@@ -128,10 +128,7 @@ webpackConfig.module.loaders = [{
     presets: ['es2015', 'react', 'stage-0'],
     env: {
       production: {
-        plugins: [
-          'transform-react-remove-prop-types',
-          'transform-react-constant-elements'
-        ]
+        presets: ['react-optimize']
       }
     }
   }
@@ -157,7 +154,7 @@ const PATHS_TO_TREAT_AS_CSS_MODULES = [
 // If config has CSS modules enabled, treat this project's styles as CSS modules.
 if (config.compiler_css_modules) {
   PATHS_TO_TREAT_AS_CSS_MODULES.push(
-    paths.client().replace(/[\^\$\.\*\+\-\?\=\!\:\|\\\/\(\)\[\]\{\}\,]/g, '\\$&')
+    paths.client().replace(/[\^\$\.\*\+\-\?\=\!\:\|\\\/\(\)\[\]\{\}\,]/g, '\\$&') // eslint-disable-line
   )
 }
 
