@@ -7,7 +7,7 @@ export const Counter = (props) => (
       Counter:
       {' '}
       <span className={classes['counter--green']}>
-        {props.counter}
+        {props.counter.get('val')}
       </span>
     </h2>
     <button className='btn btn-default' onClick={props.increment}>
@@ -21,7 +21,7 @@ export const Counter = (props) => (
 )
 
 Counter.propTypes = {
-  counter: React.PropTypes.number.isRequired,
+  counter: React.PropTypes.object.isRequired,
   doubleAsync: React.PropTypes.func.isRequired,
   increment: React.PropTypes.func.isRequired
 }

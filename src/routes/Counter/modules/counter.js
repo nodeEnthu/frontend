@@ -2,7 +2,7 @@
 // Constants
 // ------------------------------------
 export const COUNTER_INCREMENT = 'COUNTER_INCREMENT'
-
+import {Map} from 'immutable'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -25,7 +25,7 @@ export const doubleAsync = () => {
   return (dispatch, getState) => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        dispatch(increment(getState().counter))
+        dispatch(increment(getState().counter.get('val')))
         resolve()
       }, 200)
     })
@@ -41,13 +41,13 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [COUNTER_INCREMENT]: (state, action) => state + action.payload
+  [COUNTER_INCREMENT]: (state, action) => state.set('val',state.get('val')+action.payload)
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = 0
+const initialState = Map({val:0})
 export default function counterReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
 
