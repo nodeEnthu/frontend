@@ -1,29 +1,36 @@
 import React from 'react'
 import classes from './Counter.scss'
+import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 
-export const Counter = (props) => (
-  <div>
-    <h2 className={classes.counterContainer}>
-      Counter:
-      {' '}
-      <span className={classes['counter--green']}>
-        {props.counter.get('val')}
-      </span>
-    </h2>
-    <button className='btn btn-default' onClick={props.increment}>
-      Increment
-    </button>
-    {' '}
-    <button className='btn btn-default' onClick={props.doubleAsync}>
-      Double (Async)
-    </button>
-  </div>
-)
+export default class Counter extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return (
+        <div>
+          <h2 className={classes.counterContainer}>
+            Counter:
+            {' '}
+            <span className={classes['counter--green']}>
+              {this.props.counter.get('val')}
+            </span>
+          </h2>
+          <button className='btn btn-default' onClick={this.props.increment}>
+            Increment
+          </button>
+          {' '}
+          <button className='btn btn-default' onClick={this.props.doubleAsync}>
+            Double (Async)
+          </button>
+        </div>
+    );
+  }
+}; 
 
 Counter.propTypes = {
   counter: React.PropTypes.object.isRequired,
   doubleAsync: React.PropTypes.func.isRequired,
   increment: React.PropTypes.func.isRequired
 }
-
 export default Counter

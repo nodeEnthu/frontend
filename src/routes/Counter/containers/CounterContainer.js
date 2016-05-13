@@ -18,7 +18,12 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => ({
-  counter: state.counter
+  counter: state.counter,
+  logIntoMachine:(component)=>{
+    return ()=>
+      console.log(component);
+    
+  }
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
