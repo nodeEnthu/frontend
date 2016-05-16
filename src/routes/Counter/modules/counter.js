@@ -7,6 +7,7 @@ import {Map} from 'immutable'
 // Actions
 // ------------------------------------
 export function increment (value = 1) {
+  console.log("I am action");
   return {
     type: COUNTER_INCREMENT,
     payload: value
@@ -41,7 +42,9 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [COUNTER_INCREMENT]: (state, action) => state.set('val',state.get('val')+action.payload)
+  [COUNTER_INCREMENT]: (state, action) => {
+    return state.set('val',state.get('val')+action.payload)
+  }
 }
 
 // ------------------------------------
