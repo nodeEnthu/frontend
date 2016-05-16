@@ -9,13 +9,13 @@ export default class Counter extends React.Component{
   render(){
     return (
         <div>
-          <h2 className={classes.counterContainer}>
+          <div>
             Counter:
             {' '}
             <span className={classes['counter--green']}>
               {this.props.counter.get('val')}
             </span>
-          </h2>
+          </div>
           <button className='btn btn-default' onClick={this.props.increment}>
             Increment
           </button>

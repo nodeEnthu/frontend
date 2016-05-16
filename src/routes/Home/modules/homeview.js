@@ -7,7 +7,6 @@ import {Map,fromJS} from 'immutable'
 // Actions
 // ------------------------------------
 export function leftnavstatechange (state) {
-	console.log("I was invoked");
   	return {
     type: LEFTNAV_OPEN_CLOSE
   }
@@ -22,8 +21,7 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [LEFTNAV_OPEN_CLOSE]: (state, action) => { 
-  	state.leftNav.leftNavOpen = !state.leftNav.leftNavOpen
-  	return state;
+  	return state.set('leftNavOpen',!state.get('leftNavOpen'));
   }
 }
 
@@ -31,8 +29,7 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 
-export function homeviewReducer (state={leftNav:{leftNavOpen:true}} , action) {
-	console.log("reducer was evoked",state);
+export function homeviewReducer (state=Map({leftNavOpen:false}) , action) {
   const handler = ACTION_HANDLERS[action.type]
   return handler ? handler(state, action) : state
 }

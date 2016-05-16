@@ -4,12 +4,9 @@ import { IndexLink, Link } from 'react-router'
 const HomeView =  React.createClass({
 	getInitialState() {
     return {
-        checked: this.props.leftNav.leftNavOpen || false
+        checked: this.props.leftNav.get('leftNavOpen') || false
      };
 	},
-	handleClick(e) {
-      this.setState({checked: e.target.checked});
-  	},
 	render(){
 		return(	<div>
 				 <input type="checkbox" className = "opacity-none" onClick={this.props.leftnavstatechange} checked={this.checked} id="show-menu" role="button" onChange={this.onChange}></input>
@@ -20,15 +17,25 @@ const HomeView =  React.createClass({
 							<Link to='/counter'>About</Link>
 						</li>
 						<li>
-							<a href="#">Portfolio &#65516;</a>
+							<Link to='/counter'>Portfolio &#65516;</Link>
 							<ul className="hidden">
-								<li><a href="#">Photography</a></li>
-								<li><a href="#">Web &amp; User Interface Design</a></li>
-								<li><a href="#">Illustration</a></li>
+								<li>
+									<Link to='/counter'>News</Link>
+								</li>
+								<li>
+									<Link to='/counter'>News</Link>
+								</li>
+								<li>
+									<Link to='/counter'>News</Link>
+								</li>
 							</ul>
 						</li>
-						<li><a href="#">News</a></li>
-						<li><a href="#">Contact</a></li>
+						<li>
+							<Link to='/counter'>News</Link>
+						</li>
+						<li>
+							<Link to='/counter'>Contacts</Link>
+						</li>
 					</ul>
 				</div>)
 	}

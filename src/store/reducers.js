@@ -6,7 +6,7 @@ const LEFTNAV_OPEN_CLOSE = 'LEFTNAV_OPEN_CLOSE'
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
     // Add sync reducers here
-    homeviewReducer:homeviewReducer,
+    leftNav:homeviewReducer,
     router,
     ...asyncReducers
   })
