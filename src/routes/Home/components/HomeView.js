@@ -1,4 +1,6 @@
 import React from 'react'
+import { IndexLink, Link } from 'react-router'
+
 const HomeView =  React.createClass({
 	getInitialState() {
     return {
@@ -9,18 +11,13 @@ const HomeView =  React.createClass({
       this.setState({checked: e.target.checked});
   	},
 	render(){
-		console.log(this.props.leftNav);
 		return(	<div>
-				  <label for="show-menu" className="show-menu">Show Menu</label>
-					<input type="checkbox" onClick={this.handleClick} checked={this.state.checked} id="show-menu" role="button" onChange={this.onChange}></input>
+				 <input type="checkbox" className = "opacity-none" onClick={this.props.leftnavstatechange} checked={this.checked} id="show-menu" role="button" onChange={this.onChange}></input>
+				  <div for="show-menu" className="show-menu">Show Menu</div>
 					<ul id="menu">
-						<li><a href="#">Home</a></li>
+						<li><IndexLink to='/' >Home</IndexLink></li>
 						<li>
-							<a href="#">About &#65516;</a>
-							<ul className="hidden">
-								<li><a href="#">Who We Are</a></li>
-								<li><a href="#">What We Do</a></li>
-							</ul>
+							<Link to='/counter'>About</Link>
 						</li>
 						<li>
 							<a href="#">Portfolio &#65516;</a>

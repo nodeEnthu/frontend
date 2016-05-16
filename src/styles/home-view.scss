@@ -14,6 +14,16 @@ li {
 }
 
 /*Style for menu links*/
+
+.opacity-none{
+	position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width:100%;
+    height:38px;
+}
+
 li a {
 	display:block;
 	min-width:140px;
@@ -80,9 +90,6 @@ ul li a:hover + .hidden, .hidden:hover {
 }
 
 /*Hide checkbox*/
-input[type=checkbox]{
-    display: none;
-}
 
 /*Show menu when invisible checkbox is checked*/
 input[type=checkbox]:checked ~ #menu{

@@ -1,8 +1,6 @@
 :global {
-  //@import 'base';
-  //@import '~normalize.css/normalize';
-  //@import 'material_sass_only/surface/src/scss/_imports/importMaster';
-  //@import 'material_sass_only/surface/src/scss/surface_styles';
+  @import 'base';
+  @import '~normalize.css/normalize';
   @import 'home-view';
 
 
