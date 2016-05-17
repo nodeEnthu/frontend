@@ -1,14 +1,9 @@
 import React from 'react'
-const EmptyComponent =  React.createClass({
-	render(){
-		return(null)
-	}
-})
-
+import HomeContainer from './containers/HomeContainer'
 
 // Sync route definition
 export default {
-  component: EmptyComponent
+  component: HomeContainer
 }
 
 

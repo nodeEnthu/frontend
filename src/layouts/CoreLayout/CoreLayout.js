@@ -1,11 +1,11 @@
 import React from 'react'
 import classes from './CoreLayout.scss'
 import '../../styles/core.scss'
-import HomeContainer from '../../routes/Home/containers/HomeContainer'
+import Header from '../../components/Header/index'
  
 export const CoreLayout = ({ children }) => (
   <div className='container'>
-  	<HomeContainer/>
+  	<Header/>
     <div className={classes.mainContainer}>
       {children}
     </div>
