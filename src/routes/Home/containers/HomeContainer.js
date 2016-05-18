@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { leftnavstatechange } from '../modules/homeview'
-import {fromJS} from 'immutable'
+import { fromJS } from 'immutable'
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
     wiring in the actions and state necessary to render a presentational
@@ -13,12 +13,16 @@ import HomeView from '../components/HomeView'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapActionCreators = {
-  leftnavstatechange: () => leftnavstatechange()
+    leftnavstatechange: () => leftnavstatechange()
 }
 
-const mapStateToProps = (state) => ({
-  leftNav: state.leftNav
-})
+const mapStateToProps = (state) => {
+    console.log(state.homepage.get('leftNavOpen'));
+    return {
+        leftNavOpen: state.homepage.get('leftNavOpen'),
+        userZipSearch: state.homepage.get('userZipSearch')
+    }
+}
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
 

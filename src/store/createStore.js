@@ -4,7 +4,7 @@ import thunk from 'redux-thunk'
 import makeRootReducer from './reducers'
 
 // Actions
-import { leftnavstatechange } from '../routes/Home/modules/homeview';
+
 export default (initialState = {}, history) => {
   // ======================================================
   // Middleware Configuration
@@ -34,8 +34,6 @@ export default (initialState = {}, history) => {
     )
   )
   store.asyncReducers = {}
-  console.log(leftnavstatechange);
-  store.dispatch(leftnavstatechange());
   if (module.hot) {
     module.hot.accept('./reducers', () => {
       const reducers = require('./reducers').default

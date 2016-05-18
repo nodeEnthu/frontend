@@ -7,7 +7,6 @@ import {Map} from 'immutable'
 // Actions
 // ------------------------------------
 export function increment (value = 1) {
-  console.log("I am action");
   return {
     type: COUNTER_INCREMENT,
     payload: value
