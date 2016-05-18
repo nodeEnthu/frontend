@@ -1,3 +1,3 @@
-import Counter from './Counter'
+import Autocomplete from './Autocomplete'
 
-export default Counter
+export default Autocomplete 
