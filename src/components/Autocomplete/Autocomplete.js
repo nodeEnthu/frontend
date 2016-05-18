@@ -3,7 +3,6 @@ import classes from './Autocomplete.scss'
 import Autosuggest from 'react-autosuggest'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 
-
 const languages = [
   {
     name: 'C',
@@ -176,9 +175,4 @@ class Autocomplete extends React.Component {
   }
 }
 
-Autocomplete.propTypes = {
-  counter: React.PropTypes.object.isRequired,
-  doubleAsync: React.PropTypes.func.isRequired,
-  increment: React.PropTypes.func.isRequired
-}
 export default Autocomplete

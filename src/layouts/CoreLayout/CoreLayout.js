@@ -5,7 +5,7 @@ import Header from '../../components/Header/index'
  
 export const CoreLayout = ({ children }) => (
   <div className='container'>
-  	<Header/>
+  	
     <div className={classes.mainContainer}>
       {children}
     </div>

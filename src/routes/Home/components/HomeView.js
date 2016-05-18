@@ -7,7 +7,7 @@ const HomeView = React.createClass({
 
     getInitialState() {
         return {
-            checked: this.props.leftNav.get('leftNavOpen') || false
+            checked: this.props.leftNav || false
         };
     },
     render() {
@@ -140,7 +140,7 @@ const HomeView = React.createClass({
 })
 
 HomeView.propTypes = {
-    leftNav: React.PropTypes.object.isRequired,
+    leftNavOpen: React.PropTypes.bool.isRequired,
     leftnavstatechange: React.PropTypes.func.isRequired
 }
 
