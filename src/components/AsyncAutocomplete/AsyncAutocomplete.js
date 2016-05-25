@@ -23,6 +23,7 @@ function renderSuggestion(suggestion) {
 class AsyncAutocomplete extends React.Component {
     constructor(props) {
         super();
+        console.log(props);
         this.state = {
             value: '',
             suggestions: [],
@@ -47,7 +48,7 @@ class AsyncAutocomplete extends React.Component {
             })
             .then(function(resolvedResponse) {
               if(resolvedResponse.length>5){
-                const resultsToIgnore = resolvedResponse.length -5;
+                const resultsToIgnore = resolvedResponse.length -3;
                 resolvedResponse = _.dropRight(resolvedResponse,resultsToIgnore);
               }
               self.setState({
@@ -92,16 +93,14 @@ class AsyncAutocomplete extends React.Component {
         const status = (isLoading ? 'Loading...' : 'Type to load suggestions');
 
         return (
-            <div className="app-container">
-        <Autosuggest suggestions={suggestions}
-                     onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                     getSuggestionValue={getSuggestionValue}
-                     renderSuggestion={renderSuggestion}
-                     inputProps={inputProps} />
-        <div className="status">
-          <strong>Status:</strong> {status}
-        </div>
-      </div>
+          <div>
+              <Autosuggest suggestions={suggestions}
+                           onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+                           getSuggestionValue={getSuggestionValue}
+                           renderSuggestion={renderSuggestion}
+                           inputProps={inputProps} />
+             
+          </div>
         );
     }
 }
