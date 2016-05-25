@@ -1,10 +1,13 @@
 import React from 'react'
 import { IndexLink, Link } from 'react-router'
 import FileIcons from '../assets/file-icons.png'
-import Autosuggest from 'react-autosuggest';
+import Autosuggest from 'react-autosuggest'
+import AsyncAutocomplete from 'components/AsyncAutocomplete'
 
 const HomeView = React.createClass({
-
+	autocompleteSettings:{
+		apiUrl:"whateveritmightbe"
+	},
     getInitialState() {
         return {
             checked: this.props.leftNav || false
@@ -16,6 +19,7 @@ const HomeView = React.createClass({
 				<div className="splash-container">
 				    <div className="splash">
 				        <h1 className="splash-head">Big Bold Text</h1>
+				        <AsyncAutocomplete settings={this.autocompleteSettings}/>
 				        <p className="splash-subhead">
 				            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 				        </p>

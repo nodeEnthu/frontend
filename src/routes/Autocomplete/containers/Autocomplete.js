@@ -6,7 +6,7 @@ import { increment, doubleAsync } from '../modules/autocomplete'
     wiring in the actions and state necessary to render a presentational
     component - in this case, the counter:   */
 
-import Autocomplete from 'components/Autocomplete'
+import Autocomplete from 'components/AsyncAutocomplete'
 
 /*  Object of action creators (can also be function that returns object).
     Keys will be passed as props to presentational components. Here we are

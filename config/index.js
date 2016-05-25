@@ -109,7 +109,6 @@ config.compiler_vendor = config.compiler_vendor
 const resolve = path.resolve
 const base = (...args) =>
   Reflect.apply(resolve, null, [config.path_base, ...args])
-
 config.utils_paths = {
   base   : base,
   client : base.bind(null, config.dir_client),
