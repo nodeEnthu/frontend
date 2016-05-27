@@ -5,21 +5,30 @@ import Autosuggest from 'react-autosuggest'
 import AsyncAutocomplete from 'components/AsyncAutocomplete'
 
 const HomeView = React.createClass({
-	autocompleteSettings:{
-		apiUrl:"whateveritmightbe"
-	},
     getInitialState() {
         return {
-            checked: this.props.leftNav || false
+                userSearchChange: this.props.userZipSearchChange,
+                apiUrl: "/api/city/",
+                searchTextAlreadyInStore:this.props.userZipSearch.get('searchText')
         };
     },
     render() {
         return (
-            <div>  
+            <div>
 				<div className="splash-container">
 				    <div className="splash">
-				        <h1 className="splash-head">Big Bold Text</h1>
-				        <AsyncAutocomplete settings={this.autocompleteSettings}/>
+				        <h1 className="splash-head">Big bold text</h1>
+				        <AsyncAutocomplete settings={this.state}/>
+				        <p className="splash-subhead">
+				            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+				        </p>
+				        <p>
+				            <a href="http://purecss.io" className="pure-button pure-button-primary">Get Started</a>
+				        </p>
+				    </div>
+				     <div className="splash">
+				        <h1 className="splash-head">Big bold text</h1>
+				        <AsyncAutocomplete settings={this.state}/>
 				        <p className="splash-subhead">
 				            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 				        </p>
@@ -28,7 +37,6 @@ const HomeView = React.createClass({
 				        </p>
 				    </div>
 				</div>
-				
 				<div className="content-wrapper">
 				    <div className="content">
 				        <h2 className="content-head is-center">Excepteur sint occaecat cupidatat.</h2>
@@ -145,7 +153,9 @@ const HomeView = React.createClass({
 
 HomeView.propTypes = {
     leftNavOpen: React.PropTypes.bool.isRequired,
-    leftnavstatechange: React.PropTypes.func.isRequired
+    leftnavstatechange: React.PropTypes.func.isRequired,
+    userZipSearchChange: React.PropTypes.func.isRequired,
+    userZipSearch: React.PropTypes.object.isRequired
 }
 
 export default HomeView

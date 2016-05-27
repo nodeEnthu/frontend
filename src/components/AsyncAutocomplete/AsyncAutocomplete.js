@@ -23,11 +23,12 @@ function renderSuggestion(suggestion) {
 class AsyncAutocomplete extends React.Component {
     constructor(props) {
         super();
-        console.log(props);
         this.state = {
-            value: '',
+            value: props.settings.searchTextAlreadyInStore,
             suggestions: [],
-            isLoading: false
+            isLoading: false,
+            apiUrl:props.settings.apiUrl,
+            changeGlobalState: props.settings.userSearchChange
         };
 
         this.onChange = this.onChange.bind(this);
@@ -42,7 +43,7 @@ class AsyncAutocomplete extends React.Component {
             isLoading: true
         });
         
-        fetch('/api/city/' + value, { method: 'get' })
+        fetch(this.state.apiUrl + value, { method: 'get' })
             .then(function(response) {
                 return response.json();
             })
@@ -71,8 +72,9 @@ class AsyncAutocomplete extends React.Component {
 
     onChange(event, { newValue }) {
         this.setState({
-            value: newValue
+            value: newValue,
         });
+        this.state.changeGlobalState(newValue);
     }
 
     onSuggestionsUpdateRequested({ value, reason }) {
@@ -99,7 +101,6 @@ class AsyncAutocomplete extends React.Component {
                            getSuggestionValue={getSuggestionValue}
                            renderSuggestion={renderSuggestion}
                            inputProps={inputProps} />
-             
           </div>
         );
     }

@@ -1,5 +1,7 @@
 import { connect } from 'react-redux'
 import { leftnavstatechange } from '../modules/homeview'
+import { userZipSearchChange } from '../modules/homeview'
+
 import { fromJS } from 'immutable'
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -13,11 +15,11 @@ import HomeView from '../components/HomeView'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapActionCreators = {
-    leftnavstatechange: () => leftnavstatechange()
+    leftnavstatechange: () => leftnavstatechange(),
+    userZipSearchChange:(val)=>userZipSearchChange(val)
 }
 
 const mapStateToProps = (state) => {
-    console.log(state.homepage.get('leftNavOpen'));
     return {
         leftNavOpen: state.homepage.get('leftNavOpen'),
         userZipSearch: state.homepage.get('userZipSearch')

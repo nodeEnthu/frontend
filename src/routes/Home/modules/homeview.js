@@ -1,7 +1,9 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const LEFTNAV_OPEN_CLOSE = 'LEFTNAV_OPEN_CLOSE'
+export const LEFTNAV_OPEN_CLOSE = 'LEFTNAV_OPEN_CLOSE';
+export const USER_ZIP_SEARCH_CHANGE = 'USER_ZIP_SEARCH_CHANGE'
+
 import { Map, fromJS } from 'immutable'
 // ------------------------------------
 // Actions
@@ -11,9 +13,16 @@ export function leftnavstatechange(state) {
         type: LEFTNAV_OPEN_CLOSE
     }
 }
+export function userZipSearchChange(val) {
+    return {
+        type: USER_ZIP_SEARCH_CHANGE,
+        payload:val
+    }
+}
 
 export const actions = {
-    leftnavstatechange
+    leftnavstatechange,
+    userZipSearchChange
 }
 
 // ------------------------------------
@@ -22,6 +31,10 @@ export const actions = {
 const ACTION_HANDLERS = {
     [LEFTNAV_OPEN_CLOSE]: (state, action) => {
         return state.set('leftNavOpen', !state.get('leftNavOpen'));
+    },
+    [USER_ZIP_SEARCH_CHANGE]:(state,action)=>{
+        let newState = state.updateIn(['userZipSearch','searchText'],value=>action.payload);
+        return newState;
     }
 }
 
@@ -31,8 +44,7 @@ const ACTION_HANDLERS = {
 let initialState = Map({
     leftNavOpen: false,
     userZipSearch: Map({
-        searchText: '',
-        refinedVals: []
+        searchText: ''
     })
 });
 export function homeviewReducer(state = initialState, action) {
