@@ -2,7 +2,7 @@
 import CoreLayout from '../layouts/CoreLayout/CoreLayout'
 import Home from './Home'
 import CounterRoute from './Counter'
-import AutocompleteRoute from './Autocomplete'
+import ProviderRoute from './Provider'
 
 
 /*  Note: Instead of using JSX, we recommend using react-router
@@ -14,7 +14,7 @@ export const createRoutes = (store) => ({
   indexRoute: Home,
   childRoutes: [
     CounterRoute(store),
-    AutocompleteRoute(store)
+    ProviderRoute(store)
   ]
 })
 

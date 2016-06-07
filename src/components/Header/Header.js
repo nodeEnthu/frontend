@@ -24,8 +24,10 @@ export const Header = () => (
                 </IndexLink>
               </li>
               <li className="pure-menu-item">
-                
                   <Link to='/counter' className="pure-menu-link">Tour</Link>
+              </li>
+              <li className="pure-menu-item">
+                  <Link to='/provider' className="pure-menu-link">Provider</Link>
               </li>
               <li className="pure-menu-item"><a href="#" className="pure-menu-link">Sign Up</a></li>
           </ul>

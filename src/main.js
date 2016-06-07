@@ -5,7 +5,9 @@ import { useRouterHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import createStore from './store/createStore'
 import AppContainer from './containers/AppContainer'
-
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 // ========================================================
 // Browser History Setup
 // ========================================================
@@ -44,15 +46,18 @@ let render = (routerKey = null) => {
   const routes = require('./routes/index').default(store)
 
   ReactDOM.render(
-    <AppContainer
-      store={store}
-      history={history}
-      routes={routes}
-      routerKey={routerKey}
-    />,
-    MOUNT_NODE
+    <MuiThemeProvider muiTheme={getMuiTheme()}>
+      <AppContainer
+        store={store}
+        history={history}
+        routes={routes}
+        routerKey={routerKey}
+      />
+    </MuiThemeProvider>,MOUNT_NODE
   )
 }
+
+injectTapEventPlugin();
 
 // Enable HMR and catch runtime errors in RedBox
 // This code is excluded from production bundle

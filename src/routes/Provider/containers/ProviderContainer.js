@@ -1,12 +1,12 @@
 import { connect } from 'react-redux'
-import { increment, doubleAsync } from '../modules/autocomplete'
+import { increment, doubleAsync } from '../modules/provider'
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
     wiring in the actions and state necessary to render a presentational
     component - in this case, the counter:   */
 
-import Autocomplete from 'components/AsyncAutocomplete'
+import Provider from '../components/Provider'
 
 /*  Object of action creators (can also be function that returns object).
     Keys will be passed as props to presentational components. Here we are
@@ -18,7 +18,7 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => ({
-  counter: state.counter,
+  counter: state.provider,
   logIntoMachine:(component)=>{
     return ()=>
       console.log(component);
@@ -40,4 +40,4 @@ const mapStateToProps = (state) => ({
     Selectors are composable. They can be used as input to other selectors.
     https://github.com/reactjs/reselect    */
 
-export default connect(mapStateToProps, mapActionCreators)(Autocomplete)
+export default connect(mapStateToProps, mapActionCreators)(Provider)

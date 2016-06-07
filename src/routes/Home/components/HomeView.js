@@ -15,27 +15,32 @@ const HomeView = React.createClass({
     render() {
         return (
             <div>
-				<div className="splash-container">
-				    <div className="splash">
-				        <h1 className="splash-head">Big bold text</h1>
-				        <AsyncAutocomplete settings={this.state}/>
-				        <p className="splash-subhead">
-				            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-				        </p>
-				        <p>
-				            <a href="http://purecss.io" className="pure-button pure-button-primary">Get Started</a>
-				        </p>
-				    </div>
-				     <div className="splash">
-				        <h1 className="splash-head">Big bold text</h1>
-				        <AsyncAutocomplete settings={this.state}/>
-				        <p className="splash-subhead">
-				            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-				        </p>
-				        <p>
-				            <a href="http://purecss.io" className="pure-button pure-button-primary">Get Started</a>
-				        </p>
-				    </div>
+				<div className="splash-container counter-fixed-menu">
+					<div className="banner-wrapper">
+						<div className="pure-g">
+							<div className = "pure-u-1 pure-u-md-1-2">
+							    <div className="splash ">
+							        <h1 className="splash-head">
+							        	Please enter a zip code to find food close to you.
+							        </h1>
+							        <AsyncAutocomplete settings={this.state}/>
+							        <p className="is-center">
+							        	<button className="pure-button pure-button-primary">Get Started</button>
+							        </p>
+							    </div>
+						    </div>
+						    <div className = "pure-u-1 pure-u-md-1-2">
+							    <div className="splash">
+							        <div className="splash-head">
+							        	Advertise your food right away in 3 easy steps
+							        </div>
+							        <p className="is-center">
+							        	<button className="pure-button pure-button-primary">Get Started</button>
+							        </p>
+							    </div>
+						    </div>
+						</div>
+					</div>
 				</div>
 				<div className="content-wrapper">
 				    <div className="content">

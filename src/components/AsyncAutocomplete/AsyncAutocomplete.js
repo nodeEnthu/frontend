@@ -2,7 +2,8 @@
 import classes from './AsyncAutocomplete.scss'
 import Autosuggest from 'react-autosuggest'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
-import _ from 'lodash'
+import debounce from 'lodash.debounce'
+//import dropRight from 'lodash.dropRight'
 import React from 'react'
 
 
@@ -34,7 +35,7 @@ class AsyncAutocomplete extends React.Component {
         this.onChange = this.onChange.bind(this);
         this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
 
-        this.debouncedLoadSuggestions = _.debounce(this.loadSuggestions, 500);
+        this.debouncedLoadSuggestions = debounce(this.loadSuggestions, 500);
     }
 
     loadSuggestions(value) {
@@ -50,7 +51,7 @@ class AsyncAutocomplete extends React.Component {
             .then(function(resolvedResponse) {
               if(resolvedResponse.length>5){
                 const resultsToIgnore = resolvedResponse.length -3;
-                resolvedResponse = _.dropRight(resolvedResponse,resultsToIgnore);
+                //resolvedResponse = dropRight(resolvedResponse,resultsToIgnore);
               }
               self.setState({
                   isLoading: false,

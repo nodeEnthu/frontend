@@ -1,0 +1,56 @@
+.retain-letter-spacing {
+    letter-spacing: normal;
+}
+
+.text-align-left {
+    text-align: left;
+}
+
+.pure-form{
+	.pure-group{
+		input[type]{
+		margin-bottom: 0px;
+		}
+	}
+}
+   
+
+
+legend {
+    decoration: none;
+}
+
+.pure-group {
+    clear: both;
+    .pure-checkbox {
+        float: left;
+        input {
+            float: left;
+        }
+    }
+}
+
+.display-inline {
+    display: inline-block;
+}
+
+.pull-left {
+    text-align: left;
+}
+
+.pure-form .pure-group .remove-margin-bottom{
+	margin-bottom:0px;
+}
+
+.pure-override-letter-spacing{
+	letter-spacing:normal;
+}
+
+input:required:focus {
+  border: normal;
+  outline: none;
+}
+
+input:invalid {
+        border: 1px solid red;
+    }

@@ -6,13 +6,13 @@
 .react-autosuggest__container {
     position: relative;
     margin: 0px auto;
-    width: 240px;
+    width: 200px;
 }
 
 .react-autosuggest__input {
     width: 200px;
     height: 30px;
-    padding: 10px 20px;
+    padding: 10px;
     font-family: Helvetica, sans-serif;
     font-weight: 300;
     font-size: 16px;
@@ -31,7 +31,7 @@
 
 .react-autosuggest__suggestions-container {
     position: absolute;
-    width: 240px;
+    width: 200px;
     margin: 0px auto;
     padding: 0;
     list-style-type: none;
