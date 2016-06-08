@@ -11,9 +11,6 @@ import ImageUploader from '../../../components/ImageUploader/index'
 import classes from './provider.scss'
 import ProviderEntryForm from '../../../components/ProviderEntryForm/ProviderEntryForm'
 
-/**
- * A contrived example using a transition between steps
- */
 
 class HorizontalTransition extends React.Component {
 
@@ -33,11 +30,9 @@ class HorizontalTransition extends React.Component {
     let formValidity = true;
     if(this.state.stepIndex===0){
       //check the validity of the form
-      var providerForm = document.getElementById('provider-form');
-      formValidity = providerForm.checkValidity();
-      if(!formValidity){
-       
-      } 
+      console.log(this.refs.providerform);
+      this.refs.providerform.formSubmit();
+      this.state.loading = true;  
     }
     const {stepIndex} = this.state;
     if (!this.state.loading && formValidity) {
@@ -59,6 +54,7 @@ class HorizontalTransition extends React.Component {
     }
   };
 
+
   getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
@@ -70,7 +66,7 @@ class HorizontalTransition extends React.Component {
             </p>
             <div className="is-center">
                 <ImageUploader/>
-                <ProviderEntryForm/>
+                <ProviderEntryForm ref="providerform"/>
             </div>
   
       

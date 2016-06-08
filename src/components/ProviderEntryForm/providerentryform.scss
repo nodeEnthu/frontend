@@ -5,29 +5,10 @@
 .text-align-left {
     text-align: left;
 }
-
-.pure-form{
-	.pure-group{
-		input[type]{
-		margin-bottom: 0px;
-		}
-	}
-}
-   
-
+ 
 
 legend {
     decoration: none;
-}
-
-.pure-group {
-    clear: both;
-    .pure-checkbox {
-        float: left;
-        input {
-            float: left;
-        }
-    }
 }
 
 .display-inline {
@@ -54,3 +35,7 @@ input:required:focus {
 input:invalid {
         border: 1px solid red;
     }
+.error-message{
+    float:left;
+    color:red;
+}
