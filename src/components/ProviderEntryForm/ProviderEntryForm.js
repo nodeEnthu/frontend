@@ -3,7 +3,6 @@ import classes from './providerentryform.scss';
 import { email, maxLength, required } from './../../utils/formValidation';
 const maxCount = 100;
 
-
 class ProviderEntryForm extends React.Component {
     constructor(props) {
         super(props); 
@@ -18,13 +17,18 @@ class ProviderEntryForm extends React.Component {
         this.handleFocus = this.handleFocus.bind(this);
         this.formSubmit = this.formSubmit.bind(this);
         this.changeTitle = this.changeTitle.bind(this);
+        this.toggle = this.toggle.bind(this);
     }
 
     handleChange(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
         let validation = this.mapFieldsToValidationType[stateKeyName];
-        let errorMsg = validation(input);
+        let errorMsg;
+        if(validation){
+        	errorMsg = validation(input);
+        }
+        
         if (errorMsg) {
             let errorMsgkey = stateKeyName + 'ErrorMsg';
             this.setState({
@@ -43,6 +47,14 @@ class ProviderEntryForm extends React.Component {
         }
     }
 
+    toggle(event){
+    	let input = event.target.value;
+    	let stateKeyName = event.target.name;
+    	this.setState({
+                [stateKeyName]: !this.state[stateKeyName]
+            })
+    	this.props.providerEntryForm[stateKeyName] = !this.props.providerEntryForm[stateKeyName];
+    }
     handleFocus(event) {
         let stateKeyName = event.target.name;
         if (stateKeyName) {
@@ -107,7 +119,7 @@ class ProviderEntryForm extends React.Component {
         }
     }
     render() {
-        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg } = this.state;
+        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg,keepEmailPrivateFlag,keepAddressPrivateFlag } = this.state;
         console.log(title);
         return (
 
@@ -132,6 +144,8 @@ class ProviderEntryForm extends React.Component {
 			    <fieldset className="pure-group">
 			    	<legend className={classes["pull-left"]}>
 			    		Display your neighbouring address
+			    		<input style = {{display:'inline', width:'10%'}} type ="checkBox" name="keepAddressPrivateFlag" 
+			    			checked={keepAddressPrivateFlag} onChange={this.toggle}/>
 			    	</legend>
 			        <input type="text"  style = {{marginBottom:0.5+'em'}} name="streetName"  placeholder="Street Name (optional)" />
 			        <input type="text"  style = {{marginBottom:0.5+'em'}} name="crosStreetName" placeholder="Cross Street Name (optional)"/>
@@ -143,6 +157,8 @@ class ProviderEntryForm extends React.Component {
 			    <fieldset className="pure-group">
 			    	<legend className={classes["pull-left"]}>
 			    		Keep my email private
+			    		<input style = {{display:'inline', width:'10%'}}type ="checkBox" name="keepEmailPrivateFlag"
+			    			checked={keepEmailPrivateFlag} onChange={this.toggle}/>
 			    	</legend>
 			        <input type="text" name="emailId" placeholder="email (required)" style = {{marginBottom:0.5+'em'}} 
 			        	onBlur={this.handleChange} 
