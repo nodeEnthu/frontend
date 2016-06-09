@@ -37,13 +37,13 @@ class ProviderEntryForm extends React.Component {
             this.setState({
                 stateKeyName: input
             });
-            this.props.providerEntryForm[stateKeyName] = input;
+            this.props.providerEntryForm[stateKeyName] = input;	// hacky again
             this.props.providerEntryForm[errorMsgkey] = errorMsg  // hacky again
         } else {
             this.setState({
                 [stateKeyName]: input
             })
-            this.props.providerEntryForm[stateKeyName] = input;
+            this.props.providerEntryForm[stateKeyName] = input;	// hacky again
         }
     }
 
@@ -53,7 +53,7 @@ class ProviderEntryForm extends React.Component {
     	this.setState({
                 [stateKeyName]: !this.state[stateKeyName]
             })
-    	this.props.providerEntryForm[stateKeyName] = !this.props.providerEntryForm[stateKeyName];
+    	this.props.providerEntryForm[stateKeyName] = !this.props.providerEntryForm[stateKeyName];// hacky again
     }
     handleFocus(event) {
         let stateKeyName = event.target.name;
@@ -63,7 +63,7 @@ class ProviderEntryForm extends React.Component {
             this.setState({
                 [errorMsgkey]: null
             });
-            this.props.providerEntryForm[errorMsgkey] = null;
+            this.props.providerEntryForm[errorMsgkey] = null;// hacky again
         }
     }
 
@@ -74,8 +74,8 @@ class ProviderEntryForm extends React.Component {
         	description:input,
             chars_left: maxCount - input.length
         })
-        this.props.providerEntryForm.chars_left = maxCount - input.length;
-        this.props.providerEntryForm.description = input;
+        this.props.providerEntryForm.chars_left = maxCount - input.length; // hacky again
+        this.props.providerEntryForm.description = input; // hacky again
     }
 
     changeTitle(event){
@@ -86,6 +86,7 @@ class ProviderEntryForm extends React.Component {
     	// THIS IS REALLY HACKY .. 
     	// IDEALLY WE SHOULD HAVE SHARED A REFERENCE TO REDUCER WHICH MAKES CHANGES IN THE STORE
     	// now we are being forced to keep state internally and globally
+    	// going to have one source of truth in future
     	this.props.providerEntryForm.title=input;
     }
 
