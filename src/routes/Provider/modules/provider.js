@@ -2,15 +2,16 @@
 // Constants
 // ------------------------------------
 export const COUNTER_INCREMENT = 'COUNTER_INCREMENT'
-import {Map} from 'immutable'
+export const MAX_COUNT_PROVIDER_DESC = 100;
+import { Map } from 'immutable'
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function increment (value = 1) {
-  return {
-    type: COUNTER_INCREMENT,
-    payload: value
-  }
+export function increment(value = 1) {
+    return {
+        type: COUNTER_INCREMENT,
+        payload: value
+    }
 }
 
 /*  This is a thunk, meaning it is a function that immediately
@@ -22,36 +23,58 @@ export function increment (value = 1) {
     reducer take care of this logic.  */
 
 export const doubleAsync = () => {
-  return (dispatch, getState) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        dispatch(increment(getState().counter.get('val')))
-        resolve()
-      }, 200)
-    })
-  }
+    return (dispatch, getState) => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                dispatch(increment(getState().counter.get('val')))
+                resolve()
+            }, 200)
+        })
+    }
 }
 
 export const actions = {
-  increment,
-  doubleAsync
+    increment,
+    doubleAsync
 }
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [COUNTER_INCREMENT]: (state, action) => {
-    return state.set('val',state.get('val')+action.payload)
-  }
+    [COUNTER_INCREMENT]: (state, action) => {
+        return state.set('val', state.get('val') + action.payload)
+    }
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = Map({val:0})
-export default function counterReducer (state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type]
+const initialState =
+    Map({
+        val: 0,
+        providerEntryState: {
+            loading: false,
+            finished: false,
+            stepIndex: 0
+        },
+        providerEntryForm: {
+            chars_left: MAX_COUNT_PROVIDER_DESC ,
+            title: 'This is for starters',
+            description: '',
+            streetName: '',
+            crosStreetName: '',
+            city: '',
+            emailId: '',
+            allClear: false,
+            titleErrorMsg: '',
+            emailIdErrorMsg: '',
+            descriptionErrorMsg: '',
+            cityErrorMsg: ''
+        }
 
-  return handler ? handler(state, action) : state
+    })
+export default function counterReducer(state = initialState, action) {
+    const handler = ACTION_HANDLERS[action.type]
+    return handler ? handler(state, action) : state
 }

@@ -18,7 +18,8 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => ({
-  counter: state.provider,
+  providerEntryForm:state.provider.get('providerEntryForm'),
+  providerEntryState:state.provider.get('providerEntryState'),
   logIntoMachine:(component)=>{
     return ()=>
       console.log(component);

@@ -1,3 +1,4 @@
+
 .retain-letter-spacing {
     letter-spacing: normal;
 }
@@ -5,21 +6,18 @@
 .text-align-left {
     text-align: left;
 }
- 
 
-legend {
-    decoration: none;
-}
-
+   
 .display-inline {
     display: inline-block;
 }
 
 .pull-left {
+    float:left;
     text-align: left;
 }
 
-.pure-form .pure-group .remove-margin-bottom{
+.remove-margin-bottom{
 	margin-bottom:0px;
 }
 

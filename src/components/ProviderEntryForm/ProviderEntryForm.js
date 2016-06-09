@@ -6,17 +6,8 @@ const maxCount = 100;
 
 class ProviderEntryForm extends React.Component {
     constructor(props) {
-        super(props);
-        this.state = {
-            chars_left: maxCount,
-            title: '',
-            description: '',
-            streetName: '',
-            crosStreetName: '',
-            city: '',
-            emailId: '',
-            allClear: false
-        };
+        super(props); 
+        this.state= this.props.providerEntryForm;
         this.mapFieldsToValidationType = {
             title: required,
             emailId: email,
@@ -26,6 +17,7 @@ class ProviderEntryForm extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
         this.formSubmit = this.formSubmit.bind(this);
+        this.changeTitle = this.changeTitle.bind(this);
     }
 
     handleChange(event) {
@@ -38,10 +30,16 @@ class ProviderEntryForm extends React.Component {
             this.setState({
                 [errorMsgkey]: errorMsg
             });
+            this.setState({
+                stateKeyName: input
+            });
+            this.props.providerEntryForm[stateKeyName] = input;
+            this.props.providerEntryForm[errorMsgkey] = errorMsg  // hacky again
         } else {
             this.setState({
                 [stateKeyName]: input
             })
+            this.props.providerEntryForm[stateKeyName] = input;
         }
     }
 
@@ -53,6 +51,7 @@ class ProviderEntryForm extends React.Component {
             this.setState({
                 [errorMsgkey]: null
             });
+            this.props.providerEntryForm[errorMsgkey] = null;
         }
     }
 
@@ -60,8 +59,22 @@ class ProviderEntryForm extends React.Component {
         let input = event.target.value;
         let stateKeyName = event.target.name;
         this.setState({
+        	description:input,
             chars_left: maxCount - input.length
         })
+        this.props.providerEntryForm.chars_left = maxCount - input.length;
+        this.props.providerEntryForm.description = input;
+    }
+
+    changeTitle(event){
+    	let input = event.target.value;
+    	this.setState({
+    		title:input
+    	});
+    	// THIS IS REALLY HACKY .. 
+    	// IDEALLY WE SHOULD HAVE SHARED A REFERENCE TO REDUCER WHICH MAKES CHANGES IN THE STORE
+    	// now we are being forced to keep state internally and globally
+    	this.props.providerEntryForm.title=input;
     }
 
     formSubmit(event) {
@@ -70,13 +83,14 @@ class ProviderEntryForm extends React.Component {
         for (let key in this.mapFieldsToValidationType) {
             if (this.mapFieldsToValidationType.hasOwnProperty(key)) {
                 let errorMsg = this.mapFieldsToValidationType[key](this.state[key]);
-                //console.log(errorMsg + '  for key: '+ key +'  whose value is '+ this.state[key]);
+                console.log(errorMsg + '  for key: '+ key +'  whose value is '+ this.state[key]);
                 if (errorMsg) {
                     noErrorsInform = false;
                     let errorStateKey = [key] + 'ErrorMsg'
                     self.setState({
                         [errorStateKey]: errorMsg
                     });
+                    this.props.providerEntryForm[errorStateKey]=errorMsg;
                 }
             }
         }
@@ -84,20 +98,29 @@ class ProviderEntryForm extends React.Component {
             this.setState({
                 allClear: false
             })
+            this.props.providerEntryForm.allClear = false;
         } else {
             this.setState({
                 allClear: true
             })
+            this.props.providerEntryForm.allClear = true;
         }
     }
     render() {
         let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg } = this.state;
+        console.log(title);
         return (
-            <form id="provider-form" className="pure-form">
+
+            <div>
+            <form className="pure-form">
 	         	<fieldset className="pure-group">
-			        <input type="text"  placeholder="title (required)" name="title" onBlur={this.handleChange} onFocus={this.handleFocus}/>
+			        <input type="text"  className="pure-u-1" placeholder="title (required)" name="title" value={title}
+			        onChange={this.changeTitle}
+			        onBlur={this.handleChange} 
+			        onFocus={this.handleFocus}
+			    />
 			        <span className = {classes["error-message"]}>{(titleErrorMsg)?'*'+titleErrorMsg:undefined}</span>
-			        <textarea className = "pure-input-1"name="description" placeholder="Background (optional)" 
+			        <textarea className = "pure-u-1"name="description" placeholder="Background (optional)" value={description}
 			        	onBlur={this.handleChange} 
 			        	onFocus={this.handleFocus} 
 			        	onChange={this.setCount.bind(this)} 
@@ -106,33 +129,32 @@ class ProviderEntryForm extends React.Component {
 			        <span className = {classes["error-message"]}>{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
 			        <div>{chars_left}/100</div>
 			    </fieldset>
-			    <div className = {classes["pull-left"]}>
-			    	<div className ={classes["display-inline"]} style = {{position:'relative', top:'-7px'}}>
-			    		Display your neighborhood address on map
-			    	</div>
-			    	<input type="checkbox"/>
-				</div>
 			    <fieldset className="pure-group">
-			        <input type="text"  name="streetName"  placeholder="Street Name (optional)" />
-			        <input type="text"  className = {classes["remove-margin-bottom"]} name="crosStreetName" placeholder="Cross Street Name (optional)"/>
-			        <input type="text"  name="city"  placeholder="City (required)" 
+			    	<legend className={classes["pull-left"]}>
+			    		Display your neighbouring address
+			    	</legend>
+			        <input type="text"  style = {{marginBottom:0.5+'em'}} name="streetName"  placeholder="Street Name (optional)" />
+			        <input type="text"  style = {{marginBottom:0.5+'em'}} name="crosStreetName" placeholder="Cross Street Name (optional)"/>
+			        <input type="text"  name="city"  placeholder="City (required)" style = {{marginBottom:0.5+'em'}}
 			        	onBlur={this.handleChange} 
 			        	onFocus={this.handleFocus}/>
 			        <span className = {classes["error-message"]}>{(cityErrorMsg)?'*'+cityErrorMsg:undefined}</span>
 			    </fieldset>
-
-			    <div className = {classes["pull-left"]}>
-			    	<div className ={classes["display-inline"]} style = {{position:'relative', top:'-7px'}}>Keep my email id private</div>
-			    		<input type="checkbox" />
-			    </div>
 			    <fieldset className="pure-group">
-			        <input type="text" name="emailId" placeholder="email (required)" 
+			    	<legend className={classes["pull-left"]}>
+			    		Keep my email private
+			    	</legend>
+			        <input type="text" name="emailId" placeholder="email (required)" style = {{marginBottom:0.5+'em'}} 
 			        	onBlur={this.handleChange} 
 			        	onFocus={this.handleFocus}/>
 			        <span className = {classes["error-message"]}>{(emailIdErrorMsg)?'*'+emailIdErrorMsg:undefined}</span>
 			    </fieldset>
 			</form>
+		</div>
         )
     }
 }
+ProviderEntryForm.propTypes = {
+    providerEntryState: React.PropTypes.object.isRequired,
+};
 export default ProviderEntryForm;

@@ -12,7 +12,7 @@ import classes from './provider.scss'
 import ProviderEntryForm from '../../../components/ProviderEntryForm/ProviderEntryForm'
 
 
-class HorizontalTransition extends React.Component {
+class Provider extends React.Component {
 
   state = {
     loading: false,
@@ -27,15 +27,11 @@ class HorizontalTransition extends React.Component {
   };
 
   handleNext = () => {
-    let formValidity = true;
     if(this.state.stepIndex===0){
-      //check the validity of the form
-      console.log(this.refs.providerform);
       this.refs.providerform.formSubmit();
-      this.state.loading = true;  
     }
     const {stepIndex} = this.state;
-    if (!this.state.loading && formValidity) {
+    if (!this.state.loading && this.props.providerEntryForm.allClear) {
       this.dummyAsync(() => this.setState({
         loading: false,
         stepIndex: stepIndex + 1,
@@ -66,7 +62,7 @@ class HorizontalTransition extends React.Component {
             </p>
             <div className="is-center">
                 <ImageUploader/>
-                <ProviderEntryForm ref="providerform"/>
+                <ProviderEntryForm {...this.props} ref="providerform"/>
             </div>
   
       
@@ -162,4 +158,9 @@ class HorizontalTransition extends React.Component {
   }
 }
 
-export default HorizontalTransition;
+Provider.propTypes= {
+    providerEntryForm: React.PropTypes.object.isRequired,
+    providerEntryState: React.PropTypes.object.isRequired,
+    
+};
+export default Provider;
