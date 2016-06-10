@@ -10,10 +10,10 @@ import ExpandTransition from 'material-ui/internal/ExpandTransition'
 import ImageUploader from '../../../components/ImageUploader/index'
 import classes from './provider.scss'
 import ProviderEntryForm from '../../../components/ProviderEntryForm/ProviderEntryForm'
+import FoodItemEntryForm from '../../../components/FoodItemEntryForm/FoodItemEntryForm'
 
 
 class Provider extends React.Component {
-
   state = {
     loading: false,
     finished: false,
@@ -27,6 +27,7 @@ class Provider extends React.Component {
   };
 
   handleNext = () => {
+    console.log(this.props);
     if(this.state.stepIndex===0){
       this.refs.providerform.formSubmit();
     }
@@ -75,7 +76,13 @@ class Provider extends React.Component {
             <p>
               Enter the food item you wish to provide
             </p>
-            <p>Something something whatever cool</p>
+            <p>
+              Something everybody will like
+            </p>
+            <div className="is-center">
+                <ImageUploader/>
+            </div>
+            <FoodItemEntryForm {...this.props} ref="foodItemEntryForm"/>
           </div>
         );
       case 2:

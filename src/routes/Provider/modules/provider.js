@@ -1,15 +1,52 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const COUNTER_INCREMENT = 'COUNTER_INCREMENT'
+export const Add_Food_Item_Name = 'Add_Food_Item_Name'
+export const Add_Food_Item_Description = 'Add_Food_Item_Description'
+export const Add_DeadLine_To_Order = 'Add_DeadLine_To_Order'
+export const Add_Time_Range_To_PickUp_Start = 'Add_Time_Range_To_PickUp_Start'
+export const Add_Time_Range_To_PickUp_End = 'Add_Time_Range_To_PickUp_End'
+export const Add_Item_Tags = 'Add_Item_Tags'
+
 export const MAX_COUNT_PROVIDER_DESC = 100;
-import { Map } from 'immutable'
+import { Map,List } from 'immutable'
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function increment(value = 1) {
+
+export function addFoodItemName(value) {
     return {
-        type: COUNTER_INCREMENT,
+        type: Add_Food_Item_Name,
+        payload: value
+    }
+}
+export function addFoodItemDescription(value) {
+    return {
+        type: Add_Food_Item_Description,
+        payload: value
+    }
+}
+export function addDeadLineToOrder(value) {
+    return {
+        type: Add_DeadLine_To_Order,
+        payload: value
+    }
+}
+export function addTimeRangeToPickUpStart(value) {
+    return {
+        type: Add_Time_Range_To_PickUp_Start,
+        payload: value
+    }
+}
+export function addTimeRangeToPickUpEnd(value) {
+    return {
+        type: Add_Time_Range_To_PickUp_End,
+        payload: value
+    }
+}
+export function addItemTags(value) {
+    return {
+        type: Add_Item_Tags,
         payload: value
     }
 }
@@ -20,7 +57,7 @@ export function increment(value = 1) {
 
     NOTE: This is solely for demonstration purposes. In a real application,
     you'd probably want to dispatch an action of COUNTER_DOUBLE and let the
-    reducer take care of this logic.  */
+    reducer take care of this logic. 
 
 export const doubleAsync = () => {
     return (dispatch, getState) => {
@@ -32,18 +69,28 @@ export const doubleAsync = () => {
         })
     }
 }
-
-export const actions = {
-    increment,
-    doubleAsync
-}
-
+ */
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-    [COUNTER_INCREMENT]: (state, action) => {
-        return state.set('val', state.get('val') + action.payload)
+    [Add_Food_Item_Name]: (state, action) => {
+        return state.setIn(['foodItemEntryForm','name'], action.payload)
+    },
+    [Add_Food_Item_Description]: (state, action) => {
+        return state.setIn(['foodItemEntryForm','description'], action.payload)
+    },
+    [Add_DeadLine_To_Order]: (state, action) => {
+        return state.setIn(['foodItemEntryForm','deadlineToOrder'], action.payload)
+    },
+    [Add_Time_Range_To_PickUp_Start]: (state, action) => {
+        return state.setIn(['foodItemEntryForm','timeRangeToPickUp','startTime'], action.payload)
+    },
+    [Add_Time_Range_To_PickUp_End]: (state, action) => {
+        return state.setIn(['foodItemEntryForm','timeRangeToPickUp','endTime'], action.payload)
+    },
+    [Add_Item_Tags]: (state, action) => {
+        return state.setIn(['foodItemEntryForm','name'], action.payload)
     }
 }
 
@@ -60,7 +107,7 @@ const initialState =
         },
         providerEntryForm: {
             chars_left: MAX_COUNT_PROVIDER_DESC ,
-            title: 'This is for starters',
+            title: '',
             description: '',
             streetName: '',
             keepAddressPrivateFlag:false,
@@ -73,10 +120,21 @@ const initialState =
             emailIdErrorMsg: '',
             descriptionErrorMsg: '',
             cityErrorMsg: ''
-        }
+        },
+        foodItemEntryForm:Map({
+            name:'',
+            description:'',
+            deadlineToOrder:'',
+            timeRangeToPickUp:Map({
+                startTime:'',
+                endTime:''
+            }),
+            itemTags:List()
+
+        })
 
     })
-export default function counterReducer(state = initialState, action) {
+export default function providerReducer(state = initialState, action) {
     const handler = ACTION_HANDLERS[action.type]
     return handler ? handler(state, action) : state
 }

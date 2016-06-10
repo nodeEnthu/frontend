@@ -1,5 +1,12 @@
 import { connect } from 'react-redux'
-import { increment, doubleAsync } from '../modules/provider'
+import {
+    addFoodItemName,
+    addFoodItemDescription,
+    addDeadLineToOrder,
+    addTimeRangeToPickUpStart,
+    addTimeRangeToPickUpEnd,
+    addItemTags
+} from '../modules/provider'
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -13,18 +20,17 @@ import Provider from '../components/Provider'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapActionCreators = {
-  increment: () => increment(1),
-  doubleAsync
+    addFoodItemName,
+    addFoodItemDescription,
+    addDeadLineToOrder,
+    addTimeRangeToPickUpStart,
+    addTimeRangeToPickUpEnd,
+    addItemTags
 }
 
 const mapStateToProps = (state) => ({
-  providerEntryForm:state.provider.get('providerEntryForm'),
-  providerEntryState:state.provider.get('providerEntryState'),
-  logIntoMachine:(component)=>{
-    return ()=>
-      console.log(component);
-    
-  }
+    providerEntryForm: state.provider.get('providerEntryForm'),
+    providerEntryState: state.provider.get('providerEntryState'),
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
