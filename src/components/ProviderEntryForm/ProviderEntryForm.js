@@ -7,7 +7,6 @@ const maxCount = 100;
 class ProviderEntryForm extends React.Component {
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = this.props.providerEntryForm;
         this.mapFieldsToValidationType = {
             title: required,
@@ -18,9 +17,8 @@ class ProviderEntryForm extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
         this.formSubmit = this.formSubmit.bind(this);
-        this.changeTitle = this.changeTitle.bind(this);
+        this.changeStoreVal = this.changeStoreVal.bind(this);
         this.toggle = this.toggle.bind(this);
-        this.handleBaconChange = this.handleBaconChange.bind(this);
     }
     
     handleToggle() {
@@ -31,6 +29,10 @@ class ProviderEntryForm extends React.Component {
     handleChange(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
+        let actionObj = {
+            storeKey :stateKeyName,
+            payload : input
+        }
         let validation = this.mapFieldsToValidationType[stateKeyName];
         let errorMsg;
         if (validation) {
@@ -39,41 +41,34 @@ class ProviderEntryForm extends React.Component {
 
         if (errorMsg) {
             let errorMsgkey = stateKeyName + 'ErrorMsg';
-            this.setState({
-                [errorMsgkey]: errorMsg
+            this.props.addProviderErrorMsg({
+                storeKey:errorMsgkey,
+                payload:errorMsg
             });
-            this.setState({
-                stateKeyName: input
-            });
-            this.props.providerEntryForm[stateKeyName] = input; // hacky again
-            this.props.providerEntryForm[errorMsgkey] = errorMsg // hacky again
-        } else {
-            this.setState({
-                [stateKeyName]: input
-            })
-            this.props.providerEntryForm[stateKeyName] = input; // hacky again
         }
-    }
-    handleBaconChange(){
-        this.state.handleBaconChange = !this.state.handleBaconChange;
+        this.props.addProviderInfo({
+            storeKey:stateKeyName,
+            payload:input
+        })
+       
     }
     toggle(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
-        this.setState({
-            [stateKeyName]: !this.state[stateKeyName]
+        this.props.addProviderInfo({
+            storeKey: stateKeyName,
+            payload:!this.props.providerEntryForm.get(stateKeyName)
         })
-        this.props.providerEntryForm[stateKeyName] = !this.props.providerEntryForm[stateKeyName]; // hacky again
     }
     handleFocus(event) {
         let stateKeyName = event.target.name;
         if (stateKeyName) {
             // clear the error msg if it exists
             let errorMsgkey = stateKeyName + 'ErrorMsg';
-            this.setState({
-                [errorMsgkey]: null
+            this.props.addProviderErrorMsg({
+                storeKey:errorMsgkey,
+                payload:null
             });
-            this.props.providerEntryForm[errorMsgkey] = null; // hacky again
         }
     }
 
@@ -88,9 +83,13 @@ class ProviderEntryForm extends React.Component {
         this.props.providerEntryForm.description = input; // hacky again
     }
 
-    changeTitle(event) {
+    changeStoreVal(event) {
         let input = event.target.value;
-        this.props.addProviderTitle(input);
+        let stateKeyName = event.target.name;
+        this.props.addProviderInfo({
+            storeKey:stateKeyName,
+            payload:input
+        });
     }
 
     formSubmit(event) {
@@ -98,88 +97,85 @@ class ProviderEntryForm extends React.Component {
         let noErrorsInform = true;
         for (let key in this.mapFieldsToValidationType) {
             if (this.mapFieldsToValidationType.hasOwnProperty(key)) {
-                let errorMsg = this.mapFieldsToValidationType[key](this.state[key]);
-                console.log(errorMsg + '  for key: ' + key + '  whose value is ' + this.state[key]);
+                let errorMsg = this.mapFieldsToValidationType[key](this.props.providerEntryForm.get(key));
+                console.log(errorMsg + '  for key: ' + key + '  whose value is ' + this.props.providerEntryForm.get(key));
                 if (errorMsg) {
                     noErrorsInform = false;
-                    let errorStateKey = [key] + 'ErrorMsg'
-                    self.setState({
-                        [errorStateKey]: errorMsg
-                    });
-                    this.props.providerEntryForm[errorStateKey] = errorMsg;
+                    let errorStateKey = [key] + 'ErrorMsg';
+                    self.props.addProviderErrorMsg({
+                        storeKey:errorStateKey,
+                        payload:errorMsg
+                    })
                 }
             }
         }
-        if (!noErrorsInform) {
-            this.setState({
-                allClear: false
-            })
-            this.props.providerEntryForm.allClear = false;
-        } else {
-            this.setState({
-                allClear: true
-            })
-            this.props.providerEntryForm.allClear = true;
-        }
+        this.props.addProviderInfo({
+            storeKey:'allClear',
+            payload:noErrorsInform
+        })
     }
     render() {
-        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag } = this.state;
+        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag } = this.props.providerEntryForm.toJS();
         return (
             <div>
-              
-           
-            <form className="pure-form">
-
-                <fieldset className="pure-group">
-                    <input type="text"  className="pure-u-1" placeholder="title (required)" name="title" value={this.props.providerEntryForm.get('title')}
-                    onChange={this.changeTitle}
-                    onBlur={this.handleChange} 
-                    onFocus={this.handleFocus}
-                />
-                    <span className = {classes["error-message"]}>{(titleErrorMsg)?'*'+titleErrorMsg:undefined}</span>
-                    <textarea className = "pure-u-1"name="description" placeholder="Background (optional)" value={description}
+                <form className="pure-form">
+                    <fieldset className="pure-group">
+                        <input type="text"  className="pure-u-1" placeholder="title (required)" name="title" value={this.props.providerEntryForm.get('title')}
+                        onChange={this.changeStoreVal}
                         onBlur={this.handleChange} 
-                        onFocus={this.handleFocus} 
-                        onChange={this.setCount.bind(this)} 
-                    >   
-                    </textarea>
+                        onFocus={this.handleFocus}
+                    />
+                        <span className = {classes["error-message"]}>{(titleErrorMsg)?'*'+titleErrorMsg:undefined}</span>
+                        <textarea className = "pure-u-1"name="description" placeholder="Background (optional)" value={description}
+                            onBlur={this.handleChange} 
+                            onFocus={this.handleFocus} 
+                            onChange={this.changeStoreVal} 
+                        >   
+                        </textarea>
 
-                    <span className = {classes["error-message"]}>{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
-                    <div>{chars_left}/100</div>
-                </fieldset>
-                <fieldset className="pure-group">
-                    <legend className={classes["pull-left"]}>
-                        Display your neighbouring address
-                        {/*<Toggle
-                            defaultChecked={this.state.baconIsReady}
-                            name="keepAddressPrivateFlag"
-                            onChange={this.handleBaconChange} 
-                            className = {classes["input-hidden"]}
-                        />*/}
-                        <input style = {{display:'inline', width:'10%'}} type ="checkBox" name="keepAddressPrivateFlag" 
-                            checked={keepAddressPrivateFlag} onChange={this.toggle}/>
-                    </legend>
+                        <span className = {classes["error-message"]}>{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
+                        <div>{chars_left}/100</div>
+                    </fieldset>
+                    <fieldset className="pure-group">
+                        <legend className={classes["pull-left"]}>
+                            Display your neighbouring address
+                            {/*<Toggle
+                                defaultChecked={this.state.baconIsReady}
+                                name="keepAddressPrivateFlag"
+                                onChange={this.handleBaconChange} 
+                                className = {classes["input-hidden"]}
+                            />*/}
+                            <input style = {{display:'inline', width:'10%'}} type ="checkBox" name="keepAddressPrivateFlag" 
+                                checked={keepAddressPrivateFlag} onChange={this.toggle}/>
+                        </legend>
 
-                    <input type="text"  style = {{marginBottom:0.5+'em'}} name="streetName"  placeholder="Street Name (optional)" />
-                    <input type="text"  style = {{marginBottom:0.5+'em'}} name="crosStreetName" placeholder="Cross Street Name (optional)"/>
-                    <input type="text"  name="city"  placeholder="City (required)" style = {{marginBottom:0.5+'em'}}
-                        onBlur={this.handleChange} 
-                        onFocus={this.handleFocus}/>
-                    <span className = {classes["error-message"]}>{(cityErrorMsg)?'*'+cityErrorMsg:undefined}</span>
-                </fieldset>
-                <fieldset className="pure-group">
-                    <legend className={classes["pull-left"]}>
-                        Keep my email private
-                        <input style = {{display:'inline', width:'10%'}}type ="checkBox" name="keepEmailPrivateFlag"
-                            checked={keepEmailPrivateFlag} onChange={this.toggle}/>
-                    </legend>
-                    <input type="text" name="emailId" placeholder="email (required)" style = {{marginBottom:0.5+'em'}} 
-                        onBlur={this.handleChange} 
-                        onFocus={this.handleFocus}/>
-                    <span className = {classes["error-message"]}>{(emailIdErrorMsg)?'*'+emailIdErrorMsg:undefined}</span>
-                </fieldset>
-            </form>
-        </div>
+                        <input type="text"  style = {{marginBottom:0.5+'em'}} name="streetName"  placeholder="Street Name (optional)" value = {streetName}
+                            onChange={this.changeStoreVal} 
+                         />
+                        <input type="text"  style = {{marginBottom:0.5+'em'}} name="crosStreetName" placeholder="Cross Street Name (optional)" value = {crosStreetName}
+                            onChange={this.changeStoreVal} 
+                        />
+                        <input type="text"  name="city"  placeholder="City (required)" style = {{marginBottom:0.5+'em'}} value = {city}
+                            onBlur={this.handleChange} 
+                            onFocus={this.handleFocus}
+                            onChange={this.changeStoreVal}
+                        />
+                        <span className = {classes["error-message"]}>{(cityErrorMsg)?'*'+cityErrorMsg:undefined}</span>
+                    </fieldset>
+                    <fieldset className="pure-group">
+                        <legend className={classes["pull-left"]}>
+                            Keep my email private
+                            <input style = {{display:'inline', width:'10%'}}type ="checkBox" name="keepEmailPrivateFlag"
+                                checked={keepEmailPrivateFlag} onChange={this.toggle}/>
+                        </legend>
+                        <input type="text" name="emailId" placeholder="email (required)" style = {{marginBottom:0.5+'em'}} value={emailId}
+                            onBlur={this.handleChange} 
+                            onFocus={this.handleFocus}
+                            onChange={this.changeStoreVal}/>
+                        <span className = {classes["error-message"]}>{(emailIdErrorMsg)?'*'+emailIdErrorMsg:undefined}</span>
+                    </fieldset>
+                </form>
+            </div>
         )
     }
 }

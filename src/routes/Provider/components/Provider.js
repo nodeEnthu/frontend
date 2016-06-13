@@ -32,7 +32,7 @@ class Provider extends React.Component {
       this.refs.providerform.formSubmit();
     }
     const {stepIndex} = this.state;
-    if (!this.state.loading && this.props.providerEntryForm.allClear) {
+    if (!this.state.loading && this.props.providerEntryForm.get('allClear')) {
       this.dummyAsync(() => this.setState({
         loading: false,
         stepIndex: stepIndex + 1,

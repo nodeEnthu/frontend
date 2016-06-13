@@ -2,19 +2,8 @@
 // Constants
 // ------------------------------------
 export const Chars_Left = 'Chars_Left'
-export const Add_Provider_Title = 'Add_Provider_Title'
-export const Add_Provider_Description = 'Add_Provider_Description'
-export const Add_Provider_Street_Name = 'Add_Provider_Street_Name'
-export const Add_Provider_CrosStreet_Name = 'Add_Provider_CrosStreet_Name'
-export const Add_Provider_City = 'Add_Provider_City'
-export const Add_Provider_Email = 'Add_Provider_Email'
-export const Form_All_Clear_Flag = 'Form_All_Clear_Flag'
-export const Add_Provider_Keep_Address_Private_Flag = 'Add_Provider_Keep_Address_Private_Flag'
-export const Add_Provider_Keep_Email_Private_Flag = 'Add_Provider_Keep_Email_Private_Flag'
-export const Add_Provider_Title_Error_Msg = 'Add_Provider_Title_Error_Msg'
-export const Add_Provider_Description_Error_Msg = 'Add_Provider_Description_Error_Msg'
-export const Add_Provider_Email_Id_Error_Msg = 'Add_Provider_Email_Id_Error_Msg'
-export const Add_Provider_City_Error_Msg = 'Add_Provider_City_Error_Msg'
+export const Add_Provider_Info = "Add_Provider_Info"
+export const Add_Provider_Error_Msg = 'Add_Provider_Error_Msg'
 
 
 export const Add_Food_Item_Name = 'Add_Food_Item_Name'
@@ -25,7 +14,7 @@ export const Add_Time_Range_To_PickUp_End = 'Add_Time_Range_To_PickUp_End'
 export const Add_Item_Tags = 'Add_Item_Tags'
 
 export const MAX_COUNT_PROVIDER_DESC = 100;
-import { Map,List } from 'immutable'
+import { Map, List } from 'immutable'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -39,84 +28,23 @@ export function charsLeft(value) {
         payload: value
     }
 }
-export function addProviderTitle(value) {
+export function addProviderInfo(obj) {
     return {
-        type: Add_Provider_Title,
-        payload: value
+        type: Add_Provider_Info,
+        storeKey: obj.storeKey,
+        payload: obj.payload
     }
 }
-export function addProviderDescription(value) {
+
+
+export function addProviderErrorMsg(obj) {
     return {
-        type: Add_Provider_Description,
-        payload: value
+        type: Add_Provider_Error_Msg,
+        storeKey: obj.storeKey,
+        payload: obj.payload
     }
 }
-export function addProviderStreetName(value) {
-    return {
-        type: Add_Provider_Street_Name,
-        payload: value
-    }
-}
-export function addProviderCrosStreetName(value) {
-    return {
-        type: Add_Provider_CrosStreet_Name,
-        payload: value
-    }
-}
-export function addProviderCity(value) {
-    return {
-        type: Add_Provider_City,
-        payload: value
-    }
-}
-export function addProviderKeepAddressPrivateFlag(value) {
-    return {
-        type: Add_Provider_Keep_Address_Private_Flag,
-        payload: value
-    }
-}
-export function addProviderKeepEmailPrivateFlag(value) {
-    return {
-        type: Add_Provider_Keep_Email_Private_Flag,
-        payload: value
-    }
-}
-export function formAllClearFlag(value) {
-    return {
-        type: Form_All_Clear_Flag,
-        payload: value
-    }
-}
-export function addProviderEmail(value) {
-    return {
-        type: Add_Provider_Email,
-        payload: value
-    }
-}
-export function addProviderTitleErrorMsg(value) {
-    return {
-        type: Add_Provider_Title_Error_Msg,
-        payload: value
-    }
-}
-export function addProviderEmailIdErrorMsg(value) {
-    return {
-        type: Add_Provider_Email_Id_Error_Msg,
-        payload: value
-    }
-}
-export function addProviderDescriptionErrorMsg(value) {
-    return {
-        type: Add_Provider_Description_Error_Msg,
-        payload: value
-    }
-}
-export function addProviderCityErrorMsg(value) {
-    return {
-        type: Add_Provider_City_Error_Msg,
-        payload: value
-    }
-}
+
 
 ////////////////////////////////
 //actions for food item entry
@@ -182,64 +110,35 @@ export const doubleAsync = () => {
 // ------------------------------------
 const ACTION_HANDLERS = {
 
-    [Add_Provider_Title]: (state, action) => {
-        return state.setIn(['providerEntryForm','title'], action.payload)
+    [Add_Provider_Info]: (state, action) => {
+        console.log(" reducer Add_Provider_Info is invoked with ", action);
+        return state.setIn(['providerEntryForm', action.storeKey], action.payload)
     },
-    [Add_Provider_Description]: (state, action) => {
-        return state.setIn(['providerEntryForm','description'], action.payload)
-    },
-    [Add_Provider_Street_Name]: (state, action) => {
-        return state.setIn(['providerEntryForm','streetName'], action.payload)
-    },
-    [Add_Provider_CrosStreet_Name]: (state, action) => {
-        return state.setIn(['providerEntryForm','crosStreetName'], action.payload)
-    },
-    [Add_Provider_City]: (state, action) => {
-        return state.setIn(['providerEntryForm','city'], action.payload)
-    },
-    [Add_Provider_Email]: (state, action) => {
-        return state.setIn(['providerEntryForm','emailId'], action.payload)
-    },
-    [Add_Provider_Keep_Address_Private_Flag]: (state, action) => {
-        return state.setIn(['providerEntryForm','keepAddressPrivateFlag'], action.payload)
-    },
-    [Add_Provider_Keep_Email_Private_Flag]: (state, action) => {
-        return state.setIn(['providerEntryForm','keepEmailPrivateFlag'], action.payload)
-    },
-    [Form_All_Clear_Flag]: (state, action) => {
-        return state.setIn(['providerEntryForm','formAllClearFlag'], action.payload)
-    },
-    [Add_Provider_Title_Error_Msg]: (state, action) => {
-        return state.setIn(['providerEntryForm','titleErrorMsg'], action.payload)
-    },
-    [Add_Provider_Email_Id_Error_Msg]: (state, action) => {
-        return state.setIn(['providerEntryForm','emailIdErrorMsg'], action.payload)
-    },
-    [Add_Provider_Description_Error_Msg]: (state, action) => {
-        return state.setIn(['providerEntryForm','descriptionErrorMsg'], action.payload)
-    },
-    [Add_Provider_City_Error_Msg]: (state, action) => {
-        return state.setIn(['providerEntryForm','cityErrorMsg'], action.payload)
+
+    [Add_Provider_Error_Msg]: (state, action) => {
+        console.log(" reducer Add_Provider_Error_Msg is invoked with ", action);
+
+        return state.setIn(['providerEntryForm', action.storeKey], action.payload)
     },
 
 
     [Add_Food_Item_Name]: (state, action) => {
-        return state.setIn(['foodItemEntryForm','name'], action.payload)
+        return state.setIn(['foodItemEntryForm', 'name'], action.payload)
     },
     [Add_Food_Item_Description]: (state, action) => {
-        return state.setIn(['foodItemEntryForm','description'], action.payload)
+        return state.setIn(['foodItemEntryForm', 'description'], action.payload)
     },
     [Add_DeadLine_To_Order]: (state, action) => {
-        return state.setIn(['foodItemEntryForm','deadlineToOrder'], action.payload)
+        return state.setIn(['foodItemEntryForm', 'deadlineToOrder'], action.payload)
     },
     [Add_Time_Range_To_PickUp_Start]: (state, action) => {
-        return state.setIn(['foodItemEntryForm','timeRangeToPickUp','startTime'], action.payload)
+        return state.setIn(['foodItemEntryForm', 'timeRangeToPickUp', 'startTime'], action.payload)
     },
     [Add_Time_Range_To_PickUp_End]: (state, action) => {
-        return state.setIn(['foodItemEntryForm','timeRangeToPickUp','endTime'], action.payload)
+        return state.setIn(['foodItemEntryForm', 'timeRangeToPickUp', 'endTime'], action.payload)
     },
     [Add_Item_Tags]: (state, action) => {
-        return state.setIn(['foodItemEntryForm','name'], action.payload)
+        return state.setIn(['foodItemEntryForm', 'name'], action.payload)
     }
 }
 
@@ -255,30 +154,30 @@ const initialState =
             stepIndex: 0
         },
         providerEntryForm: Map({
-            chars_left: MAX_COUNT_PROVIDER_DESC ,
+            chars_left: MAX_COUNT_PROVIDER_DESC,
             title: '',
             description: '',
             streetName: '',
-            keepAddressPrivateFlag:false,
+            keepAddressPrivateFlag: false,
             crosStreetName: '',
             city: '',
             emailId: '',
-            keepEmailPrivateFlag:true,
+            keepEmailPrivateFlag: true,
             allClear: false,
             titleErrorMsg: '',
             emailIdErrorMsg: '',
             descriptionErrorMsg: '',
             cityErrorMsg: ''
         }),
-        foodItemEntryForm:Map({
-            name:'',
-            description:'',
-            deadlineToOrder:'',
-            timeRangeToPickUp:Map({
-                startTime:'',
-                endTime:''
+        foodItemEntryForm: Map({
+            name: '',
+            description: '',
+            deadlineToOrder: '',
+            timeRangeToPickUp: Map({
+                startTime: '',
+                endTime: ''
             }),
-            itemTags:List()
+            itemTags: List()
 
         })
 

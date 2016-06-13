@@ -9,18 +9,8 @@ import {
 } from '../modules/provider'
 import {
     charsLeft,
-    addProviderTitle,
-    addProviderDescription,
-    addProviderStreetName,
-    addProviderCrosStreetName,
-    addProviderCity,
-    addProviderKeepAddressPrivateFlag,
-    addProviderEmail,
-    addProviderKeepEmailPrivateFlag,
-    formAllClearFlag,
-    addProviderTitleErrorMsg,
-    addProviderDescriptionErrorMsg,
-    addProviderCityErrorMsg
+    addProviderInfo,
+    addProviderErrorMsg
 } from '../modules/provider'
 
 
@@ -37,18 +27,8 @@ import Provider from '../components/Provider'
 
 const mapActionCreators = {
     charsLeft,
-    addProviderTitle,
-    addProviderDescription,
-    addProviderStreetName,
-    addProviderCrosStreetName,
-    addProviderCity,
-    addProviderKeepAddressPrivateFlag,
-    addProviderEmail,
-    addProviderKeepEmailPrivateFlag,
-    formAllClearFlag,
-    addProviderTitleErrorMsg,
-    addProviderDescriptionErrorMsg,
-    addProviderCityErrorMsg,
+    addProviderInfo,
+    addProviderErrorMsg,
     addFoodItemName,
     addFoodItemDescription,
     addDeadLineToOrder,
