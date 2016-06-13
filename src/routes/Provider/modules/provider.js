@@ -13,6 +13,10 @@ export const Add_Provider_Keep_Address_Private_Flag = 'Add_Provider_Keep_Address
 export const Add_Provider_Keep_Email_Private_Flag = 'Add_Provider_Keep_Email_Private_Flag'
 export const Add_Provider_Title_Error_Msg = 'Add_Provider_Title_Error_Msg'
 export const Add_Provider_Description_Error_Msg = 'Add_Provider_Description_Error_Msg'
+export const Add_Provider_Email_Id_Error_Msg = 'Add_Provider_Email_Id_Error_Msg'
+export const Add_Provider_City_Error_Msg = 'Add_Provider_City_Error_Msg'
+
+
 export const Add_Food_Item_Name = 'Add_Food_Item_Name'
 export const Add_Food_Item_Description = 'Add_Food_Item_Description'
 export const Add_DeadLine_To_Order = 'Add_DeadLine_To_Order'
