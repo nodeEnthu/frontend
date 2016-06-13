@@ -15,7 +15,7 @@ const HomeView = React.createClass({
     render() {
         return (
             <div>
-				<div className="splash-container counter-fixed-menu">
+				<div className="splash-container counter-fixed-menu pure-override-letter-spacing">
 					<div className="banner-wrapper">
 						<div className="pure-g">
 							<div className = "pure-u-1 pure-u-md-1-2">

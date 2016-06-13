@@ -183,6 +183,11 @@ if (isUsingCSSModules) {
       'sass?sourceMap'
     ]
   })
+  webpackConfig.module.loaders.push({
+    test: /\.less$/,
+    include: cssModulesRegex,
+     loader: "style!css!less"
+  })
 
   webpackConfig.module.loaders.push({
     test: /\.css$/,

@@ -7,6 +7,22 @@ import {
     addTimeRangeToPickUpEnd,
     addItemTags
 } from '../modules/provider'
+import {
+    charsLeft,
+    addProviderTitle,
+    addProviderDescription,
+    addProviderStreetName,
+    addProviderCrosStreetName,
+    addProviderCity,
+    addProviderKeepAddressPrivateFlag,
+    addProviderEmail,
+    addProviderKeepEmailPrivateFlag,
+    formAllClearFlag,
+    addProviderTitleErrorMsg,
+    addProviderDescriptionErrorMsg,
+    addProviderCityErrorMsg
+} from '../modules/provider'
+
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -20,6 +36,19 @@ import Provider from '../components/Provider'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapActionCreators = {
+    charsLeft,
+    addProviderTitle,
+    addProviderDescription,
+    addProviderStreetName,
+    addProviderCrosStreetName,
+    addProviderCity,
+    addProviderKeepAddressPrivateFlag,
+    addProviderEmail,
+    addProviderKeepEmailPrivateFlag,
+    formAllClearFlag,
+    addProviderTitleErrorMsg,
+    addProviderDescriptionErrorMsg,
+    addProviderCityErrorMsg,
     addFoodItemName,
     addFoodItemDescription,
     addDeadLineToOrder,
