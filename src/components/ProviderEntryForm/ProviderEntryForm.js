@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import classes from './providerentryform.scss';
 import { email, maxLength, required } from './../../utils/formValidation';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import Toggle from 'react-toggle';
 const maxCount = 100;
-
 class ProviderEntryForm extends React.Component {
     constructor(props) {
         super(props);
@@ -19,7 +19,12 @@ class ProviderEntryForm extends React.Component {
         this.formSubmit = this.formSubmit.bind(this);
         this.changeStoreVal = this.changeStoreVal.bind(this);
         this.toggle = this.toggle.bind(this);
+        this.handleTimeChange = this.handleTimeChange.bind(this);
     }
+    handleTimeChange = (time) => {
+        this.setState({time});
+    };
+
     
     handleToggle() {
         this.setState({
@@ -115,9 +120,10 @@ class ProviderEntryForm extends React.Component {
         })
     }
     render() {
-        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag } = this.props.providerEntryForm.toJS();
+        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag, deliveryAddtnlComments } = this.props.providerEntryForm.toJS();
         return (
             <div>
+                
                 <form className="pure-form">
                     <fieldset className="pure-group">
                         <input type="text"  className="pure-u-1" placeholder="title (required)" name="title" value={this.props.providerEntryForm.get('title')}
@@ -173,6 +179,50 @@ class ProviderEntryForm extends React.Component {
                             onFocus={this.handleFocus}
                             onChange={this.changeStoreVal}/>
                         <span className = {classes["error-message"]}>{(emailIdErrorMsg)?'*'+emailIdErrorMsg:undefined}</span>
+                    </fieldset>
+                    <fieldset className="pure-group">
+                        <Card style={{width:'99%', margin: '0 auto'}}>
+                            <CardHeader
+                              title="Delivery options"
+                              actAsExpander={true}
+                              showExpandableButton={true}
+                              style={{padding:'7px'}}
+                            />
+                            <CardText 
+                                expandable={true}>
+                                <div style={{overflow:'hidden'}}>
+                                    <label style={{
+                                            display: 'inline-block',
+                                            margin: 0,
+                                            fontWeight: 'normal',
+                                            marginRight: '5px',
+                                            float: 'left'
+                                    }}for="delivery">Delivery within</label>
+                                    <div style = {{float:'left'}}>
+                                         <select id="delivery">
+                                            <option selected="selected">Please select miles</option>
+                                            <option>5</option>
+                                            <option>10</option>
+                                            <option>15</option>
+                                            <option>20</option>
+                                            <option>25</option>
+                                        </select> miles
+                                    </div>
+                                </div>
+                                <div className="is-center">
+                                    <textarea className = "pure-u-1" style={{marginTop:'10px'}} name="deliveryAddtnlComments" placeholder="
+                                    Minimum Order $35 
+Delivery Fee $6 
+Free above $100" value={deliveryAddtnlComments}
+                                        style = {{marginTop:'10px'}}
+                                        onBlur={this.handleChange} 
+                                        onFocus={this.handleFocus} 
+                                        onChange={this.changeStoreVal} 
+                                    >
+                                    </textarea> 
+                                </div>
+                            </CardText>
+                        </Card>
                     </fieldset>
                 </form>
             </div>

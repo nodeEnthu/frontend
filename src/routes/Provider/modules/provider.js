@@ -6,13 +6,7 @@ export const Add_Provider_Info = "Add_Provider_Info"
 export const Add_Provider_Error_Msg = 'Add_Provider_Error_Msg'
 
 
-export const Add_Food_Item_Name = 'Add_Food_Item_Name'
-export const Add_Food_Item_Description = 'Add_Food_Item_Description'
-export const Add_DeadLine_To_Order = 'Add_DeadLine_To_Order'
-export const Add_Time_Range_To_PickUp_Start = 'Add_Time_Range_To_PickUp_Start'
-export const Add_Time_Range_To_PickUp_End = 'Add_Time_Range_To_PickUp_End'
-export const Add_Item_Tags = 'Add_Item_Tags'
-
+export const Add_Food_Item_Info = 'Add_Food_Item_Info'
 export const MAX_COUNT_PROVIDER_DESC = 100;
 import { Map, List } from 'immutable'
 // ------------------------------------
@@ -49,42 +43,15 @@ export function addProviderErrorMsg(obj) {
 ////////////////////////////////
 //actions for food item entry
 ///////////////////////////////
-export function addFoodItemName(value) {
+export function addFoodItemInfo(obj) {
     return {
-        type: Add_Food_Item_Name,
-        payload: value
+        type: Add_Food_Item_Info,
+        storeKey: obj.storeKey,
+        payload: obj.payload
     }
 }
-export function addFoodItemDescription(value) {
-    return {
-        type: Add_Food_Item_Description,
-        payload: value
-    }
-}
-export function addDeadLineToOrder(value) {
-    return {
-        type: Add_DeadLine_To_Order,
-        payload: value
-    }
-}
-export function addTimeRangeToPickUpStart(value) {
-    return {
-        type: Add_Time_Range_To_PickUp_Start,
-        payload: value
-    }
-}
-export function addTimeRangeToPickUpEnd(value) {
-    return {
-        type: Add_Time_Range_To_PickUp_End,
-        payload: value
-    }
-}
-export function addItemTags(value) {
-    return {
-        type: Add_Item_Tags,
-        payload: value
-    }
-}
+
+
 
 /*  This is a thunk, meaning it is a function that immediately
     returns a function for lazy evaluation. It is incredibly useful for
@@ -122,24 +89,10 @@ const ACTION_HANDLERS = {
     },
 
 
-    [Add_Food_Item_Name]: (state, action) => {
-        return state.setIn(['foodItemEntryForm', 'name'], action.payload)
+    [Add_Food_Item_Info]: (state, action) => {
+        console.log(" reducer Add_Food_Item_Info is invoked with ", action);
+        return state.setIn(['foodItemEntryForm', action.storeKey], action.payload)
     },
-    [Add_Food_Item_Description]: (state, action) => {
-        return state.setIn(['foodItemEntryForm', 'description'], action.payload)
-    },
-    [Add_DeadLine_To_Order]: (state, action) => {
-        return state.setIn(['foodItemEntryForm', 'deadlineToOrder'], action.payload)
-    },
-    [Add_Time_Range_To_PickUp_Start]: (state, action) => {
-        return state.setIn(['foodItemEntryForm', 'timeRangeToPickUp', 'startTime'], action.payload)
-    },
-    [Add_Time_Range_To_PickUp_End]: (state, action) => {
-        return state.setIn(['foodItemEntryForm', 'timeRangeToPickUp', 'endTime'], action.payload)
-    },
-    [Add_Item_Tags]: (state, action) => {
-        return state.setIn(['foodItemEntryForm', 'name'], action.payload)
-    }
 }
 
 // ------------------------------------
@@ -167,18 +120,32 @@ const initialState =
             titleErrorMsg: '',
             emailIdErrorMsg: '',
             descriptionErrorMsg: '',
-            cityErrorMsg: ''
+            cityErrorMsg: '',
+            deliveryAddtnlComments:''
         }),
         foodItemEntryForm: Map({
             name: '',
+            nameErrMsg:'',
             description: '',
-            deadlineToOrder: '',
-            timeRangeToPickUp: Map({
-                startTime: '',
-                endTime: ''
-            }),
-            itemTags: List()
-
+            descriptionErrorMsg:'',
+            placeOrderBy: '',
+            placeOrderByErrorMsg:'',
+            serviceDate:'',
+            serviceDateErrorMsg:'',
+            deliveryFlag: false,
+            deliveryRadius:'',
+            deliveryAddtnlComments:'',
+            pickUpAddtnlComments:'',
+           
+            organic:false,
+            vegetarian:false,
+            glutenfree:false,
+            lowcarb:false,
+            vegan:false,
+            nutfree:false,
+            oilfree:false,
+            nondairy:false,
+            allClear:false
         })
 
     })

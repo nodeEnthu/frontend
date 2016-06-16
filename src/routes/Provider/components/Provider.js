@@ -152,7 +152,7 @@ class Provider extends React.Component {
                 <StepLabel>Item info</StepLabel>
               </Step>
               <Step>
-                <StepLabel>Time and delivery options</StepLabel>
+                <StepLabel>Preview and Submit</StepLabel>
               </Step>
             </Stepper>
             <ExpandTransition loading={loading} open={true} >

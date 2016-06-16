@@ -1,16 +1,12 @@
 import { connect } from 'react-redux'
 import {
-    addFoodItemName,
-    addFoodItemDescription,
-    addDeadLineToOrder,
-    addTimeRangeToPickUpStart,
-    addTimeRangeToPickUpEnd,
-    addItemTags
+    
 } from '../modules/provider'
 import {
     charsLeft,
     addProviderInfo,
-    addProviderErrorMsg
+    addProviderErrorMsg,
+    addFoodItemInfo
 } from '../modules/provider'
 
 
@@ -29,17 +25,13 @@ const mapActionCreators = {
     charsLeft,
     addProviderInfo,
     addProviderErrorMsg,
-    addFoodItemName,
-    addFoodItemDescription,
-    addDeadLineToOrder,
-    addTimeRangeToPickUpStart,
-    addTimeRangeToPickUpEnd,
-    addItemTags
+    addFoodItemInfo
 }
 
 const mapStateToProps = (state) => ({
     providerEntryForm: state.provider.get('providerEntryForm'),
     providerEntryState: state.provider.get('providerEntryState'),
+    foodItemEntryForm: state.provider.get('foodItemEntryForm')
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
