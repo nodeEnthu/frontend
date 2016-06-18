@@ -210,10 +210,14 @@ class ProviderEntryForm extends React.Component {
                                     </div>
                                 </div>
                                 <div className="is-center">
-                                    <textarea className = "pure-u-1" style={{marginTop:'10px'}} name="deliveryAddtnlComments" placeholder="
-                                    Minimum Order $35 
-Delivery Fee $6 
-Free above $100" value={deliveryAddtnlComments}
+                                    <textarea className = "pure-u-1" style={{marginTop:'10px'}} name="deliveryAddtnlComments" 
+                                    placeholder="Please add comments like delivery charges and location. 
+                                        Example:
+                                        Minimum Order $35 
+                                        Delivery Fee $6 
+                                        Free above $100
+                                        Located near Super Market at 123 Main street"
+                                    value={deliveryAddtnlComments}
                                         style = {{marginTop:'10px'}}
                                         onBlur={this.handleChange} 
                                         onFocus={this.handleFocus} 

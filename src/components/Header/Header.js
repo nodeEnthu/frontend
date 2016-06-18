@@ -15,7 +15,7 @@ import classes from './Header.scss'
 export const Header = () => (
 
   <div className="header">
-      <div className="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+      <div className="home-menu pure-menu pure-menu-horizontal">
           <a className="pure-menu-heading" href="">Your Site</a>
           <ul className="pure-menu-list">
               <li className="pure-menu-item pure-menu-selected">
@@ -24,7 +24,7 @@ export const Header = () => (
                 </IndexLink>
               </li>
               <li className="pure-menu-item">
-                  <Link to='/counter' className="pure-menu-link">Tour</Link>
+                  <Link to='/providerProfile' className="pure-menu-link">Tour</Link>
               </li>
               <li className="pure-menu-item">
                   <Link to='/provider' className="pure-menu-link">Provider</Link>

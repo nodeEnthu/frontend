@@ -21,7 +21,6 @@ class FoodItemEntryForm extends React.Component {
             pickUpDate: regexDate,
             timeRangeToPickUpStartTime: regexTime,
             timeRangeToPickUpEndTime: regexTime,
-            pickUpAddtnlComments:required,
             // delivery options
             devliveryDate: regexDate,
             timeRangeToDeliverStartTime: regexTime,
@@ -240,7 +239,8 @@ class FoodItemEntryForm extends React.Component {
                             />
                             <CardText 
                                 expandable={true}>
-                                <textarea className = "pure-u-1" name="pickUpAddtnlComments" placeholder="Pick-up comments (optional)" value={pickUpAddtnlComments}
+                                <textarea className = "pure-u-1" name="pickUpAddtnlComments" 
+                                    placeholder="Pick-up comments. Please add comments like pick-up timings and your approximate location" value={pickUpAddtnlComments}
                                     onBlur={this.handleChange} 
                                     onFocus={this.handleFocus} 
                                     onChange={this.changeStoreVal} 
