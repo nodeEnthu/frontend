@@ -29,7 +29,9 @@ export const Header = () => (
               <li className="pure-menu-item">
                   <Link to='/provider' className="pure-menu-link">Provider</Link>
               </li>
-              <li className="pure-menu-item"><a href="#" className="pure-menu-link">Sign Up</a></li>
+              <li className="pure-menu-item">
+                 <Link to='/counter' className="pure-menu-link">Chat</Link>
+              </li>
           </ul>
       </div>
   </div>
