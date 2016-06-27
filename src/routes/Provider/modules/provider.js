@@ -4,7 +4,7 @@
 export const Chars_Left = 'Chars_Left'
 export const Add_Provider_Info = "Add_Provider_Info"
 export const Add_Provider_Error_Msg = 'Add_Provider_Error_Msg'
-
+export const Add_Provider_Entry_State = "Add_Provider_Entry_State"
 
 export const Add_Food_Item_Info = 'Add_Food_Item_Info'
 export const MAX_COUNT_PROVIDER_DESC = 100;
@@ -51,6 +51,16 @@ export function addFoodItemInfo(obj) {
     }
 }
 
+////////////////////////////////
+//actions for changing state of form
+///////////////////////////////
+export function addProviderEntryState(obj) {
+    return {
+        type: Add_Provider_Entry_State,
+        storeKey: obj.storeKey,
+        payload: obj.payload
+    }
+}
 
 
 /*  This is a thunk, meaning it is a function that immediately
@@ -76,23 +86,23 @@ export const doubleAsync = () => {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-
     [Add_Provider_Info]: (state, action) => {
-        console.log(" reducer Add_Provider_Info is invoked with ", action);
+        //console.log(" reducer Add_Provider_Info is invoked with ", action);
         return state.setIn(['providerEntryForm', action.storeKey], action.payload)
     },
-
     [Add_Provider_Error_Msg]: (state, action) => {
-        console.log(" reducer Add_Provider_Error_Msg is invoked with ", action);
-
+        //console.log(" reducer Add_Provider_Error_Msg is invoked with ", action);
         return state.setIn(['providerEntryForm', action.storeKey], action.payload)
     },
-
 
     [Add_Food_Item_Info]: (state, action) => {
-        console.log(" reducer Add_Food_Item_Info is invoked with ", action);
+        //console.log(" reducer Add_Food_Item_Info is invoked with ", action);
         return state.setIn(['foodItemEntryForm', action.storeKey], action.payload)
     },
+    [Add_Provider_Entry_State]:(state,action)=>{
+        console.log(" reducer Provider_Entry_State is invoked with ", action);
+        return state.setIn(['providerEntryState', action.storeKey], action.payload)
+    }
 }
 
 // ------------------------------------
@@ -101,11 +111,11 @@ const ACTION_HANDLERS = {
 const initialState =
     Map({
         val: 0,
-        providerEntryState: {
+        providerEntryState: Map({
             loading: false,
             finished: false,
             stepIndex: 0
-        },
+        }),
         providerEntryForm: Map({
             chars_left: MAX_COUNT_PROVIDER_DESC,
             title: '',
@@ -136,7 +146,6 @@ const initialState =
             deliveryRadius:'',
             deliveryAddtnlComments:'',
             pickUpAddtnlComments:'',
-           
             organic:false,
             vegetarian:false,
             glutenfree:false,

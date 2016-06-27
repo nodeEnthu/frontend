@@ -34,7 +34,10 @@
 .people-list ul {
   padding: 20px;
   height: 758px;
-  overflow-y:auto;
+  overflow:hidden;
+}
+.people-list ul:hover {
+  overflow-y:scroll;
 }
 .people-list ul li {
   padding-bottom: 20px;

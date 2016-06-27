@@ -12,45 +12,27 @@ import classes from './provider.scss'
 import ProviderEntryForm from '../../../components/ProviderEntryForm/ProviderEntryForm'
 import FoodItemEntryForm from '../../../components/FoodItemEntryForm/FoodItemEntryForm'
 
-
 class Provider extends React.Component {
-  state = {
-    loading: false,
-    finished: false,
-    stepIndex: 0,
-  };
-
-  dummyAsync = (cb) => {
-    this.setState({loading: true}, () => {
-      this.asyncTimer = setTimeout(cb, 500);
-    });
-  };
-
+  state = this.props.providerEntryState.toJS();
   handleNext = () => {
-    console.log(this.props);
-    if(this.state.stepIndex===0){
+    if(this.props.providerEntryState.get('stepIndex')===0){
       this.refs.providerform.formSubmit();
-    }
-    const {stepIndex} = this.state;
-    if (!this.state.loading && this.props.providerEntryForm.get('allClear')) {
-      this.dummyAsync(() => this.setState({
-        loading: false,
-        stepIndex: stepIndex + 1,
-        finished: stepIndex >= 2,
-      }));
     }
   };
 
   handlePrev = () => {
-    const {stepIndex} = this.state;
-    if (!this.state.loading) {
-      this.dummyAsync(() => this.setState({
-        loading: false,
-        stepIndex: stepIndex - 1,
-      }));
+   const stepIndex = this.props.providerEntryState.get('stepIndex');
+    if (!this.props.providerEntryState.get('loading')) {
+        this.props.addProviderEntryState({
+          storeKey: "loading",
+          payload:false
+        });
+        this.props.addProviderEntryState({
+          storeKey: "stepIndex",
+          payload:stepIndex -1
+        });
     }
   };
-
 
   getStepContent(stepIndex) {
     switch (stepIndex) {
@@ -65,8 +47,6 @@ class Provider extends React.Component {
                 <ImageUploader/>
                 <ProviderEntryForm {...this.props} ref="providerform"/>
             </div>
-  
-      
           </div>
             
         );
@@ -97,7 +77,7 @@ class Provider extends React.Component {
   }
 
   renderContent() {
-    const {finished, stepIndex} = this.state;
+    const {finished, stepIndex} = this.props.providerEntryState.toJS();
     const contentStyle = {margin: '0 16px', overflow: 'hidden', height:'800px'};
 
     if (finished) {
@@ -138,7 +118,8 @@ class Provider extends React.Component {
   }
 
   render() {
-    const {loading, stepIndex} = this.state;
+     
+    const {loading, stepIndex} = this.props.providerEntryState.toJS();
 
     return (
       <div className="pure-g" className = {classes["pure-override-letter-spacing"]}>
@@ -168,6 +149,5 @@ class Provider extends React.Component {
 Provider.propTypes= {
     providerEntryForm: React.PropTypes.object.isRequired,
     providerEntryState: React.PropTypes.object.isRequired,
-    
 };
 export default Provider;

@@ -20,12 +20,11 @@ class ProviderEntryForm extends React.Component {
         this.changeStoreVal = this.changeStoreVal.bind(this);
         this.toggle = this.toggle.bind(this);
         this.handleTimeChange = this.handleTimeChange.bind(this);
+        this.validateForm = this.validateForm.bind(this);
     }
     handleTimeChange = (time) => {
         this.setState({time});
     };
-
-    
     handleToggle() {
         this.setState({
             active: !this.state.active
@@ -43,7 +42,6 @@ class ProviderEntryForm extends React.Component {
         if (validation) {
             errorMsg = validation(input);
         }
-
         if (errorMsg) {
             let errorMsgkey = stateKeyName + 'ErrorMsg';
             this.props.addProviderErrorMsg({
@@ -96,14 +94,12 @@ class ProviderEntryForm extends React.Component {
             payload:input
         });
     }
-
-    formSubmit(event) {
+    validateForm(){
         let self = this;
         let noErrorsInform = true;
         for (let key in this.mapFieldsToValidationType) {
             if (this.mapFieldsToValidationType.hasOwnProperty(key)) {
                 let errorMsg = this.mapFieldsToValidationType[key](this.props.providerEntryForm.get(key));
-                console.log(errorMsg + '  for key: ' + key + '  whose value is ' + this.props.providerEntryForm.get(key));
                 if (errorMsg) {
                     noErrorsInform = false;
                     let errorStateKey = [key] + 'ErrorMsg';
@@ -114,16 +110,21 @@ class ProviderEntryForm extends React.Component {
                 }
             }
         }
-        this.props.addProviderInfo({
-            storeKey:'allClear',
-            payload:noErrorsInform
-        })
+        return noErrorsInform;
+    }
+
+    formSubmit(event) {
+        if(this.validateForm()){
+            this.props.addProviderEntryState({
+                storeKey: "stepIndex",
+                payload:1
+            });
+        }
     }
     render() {
-        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag, deliveryAddtnlComments } = this.props.providerEntryForm.toJS();
+        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag, deliveryAddtnlComments,allClear } = this.props.providerEntryForm.toJS();
         return (
             <div>
-                
                 <form className="pure-form">
                     <fieldset className="pure-group">
                         <input type="text"  className="pure-u-1" placeholder="title (required)" name="title" value={this.props.providerEntryForm.get('title')}
@@ -141,6 +142,13 @@ class ProviderEntryForm extends React.Component {
 
                         <span className = {classes["error-message"]}>{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
                         <div>{chars_left}/100</div>
+                    </fieldset>
+                    <fieldset className="pure-group">
+                        <input type="text" name="emailId" placeholder="email (required)" style = {{marginBottom:0.5+'em'}} value={emailId}
+                            onBlur={this.handleChange} 
+                            onFocus={this.handleFocus}
+                            onChange={this.changeStoreVal}/>
+                        <span className = {classes["error-message"]}>{(emailIdErrorMsg)?'*'+emailIdErrorMsg:undefined}</span>
                     </fieldset>
                     <fieldset className="pure-group">
                         <legend className={classes["pull-left"]}>
@@ -167,18 +175,6 @@ class ProviderEntryForm extends React.Component {
                             onChange={this.changeStoreVal}
                         />
                         <span className = {classes["error-message"]}>{(cityErrorMsg)?'*'+cityErrorMsg:undefined}</span>
-                    </fieldset>
-                    <fieldset className="pure-group">
-                        <legend className={classes["pull-left"]}>
-                            Keep my email private
-                            <input style = {{display:'inline', width:'10%'}}type ="checkBox" name="keepEmailPrivateFlag"
-                                checked={keepEmailPrivateFlag} onChange={this.toggle}/>
-                        </legend>
-                        <input type="text" name="emailId" placeholder="email (required)" style = {{marginBottom:0.5+'em'}} value={emailId}
-                            onBlur={this.handleChange} 
-                            onFocus={this.handleFocus}
-                            onChange={this.changeStoreVal}/>
-                        <span className = {classes["error-message"]}>{(emailIdErrorMsg)?'*'+emailIdErrorMsg:undefined}</span>
                     </fieldset>
                     <fieldset className="pure-group">
                         <Card style={{width:'99%', margin: '0 auto'}}>
@@ -225,6 +221,7 @@ class ProviderEntryForm extends React.Component {
                                     >
                                     </textarea> 
                                 </div>
+                                
                             </CardText>
                         </Card>
                     </fieldset>
@@ -235,5 +232,6 @@ class ProviderEntryForm extends React.Component {
 }
 ProviderEntryForm.propTypes = {
     providerEntryState: React.PropTypes.object.isRequired,
+    providerEntryForm: React.PropTypes.object.isRequired
 };
 export default ProviderEntryForm;
