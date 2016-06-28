@@ -1,8 +1,8 @@
 import React from 'react'
-import classes from './Counter.scss'
+import classes from './Chat.scss'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import classNames from 'classnames';
-export default class Counter extends React.Component{
+export default class Chat extends React.Component{
   constructor(props){
     super(props);
   }
@@ -202,9 +202,9 @@ export default class Counter extends React.Component{
   }
 }; 
 
-Counter.propTypes = {
+Chat.propTypes = {
   counter: React.PropTypes.object.isRequired,
   doubleAsync: React.PropTypes.func.isRequired,
   increment: React.PropTypes.func.isRequired
 }
-export default Counter
+export default Chat;

@@ -156,7 +156,6 @@ const initialState =
             nondairy:false,
             allClear:false
         })
-
     })
 export default function providerReducer(state = initialState, action) {
     const handler = ACTION_HANDLERS[action.type]

@@ -30,7 +30,7 @@ export const Header = () => (
                   <Link to='/provider' className="pure-menu-link">Provider</Link>
               </li>
               <li className="pure-menu-item">
-                 <Link to='/counter' className="pure-menu-link">Chat</Link>
+                 <Link to='/chat' className="pure-menu-link">Chat</Link>
               </li>
           </ul>
       </div>

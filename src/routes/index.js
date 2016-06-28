@@ -1,7 +1,7 @@
 // We only need to import the modules necessary for initial render
 import CoreLayout from '../layouts/CoreLayout/CoreLayout'
 import Home from './Home'
-import CounterRoute from './Counter'
+import ChatRoute from './Chat'
 import ProviderRoute from './Provider'
 import ProviderProfile from './ProviderProfile'
 
@@ -13,7 +13,7 @@ export const createRoutes = (store) => ({
   component: CoreLayout,
   indexRoute: Home,
   childRoutes: [
-    CounterRoute(store),
+    ChatRoute(store),
     ProviderRoute(store),
     ProviderProfile(store)
   ]
