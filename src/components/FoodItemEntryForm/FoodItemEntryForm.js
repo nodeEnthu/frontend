@@ -36,7 +36,6 @@ class FoodItemEntryForm extends React.Component {
     }
 
     handleChange(event) {
-        console.log(event)
         let input = event.target.value;
         let stateKeyName = event.target.name;
         let actionObj = {

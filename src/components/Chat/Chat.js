@@ -2,11 +2,43 @@ import React from 'react'
 import classes from './Chat.scss'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import classNames from 'classnames';
+import * as actions from '../../routes/Chat/modules/chat'
+import moment from 'moment'
+import fetch from 'isomorphic-fetch'
 export default class Chat extends React.Component{
   constructor(props){
     super(props);
+    this.sendMessage = this.sendMessage.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+  componentDidMount() {
+    const { socket,dispatch } = this.props;
+    socket.emit('chat mounted', { user: "username", channel: "Lobby" });
+    socket.on('typing bc', user =>
+      dispatch(actions.typing(user))
+    );
+    socket.on('stop typing bc', user =>
+      dispatch(actions.stopTyping(user))
+    );
+  }
+  sendMessage(){
+    const {text} = this.props.chat.toJS();
+    let randomUser = Math.random();
+    const reqBody={
+      text:text,
+      user:randomUser.toString(),
+      time: moment().format('LT')
+    }
+    this.props.dispatch(actions.createMessage(JSON.stringify(reqBody)));
+  }
+  handleChange(event){
+    let input = event.target.value;
+    const {socket}= this.props;
+    socket.emit('typing', { user: "username", channel: "Lobby" });
+    this.props.dispatch(actions.addMessage(input));
   }
   render(){
+    const {dispatch} = this.props;
     return (
         <div className={classNames(classes["container-chat"], classes["clearfix"])} >
           <div className={classes["people-list"]} id="people-list">
@@ -191,10 +223,12 @@ export default class Chat extends React.Component{
               </ul>
             </div>
             <div className={classNames(classes["chat-message"],classes["clearfix"])} >
-              <textarea name="message-to-send" id="message-to-send" placeholder="Type your message" rows="3"></textarea>
+              <textarea name="message-to-send" id="message-to-send" placeholder="Type your message" rows="3"
+                onChange={this.handleChange}
+              ></textarea>
               <i className={classNames(classes["fa"],classes["fa-file-o"])}></i> &nbsp;&nbsp;&nbsp;
               <i className={classNames(classes["fa"],classes["fa-file-image-o"])}></i>
-              <button>Send</button>
+              <button onClick={this.sendMessage}>Send</button>
             </div>
           </div>
         </div>
@@ -203,8 +237,8 @@ export default class Chat extends React.Component{
 }; 
 
 Chat.propTypes = {
-  counter: React.PropTypes.object.isRequired,
-  doubleAsync: React.PropTypes.func.isRequired,
-  increment: React.PropTypes.func.isRequired
+  chat: React.PropTypes.object.isRequired,
+  dispatch:React.PropTypes.func.isRequired,
+  socket:React.PropTypes.object.isRequired
 }
 export default Chat;

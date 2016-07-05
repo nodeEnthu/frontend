@@ -27,6 +27,8 @@ export const AUTH_SIGNUP_FAIL = 'AUTH_SIGNUP_FAIL';
 export const TYPING = 'TYPING';
 export const STOP_TYPING = 'STOP_TYPING';
 
+export const ADD_TIME_STAMP = 'STOP_TYPING';
+
 export const ADD_USER = 'ADD_USER';
 
 export const REMOVE_USER_FROM_CHANNEL = 'REMOVE_USER_FROM_CHANNEL';

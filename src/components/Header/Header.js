@@ -1,6 +1,7 @@
 import React from 'react'
 import { IndexLink, Link } from 'react-router'
 import classes from './Header.scss'
+import FacebookLogin from 'components/Facebook/Facebook';
 
 
 
@@ -30,7 +31,15 @@ export const Header = () => (
                   <Link to='/provider' className="pure-menu-link">Provider</Link>
               </li>
               <li className="pure-menu-item">
-                 <Link to='/chat' className="pure-menu-link">Chat</Link>
+                  <FacebookLogin
+                    appId="116207178810953"
+                    autoLoad={true}
+                    fields="name,email,picture"
+                    callback={(response)=>{
+                      console.log(response);
+                    }} 
+                  />
+                 {/*<Link to='/chat' className="pure-menu-link">Chat</Link>*/}
               </li>
           </ul>
       </div>
