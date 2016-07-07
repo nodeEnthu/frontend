@@ -1,25 +1,44 @@
 import { connect } from 'react-redux'
-import {Map} from 'immutable'
+import { Map } from 'immutable'
 
-const ADD_TOKEN = "ADD_TOKEN"
+const ADD_TOKEN = "ADD_TOKEN";
+const ADD_USER = "ADD_USER"
 
 const initialState = Map({
-	token:''
+    token: '',
+    user: Map({
+        name: '',
+        email: '',
+        provider: '',
+        fbLargeImg: '',
+        fbSmallImg: '',
+        fbUserID: ''
+    })
 })
 
-export function addToken(value){
-	return{
-		type: "ADD_TOKEN",
-		payload:value
-	}
+export function addToken(value) {
+    return {
+        type: "ADD_TOKEN",
+        payload: value
+    }
+}
+export function addUser(user) {
+    return {
+        type: "ADD_USER",
+        payload: user
+    }
 }
 
 const ACTION_HANDLERS = {
     [ADD_TOKEN]: (state, action) => {
-    	console.log("old state",state);
-    	let newState = state.set('token', action.payload)
-    	console.log("new state",newState);
-        return newState ;
+        return state.set('token', action.payload)
+    },
+    [ADD_USER]: (state, action) => {
+        console.log(action.payload);
+        let newUser = Map(action.payload);
+        let newState = state.set('user', newUser)
+        console.log(newState.toJS());
+        return newState;
     }
 }
 
