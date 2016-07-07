@@ -3,6 +3,7 @@ import { IndexLink, Link } from 'react-router'
 import FileIcons from '../assets/file-icons.png'
 import Autosuggest from 'react-autosuggest'
 import AsyncAutocomplete from 'components/AsyncAutocomplete'
+import store from 'store/createStore'
 
 const HomeView = React.createClass({
     getInitialState() {
@@ -157,6 +158,7 @@ const HomeView = React.createClass({
 })
 
 HomeView.propTypes = {
+	globalState:React.PropTypes.object.isRequired,
     leftNavOpen: React.PropTypes.bool.isRequired,
     leftnavstatechange: React.PropTypes.func.isRequired,
     userZipSearchChange: React.PropTypes.func.isRequired,

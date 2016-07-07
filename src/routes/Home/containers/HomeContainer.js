@@ -21,6 +21,7 @@ const mapActionCreators = {
 
 const mapStateToProps = (state) => {
     return {
+        globalState:state,
         leftNavOpen: state.homepage.get('leftNavOpen'),
         userZipSearch: state.homepage.get('userZipSearch')
     }

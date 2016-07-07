@@ -1,50 +1,76 @@
 import React from 'react'
-import { IndexLink, Link } from 'react-router'
-import classes from './Header.scss'
-import FacebookLogin from 'components/Facebook/Facebook';
+import { Link, IndexLink } from 'react-router';
+import FacebookLogin from 'components/Facebook/Facebook'
+import {connect} from 'react-redux'
+import * as actions from '../../layouts/CoreLayout/coreReducer'
 
+export default class Header extends React.Component {
+    constructor(props) {
+        super(props);
+        this.successfulLogin = this.successfulLogin.bind(this);
+    }
+    successfulLogin(response) {
+      console.log("fb was invoked",response);
+      const {dispatch} = this.props;
+      response.provider = 'fb';
+      fetch('/api/users/signUp', {
+              method: 'post',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(response)
+          })
+          .then(function(res) {
+              return res.json(); })
+          .then(function(data) { 
+              if(data.token){
+                dispatch(actions.addToken(data.token))
+              } 
+           })
+    }
+    render() {
+      const {globalState} = this.props;
+      console.log(globalState.core.get('token'));
+      console.log("getting re-rendered");
+        return (
+          <div className="header">
+            <div className="home-menu pure-menu pure-menu-horizontal">
+              <a className="pure-menu-heading" href="">Your Site</a>
+              <ul className="pure-menu-list">
+                  <li className="pure-menu-item pure-menu-selected">
+                    <IndexLink to='/' className="pure-menu-link">
+                      Home
+                    </IndexLink>
+                  </li>
+                  <li className="pure-menu-item">
+                      <Link to='/providerProfile' className="pure-menu-link">Tour</Link>
+                  </li>
+                  <li className="pure-menu-item">
+                      <Link to='/provider' className="pure-menu-link">Provider</Link>
+                  </li>
+                  <li className="pure-menu-item">
+                    {globalState.core.get('token').length>0?
+                      undefined
+                      :
+                      <FacebookLogin
+                      appId="116207178810953"
+                      autoLoad={true}
+                      fields="id,email,name,link,picture"
+                      callback={this.successfulLogin} 
+                      />
+                     }
+                     
+                  </li>
+              </ul>
+          </div>
+        </div>
+        );
+    }
+};
 
-
-  // var Header = React.createClass({
-  //    getInitialState: function() {
-  //     return {clicked: false};
-  //   },
-  //   handleClick: function(event) {
-  //     this.setState({liked: !this.state.liked});
-  //   },
-  // })
-export const Header = () => (
-
-  <div className="header">
-      <div className="home-menu pure-menu pure-menu-horizontal">
-          <a className="pure-menu-heading" href="">Your Site</a>
-          <ul className="pure-menu-list">
-              <li className="pure-menu-item pure-menu-selected">
-                <IndexLink to='/' className="pure-menu-link">
-                  Home
-                </IndexLink>
-              </li>
-              <li className="pure-menu-item">
-                  <Link to='/providerProfile' className="pure-menu-link">Tour</Link>
-              </li>
-              <li className="pure-menu-item">
-                  <Link to='/provider' className="pure-menu-link">Provider</Link>
-              </li>
-              <li className="pure-menu-item">
-                  <FacebookLogin
-                    appId="116207178810953"
-                    autoLoad={true}
-                    fields="name,email,picture"
-                    callback={(response)=>{
-                      console.log(response);
-                    }} 
-                  />
-                 {/*<Link to='/chat' className="pure-menu-link">Chat</Link>*/}
-              </li>
-          </ul>
-      </div>
-  </div>
-)
-
-export default Header
-
+function mapStateToProps(state) {
+  return {
+    globalState: state
+  };
+}
+export default connect(mapStateToProps)(Header)
