@@ -10,7 +10,6 @@ export default class Header extends React.Component {
         this.successfulLogin = this.successfulLogin.bind(this);
     }
     successfulLogin(response) {
-      console.log("fb was invoked",response);
       const {dispatch} = this.props;
       response.provider = 'fb';
       fetch('/api/users/signUp', {
@@ -25,6 +24,7 @@ export default class Header extends React.Component {
           .then(function(data) { 
               if(data.token){
                 dispatch(actions.addToken(data.token))
+                sessionStorage.setItem('token', data.token);
               } 
            })
     }
