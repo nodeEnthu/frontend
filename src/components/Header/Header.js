@@ -7,12 +7,10 @@ import * as actions from '../../layouts/CoreLayout/coreReducer'
 export default class Header extends React.Component {
     constructor(props) {
         super(props);
-        this.dispatch = this.props.dispatch;
         this.successfulLogin = this.successfulLogin.bind(this);
     }
     componentDidMount() {
         let token = sessionStorage.getItem('token');
-        let self = this;
         const { dispatch } = this.props;
         if (token) {
             // send an ajax call to get the user back 
@@ -28,7 +26,8 @@ export default class Header extends React.Component {
               return response.json();
             })
             .then(function(data){
-              self.dispatch(actions.addUser(data));
+              dispatch(actions.addUser(data));
+               dispatch(actions.addToken(token));
             })
         }
     }

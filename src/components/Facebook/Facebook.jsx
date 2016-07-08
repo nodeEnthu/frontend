@@ -124,12 +124,12 @@ class FacebookLogin extends React.Component {
         }
         return (
             <span>
-        <button
+        <a
          className="pure-menu-link"
           onClick={this.click}
         >
           {textButton}
-        </button>
+        </a>
       </span>
         );
     }
