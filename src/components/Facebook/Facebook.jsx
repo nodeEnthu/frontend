@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import styles from './facebook.scss';
 import Link from 'react-router';
+import RaisedButton from 'material-ui/RaisedButton';
+
 class FacebookLogin extends React.Component {
 
     static propTypes = {
@@ -123,14 +125,15 @@ class FacebookLogin extends React.Component {
             return this.renderWithFontAwesome();
         }
         return (
-            <span>
-        <a
-         className="pure-menu-link"
+        
+        <RaisedButton
+          style = {{width:'50%'}}
+          labelPosition="before"
+          label="Login With Facebook" primary={true}
+          style={{display:"block"}}
           onClick={this.click}
         >
-          {textButton}
-        </a>
-      </span>
+        </RaisedButton>
         );
     }
 }

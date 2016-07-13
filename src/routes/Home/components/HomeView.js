@@ -4,27 +4,87 @@ import FileIcons from '../assets/file-icons.png'
 import Autosuggest from 'react-autosuggest'
 import AsyncAutocomplete from 'components/AsyncAutocomplete'
 import store from 'store/createStore'
+import IconButton from 'material-ui/IconButton'
+import CommunicationLocationOn from 'material-ui/svg-icons/communication/location-on'
+import Spinner from 'react-spinkit'
 
 const HomeView = React.createClass({
     getInitialState() {
         return {
-                userSearchChange: this.props.userZipSearchChange,
-                apiUrl: "/api/city/",
-                searchTextAlreadyInStore:this.props.userZipSearch.get('searchText')
+                fetchingGeoZips:false,
         };
     },
+    componentDidMount() {
+       
+    },
+    goToProviderProfile(){
+    	this.props.history.push('/provider');
+    },
+    getLocationCordinates(){
+    	let self = this;
+    	this.setState({
+    		fetchingGeoZips:true
+    	})
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(pos) {     
+            let latitude =  pos.coords.latitude,
+            	longitude =  pos.coords.longitude;
+            fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+latitude+'&lon='+longitude+'&addressdetails=1')
+            	.then(function(data){
+            		return data.json();
+            	}).then(function(response){
+	            	self.props.userZipSearchChange(response.address.postcode);
+	            	self.setState({
+			    		fetchingGeoZips:false
+			    	})
+            	})
+        	},
+	        function(err) {
+	            this.setState({
+    				fetchingGeoZips:true
+    			})
+	        });
+        } else {
+            // show some error message
+        }
+    },
     render() {
+    	console.log("parent rerender",this.state);
         return (
             <div>
 				<div className="splash-container counter-fixed-menu pure-override-letter-spacing">
 					<div className="banner-wrapper">
 						<div className="pure-g">
 							<div className = "pure-u-1 pure-u-md-1-2">
-							    <div className="splash ">
+							    <div className="splash">
 							        <h1 className="splash-head">
 							        	Please enter a zip code to find food close to you.
 							        </h1>
-							        <AsyncAutocomplete settings={this.state}/>
+							        <AsyncAutocomplete settings={{
+							        	userSearchText : this.props.homepage.get('userZipSearch'),
+							        	apiUrl:'/api/locations/zipcodeTypeAssist',
+							        	action:this.props.userZipSearchChange
+							        }}/>
+							        <IconButton
+							        	style = {{
+							        			padding:'0px',
+							        			height:'0px',
+							        			width:'0px',
+							        			marginLeft:'-30px',
+							        			top:'6px',
+							        			display:'inline-block',
+							        			visibility:(this.state.fetchingGeoZips)? 'hidden':'initial'							        		
+							        		}}
+							        	onClick = {this.getLocationCordinates}
+							        >
+							        	<CommunicationLocationOn/>
+							        </IconButton>
+							        <Spinner spinnerName='circle' 
+							        	style = {{	display:'inline-block',
+							        				visibility:(this.state.fetchingGeoZips)?'initial':'hidden',
+							        				top:'5px'
+							        			}}
+							        />
 							        <p className="is-center">
 							        	<button className="pure-button pure-button-primary">Get Started</button>
 							        </p>
@@ -36,7 +96,10 @@ const HomeView = React.createClass({
 							        	Advertise your food right away in 3 easy steps
 							        </div>
 							        <p className="is-center">
-							        	<button className="pure-button pure-button-primary">Get Started</button>
+							        	<button className="pure-button pure-button-primary"
+							        		onClick={this.goToProviderProfile}>
+							        		Get Started
+							        	</button>
 							        </p>
 							    </div>
 						    </div>
@@ -159,10 +222,8 @@ const HomeView = React.createClass({
 
 HomeView.propTypes = {
 	globalState:React.PropTypes.object.isRequired,
-    leftNavOpen: React.PropTypes.bool.isRequired,
-    leftnavstatechange: React.PropTypes.func.isRequired,
-    userZipSearchChange: React.PropTypes.func.isRequired,
-    userZipSearch: React.PropTypes.object.isRequired
+   	homepage:React.PropTypes.object.isRequired,
+   	userZipSearchChange:React.PropTypes.func.isRequired
 }
 
 export default HomeView

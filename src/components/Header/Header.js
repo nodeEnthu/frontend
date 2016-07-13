@@ -1,61 +1,16 @@
 import React from 'react'
 import { Link, IndexLink } from 'react-router';
-import FacebookLogin from 'components/Facebook/Facebook'
 import { connect } from 'react-redux'
 import * as actions from '../../layouts/CoreLayout/coreReducer'
+import Login from '../Login/Login'
 
 export default class Header extends React.Component {
     constructor(props) {
         super(props);
-        this.successfulLogin = this.successfulLogin.bind(this);
-    }
-    componentDidMount() {
-        let token = sessionStorage.getItem('token');
-        const { dispatch } = this.props;
-        if (token) {
-            // send an ajax call to get the user back 
-            // this makes sure user is authenticated with us
-            fetch('/api/users/me', {
-                method: 'get',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                }
-            })
-            .then(function(response){
-              return response.json();
-            })
-            .then(function(data){
-              dispatch(actions.addUser(data));
-               dispatch(actions.addToken(token));
-            })
-        }
-    }
-    successfulLogin(response) {
-        const { dispatch } = this.props;
-        response.provider = 'fb';
-        fetch('/api/users/signUp', {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(response)
-            })
-            .then(function(res) {
-                return res.json();
-            })
-            .then(function(data) {
-                if (data.token) {
-                    dispatch(actions.addToken(data.token));
-                    dispatch(actions.addUser(data.user))
-                    sessionStorage.setItem('token', data.token);
-                }
-            })
     }
     render() {
         const { globalState } = this.props;
-        const {fbSmallImg} = globalState.core.get('user').toJS();
-        
+        const {img} = globalState.core.get('user').toJS();
         return (
             <div className="header">
             <div className="home-menu pure-menu pure-menu-horizontal">
@@ -74,20 +29,16 @@ export default class Header extends React.Component {
                   </li>
                   <li className="pure-menu-item">
                     {(globalState.core.get('token').length>0 )?
-                      <img src={fbSmallImg} 
+                      <img src={img} 
                         style = {{
-                          borderRadius:24+'px'
+                          borderRadius:24+'px',
+                          width:'40px',
+                          displat:'inline-block'
                         }}
                       />
                       :
-                      <FacebookLogin
-                      appId="116207178810953"
-                      autoLoad={true}
-                      fields="id,email,name,link,picture"
-                      callback={this.successfulLogin} 
-                      />
-                     }
-                     
+                      <Login{...this.props}/>
+                     } 
                   </li>
               </ul>
           </div>

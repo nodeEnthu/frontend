@@ -1,8 +1,11 @@
 import { connect } from 'react-redux'
 import { Map } from 'immutable'
 
-const ADD_TOKEN = "ADD_TOKEN";
-const ADD_USER = "ADD_USER"
+export const ADD_TOKEN = "ADD_TOKEN";
+export const ADD_USER = "ADD_USER"
+export const OPEN_MODAL_LOGIN = 'OPEN_MODAL_LOGIN';
+export const CLOSE_MODAL_LOGIN = 'CLOSE_MODAL_LOGIN';
+export const USER_LOGGED_IN = 'USER_LOGGED_IN';
 
 const initialState = Map({
     token: '',
@@ -10,10 +13,12 @@ const initialState = Map({
         name: '',
         email: '',
         provider: '',
-        fbLargeImg: '',
-        fbSmallImg: '',
-        fbUserID: ''
-    })
+        img:'',
+        fbUserID: '',
+        gmailUserID:''
+    }),
+    loginModalOPen:false,
+    userLoggedIn:false
 })
 
 export function addToken(value) {
@@ -28,18 +33,40 @@ export function addUser(user) {
         payload: user
     }
 }
+export function openLoginModal() {
+  return {
+    type: OPEN_MODAL_LOGIN,
+  };
+};
+
+export function closeLoginModal() {
+  return {
+    type: CLOSE_MODAL_LOGIN,
+  };
+};
+export function userLoggedIn() {
+  return {
+    type: USER_LOGGED_IN,
+  };
+};
 
 const ACTION_HANDLERS = {
     [ADD_TOKEN]: (state, action) => {
         return state.set('token', action.payload)
     },
     [ADD_USER]: (state, action) => {
-        console.log(action.payload);
         let newUser = Map(action.payload);
-        let newState = state.set('user', newUser)
-        console.log(newState.toJS());
-        return newState;
-    }
+        return state.set('user', newUser)
+    },
+    [OPEN_MODAL_LOGIN]: (state,action) => {
+        return state.set('loginModalOPen', true)
+    },
+    [CLOSE_MODAL_LOGIN]: (state, action) => {
+        return state.set('loginModalOPen', false)
+    },
+    [USER_LOGGED_IN]:(state,action)=>{
+        return state.set('loggedIn',action.payload);
+    }   
 }
 
 export function coreReducer(state = initialState, action) {
