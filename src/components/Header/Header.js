@@ -3,10 +3,14 @@ import { Link, IndexLink } from 'react-router';
 import { connect } from 'react-redux'
 import * as actions from '../../layouts/CoreLayout/coreReducer'
 import Login from '../Login/Login'
-
 export default class Header extends React.Component {
     constructor(props) {
         super(props);
+        this.removeToken = this.removeToken.bind(this);
+    }
+    removeToken(){
+      this.props.dispatch(actions.addToken(''))
+      sessionStorage.removeItem('token');
     }
     render() {
         const { globalState } = this.props;
@@ -27,15 +31,27 @@ export default class Header extends React.Component {
                   <li className="pure-menu-item">
                       <Link to='/provider' className="pure-menu-link">Provider</Link>
                   </li>
+                  {(globalState.core.get('token').length>0 )?
+                    <li className="pure-menu-item">
+                        <a className="pure-menu-link"
+                          onClick = {this.removeToken}
+                          >Logout</a>
+                    </li>
+                    :
+                    undefined
+                  }
                   <li className="pure-menu-item">
                     {(globalState.core.get('token').length>0 )?
-                      <img src={img} 
-                        style = {{
-                          borderRadius:24+'px',
-                          width:'40px',
-                          displat:'inline-block'
-                        }}
-                      />
+                      <div>
+                        <img  src={img} 
+                              style = {{
+                                borderRadius:24+'px',
+                                width:'40px',
+                                display:'inline-block'
+                              }}
+                              onClick={this.handleTouchTap}
+                        />
+                      </div>
                       :
                       <Login{...this.props}/>
                      } 

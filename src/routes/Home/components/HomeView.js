@@ -14,11 +14,15 @@ const HomeView = React.createClass({
                 fetchingGeoZips:false,
         };
     },
+    contextTypes: {
+    	router: React.PropTypes.object.isRequired
+  	},
     componentDidMount() {
        
     },
+    
     goToProviderProfile(){
-    	this.props.history.push('/provider');
+    	this.context.router.push('/provider');
     },
     getLocationCordinates(){
     	let self = this;
