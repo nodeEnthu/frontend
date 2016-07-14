@@ -28,9 +28,6 @@ export default class Header extends React.Component {
                   <li className="pure-menu-item">
                       <Link to='/providerProfile' className="pure-menu-link">Tour</Link>
                   </li>
-                  <li className="pure-menu-item">
-                      <Link to='/provider' className="pure-menu-link">Provider</Link>
-                  </li>
                   {(globalState.core.get('token').length>0 )?
                     <li className="pure-menu-item">
                         <a className="pure-menu-link"

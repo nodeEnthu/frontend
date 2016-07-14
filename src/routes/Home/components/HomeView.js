@@ -110,7 +110,7 @@ const HomeView = React.createClass({
 						</div>
 					</div>
 				</div>
-				<div className="content-wrapper">
+				{/*<div className="content-wrapper">
 				    <div className="content">
 				        <h2 className="content-head is-center">Excepteur sint occaecat cupidatat.</h2>
 
@@ -218,7 +218,7 @@ const HomeView = React.createClass({
 				        View the source of this layout to learn more. Made with love by the YUI Team.
 				    </div>
 
-				</div>
+				</div>*/}
 			</div>
         )
     }
