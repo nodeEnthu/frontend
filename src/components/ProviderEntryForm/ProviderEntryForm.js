@@ -3,6 +3,7 @@ import classes from './providerentryform.scss';
 import { email, maxLength, required } from './../../utils/formValidation';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import Toggle from 'react-toggle';
+
 const maxCount = 100;
 class ProviderEntryForm extends React.Component {
     constructor(props) {
