@@ -78,7 +78,7 @@ class Provider extends React.Component {
 
   renderContent() {
     const {finished, stepIndex} = this.props.providerEntryState.toJS();
-    const contentStyle = {margin: '0 16px', overflow: 'hidden', height:'800px'};
+    const contentStyle = {margin: '0 16px'};
 
     if (finished) {
       return (
@@ -99,8 +99,8 @@ class Provider extends React.Component {
 
     return (
       <div style={contentStyle} >
-        <div style={{height:'auto'}}>{this.getStepContent(stepIndex)}</div>
-        <div style={{display:'block', clear:'both', marginTop: 24, marginBottom: 12,height:'auto'}}>
+        <div >{this.getStepContent(stepIndex)}</div>
+        <div style={{display:'block', clear:'both', marginTop: 24, marginBottom: 12}}>
           <FlatButton
             label="Back"
             disabled={stepIndex === 0}
