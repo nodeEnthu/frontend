@@ -148,7 +148,8 @@ class ProviderEntryForm extends React.Component {
                         <input type="text" name="emailId" placeholder="email (required)" style = {{marginBottom:0.5+'em'}} value={emailId}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus}
-                            onChange={this.changeStoreVal}/>
+                            onChange={this.changeStoreVal}
+                            className={"pure-u-1"}/>
                         <span className = {classes["error-message"]}>{(emailIdErrorMsg)?'*'+emailIdErrorMsg:undefined}</span>
                     </fieldset>
                     <fieldset className="pure-group">
@@ -164,16 +165,19 @@ class ProviderEntryForm extends React.Component {
                                 checked={keepAddressPrivateFlag} onChange={this.toggle}/>
                         </legend>
 
-                        <input type="text"  style = {{marginBottom:0.5+'em'}} name="streetName"  placeholder="Street Name (optional)" value = {streetName}
-                            onChange={this.changeStoreVal} 
+                        <input type="text"  name="streetName" placeholder="Street Name (optional)" value = {streetName}
+                            onChange={this.changeStoreVal}
+                            className="pure-u-1" 
                          />
-                        <input type="text"  style = {{marginBottom:0.5+'em'}} name="crosStreetName" placeholder="Cross Street Name (optional)" value = {crosStreetName}
-                            onChange={this.changeStoreVal} 
+                        <input type="text" name="crosStreetName" placeholder="Cross Street Name (optional)" value = {crosStreetName}
+                            onChange={this.changeStoreVal}
+                            className="pure-u-1" 
                         />
-                        <input type="text"  name="city"  placeholder="City (required)" style = {{marginBottom:0.5+'em'}} value = {city}
+                        <input type="text"  name="city"  placeholder="City (required)" value = {city}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus}
                             onChange={this.changeStoreVal}
+                            className="pure-u-1"
                         />
                         <span className = {classes["error-message"]}>{(cityErrorMsg)?'*'+cityErrorMsg:undefined}</span>
                     </fieldset>
