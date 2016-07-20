@@ -3,6 +3,8 @@ import { Link, IndexLink } from 'react-router';
 import { connect } from 'react-redux'
 import * as actions from '../../layouts/CoreLayout/coreReducer'
 import Login from '../Login/Login'
+import classes from './Header.scss'
+import classNames from 'classnames'
 export default class Header extends React.Component {
     constructor(props) {
         super(props);
@@ -16,8 +18,8 @@ export default class Header extends React.Component {
         const { globalState } = this.props;
         const {img} = globalState.core.get('user').toJS();
         return (
-            <div className="header">
-            <div className="home-menu pure-menu pure-menu-horizontal">
+            <div className={classes["header"]}>
+            <div className={classNames(classes["home-menu"], "pure-menu","pure-menu-horizontal")}>
               <a className="pure-menu-heading" href="">Your Site</a>
               <ul className="pure-menu-list">
                   <li className="pure-menu-item pure-menu-selected">

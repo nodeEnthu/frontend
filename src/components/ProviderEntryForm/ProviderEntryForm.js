@@ -187,42 +187,58 @@ class ProviderEntryForm extends React.Component {
                             />
                             <CardText 
                                 expandable={true}>
-                                <div style={{overflow:'hidden'}}>
-                                    <label style={{
-                                            display: 'inline-block',
-                                            margin: 0,
-                                            fontWeight: 'normal',
-                                            marginRight: '5px',
-                                            float: 'left'
-                                    }}for="delivery">Delivery within</label>
-                                    <div style = {{float:'left'}}>
-                                         <select id="delivery">
-                                            <option selected="selected">Please select miles</option>
-                                            <option>5</option>
-                                            <option>10</option>
-                                            <option>15</option>
-                                            <option>20</option>
-                                            <option>25</option>
-                                        </select> miles
-                                    </div>
-                                </div>
-                                <div className="is-center">
-                                    <textarea className = "pure-u-1" style={{marginTop:'10px'}} name="deliveryAddtnlComments" 
-                                    placeholder="Please add comments like delivery charges and location. 
-                                        Example:
-                                        Minimum Order $35 
-                                        Delivery Fee $6 
-                                        Free above $100
-                                        Located near Super Market at 123 Main street"
-                                    value={deliveryAddtnlComments}
-                                        style = {{marginTop:'10px'}}
-                                        onBlur={this.handleChange} 
-                                        onFocus={this.handleFocus} 
-                                        onChange={this.changeStoreVal} 
-                                    >
-                                    </textarea> 
-                                </div>
+                                    <div className="pure-g">
+                                        <div className="pure-u-1 pure-u-md-1-3">
+                                            <label for="min-order">Minimum Order</label>
+                                            <input id="min-order" className="pure-u-3-4" type="text"/>
+                                        </div>
+
+                                        <div className="pure-u-1 pure-u-md-1-3">
+                                            <label for="last-name">Last Name</label>
+                                            <input id="last-name" className="pure-u-3-4" type="text"/>
+                                        </div>
+
+                                        <div className="pure-u-1 pure-u-md-1-3">
+                                            <label for="email">E-Mail</label>
+                                            <input id="email" className="pure-u-3-4" type="email" required/>
+                                        </div>
+
+                                        <div className="pure-u-1 pure-u-md-1-3">
+                                            <label for="city">City</label>
+                                            <input id="city" className="pure-u-3-4"  type="text"/>
+                                        </div>
+
+                                        <div className="pure-u-1 pure-u-md-1-3">
+                                            <label for="delivery">
+                                                Delivery within
+                                            </label>
+                                            <div>
+                                                 <select id="delivery">
+                                                    <option selected="selected">Please select miles</option>
+                                                    <option>5</option>
+                                                    <option>10</option>
+                                                    <option>15</option>
+                                                    <option>20</option>
+                                                    <option>25</option>
+                                                </select> miles
+                                            </div>
+                                        </div>
+                                    </div>   
                                 
+                                <textarea className = "pure-u-1" style={{marginTop:'10px'}} name="deliveryAddtnlComments" 
+                                placeholder="Please add comments like delivery charges. 
+                                    Example:
+                                    Minimum Order $35 
+                                    Delivery Fee $6 
+                                    Free above $100"
+                                value={deliveryAddtnlComments}
+                                    style = {{marginTop:'10px'}}
+                                    onBlur={this.handleChange} 
+                                    onFocus={this.handleFocus} 
+                                    onChange={this.changeStoreVal} 
+                                >
+                                </textarea> 
+                               
                             </CardText>
                         </Card>
                     </fieldset>

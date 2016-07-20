@@ -7,6 +7,8 @@ import store from 'store/createStore'
 import IconButton from 'material-ui/IconButton'
 import CommunicationLocationOn from 'material-ui/svg-icons/communication/location-on'
 import Spinner from 'react-spinkit'
+import classes from './HomeView.scss'
+import classNames from 'classnames';
 
 const HomeView = React.createClass({
     getInitialState() {
@@ -56,12 +58,12 @@ const HomeView = React.createClass({
     	console.log("parent rerender",this.state);
         return (
             <div>
-				<div className="splash-container counter-fixed-menu pure-override-letter-spacing">
-					<div className="banner-wrapper">
+				<div className={classNames(classes["splash-container"],classes["pure-override-letter-spacing"])}>
+					<div className={classes["banner-wrapper"]}>
 						<div className="pure-g">
 							<div className = "pure-u-1 pure-u-md-1-2">
-							    <div className="splash">
-							        <h1 className="splash-head">
+							    <div className={classes["splash"]}>
+							        <h1 className={classes["splash-head"]}>
 							        	Please enter a zip code to find food close to you.
 							        </h1>
 							        <AsyncAutocomplete settings={{
@@ -89,17 +91,17 @@ const HomeView = React.createClass({
 							        				top:'5px'
 							        			}}
 							        />
-							        <p className="is-center">
+							        <p className={classes["is-center"]}>
 							        	<button className="pure-button pure-button-primary">Get Started</button>
 							        </p>
 							    </div>
 						    </div>
 						    <div className = "pure-u-1 pure-u-md-1-2">
-							    <div className="splash">
-							        <div className="splash-head">
+							   <div className={classes["splash"]}>
+							        <div className={classes["splash-head"]}>
 							        	Advertise your food right away in 3 easy steps
 							        </div>
-							        <p className="is-center">
+							        <p className={classes["is-center"]}>
 							        	<button className="pure-button pure-button-primary"
 							        		onClick={this.goToProviderProfile}>
 							        		Get Started

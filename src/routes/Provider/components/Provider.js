@@ -45,8 +45,8 @@ class Provider extends React.Component {
             </p>
             <div className="is-center">
                 <ImageUploader/>
-                <ProviderEntryForm {...this.props} ref="providerform"/>
             </div>
+            <ProviderEntryForm {...this.props} ref="providerform"/>
           </div>
             
         );
