@@ -124,8 +124,6 @@ class FoodItemEntryForm extends React.Component {
         })
     }
     changeDateTime(name, moment) {
-        // remove the earlier errors 
-        console.log('being calls');
         //check for the new one
         if (!moment || moment === '') {
             this.props.addFoodItemInfo({
@@ -160,6 +158,7 @@ class FoodItemEntryForm extends React.Component {
             serviceDate,
             serviceDateErrorMsg,
             deliveryAddtnlComments,
+            pickUpFlag,
             pickUpAddtnlComments,
             deliveryFlag,
             deliveryRadius,
@@ -221,7 +220,7 @@ class FoodItemEntryForm extends React.Component {
                         </div>
                     </fieldset>
                     <fieldset className="pure-group">
-                        Apply delivery option
+                        For delivery
                         <Toggle
                             defaultChecked={deliveryFlag}
                             onChange={this.applyDeliveryFlag} 
@@ -229,27 +228,23 @@ class FoodItemEntryForm extends React.Component {
                         />
                     </fieldset>
                     <fieldset className="pure-group">
-                        <Card style={{width:'99%', margin: '0 auto'}}>
-                            <CardHeader
-                              title="Pick-up options"
-                              actAsExpander={true}
-                              showExpandableButton={true}
-                              style={{padding:'7px'}}
-                            />
-                            <CardText 
-                                expandable={true}>
-                                <textarea className = "pure-u-1" name="pickUpAddtnlComments" 
-                                    placeholder="Pick-up comments. Please add comments like pick-up timings and your approximate location" value={pickUpAddtnlComments}
-                                    onBlur={this.handleChange} 
-                                    onFocus={this.handleFocus} 
-                                    onChange={this.changeStoreVal} 
-                                >
-                                </textarea>
-                                <span className = {classes["error-message"]}>{(pickUpAddtnlCommentsErrorMsg)?'*'+pickUpAddtnlCommentsErrorMsg:undefined}</span>
-
-                            </CardText>
-                        </Card>                    
+                        For pick-up
+                        <Toggle
+                            defaultChecked={pickUpFlag}
+                            onChange={this.applyDeliveryFlag} 
+                            className = {classes["input-hidden"]}
+                        />
+                    </fieldset>
+                    <fieldset className="pure-group">
                         
+                        <textarea className = "pure-u-1" name="pickUpAddtnlComments" 
+                            placeholder="Pick-up comments. Please add comments like pick-up timings and your approximate location" value={pickUpAddtnlComments}
+                            onBlur={this.handleChange} 
+                            onFocus={this.handleFocus} 
+                            onChange={this.changeStoreVal} 
+                        >
+                        </textarea>
+                        <span className = {classes["error-message"]}>{(pickUpAddtnlCommentsErrorMsg)?'*'+pickUpAddtnlCommentsErrorMsg:undefined}</span>
                     </fieldset>
                     
                     <fieldset className="pure-group">

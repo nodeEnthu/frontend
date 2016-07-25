@@ -41,7 +41,6 @@ class Provider extends React.Component {
           <div>
             <p>
               Please give a brief history about your cooking skills along with a picture showcasing you/your business.
-              Personalized message and relavent picture goes a long way in attracting customers. 
             </p>
             <div className="is-center">
                 <ImageUploader/>
@@ -55,9 +54,6 @@ class Provider extends React.Component {
           <div>
             <p>
               Enter the food item you wish to provide
-            </p>
-            <p>
-              Something everybody will like
             </p>
             <div className="is-center">
                 <ImageUploader/>

@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import classes from './providerentryform.scss';
 import { email, maxLength, required } from './../../utils/formValidation';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import Toggle from 'react-toggle';
-
+import classNames from 'classnames';
+import Modal from 'react-modal';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 const maxCount = 100;
 class ProviderEntryForm extends React.Component {
     constructor(props) {
@@ -15,17 +16,17 @@ class ProviderEntryForm extends React.Component {
             description: maxLength,
             city: required
         }
+        this.state = {
+            value: 'vvendetta'
+        };
         this.handleChange = this.handleChange.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
         this.formSubmit = this.formSubmit.bind(this);
         this.changeStoreVal = this.changeStoreVal.bind(this);
         this.toggle = this.toggle.bind(this);
-        this.handleTimeChange = this.handleTimeChange.bind(this);
         this.validateForm = this.validateForm.bind(this);
     }
-    handleTimeChange = (time) => {
-        this.setState({time});
-    };
+   
     handleToggle() {
         this.setState({
             active: !this.state.active
@@ -56,12 +57,11 @@ class ProviderEntryForm extends React.Component {
         })
        
     }
-    toggle(event) {
-        let input = event.target.value;
-        let stateKeyName = event.target.name;
+    toggle(storeKey) {
+        console.log(storeKey);
         this.props.addProviderInfo({
-            storeKey: stateKeyName,
-            payload:!this.props.providerEntryForm.get(stateKeyName)
+            storeKey: storeKey,
+            payload:!this.props.providerEntryForm.get(storeKey)
         })
     }
     handleFocus(event) {
@@ -75,7 +75,6 @@ class ProviderEntryForm extends React.Component {
             });
         }
     }
-
     setCount(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
@@ -83,8 +82,8 @@ class ProviderEntryForm extends React.Component {
             description: input,
             chars_left: maxCount - input.length
         })
-        this.props.providerEntryForm.chars_left = maxCount - input.length; // hacky again
-        this.props.providerEntryForm.description = input; // hacky again
+        this.props.providerEntryForm.chars_left = maxCount - input.length; // hacky 
+        this.props.providerEntryForm.description = input; // hacky 
     }
 
     changeStoreVal(event) {
@@ -113,7 +112,6 @@ class ProviderEntryForm extends React.Component {
         }
         return noErrorsInform;
     }
-
     formSubmit(event) {
         if(this.validateForm()){
             this.props.addProviderEntryState({
@@ -123,29 +121,36 @@ class ProviderEntryForm extends React.Component {
         }
     }
     render() {
-        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag, deliveryAddtnlComments,allClear } = this.props.providerEntryForm.toJS();
+        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag, deliveryAddtnlComments,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag } = this.props.providerEntryForm.toJS();
+        const styles = {
+          block: {
+            maxWidth: 250,
+          },
+          radioButton: {
+            marginBottom: 12,
+          },
+        };
         return (
             <div>
-                <form className="pure-form">
+                <form className="pure-form pure-form-stacked">
                     <fieldset className="pure-group">
-                        <input type="text"  className="pure-u-1" placeholder="title (required)" name="title" value={this.props.providerEntryForm.get('title')}
+                        <input type="text"  className="pure-u-1" placeholder="*title" name="title" value={this.props.providerEntryForm.get('title')}
                         onChange={this.changeStoreVal}
                         onBlur={this.handleChange} 
                         onFocus={this.handleFocus}
                     />
                         <span className = {classes["error-message"]}>{(titleErrorMsg)?'*'+titleErrorMsg:undefined}</span>
-                        <textarea className = "pure-u-1"name="description" placeholder="Background (optional)" value={description}
+                        <textarea className = "pure-u-1"name="description" placeholder="background" value={description}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus} 
                             onChange={this.changeStoreVal} 
                         >   
                         </textarea>
-
                         <span className = {classes["error-message"]}>{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
                         <div>{chars_left}/100</div>
                     </fieldset>
                     <fieldset className="pure-group">
-                        <input type="text" name="emailId" placeholder="email (required)" style = {{marginBottom:0.5+'em'}} value={emailId}
+                        <input type="text" name="emailId" placeholder="*email" style = {{marginBottom:0.5+'em'}} value={emailId}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus}
                             onChange={this.changeStoreVal}
@@ -154,26 +159,32 @@ class ProviderEntryForm extends React.Component {
                     </fieldset>
                     <fieldset className="pure-group">
                         <legend className={classes["pull-left"]}>
-                            Display your neighbouring address
-                            {/*<Toggle
-                                defaultChecked={this.state.baconIsReady}
-                                name="keepAddressPrivateFlag"
-                                onChange={this.handleBaconChange} 
-                                className = {classes["input-hidden"]}
-                            />*/}
-                            <input style = {{display:'inline', width:'10%'}} type ="checkBox" name="keepAddressPrivateFlag" 
-                                checked={keepAddressPrivateFlag} onChange={this.toggle}/>
+                            <div>
+                                Address:
+                            </div>
+                            <div>
+                                <span style={{fontSize:'0.75em'}}>Display this on my public profile page</span>
+                                <Toggle
+                                defaultChecked={!keepAddressPrivateFlag}
+                                onChange={()=>{this.toggle('keepAddressPrivateFlag')}}
+                                className = {classes["input-hidden"]} 
+                                />
+                                <a className={classNames("pure-menu-link",classes["address-justification"])} 
+                                    onClick={()=>{this.toggle('providerAddressJustificationModalOpen')}}>
+                                    why we need it?
+                                </a> 
+                            </div>
+                            
                         </legend>
-
-                        <input type="text"  name="streetName" placeholder="Street Name (optional)" value = {streetName}
+                        <input type="text"  name="streetName" placeholder="address line1" value = {streetName}
                             onChange={this.changeStoreVal}
                             className="pure-u-1" 
                          />
-                        <input type="text" name="crosStreetName" placeholder="Cross Street Name (optional)" value = {crosStreetName}
+                        <input type="text" name="crosStreetName" placeholder="address line 2" value = {crosStreetName}
                             onChange={this.changeStoreVal}
                             className="pure-u-1" 
                         />
-                        <input type="text"  name="city"  placeholder="City (required)" value = {city}
+                        <input type="text"  name="city"  placeholder="*city" value = {city}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus}
                             onChange={this.changeStoreVal}
@@ -181,72 +192,112 @@ class ProviderEntryForm extends React.Component {
                         />
                         <span className = {classes["error-message"]}>{(cityErrorMsg)?'*'+cityErrorMsg:undefined}</span>
                     </fieldset>
+                    {(keepAddressPrivateFlag)?
+                        <fieldset className="pure-group">
+                            <div>
+                                <p>
+                                    Please note that the address entered above will be used as a pick-up address
+                                </p>
+                                <p>
+                                    Choose from one of the following privacy options
+                                </p>
+                                <RadioButtonGroup name="shipSpeed" defaultSelected="light">
+                                  <RadioButton
+                                    value="light"
+                                    label="don't display the address but include it in the email sent to customer after order submission"
+                                    style={styles.radioButton}
+                                  />
+                                  <RadioButton
+                                    value="not_light"
+                                    label="i will cordinate with customer regarding the pick-up location"
+                                    style={styles.radioButton}
+                                  />
+                                </RadioButtonGroup>
+                            </div>      
+                        </fieldset>
+                        : undefined
+                    }
                     <fieldset className="pure-group">
-                        <Card style={{width:'99%', margin: '0 auto'}}>
-                            <CardHeader
-                              title="Delivery options"
-                              actAsExpander={true}
-                              showExpandableButton={true}
-                              style={{padding:'7px'}}
-                            />
-                            <CardText 
-                                expandable={true}>
-                                    <div className="pure-g">
-                                        <div className="pure-u-1 pure-u-md-1-3">
-                                            <label for="min-order">Minimum Order</label>
-                                            <input id="min-order" className="pure-u-3-4" type="text"/>
-                                        </div>
-
-                                        <div className="pure-u-1 pure-u-md-1-3">
-                                            <label for="last-name">Last Name</label>
-                                            <input id="last-name" className="pure-u-3-4" type="text"/>
-                                        </div>
-
-                                        <div className="pure-u-1 pure-u-md-1-3">
-                                            <label for="email">E-Mail</label>
-                                            <input id="email" className="pure-u-3-4" type="email" required/>
-                                        </div>
-
-                                        <div className="pure-u-1 pure-u-md-1-3">
-                                            <label for="city">City</label>
-                                            <input id="city" className="pure-u-3-4"  type="text"/>
-                                        </div>
-
-                                        <div className="pure-u-1 pure-u-md-1-3">
+                        <legend className={classes["pull-left"]}>
+                                I can deliver 
+                            <Toggle
+                                defaultChecked={doYouDeliverFlag}
+                                onChange={()=>{this.toggle('doYouDeliverFlag')}}
+                                className = {classes["input-hidden"]} 
+                            /> 
+                        </legend>
+                            {(doYouDeliverFlag)?
+                                <div>
+                                    <div>
+                                        <div className="pure-u-1 pure-u-md-1-2">
                                             <label for="delivery">
                                                 Delivery within
                                             </label>
                                             <div>
-                                                 <select id="delivery">
+                                                 <select id="delivery"  className="pure-u-3-4">
                                                     <option selected="selected">Please select miles</option>
                                                     <option>5</option>
-                                                    <option>10</option>
+                                                    <option>10 </option>
                                                     <option>15</option>
                                                     <option>20</option>
                                                     <option>25</option>
-                                                </select> miles
+                                                    <option>30</option>
+                                                </select>
                                             </div>
                                         </div>
+                                        <div className="pure-u-1 pure-u-md-1-2">
+                                            <label for="min-order">Minimum Order</label>
+                                            <input id="min-order" placeholder="Example: 25"className="pure-u-3-4" type="text"/>
+                                        </div>
                                     </div>   
-                                
-                                <textarea className = "pure-u-1" style={{marginTop:'10px'}} name="deliveryAddtnlComments" 
-                                placeholder="Please add comments like delivery charges. 
-                                    Example:
-                                    Minimum Order $35 
-                                    Delivery Fee $6 
-                                    Free above $100"
-                                value={deliveryAddtnlComments}
-                                    style = {{marginTop:'10px'}}
-                                    onBlur={this.handleChange} 
-                                    onFocus={this.handleFocus} 
-                                    onChange={this.changeStoreVal} 
-                                >
-                                </textarea> 
-                               
-                            </CardText>
-                        </Card>
+                                    <textarea className = "pure-u-1" style={{marginTop:'10px'}} name="deliveryAddtnlComments" 
+                                    placeholder="Please add comments like delivery charges. 
+                                        Example:
+                                        Delivery Fee $6 
+                                        Free above $100"
+                                    value={deliveryAddtnlComments}
+                                        style = {{marginTop:'10px'}}
+                                        onBlur={this.handleChange} 
+                                        onFocus={this.handleFocus} 
+                                        onChange={this.changeStoreVal} 
+                                    >
+                                    </textarea>
+                                </div> 
+                            :
+                                undefined
+                            }
+
+                            
                     </fieldset>
                 </form>
+                <Modal
+                  isOpen={providerAddressJustificationModalOpen}
+                  onRequestClose={()=>{this.toggle('providerAddressJustificationModalOpen')}}
+                >
+                  <div ref="subtitle"
+                    style={{
+                      marginBottom:'10%'
+                    }}
+                  >
+                    <p>
+                        Address is used to match you with:
+                        <ul>
+                            <li>
+                                customers searching for food in the area. 
+                            </li>
+                        </ul> 
+                    </p>
+                    <p>
+                         Still not convinced. Please feel free to give ur your cross street address.
+                         <br/>
+                         However make sure to cordinate with your customer regarding the accurate location for pick-up
+                    </p>
+                  <p>
+                        fillurtummy is dedicated to keeping your data private
+                  </p>
+
+                  </div>
+                </Modal>
             </div>
         )
     }
