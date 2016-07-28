@@ -2,10 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import classes from './fooditementryform.scss';
 import { email, maxLength, required, regexTime, regexDate } from './../../utils/formValidation';
 import Toggle from 'react-toggle';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import Datetime from 'react-datetime';
 import classNames from 'classnames';
+import DatePicker from 'material-ui/DatePicker';
+import TimePicker from 'material-ui/TimePicker';
+
 const maxCount = 100;
 
 class FoodItemEntryForm extends React.Component {
@@ -25,16 +26,23 @@ class FoodItemEntryForm extends React.Component {
             devliveryDate: regexDate,
             timeRangeToDeliverStartTime: regexTime,
             timeRangeToDeliverEndTime: regexTime,
-        }
+        };
         this.handleChange = this.handleChange.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
         this.formSubmit = this.formSubmit.bind(this);
         this.changeStoreVal = this.changeStoreVal.bind(this);
+        this.changeStoreTimeAndDateVals = this.changeStoreTimeAndDateVals.bind(this);
         this.toggle = this.toggle.bind(this);
         this.changeDateTime = this.changeDateTime.bind(this);
         this.applyDeliveryFlag = this.applyDeliveryFlag.bind(this);
     }
-
+    changeStoreTimeAndDateVals = (time) => {
+        console.log(event,time)
+        this.props.addFoodItemInfo({
+            storeKey: 'pickUpStartTime',
+            payload: time
+        })
+    };
     handleChange(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
@@ -159,6 +167,8 @@ class FoodItemEntryForm extends React.Component {
             serviceDateErrorMsg,
             deliveryAddtnlComments,
             pickUpFlag,
+            pickUpStartTime,
+            pickUpEndTime,
             pickUpAddtnlComments,
             deliveryFlag,
             deliveryRadius,
@@ -175,7 +185,6 @@ class FoodItemEntryForm extends React.Component {
             pickUpAddtnlCommentsErrorMsg
         } = this.props.foodItemEntryForm.toJS();
         return (
-
             <div>
                 <form className="pure-form">
                     <fieldset className="pure-group">
@@ -197,35 +206,27 @@ class FoodItemEntryForm extends React.Component {
                     </fieldset>
                     <fieldset className = "pure-group">
                         <div className = "pure-u-1-2">
-                            <Datetime 
-                                inputProps={{
-                                    placeholder:"place order by date",
-                                }}
-                                value = {placeOrderBy}
-                                onChange={(value) => this.changeDateTime('placeOrderBy', value)}
-                                onBlur={(value) => this.changeDateTime('placeOrderBy', value)}
-                            />
+                             <DatePicker
+                                hintText="Order by date"
+                                value={placeOrderBy}
+                                onChange={this.changeStoreTimeAndDateVals}
+                                inputStyle={{boxShadow:'none'}}
+                              />
                             <span className = {classes["error-message"]}>{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
                         </div>
                         <div className = "pure-u-1-2">
-                            <Datetime 
-                                inputProps={{
-                                    placeholder:"ready on",
-                                }}
-                                value = {serviceDate}
-                                onChange={(value) => this.changeDateTime('serviceDate', value)}
-                                onBlur={(value) => this.changeDateTime('serviceDate', value)}
-                            />
+                              <DatePicker
+                                hintText="Order ready date"
+                                value={placeOrderBy}
+                                onChange={this.changeStoreTimeAndDateVals}
+                                inputStyle={{boxShadow:'none'}}
+                              />
+
+                            <span className = {classes["error-message"]}>{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
+                        </div>
+                        <div className = "pure-u-1-2">
                             <span className = {classes["error-message"]}>{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
                         </div>
-                    </fieldset>
-                    <fieldset className="pure-group">
-                        For delivery
-                        <Toggle
-                            defaultChecked={deliveryFlag}
-                            onChange={this.applyDeliveryFlag} 
-                            className = {classes["input-hidden"]}
-                        />
                     </fieldset>
                     <fieldset className="pure-group">
                         For pick-up
@@ -236,7 +237,31 @@ class FoodItemEntryForm extends React.Component {
                         />
                     </fieldset>
                     <fieldset className="pure-group">
-                        
+                        For delivery
+                        <Toggle
+                            defaultChecked={deliveryFlag}
+                            onChange={this.applyDeliveryFlag} 
+                            className = {classes["input-hidden"]}
+                        />
+                    </fieldset>
+                    <fieldset className="pure-group">
+                        <div className = "pure-u-1-2">
+                            <TimePicker
+                              format="ampm"
+                              hintText="Pick-up start time"
+                              inputStyle={{boxShadow:'none'}}
+                              value={pickUpStartTime}
+                              onChange={this.changeStoreTimeAndDateVals}
+                            />
+                        </div>
+                         <div className = "pure-u-1-2 ">
+                             <TimePicker
+                                inputStyle={{boxShadow:'none'}}
+                                hintText="Pick-up end time"
+                                onChange={this.changeStoreTimeAndDateVals}
+                                value={pickUpStartTime}
+                              />
+                        </div>
                         <textarea className = "pure-u-1" name="pickUpAddtnlComments" 
                             placeholder="Pick-up comments. Please add comments like pick-up timings and your approximate location" value={pickUpAddtnlComments}
                             onBlur={this.handleChange} 

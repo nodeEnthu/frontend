@@ -16,21 +16,12 @@ class ProviderEntryForm extends React.Component {
             description: maxLength,
             city: required
         }
-        this.state = {
-            value: 'vvendetta'
-        };
         this.handleChange = this.handleChange.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
         this.formSubmit = this.formSubmit.bind(this);
         this.changeStoreVal = this.changeStoreVal.bind(this);
         this.toggle = this.toggle.bind(this);
         this.validateForm = this.validateForm.bind(this);
-    }
-   
-    handleToggle() {
-        this.setState({
-            active: !this.state.active
-        })
     }
     handleChange(event) {
         let input = event.target.value;
@@ -113,12 +104,12 @@ class ProviderEntryForm extends React.Component {
         return noErrorsInform;
     }
     formSubmit(event) {
-        if(this.validateForm()){
+        // if(this.validateForm()){
             this.props.addProviderEntryState({
                 storeKey: "stepIndex",
                 payload:1
             });
-        }
+        // }
     }
     render() {
         let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag, deliveryAddtnlComments,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag } = this.props.providerEntryForm.toJS();
@@ -265,9 +256,7 @@ class ProviderEntryForm extends React.Component {
                                 </div> 
                             :
                                 undefined
-                            }
-
-                            
+                        }                            
                     </fieldset>
                 </form>
                 <Modal

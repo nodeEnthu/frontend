@@ -128,6 +128,8 @@ const initialState =
             deliveryRadius:'',
             deliveryAddtnlComments:'',
             pickUpFlag:true,
+            pickUpStartTime:new Date(),
+            pickUpEndTime:null,
             pickUpAddtnlComments:'',
             organic:false,
             vegetarian:false,

@@ -132,7 +132,7 @@
     "react-star-rating-component": "^1.0.0",
     "react-tap-event-plugin": "^1.0.0",
     "react-toggle": "^2.1.0",
-    "react-toolbox": "^1.0.0",
+    "react-toolbox": "^1.0.2",
     "redux": "^3.0.0",
     "redux-thunk": "^2.0.0",
     "rimraf": "^2.5.1",
