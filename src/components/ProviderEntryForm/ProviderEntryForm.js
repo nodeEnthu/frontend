@@ -49,7 +49,6 @@ class ProviderEntryForm extends React.Component {
        
     }
     toggle(storeKey) {
-        console.log(storeKey);
         this.props.addProviderInfo({
             storeKey: storeKey,
             payload:!this.props.providerEntryForm.get(storeKey)
@@ -104,12 +103,12 @@ class ProviderEntryForm extends React.Component {
         return noErrorsInform;
     }
     formSubmit(event) {
-        // if(this.validateForm()){
+        if(this.validateForm()){
             this.props.addProviderEntryState({
                 storeKey: "stepIndex",
                 payload:1
             });
-        // }
+        }
     }
     render() {
         let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag, deliveryAddtnlComments,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag } = this.props.providerEntryForm.toJS();

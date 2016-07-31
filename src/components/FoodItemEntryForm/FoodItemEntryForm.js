@@ -170,7 +170,6 @@ class FoodItemEntryForm extends React.Component {
     render() {
         let { name, nameErrorMsg, description, descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, deliveryAddtnlComments, pickUpFlag, pickUpStartTime, pickUpEndTime, pickUpAddtnlComments, deliveryFlag, deliveryRadius, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, pickUpAddtnlCommentsErrorMsg,snackBarOpen,snackBarMessage } = this.props.foodItemEntryForm.toJS();
         const minDate = new Date();
-        //minDate.setHours(0, 0, 0, 0);
         return (
             <div>
                 <form className="pure-form pure-form-stacked">
@@ -222,8 +221,7 @@ class FoodItemEntryForm extends React.Component {
                                     />
                                 <span className = {classes["error-message"]}>{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
                             </div>
-                        </div>
-                        
+                        </div> 
                     </fieldset>
                     <fieldset className="pure-group">
                         For pick-up
