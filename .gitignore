@@ -2,8 +2,7 @@
 *.log
 
 node_modules
-
 dist
 coverage
+.idea/
 
-src/styles/material_sass_only/surface/

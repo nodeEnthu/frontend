@@ -42,17 +42,16 @@ if (__DEBUG__) {
 // ========================================================
 const MOUNT_NODE = document.getElementById('root')
 
-let render = (routerKey = null) => {
+let render = () => {
   const routes = require('./routes/index').default(store)
 
   ReactDOM.render(
     <MuiThemeProvider muiTheme={getMuiTheme()}>
       <AppContainer
-        store={store}
-        history={history}
-        routes={routes}
-        routerKey={routerKey}
-      />
+      store={store}
+      history={history}
+      routes={routes}
+    />
     </MuiThemeProvider>,MOUNT_NODE
   )
 }
@@ -60,22 +59,35 @@ let render = (routerKey = null) => {
 injectTapEventPlugin();
 
 // Enable HMR and catch runtime errors in RedBox
-// This code is excluded from production bundle
-if (__DEV__ && module.hot) {
-  const renderApp = render
-  const renderError = (error) => {
-    const RedBox = require('redbox-react').default
 
-    ReactDOM.render(<RedBox error={error} />, MOUNT_NODE)
-  }
-  render = () => {
-    try {
-      renderApp(Math.random())
-    } catch (error) {
-      renderError(error)
+// This code is excluded from production bundle
+if (__DEV__) {
+  if (module.hot) {
+    // Development render functions
+    const renderApp = render
+    const renderError = (error) => {
+      const RedBox = require('redbox-react').default
+
+      ReactDOM.render(<RedBox error={error} />, MOUNT_NODE)
     }
+
+    // Wrap render in try/catch
+    render = () => {
+      try {
+        renderApp()
+      } catch (error) {
+        renderError(error)
+      }
+    }
+
+    // Setup hot module replacement
+    module.hot.accept('./routes/index', () => {
+      setTimeout(() => {
+        ReactDOM.unmountComponentAtNode(MOUNT_NODE)
+        render()
+      })
+    })
   }
-  module.hot.accept(['./routes/index'], () => render())
 }
 
 // ========================================================
