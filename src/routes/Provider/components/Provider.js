@@ -18,6 +18,9 @@ class Provider extends React.Component {
     if(this.props.providerEntryState.get('stepIndex')===0){
       this.refs.providerform.formSubmit();
     }
+    if(this.props.providerEntryState.get('stepIndex')===1){
+      this.refs.foodItemEntryForm.formSubmit();
+    }
   };
 
   handlePrev = () => {

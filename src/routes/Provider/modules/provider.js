@@ -120,16 +120,16 @@ const initialState =
             nameErrMsg:'',
             description: '',
             descriptionErrorMsg:'',
-            placeOrderBy: '',
+            placeOrderBy: undefined,
             placeOrderByErrorMsg:'',
-            serviceDate:'',
+            serviceDate:undefined,
             serviceDateErrorMsg:'',
             deliveryFlag: false,
             deliveryRadius:'',
             deliveryAddtnlComments:'',
             pickUpFlag:true,
-            pickUpStartTime:new Date(),
-            pickUpEndTime:null,
+            pickUpStartTime:undefined,
+            pickUpEndTime:undefined,
             pickUpAddtnlComments:'',
             organic:false,
             vegetarian:false,
@@ -139,6 +139,7 @@ const initialState =
             nutfree:false,
             oilfree:false,
             nondairy:false,
+            indianFasting:false,
             allClear:false
         })
     })
