@@ -140,7 +140,9 @@ const initialState =
             oilfree:false,
             nondairy:false,
             indianFasting:false,
-            allClear:false
+            allClear:false,
+            snackBarOpen:false,
+            snackBarMessage:''
         })
     })
 export default function providerReducer(state = initialState, action) {

@@ -8,6 +8,8 @@ import classNames from 'classnames';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
+import Snackbar from 'material-ui/Snackbar';
+
 
 const maxCount = 100;
 
@@ -135,6 +137,13 @@ class FoodItemEntryForm extends React.Component {
             storeKey: 'allClear',
             payload: noErrorsInform
         })
+        if (!noErrorsInform){
+            self.props.addFoodItemInfo({
+                storeKey: 'snackBarMessage',
+                payload: 'Please fill the required fields'
+            });
+            this.toggleFlags('snackBarOpen');
+        }
         return noErrorsInform;
     }
      formSubmit(event) {
@@ -149,10 +158,19 @@ class FoodItemEntryForm extends React.Component {
         let result = false;
         if(this.validateForm()){
             // send it to server and clear out some of the item specific info
+
+            // open the snackbar
+            this.props.addFoodItemInfo({
+                storeKey: 'snackBarMessage',
+                payload: 'Item successfully added to your menu'
+            });
+            this.toggleFlags('snackBarOpen');
         }
     }
     render() {
-        let { name, nameErrorMsg, description, descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, deliveryAddtnlComments, pickUpFlag, pickUpStartTime, pickUpEndTime, pickUpAddtnlComments, deliveryFlag, deliveryRadius, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, pickUpAddtnlCommentsErrorMsg } = this.props.foodItemEntryForm.toJS();
+        let { name, nameErrorMsg, description, descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, deliveryAddtnlComments, pickUpFlag, pickUpStartTime, pickUpEndTime, pickUpAddtnlComments, deliveryFlag, deliveryRadius, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, pickUpAddtnlCommentsErrorMsg,snackBarOpen,snackBarMessage } = this.props.foodItemEntryForm.toJS();
+        const minDate = new Date();
+        //minDate.setHours(0, 0, 0, 0);
         return (
             <div>
                 <form className="pure-form pure-form-stacked">
@@ -163,7 +181,7 @@ class FoodItemEntryForm extends React.Component {
                         onFocus={this.handleFocus}
                     />
                         <span className = {classes["error-message"]}>{(nameErrorMsg)?'*'+nameErrorMsg:undefined}</span>
-                        <textarea className = "pure-u-1" name="description" placeholder="background" value={description}
+                        <textarea className = "pure-u-1" name="description" placeholder="description" value={description}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus} 
                             onChange={this.changeStoreVal} 
@@ -185,6 +203,7 @@ class FoodItemEntryForm extends React.Component {
                                     style = {{width:'100%'}}
                                     inputStyle={{border:"1px solid #ccc",width:"95%"}}
                                     underlineStyle={{display: 'none'}} 
+                                    minDate={minDate}
                                 />
                                 <span className = {classes["error-message"]}>{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
                             </div>
@@ -192,10 +211,14 @@ class FoodItemEntryForm extends React.Component {
                                 <label>*Order ready date</label>
                                     <DatePicker
                                         value={serviceDate}
+                                        name="serviceDate"
+                                        onBlur={this.handleChange} 
+                                        onFocus={this.handleFocus}
                                         onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'serviceDate')}
                                         style = {{width:'100%'}}
                                         inputStyle={{border:"1px solid #ccc",width:"95%"}}
-                                        underlineStyle={{display: 'none'}} 
+                                        underlineStyle={{display: 'none'}}
+                                        minDate = {placeOrderBy} 
                                     />
                                 <span className = {classes["error-message"]}>{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
                             </div>
@@ -301,17 +324,23 @@ class FoodItemEntryForm extends React.Component {
                         </div>
                     </fieldset>
                 </form>
-                <IconButton
-                    style = {{
-                            display:'inline-block',                                        
-                        }}
-                    label="Choose an Image"
-                    labelPosition="before"
+                <div>
+                    <IconButton
                     onClick = {this.submitFoodItem}
-                >
-                    <ContentAddBox/>
-                    Add another food item
-                </IconButton>
+                    style={{top:'6px'}}
+                    >
+                        <ContentAddBox/>
+                    </IconButton>
+                    <div style={{display:'inline-block'}}>
+                        Add another item
+                    </div>
+                    <Snackbar
+                      open={snackBarOpen}
+                      message={snackBarMessage}
+                      autoHideDuration={1000}
+                      onRequestClose={()=>{this.toggleFlags('snackBarOpen')}} 
+                    />
+                </div>
             </div>
         )
     }
