@@ -9,7 +9,7 @@ import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import Snackbar from 'material-ui/Snackbar';
-
+import axios from 'axios';
 
 const maxCount = 100;
 
@@ -19,15 +19,7 @@ class FoodItemEntryForm extends React.Component {
         this.mapFieldsToValidationType = {
             name: required,
             placeOrderBy: required,
-            serviceDate: required,
-            //pick-up options
-            pickUpDate: regexDate,
-            pickUpStartTime: regexTime,
-            pickUpEndTime: regexTime,
-            // delivery options
-            devliveryDate: regexDate,
-            timeRangeToDeliverStartTime: regexTime,
-            timeRangeToDeliverEndTime: regexTime,
+            serviceDate: required
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
@@ -158,7 +150,16 @@ class FoodItemEntryForm extends React.Component {
         let result = false;
         if(this.validateForm()){
             // send it to server and clear out some of the item specific info
-
+            let token = sessionStorage.getItem('token');
+            axios({
+              method: 'post',
+              headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': 'Bearer ' + token
+                  },
+              url:'/api/providers/addOrEditFoodItem',
+              data: this.props.foodItemEntryForm.toJS()
+            }); 
             // open the snackbar
             this.props.addFoodItemInfo({
                 storeKey: 'snackBarMessage',
@@ -200,7 +201,7 @@ class FoodItemEntryForm extends React.Component {
                                     value={placeOrderBy}
                                     onChange={(event, date)=>this.changeStoreTimeAndDateVals(event,date,'placeOrderBy')}
                                     style = {{width:'100%'}}
-                                    inputStyle={{border:"1px solid #ccc",width:"95%"}}
+                                    inputStyle={{border:"1px solid #ccc",width:"95%",padding:'10px'}}
                                     underlineStyle={{display: 'none'}} 
                                     minDate={minDate}
                                 />
@@ -215,7 +216,7 @@ class FoodItemEntryForm extends React.Component {
                                         onFocus={this.handleFocus}
                                         onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'serviceDate')}
                                         style = {{width:'100%'}}
-                                        inputStyle={{border:"1px solid #ccc",width:"95%"}}
+                                        inputStyle={{border:"1px solid #ccc",width:"95%", padding:'10px'}}
                                         underlineStyle={{display: 'none'}}
                                         minDate = {placeOrderBy} 
                                     />
@@ -242,7 +243,7 @@ class FoodItemEntryForm extends React.Component {
                                             value={pickUpStartTime}
                                             onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'pickUpStartTime')}
                                             style = {{width:'100%'}}
-                                            inputStyle={{border:"1px solid #ccc",width:"95%"}}
+                                            inputStyle={{border:"1px solid #ccc",width:"95%", padding:'10px'}}
                                             underlineStyle={{display: 'none'}} 
                                         />
                                     </div>
@@ -253,7 +254,7 @@ class FoodItemEntryForm extends React.Component {
                                             onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'pickUpEndTime')}
                                             value={pickUpEndTime}
                                             style = {{width:'100%'}}
-                                            inputStyle={{border:"1px solid #ccc",width:"95%"}}
+                                            inputStyle={{border:"1px solid #ccc",width:"95%", padding:'10px'}}
                                             underlineStyle={{display: 'none'}} 
                                         />
                                     </div>

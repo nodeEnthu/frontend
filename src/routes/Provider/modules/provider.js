@@ -67,7 +67,7 @@ export function addProviderEntryState(obj) {
 // ------------------------------------
 const ACTION_HANDLERS = {
     [Add_Provider_Info]: (state, action) => {
-        //console.log(" reducer Add_Provider_Info is invoked with ", action);
+        console.log(" reducer Add_Provider_Info is invoked with ", action);
         return state.setIn(['providerEntryForm', action.storeKey], action.payload)
     },
     [Add_Provider_Error_Msg]: (state, action) => {
@@ -102,11 +102,15 @@ const initialState =
             description: '',
             streetName: '',
             keepAddressPrivateFlag: false,
+            includeAddressInEmail:true,
             crosStreetName: '',
             city: '',
             emailId: '',
             keepEmailPrivateFlag: false,
             doYouDeliverFlag:false,
+            deliveryRadius:'',
+            deliveryMinOrder:'',
+            deliveryAddtnlComments:'',
             allClear: false,
             titleErrorMsg: '',
             emailIdErrorMsg: '',
@@ -125,8 +129,6 @@ const initialState =
             serviceDate:undefined,
             serviceDateErrorMsg:'',
             deliveryFlag: false,
-            deliveryRadius:'',
-            deliveryAddtnlComments:'',
             pickUpFlag:true,
             pickUpStartTime:undefined,
             pickUpEndTime:undefined,

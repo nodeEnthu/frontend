@@ -5,6 +5,7 @@ import Toggle from 'react-toggle';
 import classNames from 'classnames';
 import Modal from 'react-modal';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import axios from 'axios';
 const maxCount = 100;
 class ProviderEntryForm extends React.Component {
     constructor(props) {
@@ -104,6 +105,16 @@ class ProviderEntryForm extends React.Component {
     }
     formSubmit(event) {
         if(this.validateForm()){
+            let token = sessionStorage.getItem('token');
+            axios({
+              method: 'post',
+              headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': 'Bearer ' + token
+                  },
+              url:'/api/providers/registration',
+              data: this.props.providerEntryForm.toJS()
+            }); 
             this.props.addProviderEntryState({
                 storeKey: "stepIndex",
                 payload:1
@@ -111,7 +122,7 @@ class ProviderEntryForm extends React.Component {
         }
     }
     render() {
-        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag, deliveryAddtnlComments,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag } = this.props.providerEntryForm.toJS();
+        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag,includeAddressInEmail, deliveryAddtnlComments,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag } = this.props.providerEntryForm.toJS();
         const styles = {
           block: {
             maxWidth: 250,
@@ -191,16 +202,20 @@ class ProviderEntryForm extends React.Component {
                                 <p>
                                     Choose from one of the following privacy options
                                 </p>
-                                <RadioButtonGroup name="shipSpeed" defaultSelected="light">
+                                <RadioButtonGroup name="shipSpeed" 
+                                    defaultSelected={includeAddressInEmail.toString()}
+                                    onChange={(event)=>this.toggle('includeAddressInEmail')}
+                                >
                                   <RadioButton
-                                    value="light"
+                                    value="true"
                                     label="don't display the address but include it in the email sent to customer after order submission"
                                     style={styles.radioButton}
                                   />
                                   <RadioButton
-                                    value="not_light"
+                                    value="false"
                                     label="i will cordinate with customer regarding the pick-up location"
                                     style={styles.radioButton}
+                                    
                                   />
                                 </RadioButtonGroup>
                             </div>      
@@ -220,12 +235,17 @@ class ProviderEntryForm extends React.Component {
                                 <div>
                                     <div>
                                         <div className="pure-u-1 pure-u-md-1-2">
-                                            <label for="delivery">
+                                            <label>
                                                 Delivery within
                                             </label>
                                             <div>
-                                                 <select id="delivery"  className="pure-u-3-4">
-                                                    <option selected="selected">Please select miles</option>
+                                                <select id="delivery"  className="pure-u-3-4"
+                                                    name="deliveryRadius"
+                                                    onBlur={this.handleChange} 
+                                                    onFocus={this.handleFocus}
+                                                    onChange={this.changeStoreVal}
+                                                >
+                                                    <option defaultValue="selected">Please select miles</option>
                                                     <option>5</option>
                                                     <option>10 </option>
                                                     <option>15</option>
@@ -236,16 +256,21 @@ class ProviderEntryForm extends React.Component {
                                             </div>
                                         </div>
                                         <div className="pure-u-1 pure-u-md-1-2">
-                                            <label for="min-order">Minimum Order</label>
-                                            <input id="min-order" placeholder="Example: 25"className="pure-u-3-4" type="text"/>
+                                            <label>Minimum Order</label>
+                                            <input id="min-order" placeholder="Example: 25"className="pure-u-3-4" type="text"
+                                                name="deliveryMinOrder"
+                                                onBlur={this.handleChange} 
+                                                onFocus={this.handleFocus}
+                                                onChange={this.changeStoreVal}/>
                                         </div>
                                     </div>   
-                                    <textarea className = "pure-u-1" style={{marginTop:'10px'}} name="deliveryAddtnlComments" 
-                                    placeholder="Please add comments like delivery charges. 
+                                    <textarea className = "pure-u-1" style={{marginTop:'10px'}} 
+                                        name="deliveryAddtnlComments" 
+                                        placeholder="Please add comments like delivery charges. 
                                         Example:
                                         Delivery Fee $6 
                                         Free above $100"
-                                    value={deliveryAddtnlComments}
+                                        value={deliveryAddtnlComments}
                                         style = {{marginTop:'10px'}}
                                         onBlur={this.handleChange} 
                                         onFocus={this.handleFocus} 
