@@ -16,7 +16,7 @@ export default (store) => ({
       injectReducer(store, { key: 'chat', reducer })
 
       /*  Return getComponent   */
-      cb(null, Chat)
+      cb(null, Chat);
 
     /* Webpack named bundle   */
     }, 'chat')
