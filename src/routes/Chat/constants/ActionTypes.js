@@ -31,8 +31,6 @@ export const ADD_TIME_STAMP = 'STOP_TYPING';
 
 export const ADD_USER = 'ADD_USER';
 
-export const REMOVE_USER_FROM_CHANNEL = 'REMOVE_USER_FROM_CHANNEL';
-
 export const SAVE_USERNAME = 'SAVE_USERNAME';
 
 export const LOAD_MESSAGES = 'LOAD_MESSAGES';
