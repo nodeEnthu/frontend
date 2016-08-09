@@ -144,7 +144,8 @@ const initialState =
             indianFasting:false,
             allClear:false,
             snackBarOpen:false,
-            snackBarMessage:''
+            snackBarMessage:'',
+            firstItem:true
         })
     })
 export default function providerReducer(state = initialState, action) {

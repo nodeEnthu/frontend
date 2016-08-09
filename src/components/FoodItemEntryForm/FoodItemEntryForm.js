@@ -30,7 +30,7 @@ class FoodItemEntryForm extends React.Component {
         this.toggleFlags = this.toggleFlags.bind(this);
         this.submitFoodItem = this.submitFoodItem.bind(this);
     }
-    changeStoreTimeAndDateVals = (event,date,storeKey) => {
+    changeStoreTimeAndDateVals = (event, date, storeKey) => {
         this.props.addFoodItemInfo({
             storeKey: storeKey,
             payload: date
@@ -70,7 +70,7 @@ class FoodItemEntryForm extends React.Component {
             payload: !this.props.foodItemEntryForm.get(stateKeyName)
         })
     }
-    toggleFlags(stateKeyName){
+    toggleFlags(stateKeyName) {
         this.props.addFoodItemInfo({
             storeKey: stateKeyName,
             payload: !this.props.foodItemEntryForm.get(stateKeyName)
@@ -129,7 +129,7 @@ class FoodItemEntryForm extends React.Component {
             storeKey: 'allClear',
             payload: noErrorsInform
         })
-        if (!noErrorsInform){
+        if (!noErrorsInform) {
             self.props.addFoodItemInfo({
                 storeKey: 'snackBarMessage',
                 payload: 'Please fill the required fields'
@@ -138,44 +138,56 @@ class FoodItemEntryForm extends React.Component {
         }
         return noErrorsInform;
     }
-     formSubmit(event) {
-        if(this.submitFoodItem()){
+    formSubmit(event) {
+        if (this.submitFoodItem()) {
             this.props.addProviderEntryState({
                 storeKey: "stepIndex",
-                payload:2
+                payload: 2
             });
         }
     }
-    submitFoodItem(){
+    submitFoodItem() {
         let result = false;
-        if(this.validateForm()){
+        let self = this;
+        if (this.validateForm()) {
             // send it to server and clear out some of the item specific info
             let token = sessionStorage.getItem('token');
             axios({
-              method: 'post',
-              headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + token
-                  },
-              url:'/api/providers/addOrEditFoodItem',
-              data: this.props.foodItemEntryForm.toJS()
-            }); 
-            // open the snackbar
-            this.props.addFoodItemInfo({
-                storeKey: 'snackBarMessage',
-                payload: 'Item successfully added to your menu'
-            });
-            this.toggleFlags('snackBarOpen');
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    url: '/api/providers/addOrEditFoodItem',
+                    data: this.props.foodItemEntryForm.toJS()
+                })
+                .then(function() {
+                    self.props.addFoodItemInfo({
+                        storeKey: 'snackBarMessage',
+                        payload: 'Item successfully added to your menu'
+                    });
+                    self.toggleFlags('snackBarOpen');
+                    self.props.addFoodItemInfo({
+                        storeKey: 'firstItem',
+                        payload: false
+                    });
+                    window.scrollTo(0, 23);
+                })
+                // open the snackbar
         }
     }
     render() {
-        let { name, nameErrorMsg, description, descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, deliveryAddtnlComments, pickUpFlag, pickUpStartTime, pickUpEndTime, pickUpAddtnlComments, deliveryFlag, deliveryRadius, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, pickUpAddtnlCommentsErrorMsg,snackBarOpen,snackBarMessage } = this.props.foodItemEntryForm.toJS();
+        let { name, nameErrorMsg, description, descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, deliveryAddtnlComments, pickUpFlag, pickUpStartTime, pickUpEndTime, pickUpAddtnlComments, deliveryFlag, deliveryRadius, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, pickUpAddtnlCommentsErrorMsg, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
         const minDate = new Date();
         return (
             <div>
+                <div className = {classNames(classes["item-added-msg"],classes["is-center"])}   style={{display: (firstItem)? 'none':'block'}}>
+                    Last item was successfully entered to your menu. Please enter your next item
+                </div>
                 <form className="pure-form pure-form-stacked">
+                    
                     <fieldset className="pure-group">
-                        <input type="text"  className="pure-u-1" placeholder="*title" name="name" value={this.props.foodItemEntryForm.get('title')}
+                        <input type="text"  className="pure-u-1" placeholder="*title" name="name" value={name}
                         onChange={this.changeStoreVal}
                         onBlur={this.handleChange} 
                         onFocus={this.handleFocus}
@@ -336,7 +348,7 @@ class FoodItemEntryForm extends React.Component {
                     <Snackbar
                       open={snackBarOpen}
                       message={snackBarMessage}
-                      autoHideDuration={1000}
+                      autoHideDuration={4000}
                       onRequestClose={()=>{this.toggleFlags('snackBarOpen')}} 
                     />
                 </div>
