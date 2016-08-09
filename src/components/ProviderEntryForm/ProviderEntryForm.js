@@ -122,7 +122,7 @@ class ProviderEntryForm extends React.Component {
         }
     }
     render() {
-        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag,includeAddressInEmail, deliveryAddtnlComments,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag } = this.props.providerEntryForm.toJS();
+        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag,includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag } = this.props.providerEntryForm.toJS();
         const styles = {
           block: {
             maxWidth: 250,
@@ -244,8 +244,9 @@ class ProviderEntryForm extends React.Component {
                                                     onBlur={this.handleChange} 
                                                     onFocus={this.handleFocus}
                                                     onChange={this.changeStoreVal}
+                                                    value={deliveryRadius}
                                                 >
-                                                    <option defaultValue="selected">Please select miles</option>
+                                                    <option  value="0">Please select miles</option>
                                                     <option>5</option>
                                                     <option>10 </option>
                                                     <option>15</option>
@@ -261,7 +262,9 @@ class ProviderEntryForm extends React.Component {
                                                 name="deliveryMinOrder"
                                                 onBlur={this.handleChange} 
                                                 onFocus={this.handleFocus}
-                                                onChange={this.changeStoreVal}/>
+                                                onChange={this.changeStoreVal}
+                                                value={deliveryMinOrder}
+                                            />
                                         </div>
                                     </div>   
                                     <textarea className = "pure-u-1" style={{marginTop:'10px'}} 
