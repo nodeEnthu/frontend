@@ -6,4 +6,4 @@ node_modules
 dist
 coverage
 
-src/styles/material_sass_only/surface/
+.idea/
