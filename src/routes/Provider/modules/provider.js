@@ -7,6 +7,7 @@ export const Add_Provider_Error_Msg = 'Add_Provider_Error_Msg'
 export const Add_Provider_Entry_State = "Add_Provider_Entry_State"
 
 export const Add_Food_Item_Info = 'Add_Food_Item_Info'
+export const Remove_Food_Item_Info = 'Remove_Food_Item_Info'
 export const MAX_COUNT_PROVIDER_DESC = 100;
 import { Map, List } from 'immutable'
 // ------------------------------------
@@ -50,6 +51,13 @@ export function addFoodItemInfo(obj) {
         payload: obj.payload
     }
 }
+export function removeFoodItemInfo(obj) {
+    return {
+        type: Remove_Food_Item_Info,
+        storeKeys: obj.storeKeys,
+        payload: ''
+    }
+}
 
 ////////////////////////////////
 //actions for changing state of form
@@ -79,6 +87,10 @@ const ACTION_HANDLERS = {
         //console.log(" reducer Add_Food_Item_Info is invoked with ", action);
         return state.setIn(['foodItemEntryForm', action.storeKey], action.payload)
     },
+    [Remove_Food_Item_Info]: (state, action) => {
+        return state.setIn(['foodItemEntryForm', 'name'], '')
+                    .setIn(['foodItemEntryForm', 'description'], '')
+    },
     [Add_Provider_Entry_State]:(state,action)=>{
         console.log(" reducer Provider_Entry_State is invoked with ", action);
         return state.setIn(['providerEntryState', action.storeKey], action.payload)
@@ -107,6 +119,8 @@ const initialState =
             city: '',
             emailId: '',
             keepEmailPrivateFlag: false,
+            pickUpFlag:true,
+            pickUpAddtnlComments:'',
             doYouDeliverFlag:false,
             deliveryRadius:'',
             deliveryMinOrder:'',
@@ -129,10 +143,8 @@ const initialState =
             serviceDate:undefined,
             serviceDateErrorMsg:'',
             deliveryFlag: false,
-            pickUpFlag:true,
             pickUpStartTime:undefined,
             pickUpEndTime:undefined,
-            pickUpAddtnlComments:'',
             organic:false,
             vegetarian:false,
             glutenfree:false,

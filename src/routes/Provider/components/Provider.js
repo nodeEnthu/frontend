@@ -45,7 +45,7 @@ class Provider extends React.Component {
             <p>
               Please give a brief history about your cooking skills along with a picture showcasing you/your business.
             </p>
-            <div className="is-center">
+            <div className={classes["is-center"]}>
                 <ImageUploader/>
             </div>
             <ProviderEntryForm {...this.props} ref="providerform"/>
@@ -58,7 +58,7 @@ class Provider extends React.Component {
             <p>
               Enter the food item you wish to provide
             </p>
-            <div className="is-center">
+            <div className={classes["is-center"]}>
                 <ImageUploader/>
             </div>
             <FoodItemEntryForm {...this.props} ref="foodItemEntryForm"/>

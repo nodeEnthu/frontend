@@ -122,7 +122,7 @@ class ProviderEntryForm extends React.Component {
         }
     }
     render() {
-        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag,includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag } = this.props.providerEntryForm.toJS();
+        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag } = this.props.providerEntryForm.toJS();
         const styles = {
           block: {
             maxWidth: 250,
@@ -223,8 +223,31 @@ class ProviderEntryForm extends React.Component {
                         : undefined
                     }
                     <fieldset className="pure-group">
+                        We are pick-up service
+                        <Toggle
+                            defaultChecked={pickUpFlag}
+                            onChange={()=>{this.toggle('pickUpFlag')}}
+                            className = {classes["input-hidden"]}
+                        />
+                    </fieldset>
+                    {(pickUpFlag)?
+                        <div>
+                            <fieldset className = "pure-group">
+                                <textarea className = "pure-u-1" name="pickUpAddtnlComments" 
+                                    placeholder="additional comments about pick-up" value={pickUpAddtnlComments}
+                                    onBlur={this.handleChange} 
+                                    onFocus={this.handleFocus} 
+                                    onChange={this.changeStoreVal} 
+                                >
+                                </textarea>
+                            </fieldset>
+                        </div>
+                        :
+                        undefined
+                    }
+                    <fieldset className="pure-group">
                         <legend className={classes["pull-left"]}>
-                                I can deliver 
+                                We can deliver 
                             <Toggle
                                 defaultChecked={doYouDeliverFlag}
                                 onChange={()=>{this.toggle('doYouDeliverFlag')}}

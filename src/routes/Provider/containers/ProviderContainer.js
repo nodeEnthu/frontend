@@ -7,6 +7,7 @@ import {
     addProviderInfo,
     addProviderErrorMsg,
     addFoodItemInfo,
+    removeFoodItemInfo,
     addProviderEntryState
 } from '../modules/provider'
 
@@ -27,6 +28,7 @@ const mapActionCreators = {
     addProviderInfo,
     addProviderErrorMsg,
     addFoodItemInfo,
+    removeFoodItemInfo,
     addProviderEntryState
 }
 

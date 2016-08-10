@@ -9,6 +9,8 @@ import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import Snackbar from 'material-ui/Snackbar';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import Chip from 'material-ui/Chip';
 import axios from 'axios';
 
 const maxCount = 100;
@@ -21,6 +23,9 @@ class FoodItemEntryForm extends React.Component {
             placeOrderBy: required,
             serviceDate: required
         };
+        this.state = {
+            chipDeleted : false
+        }
         this.handleChange = this.handleChange.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
         this.formSubmit = this.formSubmit.bind(this);
@@ -29,11 +34,17 @@ class FoodItemEntryForm extends React.Component {
         this.toggle = this.toggle.bind(this);
         this.toggleFlags = this.toggleFlags.bind(this);
         this.submitFoodItem = this.submitFoodItem.bind(this);
+        this.handleDeleteChip = this.handleDeleteChip.bind(this);
     }
     changeStoreTimeAndDateVals = (event, date, storeKey) => {
         this.props.addFoodItemInfo({
             storeKey: storeKey,
             payload: date
+        })
+    };
+    handleDeleteChip(){
+        this.setState({
+            chipDeleted :true
         })
     };
     handleChange(event) {
@@ -135,6 +146,8 @@ class FoodItemEntryForm extends React.Component {
                 payload: 'Please fill the required fields'
             });
             this.toggleFlags('snackBarOpen');
+            //scroll to the top
+            window.scrollTo(0, 23);
         }
         return noErrorsInform;
     }
@@ -162,30 +175,50 @@ class FoodItemEntryForm extends React.Component {
                     data: this.props.foodItemEntryForm.toJS()
                 })
                 .then(function() {
+                    // show the chip for last food item entered
+                    self.props.addFoodItemInfo({
+                        storeKey: 'firstItem',
+                        payload: false
+                    });
+                    self.setState({
+                        chipDeleted:false
+                    })
+                     // open the snackbar
                     self.props.addFoodItemInfo({
                         storeKey: 'snackBarMessage',
                         payload: 'Item successfully added to your menu'
                     });
                     self.toggleFlags('snackBarOpen');
-                    self.props.addFoodItemInfo({
-                        storeKey: 'firstItem',
-                        payload: false
-                    });
+                    //scroll to the top
                     window.scrollTo(0, 23);
+                    // remove name , desc and image from last item ...keep the others for new item
+                    self.props.removeFoodItemInfo({
+                        storeKeys: ['name','description']
+                    });
                 })
-                // open the snackbar
         }
     }
     render() {
-        let { name, nameErrorMsg, description, descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, deliveryAddtnlComments, pickUpFlag, pickUpStartTime, pickUpEndTime, pickUpAddtnlComments, deliveryFlag, deliveryRadius, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, pickUpAddtnlCommentsErrorMsg, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
+        let { name, nameErrorMsg, description, descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
         const minDate = new Date();
         return (
             <div>
-                <div className = {classNames(classes["item-added-msg"],classes["is-center"])}   style={{display: (firstItem)? 'none':'block'}}>
-                    Last item was successfully entered to your menu. Please enter your next item
-                </div>
+                {
+                    (!firstItem && !this.state.chipDeleted)?
+                        <div style={{display: 'flex',flexWrap: 'wrap'}}>
+                            <span style={{position:'relative',top:'10px'}}>Last Item Entered</span>
+                            <Chip
+                              onRequestDelete={this.handleDeleteChip}
+                              style={{margin: 4,appearance:'initial'}}
+                            >
+                              Deletable Text Chip
+                            </Chip>
+                        </div>
+                    :
+                    undefined
+
+                }
                 <form className="pure-form pure-form-stacked">
-                    
                     <fieldset className="pure-group">
                         <input type="text"  className="pure-u-1" placeholder="*title" name="name" value={name}
                         onChange={this.changeStoreVal}
@@ -236,15 +269,7 @@ class FoodItemEntryForm extends React.Component {
                             </div>
                         </div> 
                     </fieldset>
-                    <fieldset className="pure-group">
-                        For pick-up
-                        <Toggle
-                            defaultChecked={pickUpFlag}
-                            onChange={()=>{this.toggleFlags('pickUpFlag')}} 
-                            className = {classes["input-hidden"]}
-                        />
-                    </fieldset>
-                    {(pickUpFlag)?
+                    {(true)?
                         <div>
                             <fieldset className="pure-group">
                                 <div className = "pure-g">
@@ -272,23 +297,13 @@ class FoodItemEntryForm extends React.Component {
                                     </div>
                                 </div>
                             </fieldset>
-                            <fieldset className = "pure-group">
-                                <textarea className = "pure-u-1" name="pickUpAddtnlComments" 
-                                    placeholder="additional comments about pick-up" value={pickUpAddtnlComments}
-                                    onBlur={this.handleChange} 
-                                    onFocus={this.handleFocus} 
-                                    onChange={this.changeStoreVal} 
-                                >
-                                </textarea>
-                                <span className = {classes["error-message"]}>{(pickUpAddtnlCommentsErrorMsg)?'*'+pickUpAddtnlCommentsErrorMsg:undefined}</span>
-                            </fieldset>
                         </div>
                         :
                         undefined
                     }
                    
                     <fieldset className="pure-group">
-                        For delivery
+                        Enable delivery for this item
                         <Toggle
                             defaultChecked={deliveryFlag}
                             onChange={()=>{this.toggleFlags('deliveryFlag')}} 
@@ -348,7 +363,7 @@ class FoodItemEntryForm extends React.Component {
                     <Snackbar
                       open={snackBarOpen}
                       message={snackBarMessage}
-                      autoHideDuration={4000}
+                      autoHideDuration={5000}
                       onRequestClose={()=>{this.toggleFlags('snackBarOpen')}} 
                     />
                 </div>
