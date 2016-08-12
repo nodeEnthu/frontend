@@ -11,7 +11,8 @@ import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import Snackbar from 'material-ui/Snackbar';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Chip from 'material-ui/Chip';
-import axios from 'axios';
+import {securedPostCall,securedGetCall} from 'utils/apiCallWrapper';
+
 
 const maxCount = 100;
 
@@ -164,27 +165,12 @@ class FoodItemEntryForm extends React.Component {
         let self = this;
         if (this.validateForm()) {
             // send it to server and clear out some of the item specific info
-            let token = sessionStorage.getItem('token');
-            axios({
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    url: '/api/providers/addOrEditFoodItem',
-                    data: this.props.foodItemEntryForm.toJS()
-                })
+            securedPostCall('/api/providers/addOrEditFoodItem' , this.props.foodItemEntryForm.toJS())
                 .then(function(response) {
-                    // temp code starts here
-                     axios({
-                        method: 'get',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + token
-                        },
-                        url: '/api/users/me'
-                    })
+                    // temp code starts here just to log the data for providers page should be replaced: GM
+                    securedGetCall('/api/users/me')
                     // temp code finishes here
+
                     // show the chip for last food item entered
                     self.props.addFoodItemInfo({
                         storeKey: 'firstItem',
