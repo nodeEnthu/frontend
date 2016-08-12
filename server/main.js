@@ -41,6 +41,7 @@ if (config.env === 'development') {
     app.use(webpackHMRMiddleware(compiler))
 
 
+
     // Serve static assets from ~/src/static since Webpack is unaware of
     // these files. This middleware doesn't need to be enabled outside
     // of development since this directory will be copied into ~/dist
@@ -59,6 +60,7 @@ if (config.env === 'development') {
     // the web server and not the app server, but this helps to demo the
     // server in production.
     app.use(serve(paths.dist()))
+
 }
 
 export default app

@@ -6,3 +6,7 @@ dist
 coverage
 .idea/
 
+<<<<<<< HEAD
+.idea/
+=======
+>>>>>>> with-react-toolbox

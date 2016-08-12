@@ -12,6 +12,7 @@ import ProviderProfilePage from './../ProviderProfilePage'
     Keys will be passed as props to presentational components. Here we are
     implementing our wrapper around increment; the component doesn't care   */
 
+
 const mapDispatchtoProps = {
   increment: () => increment(1),
   doubleAsync
@@ -39,5 +40,6 @@ const mapStateToProps = (state) => ({
     Selectors are efficient. A selector is not recomputed unless one of its arguments change.
     Selectors are composable. They can be used as input to other selectors.
     https://github.com/reactjs/reselect    */
+
 
 export default connect(mapStateToProps, mapDispatchtoProps)(ProviderProfilePage)

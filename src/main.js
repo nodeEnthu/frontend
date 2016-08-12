@@ -46,19 +46,19 @@ let render = () => {
   const routes = require('./routes/index').default(store)
 
   ReactDOM.render(
+
+// Enable HMR and catch runtime errors in RedBox
+
     <MuiThemeProvider muiTheme={getMuiTheme()}>
       <AppContainer
-      store={store}
-      history={history}
-      routes={routes}
-    />
+        store={store}
+        history={history}
+        routes={routes}
+      />
     </MuiThemeProvider>,MOUNT_NODE
   )
 }
-
 injectTapEventPlugin();
-
-// Enable HMR and catch runtime errors in RedBox
 
 // This code is excluded from production bundle
 if (__DEV__) {
