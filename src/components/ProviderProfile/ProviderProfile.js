@@ -1,5 +1,5 @@
 import React from 'react'
-import classes from './Counter.scss'
+import classes from './providerProfile.scss'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import classNames from 'classnames';
 import StaffImg from './img/common/staff-thumb-placeholder-male.jpg'
@@ -13,7 +13,7 @@ import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Tab, Tabs} from 'react-toolbox/lib/tabs';
 
-export default class Counter extends React.Component {
+class ProviderProfile extends React.Component {
         constructor(props) {
             super(props);
         }
@@ -43,11 +43,11 @@ export default class Counter extends React.Component {
                         </div>
                        <div className = "pure-u-1" style={{marginBottom:'-20px'}}>
                           <StarRatingComponent 
-                              name="rate2" 
-                              editing={false}
-                              renderStarIcon={() => <span>&#11088;</span>}
-                              starCount={5}
-                              value={4}
+                            name="rate2" 
+                            editing={false}
+                            renderStarIcon={() => <span>&#11088;</span>}
+                            starCount={5}
+                            value={4}
                           />
                         </div>
                         <IconButton><CommunicationEmail/></IconButton>
@@ -295,9 +295,7 @@ export default class Counter extends React.Component {
     }
 };
 
-Counter.propTypes = {
-    counter: React.PropTypes.object.isRequired,
-    doubleAsync: React.PropTypes.func.isRequired,
-    increment: React.PropTypes.func.isRequired
+ProviderProfile.propTypes = {
+   
 }
-export default Counter
+export default ProviderProfile

@@ -174,14 +174,25 @@ class FoodItemEntryForm extends React.Component {
                     url: '/api/providers/addOrEditFoodItem',
                     data: this.props.foodItemEntryForm.toJS()
                 })
-                .then(function() {
+                .then(function(response) {
+                    // temp code starts here
+                     axios({
+                        method: 'get',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        url: '/api/users/me'
+                    })
+                    // temp code finishes here
                     // show the chip for last food item entered
                     self.props.addFoodItemInfo({
                         storeKey: 'firstItem',
                         payload: false
                     });
                     self.setState({
-                        chipDeleted:false
+                        chipDeleted:false,
+                        lastItemAdded:response.data.name
                     })
                      // open the snackbar
                     self.props.addFoodItemInfo({
@@ -191,7 +202,7 @@ class FoodItemEntryForm extends React.Component {
                     self.toggleFlags('snackBarOpen');
                     //scroll to the top
                     window.scrollTo(0, 23);
-                    // remove name , desc and image from last item ...keep the others for new item
+                    // remove name , desc and image from last item ...keep the others as defaults for new item
                     self.props.removeFoodItemInfo({
                         storeKeys: ['name','description']
                     });
@@ -211,7 +222,7 @@ class FoodItemEntryForm extends React.Component {
                               onRequestDelete={this.handleDeleteChip}
                               style={{margin: 4,appearance:'initial'}}
                             >
-                              Deletable Text Chip
+                              {this.state.lastItemAdded}
                             </Chip>
                         </div>
                     :
@@ -245,8 +256,8 @@ class FoodItemEntryForm extends React.Component {
                                     onFocus={this.handleFocus}
                                     value={placeOrderBy}
                                     onChange={(event, date)=>this.changeStoreTimeAndDateVals(event,date,'placeOrderBy')}
-                                    style = {{width:'100%'}}
-                                    inputStyle={{border:"1px solid #ccc",width:"95%",padding:'10px'}}
+                                    style = {{width:'auto'}}
+                                    inputStyle={{border:"1px solid #ccc",width:"100%",padding:'10px'}}
                                     underlineStyle={{display: 'none'}} 
                                     minDate={minDate}
                                 />
@@ -261,7 +272,7 @@ class FoodItemEntryForm extends React.Component {
                                         onFocus={this.handleFocus}
                                         onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'serviceDate')}
                                         style = {{width:'100%'}}
-                                        inputStyle={{border:"1px solid #ccc",width:"95%", padding:'10px'}}
+                                        inputStyle={{border:"1px solid #ccc",width:"100%", padding:'10px'}}
                                         underlineStyle={{display: 'none'}}
                                         minDate = {placeOrderBy} 
                                     />

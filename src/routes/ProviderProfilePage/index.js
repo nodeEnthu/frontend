@@ -9,14 +9,14 @@ export default (store) => ({
     require.ensure([], (require) => {
       /*  Webpack - use require callback to define
           dependencies for bundling   */
-      const Counter = require('./containers/ProviderProfileContainer').default
-      const reducer = require('./modules/providerprofile').default
+      const ProviderProfilePage = require('./containers/ProviderProfilePageContainer').default
+      const reducer = require('./modules/providerProfilePage').default
 
       /*  Add the reducer to the store on key 'counter'  */
       injectReducer(store, { key: 'providerProfile', reducer })
 
       /*  Return getComponent   */
-      cb(null, Counter)
+      cb(null, ProviderProfilePage)
 
     /* Webpack named bundle   */
     }, 'provideProfile')

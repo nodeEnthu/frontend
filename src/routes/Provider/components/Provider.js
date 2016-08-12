@@ -123,7 +123,6 @@ class Provider extends React.Component {
     return (
       <div className="pure-g" className = {classes["pure-override-letter-spacing"]}>
         <div className = "counter-fixed-menu">
-         
             <Stepper activeStep={stepIndex}>
               <Step>
                 <StepLabel>Set-up profile</StepLabel>

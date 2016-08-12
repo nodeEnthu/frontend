@@ -3,7 +3,7 @@ import CoreLayout from '../layouts/CoreLayout/CoreLayout'
 import Home from './Home'
 import ChatRoute from './Chat'
 import ProviderRoute from './Provider'
-import ProviderProfile from './ProviderProfile'
+import ProviderProfilePage from './ProviderProfilePage'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -15,7 +15,7 @@ export const createRoutes = (store) => ({
   childRoutes: [
     ChatRoute(store),
     ProviderRoute(store),
-    ProviderProfile(store)
+    ProviderProfilePage(store)
   ]
 })
 

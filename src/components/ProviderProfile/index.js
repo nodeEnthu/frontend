@@ -1,3 +1,3 @@
-import Counter from './Counter'
+import ProviderProfile from './ProviderProfile'
 
-export default Counter
+export default ProviderProfile
