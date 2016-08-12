@@ -5,7 +5,8 @@ import Toggle from 'react-toggle';
 import classNames from 'classnames';
 import Modal from 'react-modal';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import axios from 'axios';
+import {securedPostCall} from 'utils/apiCallWrapper';
+
 const maxCount = 100;
 class ProviderEntryForm extends React.Component {
     constructor(props) {
@@ -106,15 +107,7 @@ class ProviderEntryForm extends React.Component {
     formSubmit(event) {
         if(this.validateForm()){
             let token = sessionStorage.getItem('token');
-            axios({
-              method: 'post',
-              headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + token
-                  },
-              url:'/api/providers/registration',
-              data: this.props.providerEntryForm.toJS()
-            }); 
+            securedPostCall('/api/providers/registration' , this.props.providerEntryForm.toJS());
             this.props.addProviderEntryState({
                 storeKey: "stepIndex",
                 payload:1
