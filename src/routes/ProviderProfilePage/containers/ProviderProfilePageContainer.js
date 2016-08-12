@@ -1,24 +1,28 @@
 import { connect } from 'react-redux'
-import { increment, doubleAsync } from '../modules/counter'
+import { increment, doubleAsync } from '../modules/providerProfilePage'
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
     wiring in the actions and state necessary to render a presentational
     component - in this case, the counter:   */
 
-import Counter from 'components/Counter'
+import ProviderProfilePage from './../ProviderProfilePage'
 
 /*  Object of action creators (can also be function that returns object).
     Keys will be passed as props to presentational components. Here we are
     implementing our wrapper around increment; the component doesn't care   */
 
+<<<<<<< HEAD:src/routes/Counter/containers/CounterContainer.js
 const mapDispatchToProps = {
+=======
+const mapDispatchtoProps = {
+>>>>>>> with-react-toolbox:src/routes/ProviderProfilePage/containers/ProviderProfilePageContainer.js
   increment: () => increment(1),
   doubleAsync
 }
 
 const mapStateToProps = (state) => ({
-  counter: state.counter,
+  counter: state.providerProfile,
   logIntoMachine:(component)=>{
     return ()=>
       console.log(component);
@@ -40,4 +44,8 @@ const mapStateToProps = (state) => ({
     Selectors are composable. They can be used as input to other selectors.
     https://github.com/reactjs/reselect    */
 
+<<<<<<< HEAD:src/routes/Counter/containers/CounterContainer.js
 export default connect(mapStateToProps, mapDispatchToProps)(Counter)
+=======
+export default connect(mapStateToProps, mapDispatchtoProps)(ProviderProfilePage)
+>>>>>>> with-react-toolbox:src/routes/ProviderProfilePage/containers/ProviderProfilePageContainer.js

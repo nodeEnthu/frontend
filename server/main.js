@@ -40,6 +40,7 @@ if (config.env === 'development') {
     app.use(webpackDevMiddleware(compiler, publicPath))
     app.use(webpackHMRMiddleware(compiler))
 
+<<<<<<< HEAD
 
   // Serve static assets from ~/src/static since Webpack is unaware of
   // these files. This middleware doesn't need to be enabled outside
@@ -59,6 +60,27 @@ if (config.env === 'development') {
   // the web server and not the app server, but this helps to demo the
   // server in production.
   app.use(serve(paths.dist()))
+=======
+
+    // Serve static assets from ~/src/static since Webpack is unaware of
+    // these files. This middleware doesn't need to be enabled outside
+    // of development since this directory will be copied into ~/dist
+    // when the application is compiled.
+    app.use(serve(paths.client('static')))
+} else {
+    debug(
+        'Server is being run outside of live development mode, meaning it will ' +
+        'only serve the compiled application bundle in ~/dist. Generally you ' +
+        'do not need an application server for this and can instead use a web ' +
+        'server such as nginx to serve your static files. See the "deployment" ' +
+        'section in the README for more information on deployment strategies.'
+    )
+
+    // Serving ~/dist by default. Ideally these files should be served by
+    // the web server and not the app server, but this helps to demo the
+    // server in production.
+    app.use(serve(paths.dist()))
+>>>>>>> with-react-toolbox
 }
 
 export default app

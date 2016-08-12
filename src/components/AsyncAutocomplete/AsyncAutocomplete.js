@@ -25,26 +25,29 @@ class AsyncAutocomplete extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            value: props.settings.searchTextAlreadyInStore,
+            value: props.settings.userSearchText.get('searchText'),
             suggestions: [],
             isLoading: false,
             apiUrl:props.settings.apiUrl,
-            changeGlobalState: props.settings.userSearchChange
+            changeGlobalState: props.settings.action
         };
 
         this.onChange = this.onChange.bind(this);
         this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
-
         this.debouncedLoadSuggestions = debounce(this.loadSuggestions, 500);
     }
-
+    componentWillReceiveProps (nextProps) {
+        this.setState({
+            value: nextProps.settings.userSearchText.get('searchText')
+        });
+    }
     loadSuggestions(value) {
         let self = this;
         this.setState({
             isLoading: true
         });
         
-        fetch(this.state.apiUrl + value, { method: 'get' })
+        fetch(this.state.apiUrl +'?search='+value , { method: 'get' })
             .then(function(response) {
                 return response.json();
             })
@@ -72,10 +75,7 @@ class AsyncAutocomplete extends React.Component {
     }
 
     onChange(event, { newValue }) {
-        this.setState({
-            value: newValue,
-        });
-        this.state.changeGlobalState(newValue);
+        this.state.changeGlobalState(newValue); 
     }
 
     onSuggestionsUpdateRequested({ value, reason }) {
@@ -87,22 +87,21 @@ class AsyncAutocomplete extends React.Component {
     }
 
     render() {
+        console.log("child render",this.state);
         const { value, suggestions, isLoading } = this.state;
         const inputProps = {
-            placeholder: "Please enter your zip code",
+            placeholder: "Please enter zip code",
             value,
             onChange: this.onChange
         };
         const status = (isLoading ? 'Loading...' : 'Type to load suggestions');
 
         return (
-          <div>
               <Autosuggest suggestions={suggestions}
                            onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                            getSuggestionValue={getSuggestionValue}
                            renderSuggestion={renderSuggestion}
                            inputProps={inputProps} />
-          </div>
         );
     }
 }

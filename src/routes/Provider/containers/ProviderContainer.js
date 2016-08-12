@@ -1,5 +1,16 @@
 import { connect } from 'react-redux'
-import { increment, doubleAsync } from '../modules/provider'
+import {
+    
+} from '../modules/provider'
+import {
+    charsLeft,
+    addProviderInfo,
+    addProviderErrorMsg,
+    addFoodItemInfo,
+    removeFoodItemInfo,
+    addProviderEntryState
+} from '../modules/provider'
+
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -13,32 +24,19 @@ import Provider from '../components/Provider'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapActionCreators = {
-  increment: () => increment(1),
-  doubleAsync
+    charsLeft,
+    addProviderInfo,
+    addProviderErrorMsg,
+    addFoodItemInfo,
+    removeFoodItemInfo,
+    addProviderEntryState
 }
 
 const mapStateToProps = (state) => ({
-  providerEntryForm:state.provider.get('providerEntryForm'),
-  providerEntryState:state.provider.get('providerEntryState'),
-  logIntoMachine:(component)=>{
-    return ()=>
-      console.log(component);
-    
-  }
+    providerEntryForm: state.provider.get('providerEntryForm'),
+    providerEntryState: state.provider.get('providerEntryState'),
+    foodItemEntryForm: state.provider.get('foodItemEntryForm')
 })
 
-/*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
-
-    import { createSelector } from 'reselect'
-    const counter = (state) => state.counter
-    const tripleCount = createSelector(counter, (count) => count * 3)
-    const mapStateToProps = (state) => ({
-      counter: tripleCount(state)
-    })
-
-    Selectors can compute derived data, allowing Redux to store the minimal possible state.
-    Selectors are efficient. A selector is not recomputed unless one of its arguments change.
-    Selectors are composable. They can be used as input to other selectors.
-    https://github.com/reactjs/reselect    */
 
 export default connect(mapStateToProps, mapActionCreators)(Provider)

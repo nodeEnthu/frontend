@@ -2,8 +2,11 @@
 *.log
 
 node_modules
-
 dist
 coverage
-
 .idea/
+
+<<<<<<< HEAD
+.idea/
+=======
+>>>>>>> with-react-toolbox

@@ -10,46 +10,32 @@ import ExpandTransition from 'material-ui/internal/ExpandTransition'
 import ImageUploader from '../../../components/ImageUploader/index'
 import classes from './provider.scss'
 import ProviderEntryForm from '../../../components/ProviderEntryForm/ProviderEntryForm'
-
+import FoodItemEntryForm from '../../../components/FoodItemEntryForm/FoodItemEntryForm'
 
 class Provider extends React.Component {
-
-  state = {
-    loading: false,
-    finished: false,
-    stepIndex: 0,
-  };
-
-  dummyAsync = (cb) => {
-    this.setState({loading: true}, () => {
-      this.asyncTimer = setTimeout(cb, 500);
-    });
-  };
-
+  state = this.props.providerEntryState.toJS();
   handleNext = () => {
-    if(this.state.stepIndex===0){
+    if(this.props.providerEntryState.get('stepIndex')===0){
       this.refs.providerform.formSubmit();
     }
-    const {stepIndex} = this.state;
-    if (!this.state.loading && this.props.providerEntryForm.allClear) {
-      this.dummyAsync(() => this.setState({
-        loading: false,
-        stepIndex: stepIndex + 1,
-        finished: stepIndex >= 2,
-      }));
+    if(this.props.providerEntryState.get('stepIndex')===1){
+      this.refs.foodItemEntryForm.formSubmit();
     }
   };
 
   handlePrev = () => {
-    const {stepIndex} = this.state;
-    if (!this.state.loading) {
-      this.dummyAsync(() => this.setState({
-        loading: false,
-        stepIndex: stepIndex - 1,
-      }));
+   const stepIndex = this.props.providerEntryState.get('stepIndex');
+    if (!this.props.providerEntryState.get('loading')) {
+        this.props.addProviderEntryState({
+          storeKey: "loading",
+          payload:false
+        });
+        this.props.addProviderEntryState({
+          storeKey: "stepIndex",
+          payload:stepIndex -1
+        });
     }
   };
-
 
   getStepContent(stepIndex) {
     switch (stepIndex) {
@@ -58,14 +44,11 @@ class Provider extends React.Component {
           <div>
             <p>
               Please give a brief history about your cooking skills along with a picture showcasing you/your business.
-              Personalized message and relavent picture goes a long way in attracting customers. 
             </p>
-            <div className="is-center">
+            <div className={classes["is-center"]}>
                 <ImageUploader/>
-                <ProviderEntryForm {...this.props} ref="providerform"/>
             </div>
-  
-      
+            <ProviderEntryForm {...this.props} ref="providerform"/>
           </div>
             
         );
@@ -75,7 +58,10 @@ class Provider extends React.Component {
             <p>
               Enter the food item you wish to provide
             </p>
-            <p>Something something whatever cool</p>
+            <div className={classes["is-center"]}>
+                <ImageUploader/>
+            </div>
+            <FoodItemEntryForm {...this.props} ref="foodItemEntryForm"/>
           </div>
         );
       case 2:
@@ -90,8 +76,8 @@ class Provider extends React.Component {
   }
 
   renderContent() {
-    const {finished, stepIndex} = this.state;
-    const contentStyle = {margin: '0 16px', overflow: 'hidden', height:'800px'};
+    const {finished, stepIndex} = this.props.providerEntryState.toJS();
+    const contentStyle = {margin: '0 16px'};
 
     if (finished) {
       return (
@@ -112,8 +98,8 @@ class Provider extends React.Component {
 
     return (
       <div style={contentStyle} >
-        <div style={{height:'auto'}}>{this.getStepContent(stepIndex)}</div>
-        <div style={{display:'block', clear:'both', marginTop: 24, marginBottom: 12,height:'auto'}}>
+        <div >{this.getStepContent(stepIndex)}</div>
+        <div style={{display:'block', clear:'both', marginTop: 24, marginBottom: 12}}>
           <FlatButton
             label="Back"
             disabled={stepIndex === 0}
@@ -131,12 +117,12 @@ class Provider extends React.Component {
   }
 
   render() {
-    const {loading, stepIndex} = this.state;
+     
+    const {loading, stepIndex} = this.props.providerEntryState.toJS();
 
     return (
       <div className="pure-g" className = {classes["pure-override-letter-spacing"]}>
         <div className = "counter-fixed-menu">
-         
             <Stepper activeStep={stepIndex}>
               <Step>
                 <StepLabel>Set-up profile</StepLabel>
@@ -145,7 +131,7 @@ class Provider extends React.Component {
                 <StepLabel>Item info</StepLabel>
               </Step>
               <Step>
-                <StepLabel>Time and delivery options</StepLabel>
+                <StepLabel>Preview and Submit</StepLabel>
               </Step>
             </Stepper>
             <ExpandTransition loading={loading} open={true} >
@@ -161,6 +147,5 @@ class Provider extends React.Component {
 Provider.propTypes= {
     providerEntryForm: React.PropTypes.object.isRequired,
     providerEntryState: React.PropTypes.object.isRequired,
-    
 };
 export default Provider;

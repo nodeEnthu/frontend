@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { leftnavstatechange } from '../modules/homeview'
 import { userZipSearchChange } from '../modules/homeview'
 
 import { fromJS } from 'immutable'
@@ -15,14 +14,14 @@ import HomeView from '../components/HomeView'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapActionCreators = {
-    leftnavstatechange: () => leftnavstatechange(),
     userZipSearchChange:(val)=>userZipSearchChange(val)
 }
 
 const mapStateToProps = (state) => {
     return {
-        leftNavOpen: state.homepage.get('leftNavOpen'),
-        userZipSearch: state.homepage.get('userZipSearch')
+        globalState:state,
+        homepage: state.homepage,
+        userZipSearchChange:userZipSearchChange
     }
 }
 
