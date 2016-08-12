@@ -51,27 +51,15 @@ let render = () => {
 
     <MuiThemeProvider muiTheme={getMuiTheme()}>
       <AppContainer
-<<<<<<< HEAD
         store={store}
         history={history}
         routes={routes}
       />
-=======
-      store={store}
-      history={history}
-      routes={routes}
-    />
->>>>>>> with-react-toolbox
     </MuiThemeProvider>,MOUNT_NODE
   )
 }
 injectTapEventPlugin();
-<<<<<<< HEAD
-=======
 
-// Enable HMR and catch runtime errors in RedBox
-
->>>>>>> with-react-toolbox
 // This code is excluded from production bundle
 if (__DEV__) {
   if (module.hot) {

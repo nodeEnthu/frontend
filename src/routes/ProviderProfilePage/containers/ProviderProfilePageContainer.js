@@ -12,11 +12,8 @@ import ProviderProfilePage from './../ProviderProfilePage'
     Keys will be passed as props to presentational components. Here we are
     implementing our wrapper around increment; the component doesn't care   */
 
-<<<<<<< HEAD:src/routes/Counter/containers/CounterContainer.js
-const mapDispatchToProps = {
-=======
+
 const mapDispatchtoProps = {
->>>>>>> with-react-toolbox:src/routes/ProviderProfilePage/containers/ProviderProfilePageContainer.js
   increment: () => increment(1),
   doubleAsync
 }
@@ -44,8 +41,5 @@ const mapStateToProps = (state) => ({
     Selectors are composable. They can be used as input to other selectors.
     https://github.com/reactjs/reselect    */
 
-<<<<<<< HEAD:src/routes/Counter/containers/CounterContainer.js
-export default connect(mapStateToProps, mapDispatchToProps)(Counter)
-=======
+
 export default connect(mapStateToProps, mapDispatchtoProps)(ProviderProfilePage)
->>>>>>> with-react-toolbox:src/routes/ProviderProfilePage/containers/ProviderProfilePageContainer.js
