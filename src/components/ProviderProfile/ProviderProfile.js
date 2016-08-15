@@ -11,30 +11,36 @@ import CommunicationChat from 'material-ui/svg-icons/communication/chat';
 import ActionPermContactCalendar from 'material-ui/svg-icons/action/perm-contact-calendar';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import {Tab, Tabs} from 'react-toolbox/lib/tabs';
+import { Tab, Tabs } from 'react-toolbox/lib/tabs';
+import { securedPostCall, securedGetCall } from 'utils/apiCallWrapper';
 
 class ProviderProfile extends React.Component {
-        constructor(props) {
-            super(props);
-        }
-        state = {
-          index: 1,
-          checkbox: false
-        }
-        handleTabChange = (index) => {
-          this.setState({index});
-        };
-        handleCheckboxChange = () => {
-          this.setState({checkbox: !this.state.checkbox});
-        };
-
-        handleActive = () => {
-          console.log('Special one activated');
-        };
-
-        render() {
-              return (
-                <div id="layout" className="pure-g">
+    constructor(props) {
+        super(props);
+    }
+    state = {
+        index: 1,
+        checkbox: false
+    }
+    handleTabChange = (index) => {
+        this.setState({ index });
+    };
+    handleCheckboxChange = () => {
+        this.setState({ checkbox: !this.state.checkbox });
+    };
+    handleActive = () => {
+        console.log('Special one activated');
+    };
+    componentDidMount() {
+        securedGetCall('/api/users/me')
+          .then(function(response){
+            // this is logging for you Richie: Gautam
+            console.log(response);
+          })
+    };
+    render() {
+        return (
+            <div id="layout" className="pure-g">
                   <div className={classNames(classes["sidebar"], "pure-u-1","pure-u-md-1-4")}>
                     <div className={classes["header"]}>
                         <h1 className={classes["brand-title"]}>Chilli Corner</h1>
@@ -296,6 +302,6 @@ class ProviderProfile extends React.Component {
 };
 
 ProviderProfile.propTypes = {
-   
+
 }
 export default ProviderProfile

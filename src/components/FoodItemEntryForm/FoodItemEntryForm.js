@@ -167,10 +167,6 @@ class FoodItemEntryForm extends React.Component {
             // send it to server and clear out some of the item specific info
             securedPostCall('/api/providers/addOrEditFoodItem' , this.props.foodItemEntryForm.toJS())
                 .then(function(response) {
-                    // temp code starts here just to log the data for providers page should be replaced: GM
-                    securedGetCall('/api/users/me')
-                    // temp code finishes here
-
                     // show the chip for last food item entered
                     self.props.addFoodItemInfo({
                         storeKey: 'firstItem',
