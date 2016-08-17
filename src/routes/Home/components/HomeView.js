@@ -23,8 +23,8 @@ const HomeView = React.createClass({
        
     },
     
-    goToProviderProfile(){
-    	this.context.router.push('/provider');
+    goToPage(page){
+    	this.context.router.push(page);
     },
     getLocationCordinates(){
     	let self = this;
@@ -92,7 +92,10 @@ const HomeView = React.createClass({
 							        			}}
 							        />
 							        <p className={classes["is-center"]}>
-							        	<button className="pure-button pure-button-primary">Get Started</button>
+							        	<button className="pure-button pure-button-primary"
+							        		onClick={()=>this.goToPage('counter')}>
+							        		Get Started
+							        	</button>
 							        </p>
 							    </div>
 						    </div>
@@ -103,7 +106,7 @@ const HomeView = React.createClass({
 							        </div>
 							        <p className={classes["is-center"]}>
 							        	<button className="pure-button pure-button-primary"
-							        		onClick={this.goToProviderProfile}>
+							        		onClick={()=>this.goToPage('provider')}>
 							        		Get Started
 							        	</button>
 							        </p>

@@ -1,0 +1,34 @@
+export const CUISINE_TYPES = [{
+    type: 'Chinese',
+    src: 'cuisines/chinese.jpeg'
+}, {
+    type: 'American',
+    src: 'cuisines/american.jpeg'
+}, {
+    type: 'African',
+    src: 'cuisines/african.jpg'
+}, {
+    type: 'Caribbean',
+    src: 'cuisines/caribbean.jpg'
+}, {
+    type: 'Japanese',
+    src: 'cuisines/japanese.jpg'
+}, {
+    type: 'Italian',
+    src: 'cuisines/italian.jpg'
+}, {
+    type: 'Mediterrnean',
+    src: 'cuisines/mediterrnean.jpg'
+}, {
+    type: 'Korean',
+    src: 'cuisines/korean.jpeg'
+}, {
+    type: 'Mexican',
+    src: 'cuisines/mexican.jpg'
+}, {
+    type: 'Viatnamese',
+    src: 'cuisines/viatnamese.jpeg'
+}, {
+    type: 'Indian',
+    src: 'cuisines/indian.jpeg'
+}]
