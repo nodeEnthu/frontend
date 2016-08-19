@@ -32,3 +32,27 @@ export const CUISINE_TYPES = [{
     type: 'Indian',
     src: 'cuisines/indian.jpeg'
 }]
+
+export const DIET_TYPES = [{
+    type: 'organic',
+    src: 'diets/organic.jpeg'
+}, {
+    type: 'vegetarian',
+    src: 'diets/vegetarian.jpg'
+}, {
+    type: 'nutfree',
+    src: 'diets/nutfree.jpeg'
+}, {
+    type: 'glutenfree',
+    src: 'diets/glutenfree.jpg'
+}, {
+    type: 'oilfree',
+    src: 'diets/oilfree.jpg'
+}, {
+    type: 'nondairy',
+    src: 'diets/nondairy.jpg'
+}, {
+    type: 'indianfasting',
+    src: 'diets/indianfasting.jpg'
+}]
+
