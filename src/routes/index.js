@@ -4,6 +4,7 @@ import Home from './Home'
 import ChatRoute from './Chat'
 import ProviderRoute from './Provider'
 import ProviderProfilePage from './ProviderProfilePage'
+import Counter from './Counter'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -15,7 +16,8 @@ export const createRoutes = (store) => ({
   childRoutes: [
     ChatRoute(store),
     ProviderRoute(store),
-    ProviderProfilePage(store)
+    ProviderProfilePage(store),
+    Counter(store)
   ]
 })
 
