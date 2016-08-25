@@ -9,7 +9,7 @@ export const COUNTER_INCREMENT = 'COUNTER_INCREMENT'
 export function increment (value = 1) {
   return {
     type: COUNTER_INCREMENT,
-    payload: value
+    payload: value        // this should be overwritten
   }
 }
 
