@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import classes from './providerentryform.scss';
-import { email, maxLength, required } from './../../utils/formValidation';
+import { email, maxLength, required } from './../../utils/formUtils/formValidation';
 import Toggle from 'react-toggle';
 import classNames from 'classnames';
 import Modal from 'react-modal';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import {securedPostCall} from 'utils/apiCallWrapper';
+import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 
 const maxCount = 100;
 class ProviderEntryForm extends React.Component {

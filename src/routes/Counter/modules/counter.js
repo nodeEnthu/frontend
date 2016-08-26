@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { getCall } from 'utils/apiCallWrapper';
+import { getCall } from 'utils/httpUtils/apiCallWrapper';
 // ------------------------------------
 // Constants
 // ------------------------------------

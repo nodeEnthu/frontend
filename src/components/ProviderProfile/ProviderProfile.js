@@ -12,7 +12,7 @@ import ActionPermContactCalendar from 'material-ui/svg-icons/action/perm-contact
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Tab, Tabs } from 'react-toolbox/lib/tabs';
-import { securedPostCall, securedGetCall } from 'utils/apiCallWrapper';
+import { securedPostCall, securedGetCall } from 'utils/httpUtils/apiCallWrapper';
 
 class ProviderProfile extends React.Component {
     constructor(props) {

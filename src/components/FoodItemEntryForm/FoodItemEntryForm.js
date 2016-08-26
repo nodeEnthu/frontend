@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import classes from './fooditementryform.scss';
-import { email, maxLength, required, regexTime, regexDate } from './../../utils/formValidation';
+import { email, maxLength, required, regexTime, regexDate } from './../../utils/formUtils/formValidation';
 import Toggle from 'react-toggle';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton'
@@ -11,7 +11,7 @@ import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import Snackbar from 'material-ui/Snackbar';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Chip from 'material-ui/Chip';
-import {securedPostCall,securedGetCall} from 'utils/apiCallWrapper';
+import {securedPostCall,securedGetCall} from 'utils/httpUtils/apiCallWrapper';
 
 
 const maxCount = 100;
