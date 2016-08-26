@@ -7,66 +7,24 @@ import classNames from 'classnames'
 import StarRatingComponent from 'react-star-rating-component';
 
 const CounterWrapper = React.createClass({
-    getInitialState() {
-        return {
-            cuisineSelected: '',
-            cuisineSelectedArr: [],
-            dietSelected: '',
-            dietSelectedArr: []
-        };
-    },
-    filterCuisineType(event) {
-        let selectedCuisine = event.target.alt
+    filterCuisineOrDietType(event,cuisineOrDiet) {
+        let selectedCuisineOrDiet = event.target.alt
+        let storeKey= cuisineOrDiet + 'SelectedMap'
             // check whether its an image that was clicked
-        if (selectedCuisine) {
-            //check whether the selection was already selected
-            const indexOfSelectedItem = this.state.cuisineSelectedArr.indexOf(event.target.alt);
-            if (indexOfSelectedItem > -1) {
-                this.state.cuisineSelectedArr.splice(indexOfSelectedItem, 1);
-                let newState = [].concat(this.state.cuisineSelectedArr);
-                this.setState({
-                    cuisineSelected: '',
-                    cuisineSelectedArr: newState
-                })
-            } else {
-                this.setState({
-                    cuisineSelected: event.target.alt,
-                    cuisineSelectedArr: this.state.cuisineSelectedArr.concat([event.target.name])
-                })
-            }
+        if (selectedCuisineOrDiet) {
+            //check whether the selection was already selected        
+            this.props.selectCuisineOrDiet(storeKey,selectedCuisineOrDiet);
         } // else dont do anything
     },
     componentDidMount() {
     	this.props.fetchData({organic:true});
     },
-    filterDietType(event) {
-        let selectedDiet = event.target.alt
-            // check whether its an image that was clicked
-        if (selectedDiet) {
-            //check whether the selection was already selected
-            const indexOfSelectedItem = this.state.dietSelectedArr.indexOf(event.target.alt);
-            if (indexOfSelectedItem > -1) {
-                this.state.dietSelectedArr.splice(indexOfSelectedItem, 1);
-                let newState = [].concat(this.state.dietSelectedArr);
-                this.setState({
-                    dietSelected: '',
-                    dietSelectedArr: newState
-                })
-            } else {
-                this.setState({
-                    dietSelected: event.target.alt,
-                    dietSelectedArr: this.state.dietSelectedArr.concat([event.target.name])
-                })
-            }
-        } // else dont do anything
-    },
-    render() {
 
-    	const {isLoading,data,error} = this.props.counter.toJS();
-    	console.log("rerender",data);
+    render() {
+    	const {data} = this.props.counter.toJS();
         return (
             <div>
-				<div onClick={this.filterCuisineType}>
+				<div onClick={(event)=>this.filterCuisineOrDietType(event,'cuisine')}>
 					<Carousel
 						slidesToShow={5}
 						cellSpacing={10}
@@ -75,7 +33,7 @@ const CounterWrapper = React.createClass({
 						{CUISINE_TYPES.map((cuisine,index)=>{
 							return <img alt={cuisine.type} 
 										key={index}
-										src={(cuisine.type === this.state.cuisineSelected || this.state.cuisineSelectedArr.indexOf(cuisine.type)>-1)? '/selection/dark-green-check-mark-md.svg': undefined}
+										src={(this.props.counter.get('cuisineSelectedMap').get(cuisine.type))? '/selection/dark-green-check-mark-md.svg': undefined}
 										name={cuisine.type}
 										style={
 											{
@@ -87,7 +45,7 @@ const CounterWrapper = React.createClass({
 						})}
 					</Carousel>
 				</div>
-				<div className = {classes["diet-wrapper"]} onClick={this.filterDietType}>
+				<div className = {classes["diet-wrapper"]} onClick = {(event)=>this.filterCuisineOrDietType(event,'diet')}>
 					<Carousel
 						slidesToShow={5}
 						cellSpacing={10}
@@ -96,7 +54,7 @@ const CounterWrapper = React.createClass({
 						{DIET_TYPES.map((diet,index)=>{
 							return <img alt={diet.type} 
 										key={index}
-										src={(diet.type === this.state.dietSelected || this.state.dietSelectedArr.indexOf(diet.type)>-1)? '/selection/dark-green-check-mark-md.svg': undefined}
+										src={(this.props.counter.get('dietSelectedMap').get(diet.type))? '/selection/dark-green-check-mark-md.svg': undefined}
 										name={diet.type}
 										style={
 											{
@@ -116,7 +74,7 @@ const CounterWrapper = React.createClass({
 												<div className={classes["provider-profile-wrapper"]}>
 											    	<div className={classes["provider-img-section"]}>
 											    		<div className={classes["img-avatar"]}>
-											    			<img src="/cuisines/indian.jpeg"/>
+											    			<img src={foodItem._creator.img}/>
 											    		</div>
 											    	</div>
 											    	<div className={classes["provider-info-section"]}>
@@ -170,7 +128,7 @@ const CounterWrapper = React.createClass({
 											    			pick-up time: 11AM to 6PM
 											    		</div>
 											    		<div>
-											    			delivery time: 12AM to 6PM
+											    			delivery time: 12PM to 6PM
 											    		</div>
 											    	</div>
 											    </div>
@@ -187,6 +145,7 @@ const CounterWrapper = React.createClass({
 })
 CounterWrapper.propTypes = {
     fetchData:React.PropTypes.func.isRequired,
+    selectCuisineOrDiet:React.PropTypes.func.isRequired,
     counter:React.PropTypes.object.isRequired
 };
 

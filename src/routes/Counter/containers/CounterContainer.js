@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { fetchData } from '../modules/counter'
+import { fetchData,selectCuisineOrDiet } from '../modules/counter'
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -13,11 +13,12 @@ import CounterWrapper from 'routes/Counter/components/Counter'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapDispatchToProps = {
-  fetchData
+  fetchData,
+  selectCuisineOrDiet
 }
 
 const mapStateToProps = (state) => ({
-  counter: state.counter
+  counter: state.counter,
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
