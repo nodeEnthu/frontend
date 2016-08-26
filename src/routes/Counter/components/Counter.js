@@ -69,8 +69,8 @@ const CounterWrapper = React.createClass({
 				<div className={classes["providers-wrapper"]}>
 					<div className="pure-g">
 					{	(data.data)? 
-								data.data.map(function(foodItem){
-									return 	<div className={classNames("pure-u-1 pure-u-md-1-3")}>
+								data.data.map(function(foodItem,index){
+									return 	<div key={index} className={classNames("pure-u-1 pure-u-md-1-3")}>
 												<div className={classes["provider-profile-wrapper"]}>
 											    	<div className={classes["provider-img-section"]}>
 											    		<div className={classes["img-avatar"]}>
