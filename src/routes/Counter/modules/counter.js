@@ -1,55 +1,64 @@
+import {Map} from 'immutable';
+import {getCall} from 'utils/apiCallWrapper';
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const COUNTER_INCREMENT = 'COUNTER_INCREMENT'
+export const REQUEST_DATA = 'REQUEST_DATA';
+export const RECEIVE_DATA = 'RECEIVE_DATA';
+export const FAIL_DATA = 'FAIL_DATA';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function increment (value = 1) {
-  return {
-    type: COUNTER_INCREMENT,
-    payload: value        // this should be overwritten
-  }
+function requestData() {
+    return {
+        type: REQUEST_DATA,
+    };
+};
+
+function failData(err) {
+    return {
+        type: FAIL_DATA,
+        data: err,
+    };
+};
+
+function receiveData(data) {
+    return {
+        type: RECEIVE_DATA,
+        data: data,
+    };
+};
+
+export function fetchData(queryParams) {
+    return (dispatch) => {
+        dispatch(requestData());
+        return getCall('/api/query/foodItems',queryParams)
+            .then(res => dispatch(receiveData(res)))
+            .catch(err => dispatch(failData(err)));
+    };
 }
 
-/*  This is a thunk, meaning it is a function that immediately
-    returns a function for lazy evaluation. It is incredibly useful for
-    creating async actions, especially when combined with redux-thunk!
-
-    NOTE: This is solely for demonstration purposes. In a real application,
-    you'd probably want to dispatch an action of COUNTER_DOUBLE and let the
-    reducer take care of this logic.  */
-
-export const doubleAsync = () => {
-  return (dispatch, getState) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        dispatch(increment(getState().counter))
-        resolve()
-      }, 200)
-    })
-  }
-}
-
-export const actions = {
-  increment,
-  doubleAsync
-}
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [COUNTER_INCREMENT]: (state, action) => state + action.payload
+    REQUEST_DATA: (state, action) => state.set('isLoading', true),
+    FAIL_DATA: (state, action) => state.set('isLoading',false).set('error',action.data).set('data', Map()),
+    RECEIVE_DATA: (state, action)=> state.set('isLoading',false).set('error',undefined).set('data',action.data),
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = 0
-export default function counterReducer (state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type]
+const initialState = Map({
+    isLoading: false,
+    data: Map(),
+    error: undefined,
+});
 
-  return handler ? handler(state, action) : state
-}
+export default function fetchedDataReducer(state = initialState, action) {
+    const handler = ACTION_HANDLERS[action.type]
+    return handler ? handler(state, action) : state
+};

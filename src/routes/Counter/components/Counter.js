@@ -36,6 +36,9 @@ const CounterWrapper = React.createClass({
             }
         } // else dont do anything
     },
+    componentDidMount() {
+    	this.props.fetchData({organic:true});
+    },
     filterDietType(event) {
         let selectedDiet = event.target.alt
             // check whether its an image that was clicked
@@ -58,9 +61,11 @@ const CounterWrapper = React.createClass({
         } // else dont do anything
     },
     render() {
+
+    	const {isLoading,data,error} = this.props.counter.toJS();
+    	console.log("rerender",data);
         return (
             <div>
-				{/*<Counter {...this.props}/>*/}
 				<div onClick={this.filterCuisineType}>
 					<Carousel
 						slidesToShow={5}
@@ -105,462 +110,84 @@ const CounterWrapper = React.createClass({
 				</div>
 				<div className={classes["providers-wrapper"]}>
 					<div className="pure-g">
-					    <div className={classNames("pure-u-1 pure-u-md-1-3")}>
-					    	<div className={classes["provider-profile-wrapper"]}>
-						    	<div className={classes["provider-img-section"]}>
-						    		<div className={classes["img-avatar"]}>
-						    			<img src="/cuisines/indian.jpeg"/>
-						    		</div>
-						    	</div>
-						    	<div className={classes["provider-info-section"]}>
-						    		<div>Lache Paraunthe waale</div>
-						    		<div>
-						    			<div className={classes["provider-star-rating"]}>
-								    		<StarRatingComponent 
-					                            name="rate2" 
-					                            editing={false}
-					                            renderStarIcon={() => <span>&#11088;</span>}
-					                            starCount={5}
-					                            value={4}
-					                         />
-				                         </div>
-				                         <div className={classes["num-of-reviews"]}>
-				                         	(45)
-				                         </div>
-				                         <div className={classes["miles-away"]}>1.9mi</div>
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; delivery
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; pickup
-						    		</div>
-						    		<div>
-						    			order by : Mon, Oct 3  
-						    		</div>
-						    		<div>
-						    			order ready : Wed, Oct 4  
-						    		</div>
-						    		<div>
-						    			pick-up time: 11AM to 6PM
-						    		</div>
-						    		<div>
-						    			delivery time: 12AM to 6PM
-						    		</div>
-						    	</div>
-						    </div>
-					    </div>
-					    <div className="pure-u-1 pure-u-md-1-3">
-					    	<div className={classes["provider-profile-wrapper"]}>
-						    	<div className={classes["provider-img-section"]}>
-						    		<div className={classes["img-avatar"]}>
-						    			<img src="/cuisines/indian.jpeg"/>
-						    		</div>
-						    	</div>
-						    	<div className={classes["provider-info-section"]}>
-						    		<div>Lache Paraunthe waale</div>
-						    		<div>
-						    			<div className={classes["provider-star-rating"]}>
-								    		<StarRatingComponent 
-					                            name="rate2" 
-					                            editing={false}
-					                            renderStarIcon={() => <span>&#11088;</span>}
-					                            starCount={5}
-					                            value={4}
-					                         />
-				                         </div>
-				                         <div className={classes["num-of-reviews"]}>
-				                         	(45)
-				                         </div>
-				                         <div className={classes["miles-away"]}>1.9mi</div>
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; delivery
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; pickup
-						    		</div>
-						    		<div>
-						    			order by : Mon, Oct 3  
-						    		</div>
-						    		<div>
-						    			order ready : Wed, Oct 4  
-						    		</div>
-						    		<div>
-						    			pick-up time: 11AM to 6PM
-						    		</div>
-						    		<div>
-						    			delivery time: 12AM to 6PM
-						    		</div>
-						    	</div>
-						    </div>
-					    </div>
-					    <div className="pure-u-1 pure-u-md-1-3">
-					    	<div className={classes["provider-profile-wrapper"]}>
-						    	<div className={classes["provider-img-section"]}>
-						    		<div className={classes["img-avatar"]}>
-						    			<img src="/cuisines/indian.jpeg"/>
-						    		</div>
-						    	</div>
-						    	<div className={classes["provider-info-section"]}>
-						    		<div>Lache Paraunthe waale</div>
-						    		<div>
-						    			<div className={classes["provider-star-rating"]}>
-								    		<StarRatingComponent 
-					                            name="rate2" 
-					                            editing={false}
-					                            renderStarIcon={() => <span>&#11088;</span>}
-					                            starCount={5}
-					                            value={4}
-					                         />
-				                         </div>
-				                         <div className={classes["num-of-reviews"]}>
-				                         	(45)
-				                         </div>
-				                         <div className={classes["miles-away"]}>1.9mi</div>
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; delivery
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; pickup
-						    		</div>
-						    		<div>
-						    			order by : Mon, Oct 3  
-						    		</div>
-						    		<div>
-						    			order ready : Wed, Oct 4  
-						    		</div>
-						    		<div>
-						    			pick-up time: 11AM to 6PM
-						    		</div>
-						    		<div>
-						    			delivery time: 12AM to 6PM
-						    		</div>
-						    	</div>
-						    </div>
-					    </div>
-					    <div className="pure-u-1 pure-u-md-1-3">
-					    	<div className={classes["provider-profile-wrapper"]}>
-						    	<div className={classes["provider-img-section"]}>
-						    		<div className={classes["img-avatar"]}>
-						    			<img src="/cuisines/indian.jpeg"/>
-						    		</div>
-						    	</div>
-						    	<div className={classes["provider-info-section"]}>
-						    		<div>Lache Paraunthe waale</div>
-						    		<div>
-						    			<div className={classes["provider-star-rating"]}>
-								    		<StarRatingComponent 
-					                            name="rate2" 
-					                            editing={false}
-					                            renderStarIcon={() => <span>&#11088;</span>}
-					                            starCount={5}
-					                            value={4}
-					                         />
-				                         </div>
-				                         <div className={classes["num-of-reviews"]}>
-				                         	(45)
-				                         </div>
-				                         <div className={classes["miles-away"]}>1.9mi</div>
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; delivery
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; pickup
-						    		</div>
-						    		<div>
-						    			order by : Mon, Oct 3  
-						    		</div>
-						    		<div>
-						    			order ready : Wed, Oct 4  
-						    		</div>
-						    		<div>
-						    			pick-up time: 11AM to 6PM
-						    		</div>
-						    		<div>
-						    			delivery time: 12AM to 6PM
-						    		</div>
-						    	</div>
-						    </div>
-					    </div>
-					    <div className="pure-u-1 pure-u-md-1-3">
-					    	<div className={classes["provider-profile-wrapper"]}>
-						    	<div className={classes["provider-img-section"]}>
-						    		<div className={classes["img-avatar"]}>
-						    			<img src="/cuisines/indian.jpeg"/>
-						    		</div>
-						    	</div>
-						    	<div className={classes["provider-info-section"]}>
-						    		<div>Lache Paraunthe waale</div>
-						    		<div>
-						    			<div className={classes["provider-star-rating"]}>
-								    		<StarRatingComponent 
-					                            name="rate2" 
-					                            editing={false}
-					                            renderStarIcon={() => <span>&#11088;</span>}
-					                            starCount={5}
-					                            value={4}
-					                         />
-				                         </div>
-				                         <div className={classes["num-of-reviews"]}>
-				                         	(45)
-				                         </div>
-				                         <div className={classes["miles-away"]}>1.9mi</div>
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; delivery
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; pickup
-						    		</div>
-						    		<div>
-						    			order by : Mon, Oct 3  
-						    		</div>
-						    		<div>
-						    			order ready : Wed, Oct 4  
-						    		</div>
-						    		<div>
-						    			pick-up time: 11AM to 6PM
-						    		</div>
-						    		<div>
-						    			delivery time: 12AM to 6PM
-						    		</div>
-						    	</div>
-						    </div>
-					    </div>
-					    <div className="pure-u-1 pure-u-md-1-3">
-					    	<div className={classes["provider-profile-wrapper"]}>
-						    	<div className={classes["provider-img-section"]}>
-						    		<div className={classes["img-avatar"]}>
-						    			<img src="/cuisines/indian.jpeg"/>
-						    		</div>
-						    	</div>
-						    	<div className={classes["provider-info-section"]}>
-						    		<div>Lache Paraunthe waale</div>
-						    		<div>
-						    			<div className={classes["provider-star-rating"]}>
-								    		<StarRatingComponent 
-					                            name="rate2" 
-					                            editing={false}
-					                            renderStarIcon={() => <span>&#11088;</span>}
-					                            starCount={5}
-					                            value={4}
-					                         />
-				                         </div>
-				                         <div className={classes["num-of-reviews"]}>
-				                         	(45)
-				                         </div>
-				                         <div className={classes["miles-away"]}>1.9mi</div>
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; delivery
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; pickup
-						    		</div>
-						    		<div>
-						    			order by : Mon, Oct 3  
-						    		</div>
-						    		<div>
-						    			order ready : Wed, Oct 4  
-						    		</div>
-						    		<div>
-						    			pick-up time: 11AM to 6PM
-						    		</div>
-						    		<div>
-						    			delivery time: 12AM to 6PM
-						    		</div>
-						    	</div>
-						    </div>
-					    </div>
-					    <div className="pure-u-1 pure-u-md-1-3">
-					    	<div className={classes["provider-profile-wrapper"]}>
-						    	<div className={classes["provider-img-section"]}>
-						    		<div className={classes["img-avatar"]}>
-						    			<img src="/cuisines/indian.jpeg"/>
-						    		</div>
-						    	</div>
-						    	<div className={classes["provider-info-section"]}>
-						    		<div>Lache Paraunthe waale</div>
-						    		<div>
-						    			<div className={classes["provider-star-rating"]}>
-								    		<StarRatingComponent 
-					                            name="rate2" 
-					                            editing={false}
-					                            renderStarIcon={() => <span>&#11088;</span>}
-					                            starCount={5}
-					                            value={4}
-					                         />
-				                         </div>
-				                         <div className={classes["num-of-reviews"]}>
-				                         	(45)
-				                         </div>
-				                         <div className={classes["miles-away"]}>1.9mi</div>
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; delivery
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; pickup
-						    		</div>
-						    		<div>
-						    			order by : Mon, Oct 3  
-						    		</div>
-						    		<div>
-						    			order ready : Wed, Oct 4  
-						    		</div>
-						    		<div>
-						    			pick-up time: 11AM to 6PM
-						    		</div>
-						    		<div>
-						    			delivery time: 12AM to 6PM
-						    		</div>
-						    	</div>
-						    </div>
-					    </div>
-					    <div className="pure-u-1 pure-u-md-1-3">
-					    	<div className={classes["provider-profile-wrapper"]}>
-						    	<div className={classes["provider-img-section"]}>
-						    		<div className={classes["img-avatar"]}>
-						    			<img src="/cuisines/indian.jpeg"/>
-						    		</div>
-						    	</div>
-						    	<div className={classes["provider-info-section"]}>
-						    		<div>Lache Paraunthe waale</div>
-						    		<div>
-						    			<div className={classes["provider-star-rating"]}>
-								    		<StarRatingComponent 
-					                            name="rate2" 
-					                            editing={false}
-					                            renderStarIcon={() => <span>&#11088;</span>}
-					                            starCount={5}
-					                            value={4}
-					                         />
-				                         </div>
-				                         <div className={classes["num-of-reviews"]}>
-				                         	(45)
-				                         </div>
-				                         <div className={classes["miles-away"]}>1.9mi</div>
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; delivery
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; pickup
-						    		</div>
-						    		<div>
-						    			order by : Mon, Oct 3  
-						    		</div>
-						    		<div>
-						    			order ready : Wed, Oct 4  
-						    		</div>
-						    		<div>
-						    			pick-up time: 11AM to 6PM
-						    		</div>
-						    		<div>
-						    			delivery time: 12AM to 6PM
-						    		</div>
-						    	</div>
-						    </div>
-					    </div>
-					    <div className="pure-u-1 pure-u-md-1-3">
-					    	<div className={classes["provider-profile-wrapper"]}>
-						    	<div className={classes["provider-img-section"]}>
-						    		<div className={classes["img-avatar"]}>
-						    			<img src="/cuisines/indian.jpeg"/>
-						    		</div>
-						    	</div>
-						    	<div className={classes["provider-info-section"]}>
-						    		<div>Lache Paraunthe waale</div>
-						    		<div>
-						    			<div className={classes["provider-star-rating"]}>
-								    		<StarRatingComponent 
-					                            name="rate2" 
-					                            editing={false}
-					                            renderStarIcon={() => <span>&#11088;</span>}
-					                            starCount={5}
-					                            value={4}
-					                         />
-				                         </div>
-				                         <div className={classes["num-of-reviews"]}>
-				                         	(45)
-				                         </div>
-				                         <div className={classes["miles-away"]}>1.9mi</div>
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; delivery
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; pickup
-						    		</div>
-						    		<div>
-						    			order by : Mon, Oct 3  
-						    		</div>
-						    		<div>
-						    			order ready : Wed, Oct 4  
-						    		</div>
-						    		<div>
-						    			pick-up time: 11AM to 6PM
-						    		</div>
-						    		<div>
-						    			delivery time: 12AM to 6PM
-						    		</div>
-						    	</div>
-						    </div>
-					    </div>
-					    <div className="pure-u-1 pure-u-md-1-3">
-					    	<div className={classes["provider-profile-wrapper"]}>
-						    	<div className={classes["provider-img-section"]}>
-						    		<div className={classes["img-avatar"]}>
-						    			<img src="/cuisines/indian.jpeg"/>
-						    		</div>
-						    	</div>
-						    	<div className={classes["provider-info-section"]}>
-						    		<div>Lache Paraunthe waale</div>
-						    		<div>
-						    			<div className={classes["provider-star-rating"]}>
-								    		<StarRatingComponent 
-					                            name="rate2" 
-					                            editing={false}
-					                            renderStarIcon={() => <span>&#11088;</span>}
-					                            starCount={5}
-					                            value={4}
-					                         />
-				                         </div>
-				                         <div className={classes["num-of-reviews"]}>
-				                         	(45)
-				                         </div>
-				                         <div className={classes["miles-away"]}>1.9mi</div>
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; delivery
-						    		</div>
-						    		<div>
-						    			&#10003; &nbsp; pickup
-						    		</div>
-						    		<div>
-						    			order by : Mon, Oct 3  
-						    		</div>
-						    		<div>
-						    			order ready : Wed, Oct 4  
-						    		</div>
-						    		<div>
-						    			pick-up time: 11AM to 6PM
-						    		</div>
-						    		<div>
-						    			delivery time: 12AM to 6PM
-						    		</div>
-						    	</div>
-						    </div>
-					    </div>
+					{	(data.data)? 
+								data.data.map(function(foodItem){
+									return 	<div className={classNames("pure-u-1 pure-u-md-1-3")}>
+												<div className={classes["provider-profile-wrapper"]}>
+											    	<div className={classes["provider-img-section"]}>
+											    		<div className={classes["img-avatar"]}>
+											    			<img src="/cuisines/indian.jpeg"/>
+											    		</div>
+											    	</div>
+											    	<div className={classes["provider-info-section"]}>
+											    		<div>{foodItem._creator.name}</div>
+											    		<div>
+											    			<div className={classes["provider-star-rating"]}>
+													    		<StarRatingComponent 
+										                            name="rate2" 
+										                            editing={false}
+										                            renderStarIcon={() => <span>&#11088;</span>}
+										                            starCount={5}
+										                            value={4}
+										                         />
+									                         </div>
+									                         <div className={classes["num-of-reviews"]}>
+									                         	(45)
+									                         </div>
+									                         <div className={classes["miles-away"]}>1.9mi</div>
+											    		</div>
+											    		{
+											    			
+											    				(foodItem._creator.doYouDeliverFlag)?
+											    					<div>
+											    						&#10003; &nbsp; delivery
+											    					</div>
+											    					:
+											    					<div>
+											    						&#x2715; &nbsp; delivery
+											    					</div>
+											    		}
+											    		{
+											    			
+											    				(foodItem._creator.pickUpFlag)?
+											    					<div>
+											    						&#10003; &nbsp; pickup
+											    					</div>
+											    					:
+											    					<div>
+											    						&#x2715; &nbsp; pickup
+											    					</div>
+											    		}
+											    			
+											    		
+											    		<div>
+											    			order by : {new Date(foodItem.placeOrderBy).toDateString()}  
+											    		</div>
+											    		<div>
+											    			order ready : {new Date(foodItem.serviceDate).toDateString()}  
+											    		</div>
+											    		<div>
+											    			pick-up time: 11AM to 6PM
+											    		</div>
+											    		<div>
+											    			delivery time: 12AM to 6PM
+											    		</div>
+											    	</div>
+											    </div>
+											</div>
+										})
+										:
+										undefined
+					}
 					</div>
 				</div>
-				
 			</div>
         );
     }
 })
+CounterWrapper.propTypes = {
+    fetchData:React.PropTypes.func.isRequired,
+    counter:React.PropTypes.object.isRequired
+};
 
-export default CounterWrapper
+export default CounterWrapper;

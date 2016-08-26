@@ -55,7 +55,6 @@ const HomeView = React.createClass({
         }
     },
     render() {
-    	console.log("parent rerender",this.state);
         return (
             <div>
 				<div className={classNames(classes["splash-container"],classes["pure-override-letter-spacing"])}>
