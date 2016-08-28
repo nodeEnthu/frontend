@@ -5,7 +5,7 @@ import * as actions from '../../layouts/CoreLayout/coreReducer'
 import Login from '../Login/Login'
 import classes from './Header.scss'
 import classNames from 'classnames'
-export default class Header extends React.Component {
+export  class Header extends React.Component {
     constructor(props) {
         super(props);
         this.removeToken = this.removeToken.bind(this);

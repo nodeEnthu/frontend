@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import * as actions from '../../routes/Chat/modules/chat'
 import moment from 'moment'
 import fetch from 'isomorphic-fetch'
-export default class Chat extends React.Component{
+export class Chat extends React.Component{
   constructor(props){
     super(props);
     this.sendMessage = this.sendMessage.bind(this);
