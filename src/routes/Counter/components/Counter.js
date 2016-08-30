@@ -9,7 +9,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 const CounterWrapper = React.createClass({
     getInitialState() {
         return {
-            pageNum: 0,
+            pageNum: 1,
             queryBaseUrl: '/api/query/foodItems'
         };
     },
