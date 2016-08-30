@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
-import { fetchData,selectCuisineOrDiet } from '../modules/counter'
+import {selectCuisineOrDiet } from '../modules/counter'
+import {fetchData} from 'utils/actionUtils/defaultHttpActions';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
