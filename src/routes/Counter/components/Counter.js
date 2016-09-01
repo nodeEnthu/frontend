@@ -52,7 +52,7 @@ const CounterWrapper = React.createClass({
     },
     render() {
         const { data } = this.props.counter.toJS();
-        console.log("***",data);
+ 
         const { pageNum } = this.state;
         return (
             <div>

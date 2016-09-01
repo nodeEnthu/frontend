@@ -9,11 +9,11 @@ import CommunicationLocationOn from 'material-ui/svg-icons/communication/locatio
 import Spinner from 'react-spinkit'
 import classes from './HomeView.scss'
 import classNames from 'classnames';
-
+import {getCall} from 'utils/httpUtils/apiCallWrapper';
 const HomeView = React.createClass({
     getInitialState() {
         return {
-                fetchingGeoZips:false,
+                fetchingAddresses:false,
         };
     },
     contextTypes: {
@@ -24,30 +24,32 @@ const HomeView = React.createClass({
     },
     
     goToPage(page){
+    	// check if the user is logged in and whether 
+    	if(page ==='counter'){
+
+    	}
     	this.context.router.push(page);
     },
     getLocationCordinates(){
     	let self = this;
     	this.setState({
-    		fetchingGeoZips:true
+    		fetchingAddresses:true
     	})
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(pos) {     
             let latitude =  pos.coords.latitude,
             	longitude =  pos.coords.longitude;
-            fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+latitude+'&lon='+longitude+'&addressdetails=1')
-            	.then(function(data){
-            		return data.json();
-            	}).then(function(response){
-	            	self.props.userZipSearchChange(response.address.postcode);
+            getCall('api/locations/address',{latitude:latitude,longitude:longitude,token:sessionStorage.getItem('token')||""})
+            	.then(function(response){
+	            	self.props.userAddressSearchChange(response.data.address);
 	            	self.setState({
-			    		fetchingGeoZips:false
+			    		fetchingAddresses:false
 			    	})
             	})
         	},
 	        function(err) {
 	            this.setState({
-    				fetchingGeoZips:true
+    				fetchingAddresses:true
     			})
 	        });
         } else {
@@ -66,19 +68,18 @@ const HomeView = React.createClass({
 							        	Please enter a zip code to find food close to you.
 							        </h1>
 							        <AsyncAutocomplete settings={{
-							        	userSearchText : this.props.homepage.get('userZipSearch'),
-							        	apiUrl:'/api/locations/zipcodeTypeAssist',
-							        	action:this.props.userZipSearchChange
+							        	userSearchText : this.props.homepage.get('userAddressSearch'),
+							        	apiUrl:'/api/locations/addressTypeAssist',
+							        	action:this.props.userAddressSearchChange
 							        }}/>
 							        <IconButton
 							        	style = {{
 							        			padding:'0px',
 							        			height:'0px',
 							        			width:'0px',
-							        			marginLeft:'-30px',
 							        			top:'6px',
 							        			display:'inline-block',
-							        			visibility:(this.state.fetchingGeoZips)? 'hidden':'initial'							        		
+							        			visibility:(this.state.fetchingAddresses)? 'hidden':'initial'							        		
 							        		}}
 							        	onClick = {this.getLocationCordinates}
 							        >
@@ -86,7 +87,7 @@ const HomeView = React.createClass({
 							        </IconButton>
 							        <Spinner spinnerName='circle' 
 							        	style = {{	display:'inline-block',
-							        				visibility:(this.state.fetchingGeoZips)?'initial':'hidden',
+							        				visibility:(this.state.fetchingAddresses)?'initial':'hidden',
 							        				top:'5px'
 							        			}}
 							        />
@@ -231,7 +232,7 @@ const HomeView = React.createClass({
 HomeView.propTypes = {
 	globalState:React.PropTypes.object.isRequired,
    	homepage:React.PropTypes.object.isRequired,
-   	userZipSearchChange:React.PropTypes.func.isRequired
+   	userAddressSearchChange:React.PropTypes.func.isRequired
 }
 
 export default HomeView

@@ -1,31 +1,26 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const USER_ZIP_SEARCH_CHANGE = 'USER_ZIP_SEARCH_CHANGE'
+export const USER_ADDRESS_SEARCH_CHANGE = 'USER_ADDRESS_SEARCH_CHANGE'
 
 import { Map, fromJS } from 'immutable'
 // ------------------------------------
 // Actions
 // ------------------------------------
 
-export function userZipSearchChange(val) {
+export function userAddressSearchChange(val) {
     return {
-        type: USER_ZIP_SEARCH_CHANGE,
+        type: USER_ADDRESS_SEARCH_CHANGE,
         payload:val
     }
-}
-
-export const actions = {
-    userZipSearchChange
 }
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-    [USER_ZIP_SEARCH_CHANGE]:(state,action)=>{
-        let newState = state.updateIn(['userZipSearch','searchText'],value=>action.payload);
-        return newState;
+    [USER_ADDRESS_SEARCH_CHANGE]:(state,action)=>{
+        return state.updateIn(['userAddressSearch','searchText'],value=>action.payload);
     }
 }
 
@@ -33,7 +28,7 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 let initialState = Map({
-    userZipSearch: Map({
+    userAddressSearch: Map({
         searchText: ''
     })
 });

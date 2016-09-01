@@ -3,7 +3,7 @@ import classes from './AsyncAutocomplete.scss'
 import Autosuggest from 'react-autosuggest'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import debounce from 'lodash.debounce'
-//import dropRight from 'lodash.dropRight'
+import {getCall} from 'utils/httpUtils/apiCallWrapper';
 import React from 'react'
 
 
@@ -12,12 +12,12 @@ import React from 'react'
 /* --------------- */
 
 function getSuggestionValue(suggestion) {
-    return suggestion._id;
+    return suggestion;
 }
 
 function renderSuggestion(suggestion) {
     return (
-        <span>{suggestion._id}</span>
+        <span>{suggestion}</span>
     );
 }
 
@@ -46,20 +46,20 @@ class AsyncAutocomplete extends React.Component {
         this.setState({
             isLoading: true
         });
-        
-        fetch(this.state.apiUrl +'?search='+value , { method: 'get' })
-            .then(function(response) {
-                return response.json();
-            })
+        getCall(this.state.apiUrl,{searchText:value})
             .then(function(resolvedResponse) {
-              if(resolvedResponse.length>5){
-                const resultsToIgnore = resolvedResponse.length -3;
-                //resolvedResponse = dropRight(resolvedResponse,resultsToIgnore);
-              }
-              self.setState({
-                  isLoading: false,
-                  suggestions: resolvedResponse
-              });
+                let result = [];
+                // greater than 5 take first 5
+                if(resolvedResponse.data.addresses.length>5){
+                    for(var i=0; i<4; i++ ){
+                        result.push(resolvedResponse.data.addresses[i]);
+                    }
+                }else result = resolvedResponse.data.addresses;
+                
+                self.setState({
+                    isLoading: false,
+                    suggestions: result
+                });
             })
             .catch(function(err) {
 
@@ -87,7 +87,6 @@ class AsyncAutocomplete extends React.Component {
     }
 
     render() {
-        console.log("child render",this.state);
         const { value, suggestions, isLoading } = this.state;
         const inputProps = {
             placeholder: "Please enter zip code",
