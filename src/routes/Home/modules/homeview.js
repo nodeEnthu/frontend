@@ -2,8 +2,9 @@
 // Constants
 // ------------------------------------
 export const USER_ADDRESS_SEARCH_CHANGE = 'USER_ADDRESS_SEARCH_CHANGE'
+export const USER_ADDRESS_UPDATE_PLACE_ID = 'USER_ADDRESS_UPDATE_PLACE_ID'
 
-import { Map, fromJS } from 'immutable'
+import { Map } from 'immutable'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -11,7 +12,14 @@ import { Map, fromJS } from 'immutable'
 export function userAddressSearchChange(val) {
     return {
         type: USER_ADDRESS_SEARCH_CHANGE,
-        payload:val
+        payload: val
+    }
+}
+
+export function userAddressUpdatePlaceId(val) {
+    return {
+        type: USER_ADDRESS_UPDATE_PLACE_ID,
+        payload: val
     }
 }
 
@@ -19,8 +27,11 @@ export function userAddressSearchChange(val) {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-    [USER_ADDRESS_SEARCH_CHANGE]:(state,action)=>{
-        return state.updateIn(['userAddressSearch','searchText'],value=>action.payload);
+    [USER_ADDRESS_SEARCH_CHANGE]: (state, action) => {
+        return state.updateIn(['userAddressSearch', 'searchText'], value => action.payload);
+    },
+    [USER_ADDRESS_UPDATE_PLACE_ID]: (state, action) => {
+        return state.updateIn(['userAddressSearch', 'place_id'], value => action.payload);
     }
 }
 
@@ -29,9 +40,11 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 let initialState = Map({
     userAddressSearch: Map({
-        searchText: ''
+        searchText: '',
+        place_id: ''
     })
 });
+
 export function homeviewReducer(state = initialState, action) {
     const handler = ACTION_HANDLERS[action.type]
     return handler ? handler(state, action) : state

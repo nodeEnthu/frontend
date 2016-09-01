@@ -9,49 +9,53 @@ import CommunicationLocationOn from 'material-ui/svg-icons/communication/locatio
 import Spinner from 'react-spinkit'
 import classes from './HomeView.scss'
 import classNames from 'classnames';
-import {getCall} from 'utils/httpUtils/apiCallWrapper';
+import { getCall } from 'utils/httpUtils/apiCallWrapper';
 const HomeView = React.createClass({
     getInitialState() {
         return {
-                fetchingAddresses:false,
+            fetchingAddresses: false,
         };
     },
     contextTypes: {
-    	router: React.PropTypes.object.isRequired
-  	},
+        router: React.PropTypes.object.isRequired
+    },
     componentDidMount() {
-       
-    },
-    
-    goToPage(page){
-    	// check if the user is logged in and whether 
-    	if(page ==='counter'){
 
-    	}
-    	this.context.router.push(page);
     },
-    getLocationCordinates(){
-    	let self = this;
-    	this.setState({
-    		fetchingAddresses:true
-    	})
+
+    goToPage(page) {
+        // check if the user is logged in and whether 
+        if (page === 'counter') {
+            // check whether a new location was chosen
+            if (this.props.homepage.get('userAddressSearch').get('searchText')) {
+
+            }
+        }
+        this.context.router.push(page);
+    },
+    getLocationCordinates() {
+        let self = this;
+        this.setState({
+            fetchingAddresses: true
+        })
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(pos) {     
-            let latitude =  pos.coords.latitude,
-            	longitude =  pos.coords.longitude;
-            getCall('api/locations/address',{latitude:latitude,longitude:longitude,token:sessionStorage.getItem('token')||""})
-            	.then(function(response){
-	            	self.props.userAddressSearchChange(response.data.address);
-	            	self.setState({
-			    		fetchingAddresses:false
-			    	})
-            	})
-        	},
-	        function(err) {
-	            this.setState({
-    				fetchingAddresses:true
-    			})
-	        });
+            navigator.geolocation.getCurrentPosition(
+                function(pos) {
+                    const { latitude, longitude } = pos.coords;
+                    getCall('api/locations/address', { latitude: latitude, longitude: longitude, token: sessionStorage.getItem('token') || "" })
+                        .then(function(response) {
+                            self.props.userAddressSearchChange(response.data.address);
+                            self.props.userAddressUpdatePlaceId(response.data.place_id);
+                            self.setState({
+                                fetchingAddresses: false
+                            })
+                        })
+                },
+                function(err) {
+                    this.setState({
+                        fetchingAddresses: true
+                    })
+                });
         } else {
             // show some error message
         }
@@ -70,7 +74,8 @@ const HomeView = React.createClass({
 							        <AsyncAutocomplete settings={{
 							        	userSearchText : this.props.homepage.get('userAddressSearch'),
 							        	apiUrl:'/api/locations/addressTypeAssist',
-							        	action:this.props.userAddressSearchChange
+							        	action:this.props.userAddressSearchChange,
+							        	setPlaceId:this.props.userAddressUpdatePlaceId
 							        }}/>
 							        <IconButton
 							        	style = {{
@@ -230,9 +235,10 @@ const HomeView = React.createClass({
 })
 
 HomeView.propTypes = {
-	globalState:React.PropTypes.object.isRequired,
-   	homepage:React.PropTypes.object.isRequired,
-   	userAddressSearchChange:React.PropTypes.func.isRequired
+    globalState: React.PropTypes.object.isRequired,
+    homepage: React.PropTypes.object.isRequired,
+    userAddressSearchChange: React.PropTypes.func.isRequired,
+    userAddressUpdatePlaceId: React.PropTypes.func.isRequired
 }
 
 export default HomeView
