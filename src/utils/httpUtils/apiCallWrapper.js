@@ -13,6 +13,16 @@ export function securedPostCall(endPoint, bodyParams) {
     });
 }
 
+export function postCall(endPoint,bodyParams) {
+    return axios({
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        url: endPoint,
+        data: bodyParams
+    })
+}
 export function securedGetCall(endPoint, params) {
     let token = sessionStorage.getItem('token');
     return axios({

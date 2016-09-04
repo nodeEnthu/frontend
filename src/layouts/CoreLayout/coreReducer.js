@@ -44,9 +44,10 @@ export function closeLoginModal() {
     type: CLOSE_MODAL_LOGIN,
   };
 };
-export function userLoggedIn() {
+export function userLoggedIn(val) {
   return {
     type: USER_LOGGED_IN,
+    payload:val
   };
 };
 
@@ -65,7 +66,8 @@ const ACTION_HANDLERS = {
         return state.set('loginModalOPen', false)
     },
     [USER_LOGGED_IN]:(state,action)=>{
-        return state.set('loggedIn',action.payload);
+        console.log('USER_LOGGED_IN is invoked with ', action.payload );
+        return state.set('userLoggedIn',action.payload);
     }   
 }
 

@@ -9,7 +9,7 @@ import CommunicationLocationOn from 'material-ui/svg-icons/communication/locatio
 import Spinner from 'react-spinkit'
 import classes from './HomeView.scss'
 import classNames from 'classnames';
-import { getCall } from 'utils/httpUtils/apiCallWrapper';
+import { getCall,securedGetCall } from 'utils/httpUtils/apiCallWrapper';
 const HomeView = React.createClass({
     getInitialState() {
         return {
@@ -22,13 +22,15 @@ const HomeView = React.createClass({
     componentDidMount() {
 
     },
-
     goToPage(page) {
-        // check if the user is logged in and whether 
         if (page === 'counter') {
-            // check whether a new location was chosen
-            if (this.props.homepage.get('userAddressSearch').get('searchText')) {
-
+        	const {searchText,place_id} = this.props.homepage.get('userAddressSearch').toJS();
+            //register this at a new location if possible as the user needs to be logged in for this
+            if(this.props.globalState.core.get('userLoggedIn')){
+            	// register the address as most recently used 
+            	securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id});
+            }else{
+            	// user is not logged in ... add it to cookie so that it is saved in the session and we dont make another call
             }
         }
         this.context.router.push(page);
@@ -42,7 +44,7 @@ const HomeView = React.createClass({
             navigator.geolocation.getCurrentPosition(
                 function(pos) {
                     const { latitude, longitude } = pos.coords;
-                    getCall('api/locations/address', { latitude: latitude, longitude: longitude, token: sessionStorage.getItem('token') || "" })
+                    getCall('api/locations/address', { latitude: latitude, longitude: longitude })
                         .then(function(response) {
                             self.props.userAddressSearchChange(response.data.address);
                             self.props.userAddressUpdatePlaceId(response.data.place_id);

@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 import FacebookLogin from 'components/Facebook/Facebook';
 import GoogleLogin from 'components/GoogleLogin';
 import * as actions from '../../layouts/CoreLayout/coreReducer';
+import {getCall,postCall,securedGetCall} from 'utils/httpUtils/apiCallWrapper';
 
 const customStyles = {
     content: {
@@ -38,18 +39,9 @@ var Login = React.createClass({
       if (token) {
           // send an ajax call to get the user back 
           // this makes sure user is authenticated with us
-          fetch('/api/users/me', {
-                  method: 'get',
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': 'Bearer ' + token
-                  }
-              })
-              .then(function(response) {
-                  return response.json();
-              })
-              .then(function(data) {
-                  dispatch(actions.addUser(data));
+          securedGetCall('/api/users/me')
+              .then(function(result) {
+                  dispatch(actions.addUser(result.data));
                   dispatch(actions.addToken(token));
               })
       }
@@ -57,21 +49,13 @@ var Login = React.createClass({
     successfullLogin(response) {
         const { dispatch } = this.props;
        
-        fetch('/api/users/signUp', {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(response)
-            })
-            .then(function(res) {
-                return res.json();
-            })
-            .then(function(data) {
-                if (data.token) {
-                    dispatch(actions.addToken(data.token));
-                    dispatch(actions.addUser(data.user))
-                    sessionStorage.setItem('token', data.token);
+        postCall('/api/users/signUp', JSON.stringify(response))
+            .then(function(result) {
+                if (result.data.token) {
+                    dispatch(actions.addToken(result.data.token));
+                    dispatch(actions.addUser(result.data.user));
+                    dispatch(actions.userLoggedIn(true));
+                    sessionStorage.setItem('token', result.data.token);
                 }
             })
     },

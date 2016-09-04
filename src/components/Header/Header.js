@@ -14,6 +14,9 @@ export  class Header extends React.Component {
       this.props.dispatch(actions.addToken(''))
       sessionStorage.removeItem('token');
     }
+    componentDidMount() {
+           
+    }
     render() {
         const { globalState } = this.props;
         const {img} = globalState.core.get('user').toJS();
