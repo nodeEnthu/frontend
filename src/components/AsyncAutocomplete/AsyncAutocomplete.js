@@ -24,11 +24,14 @@ class AsyncAutocomplete extends React.Component {
         super();
         this.state = {
             value: props.settings.userSearchText.get('searchText'),
+            onFocusProp:props.settings.onFocus,
+            onBlurProp:props.settings.onBlur,
+            name:props.settings.name,
             suggestions: [],
             isLoading: false,
             apiUrl: props.settings.apiUrl,
             changeGlobalState: props.settings.action,
-            changeGlobalPlaceId: props.settings.setPlaceId
+            changeGlobalPlaceId: props.settings.setPlaceId,
         };
 
         this.onChange = this.onChange.bind(this);
@@ -91,8 +94,11 @@ class AsyncAutocomplete extends React.Component {
     }
 
     render() {
-        const { value, suggestions, isLoading } = this.state;
+        const { value, suggestions, isLoading,onFocusProp,onBlurProp,name } = this.state;
         const inputProps = {
+            name,
+            onFocus:onFocusProp,
+            onBlur:onBlurProp,
             placeholder: "street address",
             value,
             onChange: this.onChange
@@ -102,7 +108,8 @@ class AsyncAutocomplete extends React.Component {
                            onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                            getSuggestionValue={this.getSuggestionValue}
                            renderSuggestion={renderSuggestion}
-                           inputProps={inputProps} />
+                           inputProps={inputProps}
+            />
         );
     }
 }

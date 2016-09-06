@@ -4,13 +4,14 @@
 }
 
 .react-autosuggest__container {
+    width:100%;
     display: inline-block;
     position: relative;
     margin: 0px auto;
 }
 
 .react-autosuggest__input {
-    height: 30px;
+    width:100%;
     padding: 10px;
     font-family: Helvetica, sans-serif;
     font-weight: 300;
@@ -32,7 +33,6 @@
     position: absolute;
     margin: 0px auto;
     padding: 0;
-    width:400px;
     text-align:left;
     overflow-x: hidden;
     list-style-type: none;

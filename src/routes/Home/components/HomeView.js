@@ -71,7 +71,7 @@ const HomeView = React.createClass({
 							<div className = "pure-u-1 pure-u-md-1-2">
 							    <div className={classes["splash"]}>
 							        <h1 className={classes["splash-head"]}>
-							        	Please enter a zip code to find food close to you.
+							        	Please enter address to find food close to you.
 							        </h1>
 							        <AsyncAutocomplete settings={{
 							        	userSearchText : this.props.homepage.get('userAddressSearch'),

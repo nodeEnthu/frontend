@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import Modal from 'react-modal';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
+import AsyncAutocomplete from 'components/AsyncAutocomplete'
 
 const maxCount = 100;
 class ProviderEntryForm extends React.Component {
@@ -16,7 +17,7 @@ class ProviderEntryForm extends React.Component {
             title: required,
             emailId: email,
             description: maxLength,
-            city: required
+            searchText:required
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
@@ -81,10 +82,10 @@ class ProviderEntryForm extends React.Component {
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
-        this.props.addProviderInfo({
-            storeKey:stateKeyName,
-            payload:input
-        });
+            this.props.addProviderInfo({
+                storeKey:stateKeyName,
+                payload:input
+            });
     }
     validateForm(){
         let self = this;
@@ -115,7 +116,7 @@ class ProviderEntryForm extends React.Component {
         }
     }
     render() {
-        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag } = this.props.providerEntryForm.toJS();
+        let { chars_left, title, description, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg } = this.props.providerEntryForm.toJS();
         const styles = {
           block: {
             maxWidth: 250,
@@ -159,32 +160,32 @@ class ProviderEntryForm extends React.Component {
                             <div>
                                 <span style={{fontSize:'0.75em'}}>Display this on my public profile page</span>
                                 <Toggle
-                                defaultChecked={!keepAddressPrivateFlag}
-                                onChange={()=>{this.toggle('keepAddressPrivateFlag')}}
-                                className = {classes["input-hidden"]} 
+                                    defaultChecked={!keepAddressPrivateFlag}
+                                    onChange={()=>{this.toggle('keepAddressPrivateFlag')}}
+                                    className = {classes["input-hidden"]} 
                                 />
                                 <a className={classNames("pure-menu-link",classes["address-justification"])} 
                                     onClick={()=>{this.toggle('providerAddressJustificationModalOpen')}}>
                                     why we need it?
                                 </a> 
-                            </div>
-                            
+                            </div>  
                         </legend>
-                        <input type="text"  name="streetName" placeholder="address line1" value = {streetName}
-                            onChange={this.changeStoreVal}
-                            className="pure-u-1" 
-                         />
-                        <input type="text" name="crosStreetName" placeholder="address line 2" value = {crosStreetName}
-                            onChange={this.changeStoreVal}
-                            className="pure-u-1" 
-                        />
-                        <input type="text"  name="city"  placeholder="*city" value = {city}
-                            onBlur={this.handleChange} 
-                            onFocus={this.handleFocus}
-                            onChange={this.changeStoreVal}
-                            className="pure-u-1"
-                        />
-                        <span className = {classes["error-message"]}>{(cityErrorMsg)?'*'+cityErrorMsg:undefined}</span>
+                        <AsyncAutocomplete settings={{
+                                        name:'searchText',
+                                        onBlur: this.handleChange,
+                                        onFocus:this.handleFocus,
+                                        userSearchText : this.props.providerEntryForm,
+                                        apiUrl:'/api/locations/addressTypeAssist',
+                                        action:(address)=>this.props.addProviderInfo({
+                                                                                        storeKey:'searchText',
+                                                                                        payload:address
+                                                                                    }),
+                                        setPlaceId:(placeId)=>this.props.addProviderInfo({
+                                                                                        storeKey:'place_id',
+                                                                                        payload:placeId
+                                                                                    })
+                                    }}/>
+                        <span className = {classes["error-message"]}>{(searchTextErrorMsg)?'*'+searchTextErrorMsg:undefined}</span>
                     </fieldset>
                     {(keepAddressPrivateFlag)?
                         <fieldset className="pure-group">
