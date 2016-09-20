@@ -18,7 +18,9 @@ const initialState = Map({
         gmailUserID:''
     }),
     loginModalOPen:false,
-    userLoggedIn:false
+    userLoggedIn:false,
+    address:'',
+    placeId:''
 })
 
 export function addToken(value) {

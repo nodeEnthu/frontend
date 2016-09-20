@@ -14,6 +14,7 @@ const HomeView = React.createClass({
     getInitialState() {
         return {
             fetchingAddresses: false,
+            showBackDrop:false
         };
     },
     contextTypes: {
@@ -23,17 +24,25 @@ const HomeView = React.createClass({
 
     },
     goToPage(page) {
+    	let self = this;
+    	this.state.showBackDrop = true;
         if (page === 'counter') {
         	const {searchText,place_id} = this.props.homepage.get('userAddressSearch').toJS();
             //register this at a new location if possible as the user needs to be logged in for this
             if(this.props.globalState.core.get('userLoggedIn')){
             	// register the address as most recently used 
-            	securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id});
+            	securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
+            		.then(function(result){
+            			self.state.showBackDrop = false;
+            			self.context.router.push(page);
+            		});
             }else{
             	// user is not logged in ... add it to cookie so that it is saved in the session and we dont make another call
             }
+        } else{
+        	this.context.router.push(page);
         }
-        this.context.router.push(page);
+        
     },
     getLocationCordinates() {
         let self = this;

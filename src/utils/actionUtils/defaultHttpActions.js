@@ -1,4 +1,4 @@
-import { getCall,securedGetCall,securedPostCall } from 'utils/httpUtils/apiCallWrapper';
+import { getCall,securedGetCall,checkSecuredGetCall,securedPostCall } from 'utils/httpUtils/apiCallWrapper';
 
 
 // ------------------------------------
@@ -11,49 +11,68 @@ export const FAIL_DATA = 'FAIL_DATA';
 // ------------------------------------
 // Actions
 // ------------------------------------
-function requestData() {
+function requestData(payload) {
     return {
         type: REQUEST_DATA,
+        payload:{
+            storeKey:payload.storeKey
+        }
     };
 };
 
-function failData(err) {
+function failData(payload) {
     return {
         type: FAIL_DATA,
-        data: err,
+        payload:{
+            storeKey:payload.storeKey,
+            data:payload.data
+        }
     };
 };
 
-function receiveData(data) {
+function receiveData(payload) {
+    console.log("reaching here with",payload);
     return {
         type: RECEIVE_DATA,
-        data: data,
+        payload:{
+            storeKey:payload.storeKey,
+            data:payload.data
+        }
     };
 };
 
-export function fetchData(url,queryParams) {
+export function fetchData(url,storeKey,queryParams) {
     return (dispatch) => {
-        dispatch(requestData());
-        return getCall(url, queryParams)
-            .then(res => dispatch(receiveData(res)))
-            .catch(err => dispatch(failData(err)));
+        dispatch(requestData({storeKey:storeKey}));
+        return getCall(url,queryParams)
+            .then(res => dispatch(receiveData({storeKey:storeKey,data:res})))
+            .catch(err => dispatch(failData({storeKey:storeKey,data:err})));
     };
 }
 
-export function fetchSecuredData(url,queryParams) {
+export function fetchMayBeSecuredData(url,storeKey,queryParams) {
     return (dispatch) => {
-        dispatch(requestData());
-        return securedGetCall(url, queryParams)
-            .then(res => dispatch(receiveData(res)))
-            .catch(err => dispatch(failData(err)));
+        dispatch(requestData({storeKey:storeKey}));
+        return checkSecuredGetCall(url,queryParams)
+            .then(res => dispatch(receiveData({storeKey:storeKey,data:res})))
+            .catch(err => dispatch(failData({storeKey:storeKey,data:err})));
     };
 }
-export function postSecuredData(url,queryParams) {
+
+export function fetchSecuredData(url,storeKey,queryParams) {
     return (dispatch) => {
-        dispatch(requestData());
+        dispatch(requestData({storeKey:storeKey}));
+        return securedGetCall(url, queryParams)
+            .then(res => dispatch(receiveData({storeKey:storeKey,data:res})))
+            .catch(err => dispatch(failData({storeKey:storeKey,data:err})));
+    };
+}
+export function postSecuredData(url,storeKey,queryParams) {
+    return (dispatch) => {
+        dispatch(requestData({storeKey:storeKey}));
         return securedPostCall(url, queryParams)
-            .then(res => dispatch(receiveData(res)))
-            .catch(err => dispatch(failData(err)));
+            .then(res => dispatch(receiveData({storeKey:storeKey,data:res})))
+            .catch(err => dispatch(failData({storeKey:storeKey,data:err})));
     };
 }
 

@@ -10,7 +10,7 @@ const CounterWrapper = React.createClass({
     getInitialState() {
         return {
             pageNum: 1,
-            queryBaseUrl: '/api/query/foodItems'
+            queryBaseUrl: '/api/query/providers'
         };
     },
     filterCuisineOrDietType(event,cuisineOrDiet) {
@@ -22,8 +22,12 @@ const CounterWrapper = React.createClass({
         } // else dont do anything
     },
     // defaults for the first time you load the page 
-    componentDidMount() {    	
-        this.props.fetchData(this.state.queryBaseUrl);
+    componentDidMount() {
+    	// if user is logged in then that means the most recent address is updated in the db ... no need to pas latitude longitude
+    	if(this.props.globalState.core.get('userLoggedIn')){	
+    		this.props.fetchMayBeSecuredData(this.state.queryBaseUrl,'data');
+    	}	
+        // else  #TODO Gautam
     },
     loadMore() {
     	let self = this;
@@ -40,10 +44,12 @@ const CounterWrapper = React.createClass({
         // merging ends
         let combinedQuery = {}
         combinedQuery.combinedDietCuisineFilters = combinedDietCuisineFilters;
+
         combinedQuery.filterspageNum = this.state.pageNum;
+        console.log(combinedQuery);
         // now make the ajax call to get the data
         let newPageNum  = this.state.pageNum +1;
-        this.props.fetchData(this.state.queryBaseUrl,combinedQuery)
+        this.props.fetchMayBeSecuredData(this.state.queryBaseUrl,'data',combinedQuery)
 	        .then(function(err,response){
 	        	self.setState({
 	        		pageNum : newPageNum
@@ -51,8 +57,15 @@ const CounterWrapper = React.createClass({
 	        })
     },
     render() {
-        const { data } = this.props.counter.toJS();
- 
+        let { data } = this.props.counter.toJS();
+       	let resolvedData = [];
+       	for(let i =0; i<data.length;i++){
+       		for(let j=0;j<data[i].foodItems.length;j++){
+       			data[i].foodItems[j].distance = (data[i].distance/1600).toFixed(2);
+       		}
+       		resolvedData = resolvedData.concat(data[i].foodItems);
+
+       	}
         const { pageNum } = this.state;
         return (
             <div>
@@ -100,13 +113,13 @@ const CounterWrapper = React.createClass({
 				</div>
 				<div className={classes["providers-wrapper"]}>
 					<div className="pure-g">
-					{	(data)? 
-								data.map(function(foodItem,index){
+					{	(resolvedData)? 
+								resolvedData.map(function(foodItem,index){
 									return 	<div key={index} className={classNames("pure-u-1 pure-u-md-1-3")}>
 												<div className={classes["provider-profile-wrapper"]}>
 											    	<div className={classes["provider-img-section"]}>
 											    		<div className={classes["img-avatar"]}>
-											    			<img src={foodItem._creator.img}/>
+											    			<img src={foodItem.img}/>
 											    		</div>
 											    	</div>
 											    	<div className={classes["provider-info-section"]}>
@@ -124,7 +137,7 @@ const CounterWrapper = React.createClass({
 									                         <div className={classes["num-of-reviews"]}>
 									                         	(45)
 									                         </div>
-									                         <div className={classes["miles-away"]}>1.9mi</div>
+									                         <div className={classes["miles-away"]}><span>{foodItem.distance}</span><span>mi</span></div>
 											    		</div>
 											    		{
 											    			
@@ -189,7 +202,8 @@ const CounterWrapper = React.createClass({
     }
 })
 CounterWrapper.propTypes = {
-    fetchData: React.PropTypes.func.isRequired,
+	globalState:React.PropTypes.object.isRequired,
+    fetchMayBeSecuredData: React.PropTypes.func.isRequired,
     selectCuisineOrDiet: React.PropTypes.func.isRequired,
     counter: React.PropTypes.object.isRequired
 };

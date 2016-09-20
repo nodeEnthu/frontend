@@ -35,6 +35,22 @@ export function securedGetCall(endPoint, params) {
         params: params
     })
 }
+// check securedGetCall adds in header depending up whether user is logged in or not
+export function checkSecuredGetCall(endPoint, params) {
+    let token = sessionStorage.getItem('token');
+    let headers = (token)? {
+            'Content-Type': 'application/json',
+            'Authorization': (token)?'Bearer ' + token: undefined
+        }:{
+            'Content-Type': 'application/json'
+        };
+    return axios({
+        method: 'get',
+        headers: headers,
+        url: endPoint,
+        params: params
+    })
+}
 
 export function getCall(endPoint,params) {
     return axios({

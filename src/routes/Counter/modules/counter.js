@@ -24,7 +24,7 @@ export function selectCuisineOrDiet(storeKey,dietOrCuisineSelected){
 const ACTION_HANDLERS = {
     REQUEST_DATA: (state, action) => state.set('isLoading', true),
     FAIL_DATA: (state, action) => state.set('isLoading', false).set('error', action.data).set('data', List()),
-    RECEIVE_DATA: (state, action) => state.set('isLoading', false).set('error', undefined).set('data',state.get('data').concat(action.data.data)),
+    RECEIVE_DATA: (state, action) => state.set('isLoading', false).set('error', undefined).set('data',state.get('data').concat(action.payload.data.data)),
     SELECT_CUISINE_OR_DIET_TYPE: (state, action) => state.updateIn([action.key, action.payload],false,selected => !selected)
 }
 
