@@ -2,6 +2,7 @@ import { applyMiddleware, compose, createStore } from 'redux'
 import { routerMiddleware } from 'react-router-redux'
 import thunk from 'redux-thunk'
 import makeRootReducer from './reducers'
+import 'react-fastclick';
 
 // Actions
 import * as actions from 'layouts/CoreLayout/coreReducer'

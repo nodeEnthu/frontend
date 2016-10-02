@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { userAddressSearchChange,userAddressUpdatePlaceId } from '../modules/homeview'
+import { userAddressSearchChange,userAddressUpdatePlaceId,userAddressUpdateDetect } from '../../../layouts/CoreLayout/coreReducer'
 
 import { fromJS } from 'immutable'
 /*  This is a container component. Notice it does not contain any JSX,
@@ -15,7 +15,8 @@ import HomeView from '../components/HomeView'
 
 const mapActionCreators = {
     userAddressSearchChange,
-    userAddressUpdatePlaceId
+    userAddressUpdatePlaceId,
+    userAddressUpdateDetect
 }
 
 const mapStateToProps = (state) => {

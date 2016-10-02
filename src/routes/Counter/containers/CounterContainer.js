@@ -1,7 +1,8 @@
 import { connect } from 'react-redux'
-import {selectCuisineOrDiet } from '../modules/counter'
+import {selectCuisineOrDiet,flushOutStaleData } from '../modules/counter'
 import {fetchMayBeSecuredData} from 'utils/actionUtils/defaultHttpActions';
-
+import { userAddressUpdateDetect } from '../../../layouts/CoreLayout/coreReducer'
+ 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
     wiring in the actions and state necessary to render a presentational
@@ -15,12 +16,15 @@ import CounterWrapper from 'routes/Counter/components/Counter'
 
 const mapDispatchToProps = {
   fetchMayBeSecuredData,
-  selectCuisineOrDiet
+  flushOutStaleData,
+  selectCuisineOrDiet,
+  userAddressUpdateDetect,
 }
 
 const mapStateToProps = (state) => ({
   globalState:state,
-  counter: state.counter
+  counter: state.counter,
+  addressChange:state.core.get('userAddressSearch').get('newAddress')
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

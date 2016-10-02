@@ -32,6 +32,7 @@ class AsyncAutocomplete extends React.Component {
             apiUrl: props.settings.apiUrl,
             changeGlobalState: props.settings.action,
             changeGlobalPlaceId: props.settings.setPlaceId,
+            detectChange:props.settings.detectChange
         };
 
         this.onChange = this.onChange.bind(this);
@@ -46,6 +47,9 @@ class AsyncAutocomplete extends React.Component {
     }
     getSuggestionValue(suggestion) {
         this.state.changeGlobalPlaceId(suggestion.place_id);
+        if(this.state.detectChange){
+             this.state.detectChange(true);
+        }
         return suggestion.address;
     }
     loadSuggestions(value) {

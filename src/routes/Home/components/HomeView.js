@@ -27,7 +27,7 @@ const HomeView = React.createClass({
     	let self = this;
     	this.state.showBackDrop = true;
         if (page === 'counter') {
-        	const {searchText,place_id} = this.props.homepage.get('userAddressSearch').toJS();
+        	const {searchText,place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
             //register this at a new location if possible as the user needs to be logged in for this
             if(this.props.globalState.core.get('userLoggedIn')){
             	// register the address as most recently used 
@@ -38,6 +38,7 @@ const HomeView = React.createClass({
             		});
             }else{
             	// user is not logged in ... add it to cookie so that it is saved in the session and we dont make another call
+            	this.context.router.push(page);
             }
         } else{
         	this.context.router.push(page);
@@ -83,10 +84,11 @@ const HomeView = React.createClass({
 							        	Please enter address to find food close to you.
 							        </h1>
 							        <AsyncAutocomplete settings={{
-							        	userSearchText : this.props.homepage.get('userAddressSearch'),
+							        	userSearchText : this.props.globalState.core.get('userAddressSearch'),
 							        	apiUrl:'/api/locations/addressTypeAssist',
 							        	action:this.props.userAddressSearchChange,
-							        	setPlaceId:this.props.userAddressUpdatePlaceId
+							        	setPlaceId:this.props.userAddressUpdatePlaceId,
+							        	detectChange:this.props.userAddressUpdateDetect
 							        }}/>
 							        <IconButton
 							        	style = {{
@@ -247,9 +249,9 @@ const HomeView = React.createClass({
 
 HomeView.propTypes = {
     globalState: React.PropTypes.object.isRequired,
-    homepage: React.PropTypes.object.isRequired,
     userAddressSearchChange: React.PropTypes.func.isRequired,
-    userAddressUpdatePlaceId: React.PropTypes.func.isRequired
+    userAddressUpdatePlaceId: React.PropTypes.func.isRequired,
+    userAddressUpdateDetect:React.PropTypes.func.isRequired
 }
 
 export default HomeView

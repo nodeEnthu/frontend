@@ -13,7 +13,6 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Chip from 'material-ui/Chip';
 import {securedPostCall,securedGetCall} from 'utils/httpUtils/apiCallWrapper';
 
-
 const maxCount = 100;
 
 class FoodItemEntryForm extends React.Component {
@@ -230,21 +229,6 @@ class FoodItemEntryForm extends React.Component {
                     </fieldset>
                     <fieldset className = "pure-group">
                         <div className="pure-g">
-                            <div className = "pure-u-1 pure-u-md-1-2" >
-                                <label>*Order by date</label>
-                                <DatePicker
-                                    name="placeOrderBy"
-                                    onBlur={this.handleChange} 
-                                    onFocus={this.handleFocus}
-                                    value={placeOrderBy}
-                                    onChange={(event, date)=>this.changeStoreTimeAndDateVals(event,date,'placeOrderBy')}
-                                    style = {{width:'auto'}}
-                                    inputStyle={{border:"1px solid #ccc",width:"100%",padding:'10px'}}
-                                    underlineStyle={{display: 'none'}} 
-                                    minDate={minDate}
-                                />
-                                <span className = {classes["error-message"]}>{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
-                            </div>
                             <div className = "pure-u-1 pure-u-md-1-2">
                                 <label>*Order ready date</label>
                                     <DatePicker
@@ -259,6 +243,21 @@ class FoodItemEntryForm extends React.Component {
                                         minDate = {placeOrderBy} 
                                     />
                                 <span className = {classes["error-message"]}>{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
+                            </div>
+                             <div className = "pure-u-1 pure-u-md-1-2" >
+                                <label>Order by date:</label>
+                                <DatePicker
+                                    name="placeOrderBy"
+                                    onBlur={this.handleChange} 
+                                    onFocus={this.handleFocus}
+                                    value={placeOrderBy}
+                                    onChange={(event, date)=>this.changeStoreTimeAndDateVals(event,date,'placeOrderBy')}
+                                    style = {{width:'auto'}}
+                                    inputStyle={{border:"1px solid #ccc",width:"100%",padding:'10px'}}
+                                    underlineStyle={{display: 'none'}} 
+                                    minDate={minDate}
+                                />
+                                <span className = {classes["error-message"]}>{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
                             </div>
                         </div> 
                     </fieldset>
