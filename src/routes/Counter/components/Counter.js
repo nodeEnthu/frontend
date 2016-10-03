@@ -145,7 +145,7 @@ const CounterWrapper = React.createClass({
 								    name="form-field-name"
 								    placeholder="select by diet type"
 								    options={dietTypes}
-								    value={}
+								    value={"organic"}
 								    multi = {true}
 								    onChange={logChange}
 								/> 
