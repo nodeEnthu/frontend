@@ -21,7 +21,7 @@ export function selectCuisineOrDiet(storeKey, dietOrCuisineSelected) {
 }
 export function selectAddtnlQuery(key, value) {
     return {
-        type: SELECT_PICKUP_OR_DELIVERY,
+        type: SELECT_ADDTNL_QUERY,
         storeKey: key,
         payload: value
     };
@@ -40,7 +40,12 @@ const ACTION_HANDLERS = {
     FAIL_DATA: (state, action) => state.set('isLoading', false).set('error', action.data).set('data', List()),
     FLUSH_OUT_STALE_DATA: (state, action) => state.set('isLoading', false).set('error', undefined).set('data', List()),
     RECEIVE_DATA: (state, action) => state.set('isLoading', false).set('error', undefined).set('data', state.get('data').concat(action.payload.data.data)),
-    SELECT_ADDTNL_QUERY: (state, action) => state.setIn(['addtnlQuery', action.storeKey], action.payload)
+    SELECT_ADDTNL_QUERY: (state, action) => state.setIn(['addtnlQuery', action.storeKey], action.payload),
+    SELECT_CUISINE_OR_DIET_TYPE: (state, action) => {
+        if (state.getIn([action.key, action.payload])) {
+            return state.deleteIn([action.key, action.payload])
+        } else return state.updateIn([action.key, action.payload], false, selected => !selected)
+    }
 }
 
 // ------------------------------------
@@ -53,7 +58,7 @@ const initialState = Map({
     cuisineSelectedMap: Map(),
     dietSelectedMap: Map(),
     addtnlQuery: Map({
-        mode: undefined,
+        orderMode: undefined,
         providerRadius: undefined,
         date: undefined
     })

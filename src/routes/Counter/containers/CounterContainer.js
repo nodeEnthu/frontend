@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import {selectCuisineOrDiet,flushOutStaleData } from '../modules/counter'
+import {selectCuisineOrDiet,flushOutStaleData,selectAddtnlQuery } from '../modules/counter'
 import {fetchMayBeSecuredData} from 'utils/actionUtils/defaultHttpActions';
 import { userAddressUpdateDetect } from '../../../layouts/CoreLayout/coreReducer'
  
@@ -19,6 +19,7 @@ const mapDispatchToProps = {
   flushOutStaleData,
   selectCuisineOrDiet,
   userAddressUpdateDetect,
+  selectAddtnlQuery
 }
 
 const mapStateToProps = (state) => ({

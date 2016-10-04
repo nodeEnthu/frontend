@@ -1,6 +1,6 @@
 import React from 'react'
 import Counter from 'components/Counter'
-import { CUISINE_TYPES, DIET_TYPES } from './../constants/searchFilters'
+import { CUISINE_TYPES, DIET_TYPES, RADIUS_OPTIONS, ORDER_TYPE } from './../constants/searchFilters'
 import Carousel from 'nuka-carousel'
 import classes from './counter.scss'
 import classNames from 'classnames'
@@ -16,11 +16,11 @@ const CounterWrapper = React.createClass({
     getInitialState() {
         return {
             pageNum: 1,
-            queryBaseUrl: '/api/query/providers'
+            queryBaseUrl: '/api/query/providers',
         };
     },
     filterCuisineOrDietType(valOrevent, cuisineOrDiet) {
-        let selectedCuisineOrDiet = valOrevent.target.alt || valOrevent;
+        let selectedCuisineOrDiet = (valOrevent.target) ? valOrevent.target.alt : valOrevent;
         let storeKey = cuisineOrDiet + 'SelectedMap'
             // check whether its an image that was clicked
         if (selectedCuisineOrDiet) {
@@ -40,12 +40,10 @@ const CounterWrapper = React.createClass({
         }
         // else  #TODO Gautam
     },
-    loadMore() {
-        let self = this;
-        // make query params here
+    createQuery() {
         let cuisineSelectedMap = this.props.counter.get('cuisineSelectedMap').toJS();
         let dietSelectedMap = this.props.counter.get('dietSelectedMap').toJS();
-        //merge the two dieat and cuisine filters
+        //merge the two diet and cuisine filters
         let combinedDietCuisineFilters = dietSelectedMap;
         for (let selectedCuisine in cuisineSelectedMap) {
             if (cuisineSelectedMap.hasOwnProperty(selectedCuisine)) {
@@ -55,7 +53,14 @@ const CounterWrapper = React.createClass({
         // merging ends
         let combinedQuery = {}
         combinedQuery.combinedDietCuisineFilters = combinedDietCuisineFilters;
+        combinedQuery.addtnlQuery = this.props.counter.get('addtnlQuery').toJS();
         combinedQuery.filterspageNum = this.state.pageNum;
+        console.log(combinedQuery);
+        return combinedQuery;
+    },
+    loadMore() {
+        let self = this;
+        let combinedQuery = this.createQuery();
         // now make the ajax call to get the data
         let newPageNum = this.state.pageNum + 1;
         this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data', combinedQuery)
@@ -65,8 +70,38 @@ const CounterWrapper = React.createClass({
                 })
             })
     },
+    selectDietType(dietTypes) {
+        const dietSelectedMap = this.props.counter.get('dietSelectedMap').toJS();
+        let newDietsSelected = [];
+        /* 
+         * get the one which was most recently added or removed from the list
+         * by comparing the keys inside dietSelectedMap to the value of each object in dietTypes
+         * there should only be one such element as the function is called for every change
+         */
+        let oldDietSelectedMapKeys = Object.keys(dietSelectedMap);
+        dietTypes.forEach(function(dietType, index) {
+            newDietsSelected.push(dietType.value);
+        })
+        let parentArr = (newDietsSelected.length > oldDietSelectedMapKeys.length) ? newDietsSelected : oldDietSelectedMapKeys;
+        let childArr = (newDietsSelected.length > oldDietSelectedMapKeys.length) ? oldDietSelectedMapKeys : newDietsSelected;
+        let uniqueDietAdded = parentArr.filter(function(diet) {
+            return childArr.indexOf(diet) === -1
+        })
+        this.filterCuisineOrDietType(uniqueDietAdded[0], 'diet');
+    },
+    selectOption(stateKey, option) {
+        if (option) {
+        	if(option instanceof Date){
+        		this.props.selectAddtnlQuery(stateKey, option);
+        	} else this.props.selectAddtnlQuery(stateKey, option.value);
+        } else {
+            this.props.selectAddtnlQuery(stateKey, undefined);
+        }
+
+    },
     render() {
-        let { data } = this.props.counter.toJS();
+        let { data, addtnlQuery, dietSelectedMap } = this.props.counter.toJS();
+        const { pageNum } = this.state;
         let resolvedData = [];
         for (let i = 0; i < data.length; i++) {
             for (let j = 0; j < data[i].foodItems.length; j++) {
@@ -75,22 +110,6 @@ const CounterWrapper = React.createClass({
             resolvedData = resolvedData.concat(data[i].foodItems);
 
         }
-        const { pageNum } = this.state;
-        var options = [
-            { value: 'one', label: 'One' },
-            { value: 'two', label: 'Two' }
-        ];
-        let dietTypes = [];
-        DIET_TYPES.map(function(dietType, index) {
-            dietTypes.push ({
-                value: dietType.type,
-                label: dietType.type
-            });
-        })
-        function logChange(val) {
-            console.log("Selected: " + val);
-        }
-
         return (
             <div>
             	<div className={classes["date-title"]}>
@@ -108,7 +127,12 @@ const CounterWrapper = React.createClass({
     						display:'inline-block',
     						marginLeft:'10px',
     						width:'100px'
-    					}}/>
+    					}}
+    					value={new Date()}
+    					name="serviceDate"
+    					onChange={(event, date)=>this.selectOption('date',date)}
+
+    					/>
             	</div>
 				<div onClick={(event)=>this.filterCuisineOrDietType(event,'cuisine')}>
 					<Carousel
@@ -134,7 +158,6 @@ const CounterWrapper = React.createClass({
 				<Card>
 				    <CardHeader
 				      title="More search options"
-				      actAsExpander={true}
 				      showExpandableButton={true}
 				      style={{textAlign:"center"}}
 				    />
@@ -142,29 +165,30 @@ const CounterWrapper = React.createClass({
 					    <div className="pure-g">
 						    <div className="pure-u-1 pure-u-md-1-3"> 
 							    <Select
-								    name="form-field-name"
+								    name="diet-types"
 								    placeholder="select by diet type"
-								    options={dietTypes}
-								    value={"organic"}
+								    options={DIET_TYPES}
+								    value={Object.keys(dietSelectedMap).join(',')}
 								    multi = {true}
-								    onChange={logChange}
+								    onChange={this.selectDietType}
 								/> 
 							</div>
 						    <div className="pure-u-1 pure-u-md-1-3"> 
 							    <Select
-								    name="form-field-name"
+								    name="order-mode"
 								    placeholder="pick-up/delivery"
-								    options={options}
-								    onChange={logChange}
+								    value={addtnlQuery.orderMode}
+								    options={ORDER_TYPE}
+								    onChange={(selectedMode)=>this.selectOption('orderMode',selectedMode)}
 								/> 
 							</div>
 						    <div className="pure-u-1 pure-u-md-1-3"> 
 							    <Select
-								    name="form-field-name"
+								    name="provider-radius"
 								    placeholder="pick-up radius"
-								    value="one"
-								    options={options}
-								    onChange={(newValue)=>this.filterCuisineOrDietType(newValue,'diet')}
+								    value={addtnlQuery.providerRadius}
+								    options={RADIUS_OPTIONS}
+								    onChange={(selectedRadius)=>this.selectOption('providerRadius',selectedRadius)}
 								/> 
 							</div>
 						</div>
@@ -267,6 +291,7 @@ CounterWrapper.propTypes = {
     userAddressUpdateDetect: React.PropTypes.func.isRequired,
     fetchMayBeSecuredData: React.PropTypes.func.isRequired,
     selectCuisineOrDiet: React.PropTypes.func.isRequired,
+    selectAddtnlQuery: React.PropTypes.func.isRequired,
     counter: React.PropTypes.object.isRequired
 };
 

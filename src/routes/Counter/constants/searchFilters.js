@@ -34,25 +34,35 @@ export const CUISINE_TYPES = [{
 }]
 
 export const DIET_TYPES = [{
-    type: 'organic',
-    src: 'diets/organic.jpeg'
+    value: 'organic',
+    label: 'organic'
 }, {
-    type: 'vegetarian',
-    src: 'diets/vegetarian.jpg'
+    value: 'vegetarian',
+    label: 'vegetarian'
 }, {
-    type: 'nutfree',
-    src: 'diets/nutfree.jpeg'
+    value: 'nutfree',
+    label: 'nutfree'
 }, {
-    type: 'glutenfree',
-    src: 'diets/glutenfree.jpg'
+    value: 'glutenfree',
+    label: 'glutenfree'
 }, {
-    type: 'oilfree',
-    src: 'diets/oilfree.jpg'
+    value: 'oilfree',
+    label: 'oilfree'
 }, {
-    type: 'nondairy',
-    src: 'diets/nondairy.jpg'
+    value: 'nondairy',
+    label: 'nondairy'
 }, {
-    type: 'indianfasting',
-    src: 'diets/indianfasting.jpg'
+    value: 'indianfasting',
+    label: 'indianfasting'
 }]
 
+export const RADIUS_OPTIONS = [
+    { value: '3', label: '3' },
+    { value: '5', label: '5' },
+    { value: '10', label: '10' },
+    { value: '15', label: '15' }
+];
+export const ORDER_TYPE = [
+    { value: 'pickUpFlag', label: 'pick-up' },
+    { value: 'doYouDeliverFlag', label: 'delivery' }
+];
