@@ -53,21 +53,11 @@ const CounterWrapper = React.createClass({
 	            })
     },
     createQuery() {
-        let cuisineSelectedMap = this.props.counter.get('cuisineSelectedMap').toJS();
-        let dietSelectedMap = this.props.counter.get('dietSelectedMap').toJS();
-        //merge the two diet and cuisine filters
-        let combinedDietCuisineFilters = dietSelectedMap;
-        for (let selectedCuisine in cuisineSelectedMap) {
-            if (cuisineSelectedMap.hasOwnProperty(selectedCuisine)) {
-                combinedDietCuisineFilters[selectedCuisine] = cuisineSelectedMap[selectedCuisine]
-            }
-        }
-        // merging ends
         let combinedQuery = {}
-        combinedQuery.combinedDietCuisineFilters = combinedDietCuisineFilters;
+        combinedQuery.cuisineSelectedMap = this.props.counter.get('cuisineSelectedMap').toJS();
+        combinedQuery.dietSelectedMap = this.props.counter.get('dietSelectedMap').toJS();
         combinedQuery.addtnlQuery = this.props.counter.get('addtnlQuery').toJS();
         combinedQuery.filterspageNum = this.state.pageNum;
-        console.log(combinedQuery);
         return combinedQuery;
     },
     fetchQueryData() {
