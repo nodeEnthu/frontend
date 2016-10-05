@@ -17,14 +17,16 @@ const CounterWrapper = React.createClass({
         return {
             pageNum: 1,
             queryBaseUrl: '/api/query/providers',
+            searchActivated:false
         };
     },
     filterCuisineOrDietType(valOrevent, cuisineOrDiet) {
-        let selectedCuisineOrDiet = (valOrevent.target) ? valOrevent.target.alt : valOrevent;
+        let selectedCuisineOrDiet = (valOrevent && valOrevent.target) ? valOrevent.target.alt : valOrevent;
         let storeKey = cuisineOrDiet + 'SelectedMap'
             // check whether its an image that was clicked
         if (selectedCuisineOrDiet) {
             this.props.selectCuisineOrDiet(storeKey, selectedCuisineOrDiet);
+            this.activateQueryButton();
         } // else dont do anything
     },
     // defaults for the first time you load the page 
@@ -39,6 +41,16 @@ const CounterWrapper = React.createClass({
             this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data');
         }
         // else  #TODO Gautam
+    },
+    loadMore() {
+       	let newPageNum = this.state.pageNum + 1;
+       	let self = this;
+  		this.fetchQueryData()
+	       	.then(function(err, response) {
+	                self.setState({
+	                    pageNum: newPageNum
+	                })
+	            })
     },
     createQuery() {
         let cuisineSelectedMap = this.props.counter.get('cuisineSelectedMap').toJS();
@@ -58,17 +70,14 @@ const CounterWrapper = React.createClass({
         console.log(combinedQuery);
         return combinedQuery;
     },
-    loadMore() {
-        let self = this;
-        let combinedQuery = this.createQuery();
-        // now make the ajax call to get the data
-        let newPageNum = this.state.pageNum + 1;
-        this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data', combinedQuery)
-            .then(function(err, response) {
-                self.setState({
-                    pageNum: newPageNum
-                })
-            })
+    fetchQueryData() {
+    	let combinedQuery = this.createQuery();
+        return this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data', combinedQuery);
+    },
+    createNewQuery(){
+    	// flush out old data
+    	this.props.flushOutStaleData();
+    	this.fetchQueryData();
     },
     selectDietType(dietTypes) {
         const dietSelectedMap = this.props.counter.get('dietSelectedMap').toJS();
@@ -91,13 +100,23 @@ const CounterWrapper = React.createClass({
     },
     selectOption(stateKey, option) {
         if (option) {
-        	if(option instanceof Date){
-        		this.props.selectAddtnlQuery(stateKey, option);
-        	} else this.props.selectAddtnlQuery(stateKey, option.value);
+            if (option instanceof Date) {
+            	// in case of date being chnaged make the call instantly
+            	this.props.selectAddtnlQuery(stateKey, option);
+            	this.fetchQueryData();
+            } else {
+            	this.props.selectAddtnlQuery(stateKey, option.value);
+            	this.activateQueryButton();
+            }
         } else {
             this.props.selectAddtnlQuery(stateKey, undefined);
         }
 
+    },
+    activateQueryButton(){
+    	this.setState({
+    		searchActivated:true
+    	})
     },
     render() {
         let { data, addtnlQuery, dietSelectedMap } = this.props.counter.toJS();
@@ -128,7 +147,8 @@ const CounterWrapper = React.createClass({
     						marginLeft:'10px',
     						width:'100px'
     					}}
-    					value={new Date()}
+    					defaultDate={addtnlQuery.date}
+    					autoOk={true}
     					name="serviceDate"
     					onChange={(event, date)=>this.selectOption('date',date)}
 
@@ -160,6 +180,7 @@ const CounterWrapper = React.createClass({
 				      title="More search options"
 				      showExpandableButton={true}
 				      style={{textAlign:"center"}}
+				      actAsExpander = {true}
 				    />
 				    <CardText expandable={true}>
 					    <div className="pure-g">
@@ -170,6 +191,7 @@ const CounterWrapper = React.createClass({
 								    options={DIET_TYPES}
 								    value={Object.keys(dietSelectedMap).join(',')}
 								    multi = {true}
+								    autoBlur={true}
 								    onChange={this.selectDietType}
 								/> 
 							</div>
@@ -193,7 +215,18 @@ const CounterWrapper = React.createClass({
 							</div>
 						</div>
 				    </CardText>
-				 </Card>
+				</Card>
+				<div className={classes["query-btn-center"]}>
+					<RaisedButton 
+						label="Search" 
+						primary={true}
+						disabled={!this.state.searchActivated}
+						style={{
+							width:'40%'
+						}}
+						onClick={this.createNewQuery} 
+					/>
+				</div>
 				<div className={classes["providers-wrapper"]}>
 					<div className="pure-g">
 					{	(resolvedData)? 

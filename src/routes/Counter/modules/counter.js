@@ -60,7 +60,7 @@ const initialState = Map({
     addtnlQuery: Map({
         orderMode: undefined,
         providerRadius: undefined,
-        date: undefined
+        date: new Date()
     })
 });
 

@@ -133,6 +133,8 @@ const initialState =
             name: '',
             nameErrMsg:'',
             description: '',
+            cuisineType:'',
+            cuisineTypeErrorMsg:'',
             descriptionErrorMsg:'',
             placeOrderBy: undefined,
             placeOrderByErrorMsg:'',

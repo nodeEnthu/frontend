@@ -11,8 +11,8 @@ import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import Snackbar from 'material-ui/Snackbar';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Chip from 'material-ui/Chip';
-import {securedPostCall,securedGetCall} from 'utils/httpUtils/apiCallWrapper';
-
+import { securedPostCall, securedGetCall } from 'utils/httpUtils/apiCallWrapper';
+import { CUISINE_TYPES } from './../../routes/Counter/constants/searchFilters'
 const maxCount = 100;
 
 class FoodItemEntryForm extends React.Component {
@@ -21,10 +21,11 @@ class FoodItemEntryForm extends React.Component {
         this.mapFieldsToValidationType = {
             name: required,
             placeOrderBy: required,
-            serviceDate: required
+            serviceDate: required,
+            cuisineType: required
         };
         this.state = {
-            chipDeleted : false
+            chipDeleted: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
@@ -41,12 +42,12 @@ class FoodItemEntryForm extends React.Component {
             storeKey: storeKey,
             payload: date
         })
-    };
-    handleDeleteChip(){
+    }
+    handleDeleteChip() {
         this.setState({
-            chipDeleted :true
+            chipDeleted: true
         })
-    };
+    }
     handleChange(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
@@ -66,12 +67,12 @@ class FoodItemEntryForm extends React.Component {
                 storeKey: errorMsgkey,
                 payload: errorMsg
             });
+        } else {
+            this.props.addFoodItemInfo({
+                storeKey: stateKeyName,
+                payload: input
+            })
         }
-        this.props.addFoodItemInfo({
-            storeKey: stateKeyName,
-            payload: input
-        })
-
     }
     toggle(event) {
         let input = event.target.value;
@@ -109,16 +110,15 @@ class FoodItemEntryForm extends React.Component {
         this.addFoodItemInfo.providerEntryForm.chars_left = maxCount - input.length; // hacky again
         this.addFoodItemInfo.providerEntryForm.description = input; // hacky again
     }
-
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
+        console.log(input,stateKeyName);
         this.props.addFoodItemInfo({
             storeKey: stateKeyName,
             payload: input
         });
     }
-
     validateForm() {
         let self = this;
         let noErrorsInform = true;
@@ -164,7 +164,7 @@ class FoodItemEntryForm extends React.Component {
         let self = this;
         if (this.validateForm()) {
             // send it to server and clear out some of the item specific info
-            securedPostCall('/api/providers/addOrEditFoodItem' , this.props.foodItemEntryForm.toJS())
+            securedPostCall('/api/providers/addOrEditFoodItem', this.props.foodItemEntryForm.toJS())
                 .then(function(response) {
                     // show the chip for last food item entered
                     self.props.addFoodItemInfo({
@@ -172,10 +172,10 @@ class FoodItemEntryForm extends React.Component {
                         payload: false
                     });
                     self.setState({
-                        chipDeleted:false,
-                        lastItemAdded:response.data.name
-                    })
-                     // open the snackbar
+                            chipDeleted: false,
+                            lastItemAdded: response.data.name
+                        })
+                        // open the snackbar
                     self.props.addFoodItemInfo({
                         storeKey: 'snackBarMessage',
                         payload: 'Item successfully added to your menu'
@@ -185,13 +185,13 @@ class FoodItemEntryForm extends React.Component {
                     window.scrollTo(0, 23);
                     // remove name , desc and image from last item ...keep the others as defaults for new item
                     self.props.removeFoodItemInfo({
-                        storeKeys: ['name','description']
+                        storeKeys: ['name', 'description']
                     });
                 })
         }
     }
     render() {
-        let { name, nameErrorMsg, description, descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
+        let { name, nameErrorMsg, description, cuisineType, descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
         const minDate = new Date();
         return (
             <div>
@@ -216,7 +216,7 @@ class FoodItemEntryForm extends React.Component {
                         onChange={this.changeStoreVal}
                         onBlur={this.handleChange} 
                         onFocus={this.handleFocus}
-                    />
+                        />
                         <span className = {classes["error-message"]}>{(nameErrorMsg)?'*'+nameErrorMsg:undefined}</span>
                         <textarea className = "pure-u-1" name="description" placeholder="description" value={description}
                             onBlur={this.handleChange} 
@@ -225,7 +225,21 @@ class FoodItemEntryForm extends React.Component {
                         >   
                         </textarea>
                         <span className = {classes["error-message"]}>{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
-                       {/* <div>{chars_left}/100</div>*/}
+                        {/* <div>{chars_left}/100</div>*/}
+                        <select id="cuisine-type"  className="pure-u-1"
+                            placeholder="Cuisine type"
+                            name="cuisineType"
+                            onBlur={this.handleChange} 
+                            onFocus={this.handleFocus}
+                            onChange={this.changeStoreVal}
+                            value={cuisineType}
+                        >
+                            <option value=''>*Please select the cuisine type</option>
+                            {CUISINE_TYPES.map((cuisine)=>{
+                                return <option>{cuisine.type}</option>
+                            })}
+                        </select>
+                        <span className = {classes["error-message"]}>{(nameErrorMsg)?'*'+nameErrorMsg:undefined}</span>
                     </fieldset>
                     <fieldset className = "pure-group">
                         <div className="pure-g">
