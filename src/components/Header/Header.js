@@ -31,7 +31,7 @@ export  class Header extends React.Component {
                     </IndexLink>
                   </li>
                   <li className="pure-menu-item">
-                      <Link to='/providerProfile' className="pure-menu-link">Tour</Link>
+                      <Link to='/providerProfile/12345' className="pure-menu-link">Tour</Link>
                   </li>
                   {(globalState.core.get('token').length>0 )?
                     <li className="pure-menu-item">

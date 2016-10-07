@@ -22,7 +22,6 @@ const mapStateToProps = (state) => ({
   logIntoMachine:(component)=>{
     return ()=>
       console.log(component);
-    
   }
 })
 

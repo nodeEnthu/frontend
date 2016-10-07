@@ -40,6 +40,7 @@ export default (initialState = {}, history) => {
   // initializing code goes here .. bit of a hack .. should be improved
   if(sessionStorage.getItem('token')){
     store.dispatch(actions.userLoggedIn(true));
+    // now get the logged in persone information to fill the reducer
   } // else  default is fault to start with so no else condition
   // initialization code ends here
 

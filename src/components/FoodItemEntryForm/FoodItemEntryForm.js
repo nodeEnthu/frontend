@@ -12,42 +12,32 @@ import Snackbar from 'material-ui/Snackbar';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Chip from 'material-ui/Chip';
 import { securedPostCall, securedGetCall } from 'utils/httpUtils/apiCallWrapper';
-import { CUISINE_TYPES } from './../../routes/Counter/constants/searchFilters'
+import { CUISINE_TYPES} from './../../routes/Counter/constants/searchFilters'
 const maxCount = 100;
 
-class FoodItemEntryForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.mapFieldsToValidationType = {
-            name: required,
-            placeOrderBy: required,
-            serviceDate: required,
-            cuisineType: required
-        };
-        this.state = {
+const FoodItemEntryForm= React.createClass({
+    getInitialState() {
+        return {
             chipDeleted: false
-        }
-        this.handleChange = this.handleChange.bind(this);
-        this.handleFocus = this.handleFocus.bind(this);
-        this.formSubmit = this.formSubmit.bind(this);
-        this.changeStoreVal = this.changeStoreVal.bind(this);
-        this.changeStoreTimeAndDateVals = this.changeStoreTimeAndDateVals.bind(this);
-        this.toggle = this.toggle.bind(this);
-        this.toggleFlags = this.toggleFlags.bind(this);
-        this.submitFoodItem = this.submitFoodItem.bind(this);
-        this.handleDeleteChip = this.handleDeleteChip.bind(this);
-    }
-    changeStoreTimeAndDateVals = (event, date, storeKey) => {
+        };
+    },
+    mapFieldsToValidationType:{
+        name: required,
+        placeOrderBy: required,
+        serviceDate: required,
+        cuisineType: required
+    },
+    changeStoreTimeAndDateVals(event, date, storeKey){
         this.props.addFoodItemInfo({
             storeKey: storeKey,
             payload: date
         })
-    }
+    },
     handleDeleteChip() {
         this.setState({
             chipDeleted: true
         })
-    }
+    },
     handleChange(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
@@ -73,7 +63,7 @@ class FoodItemEntryForm extends React.Component {
                 payload: input
             })
         }
-    }
+    },
     toggle(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
@@ -81,13 +71,13 @@ class FoodItemEntryForm extends React.Component {
             storeKey: stateKeyName,
             payload: !this.props.foodItemEntryForm.get(stateKeyName)
         })
-    }
+    },
     toggleFlags(stateKeyName) {
         this.props.addFoodItemInfo({
             storeKey: stateKeyName,
             payload: !this.props.foodItemEntryForm.get(stateKeyName)
         })
-    }
+    },
     handleFocus(event) {
         let stateKeyName = event.target.name;
         if (stateKeyName) {
@@ -98,8 +88,7 @@ class FoodItemEntryForm extends React.Component {
                 payload: null
             });
         }
-    }
-
+    },
     setCount(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
@@ -109,7 +98,7 @@ class FoodItemEntryForm extends React.Component {
         })
         this.addFoodItemInfo.providerEntryForm.chars_left = maxCount - input.length; // hacky again
         this.addFoodItemInfo.providerEntryForm.description = input; // hacky again
-    }
+    },
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
@@ -118,7 +107,7 @@ class FoodItemEntryForm extends React.Component {
             storeKey: stateKeyName,
             payload: input
         });
-    }
+    },
     validateForm() {
         let self = this;
         let noErrorsInform = true;
@@ -150,7 +139,7 @@ class FoodItemEntryForm extends React.Component {
             window.scrollTo(0, 23);
         }
         return noErrorsInform;
-    }
+    },
     formSubmit(event) {
         if (this.submitFoodItem()) {
             this.props.addProviderEntryState({
@@ -158,7 +147,7 @@ class FoodItemEntryForm extends React.Component {
                 payload: 2
             });
         }
-    }
+    },
     submitFoodItem() {
         let result = false;
         let self = this;
@@ -189,10 +178,18 @@ class FoodItemEntryForm extends React.Component {
                     });
                 })
         }
-    }
+    },
     render() {
         let { name, nameErrorMsg, description, cuisineType, descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
-        const minDate = new Date();
+        let resolvedServiceDate = null;
+        if(serviceDate){
+            resolvedServiceDate = (serviceDate instanceof Date)? serviceDate : new Date(serviceDate);
+        } 
+        function daysBeforeOrderDate(days){
+            let newDate = new Date(serviceDate.toString());
+            newDate.setDate(newDate.getDate()-days);
+            return newDate
+        }
         return (
             <div>
                 {
@@ -246,7 +243,7 @@ class FoodItemEntryForm extends React.Component {
                             <div className = "pure-u-1 pure-u-md-1-2">
                                 <label>*Order ready date</label>
                                     <DatePicker
-                                        value={serviceDate}
+                                        value={resolvedServiceDate}
                                         name="serviceDate"
                                         onBlur={this.handleChange} 
                                         onFocus={this.handleFocus}
@@ -254,23 +251,23 @@ class FoodItemEntryForm extends React.Component {
                                         style = {{width:'100%'}}
                                         inputStyle={{border:"1px solid #ccc",width:"100%", padding:'10px'}}
                                         underlineStyle={{display: 'none'}}
-                                        minDate = {placeOrderBy} 
                                     />
                                 <span className = {classes["error-message"]}>{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
                             </div>
                              <div className = "pure-u-1 pure-u-md-1-2" >
-                                <label>Order by date:</label>
-                                <DatePicker
+                                <label>People can order</label>
+                                <select id="order-by-date" 
                                     name="placeOrderBy"
                                     onBlur={this.handleChange} 
                                     onFocus={this.handleFocus}
+                                    onChange={this.changeStoreVal}
                                     value={placeOrderBy}
-                                    onChange={(event, date)=>this.changeStoreTimeAndDateVals(event,date,'placeOrderBy')}
-                                    style = {{width:'auto'}}
-                                    inputStyle={{border:"1px solid #ccc",width:"100%",padding:'10px'}}
-                                    underlineStyle={{display: 'none'}} 
-                                    minDate={minDate}
-                                />
+                                >
+                                    <option value={serviceDate}>Same Day</option>
+                                    <option value={daysBeforeOrderDate(1)}>Atleast 1 day before</option>
+                                    <option value={daysBeforeOrderDate(2)}>Atleast 2 days before</option>
+                                    <option value={daysBeforeOrderDate(3)}>Atleast 3 days before</option>
+                                </select>
                                 <span className = {classes["error-message"]}>{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
                             </div>
                         </div> 
@@ -376,7 +373,7 @@ class FoodItemEntryForm extends React.Component {
             </div>
         )
     }
-}
+})
 FoodItemEntryForm.propTypes = {
     providerEntryState: React.PropTypes.object.isRequired,
 };

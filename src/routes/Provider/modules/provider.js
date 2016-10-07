@@ -138,7 +138,7 @@ const initialState =
             descriptionErrorMsg:'',
             placeOrderBy: undefined,
             placeOrderByErrorMsg:'',
-            serviceDate:undefined,
+            serviceDate:new Date(),
             serviceDateErrorMsg:'',
             deliveryFlag: false,
             pickUpStartTime:undefined,
