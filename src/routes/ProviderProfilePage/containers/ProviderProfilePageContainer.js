@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { increment, doubleAsync } from '../modules/providerProfilePage'
+import {fetchMayBeSecuredData} from 'utils/actionUtils/defaultHttpActions';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -13,16 +13,11 @@ import ProviderProfilePage from './../ProviderProfilePage'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapDispatchtoProps = {
-  increment: () => increment(1),
-  doubleAsync
+  fetchMayBeSecuredData,
 }
 
 const mapStateToProps = (state) => ({
-  counter: state.providerProfile,
-  logIntoMachine:(component)=>{
-    return ()=>
-      console.log(component);
-  }
+  providerProfile: state.providerProfile,
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

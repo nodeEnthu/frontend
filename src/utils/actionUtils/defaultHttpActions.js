@@ -1,4 +1,4 @@
-import { getCall,securedGetCall,checkSecuredGetCall,securedPostCall } from 'utils/httpUtils/apiCallWrapper';
+import { getCall, securedGetCall, checkSecuredGetCall, securedPostCall } from 'utils/httpUtils/apiCallWrapper';
 
 
 // ------------------------------------
@@ -11,68 +11,66 @@ export const FAIL_DATA = 'FAIL_DATA';
 // ------------------------------------
 // Actions
 // ------------------------------------
-function requestData(payload) {
+function requestData(payload, actionType) {
     return {
-        type: REQUEST_DATA,
-        payload:{
-            storeKey:payload.storeKey
+        type: (actionType) ? REQUEST_DATA + '_' + actionType : REQUEST_DATA,
+        payload: {
+            storeKey: payload.storeKey
         }
     };
 };
 
-function failData(payload) {
+function failData(payload, actionType) {
+    console.log("Fail data is invoked");
     return {
-        type: FAIL_DATA,
-        payload:{
-            storeKey:payload.storeKey,
-            data:payload.data
+        type: (actionType) ? FAIL_DATA + '_' + actionType : FAIL_DATA,
+        payload: {
+            storeKey: payload.storeKey,
+            data: payload.data
         }
     };
 };
 
-function receiveData(payload) {
-    console.log("reaching here with",payload);
+function receiveData(payload, actionType) {
     return {
-        type: RECEIVE_DATA,
-        payload:{
-            storeKey:payload.storeKey,
-            data:payload.data
+        type:(actionType) ?  RECEIVE_DATA + '_' + actionType: RECEIVE_DATA,
+        payload: {
+            storeKey: payload.storeKey,
+            data: payload.data
         }
     };
 };
 
-export function fetchData(url,storeKey,queryParams) {
+export function fetchData(url,storeKey,actionType,queryParams) {
     return (dispatch) => {
-        dispatch(requestData({storeKey:storeKey}));
-        return getCall(url,queryParams)
-            .then(res => dispatch(receiveData({storeKey:storeKey,data:res})))
-            .catch(err => dispatch(failData({storeKey:storeKey,data:err})));
+        dispatch(requestData({ storeKey: storeKey },actionType));
+        return getCall(url, queryParams)
+            .then(res => dispatch(receiveData({ storeKey: storeKey, data: res },actionType)))
+            .catch(err => dispatch(failData({ storeKey: storeKey, data: err })));
     };
 }
 
-export function fetchMayBeSecuredData(url,storeKey,queryParams) {
+export function fetchMayBeSecuredData(url,storeKey,actionType,queryParams) {
     return (dispatch) => {
-        dispatch(requestData({storeKey:storeKey}));
-        return checkSecuredGetCall(url,queryParams)
-            .then(res => dispatch(receiveData({storeKey:storeKey,data:res})))
-            .catch(err => dispatch(failData({storeKey:storeKey,data:err})));
+        dispatch(requestData({ storeKey: storeKey },actionType));
+        return checkSecuredGetCall(url, queryParams)
+            .then(res => dispatch(receiveData({ storeKey: storeKey, data: res },actionType)))
     };
 }
 
-export function fetchSecuredData(url,storeKey,queryParams) {
+export function fetchSecuredData(url, storeKey,actionType,queryParams) {
     return (dispatch) => {
-        dispatch(requestData({storeKey:storeKey}));
+        dispatch(requestData({ storeKey: storeKey },actionType));
         return securedGetCall(url, queryParams)
-            .then(res => dispatch(receiveData({storeKey:storeKey,data:res})))
-            .catch(err => dispatch(failData({storeKey:storeKey,data:err})));
+            .then(res => dispatch(receiveData({ storeKey: storeKey, data: res },actionType)))
+            .catch(err => dispatch(failData({ storeKey: storeKey, data: err },actionType)));
     };
 }
-export function postSecuredData(url,storeKey,queryParams) {
+export function postSecuredData(url, storeKey,actionType,queryParams) {
     return (dispatch) => {
-        dispatch(requestData({storeKey:storeKey}));
+        dispatch(requestData({ storeKey: storeKey },actionType));
         return securedPostCall(url, queryParams)
-            .then(res => dispatch(receiveData({storeKey:storeKey,data:res})))
-            .catch(err => dispatch(failData({storeKey:storeKey,data:err})));
+            .then(res => dispatch(receiveData({ storeKey: storeKey, data: res },actionType)))
+            .catch(err => dispatch(failData({ storeKey: storeKey, data: err },actionType)));
     };
 }
-

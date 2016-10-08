@@ -15,5 +15,8 @@ const ProviderProfilePage = React.createClass({
         );
     }
 });
-
+ProviderProfile.propTypes = {
+  fetchMayBeSecuredData:React.PropTypes.func.isRequired,
+  providerProfile:React.PropTypes.object.isRequired
+}
 export default ProviderProfilePage;

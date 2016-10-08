@@ -24,7 +24,7 @@ export function minLength(min) {
 }
 
 export function maxLength(value) {
-    const max = 8;
+    const max = value;
     if (!isEmpty(value) && value.length > max) {
         return `Please keep it below ${max} character limit`;
     }

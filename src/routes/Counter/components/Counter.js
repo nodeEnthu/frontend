@@ -62,7 +62,7 @@ const CounterWrapper = React.createClass({
     },
     fetchQueryData() {
     	let combinedQuery = this.createQuery();
-        return this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data', combinedQuery);
+        return this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery);
     },
     createNewQuery(){
     	// flush out old data
