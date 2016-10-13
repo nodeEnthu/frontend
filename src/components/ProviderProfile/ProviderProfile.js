@@ -16,8 +16,10 @@ const ProviderProfile = React.createClass({
   componentDidMount() {
       this.props.fetchMayBeSecuredData('/api/users/me','providerProfileCall','PROVIDER');
   },
+  checkOutItem(event,foodItem){
+    this.props.providerFoodItemCheckout('12345',foodItem);
+  },
   render() {
-    console.log("rerender");
     let {providerProfileCall} = this.props.providerProfile.toJS();
     let data = providerProfileCall.data;
     return (data)?
@@ -55,17 +57,8 @@ const ProviderProfile = React.createClass({
                   <h1 className={classes["content-subhead"]}>Menu Items</h1>
                   { 
                     data.foodItems.map((foodItem)=>{
-                      return <div> 
+                      return <div key={foodItem._id}> 
                                 <section className={classes["post"]}>
-                                  <div className={classes["post-avatar"]}>
-                                    <img alt="Tilo Mitra&#x27;s avatar" height="200"  src={foodItem.img}/>
-                                    <RaisedButton
-                                      labelPosition="before"
-                                      label="Checkout" secondary={true}
-                                      style={{display:"block"}}
-                                    >
-                                    </RaisedButton>
-                                  </div>
                                   <div>
                                     <header className={classes["post-header"]}>
                                       <h2 className={classes["post-title"]}>{foodItem.name}</h2>
@@ -97,6 +90,16 @@ const ProviderProfile = React.createClass({
                                       </table>
                                     </div>
                                   </div>
+                                  <div className={classes["post-avatar"]}>
+                                    <img alt="Tilo Mitra&#x27;s avatar" height="200"  src={foodItem.img}/>
+                                    <RaisedButton
+                                      labelPosition="before"
+                                      label="Checkout" primary={true}
+                                      style={{display:"block"}}
+                                      onClick={(event)=>this.checkOutItem(event,foodItem)}
+                                    >
+                                    </RaisedButton>
+                                  </div>
                                 </section>  
                               </div>
                   })
@@ -121,3 +124,9 @@ const ProviderProfile = React.createClass({
 });
 
 export default ProviderProfile
+
+ProviderProfile.propTypes = {
+  providerProfile:React.PropTypes.object.isRequired,
+  providerFoodItemCheckout:React.PropTypes.func.isRequired,
+  fetchMayBeSecuredData:React.PropTypes.func.isRequired
+}

@@ -210,15 +210,15 @@ const FoodItemEntryForm= React.createClass({
                 <form className="pure-form pure-form-stacked">
                     <fieldset className="pure-group">
                         <input type="text"  className="pure-u-1" placeholder="*title" name="name" value={name}
-                        onChange={this.changeStoreVal}
-                        onBlur={this.handleChange} 
-                        onFocus={this.handleFocus}
+                            onChange={this.changeStoreVal}
+                            onBlur={this.handleChange} 
+                            onFocus={this.handleFocus}
                         />
                         <span className = {classes["error-message"]}>{(nameErrorMsg)?'*'+nameErrorMsg:undefined}</span>
                         <textarea className = "pure-u-1" name="description" placeholder="description" value={description}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus} 
-                            onChange={this.changeStoreVal} 
+                            onChange={this.changeStoreVal}
                         >   
                         </textarea>
                         <span className = {classes["error-message"]}>{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
@@ -249,8 +249,9 @@ const FoodItemEntryForm= React.createClass({
                                         onFocus={this.handleFocus}
                                         onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'serviceDate')}
                                         style = {{width:'100%'}}
-                                        inputStyle={{border:"1px solid #ccc",width:"100%", padding:'10px'}}
+                                        inputStyle={{border:"1px solid #ccc",width:"100%", padding:'10px',borderRadius:'5px'}}
                                         underlineStyle={{display: 'none'}}
+                                        hintText="Order ready date"
                                     />
                                 <span className = {classes["error-message"]}>{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
                             </div>
@@ -283,19 +284,21 @@ const FoodItemEntryForm= React.createClass({
                                             value={pickUpStartTime}
                                             onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'pickUpStartTime')}
                                             style = {{width:'100%'}}
-                                            inputStyle={{border:"1px solid #ccc",width:"95%", padding:'10px'}}
-                                            underlineStyle={{display: 'none'}} 
+                                            inputStyle={{border:"1px solid #ccc",width:"95%", padding:'10px',borderRadius:'5px'}}
+                                            underlineStyle={{display: 'none'}}
+                                            hintText="pick-up start time" 
                                         />
                                     </div>
                                     <div className = "pure-u-1 pure-u-md-1-2">
                                          <label>Pick-up end time</label>
                                         <TimePicker
                                             format="ampm"
-                                            onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'pickUpEndTime')}
+                                            onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'pickUpEndTime',borderRadius:'5px')}
                                             value={pickUpEndTime}
                                             style = {{width:'100%'}}
-                                            inputStyle={{border:"1px solid #ccc",width:"95%", padding:'10px'}}
-                                            underlineStyle={{display: 'none'}} 
+                                            inputStyle={{border:"1px solid #ccc",width:"95%",padding:'10px',borderRadius:'5px'}}
+                                            underlineStyle={{display: 'none'}}
+                                            hintText="pick-up end time" 
                                         />
                                     </div>
                                 </div>

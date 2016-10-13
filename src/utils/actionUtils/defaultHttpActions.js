@@ -58,7 +58,7 @@ export function fetchMayBeSecuredData(url,storeKey,actionType,queryParams) {
     };
 }
 
-export function fetchSecuredData(url, storeKey,actionType,queryParams) {
+export function fetchSecuredData(url,storeKey,actionType,queryParams) {
     return (dispatch) => {
         dispatch(requestData({ storeKey: storeKey },actionType));
         return securedGetCall(url, queryParams)

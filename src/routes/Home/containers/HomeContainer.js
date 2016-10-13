@@ -21,8 +21,7 @@ const mapActionCreators = {
 
 const mapStateToProps = (state) => {
     return {
-        globalState:state,
-        homepage: state.homepage
+        globalState:state
     }
 }
 
