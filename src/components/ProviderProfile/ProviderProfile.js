@@ -22,6 +22,12 @@ const ProviderProfile = React.createClass({
   render() {
     const {providerProfileCall,itemsCheckedOut} = this.props.providerProfile.toJS();
     let data = providerProfileCall.data;
+    let resolvedItemsCheckedOut= [];
+    for(var key in itemsCheckedOut){
+      if(itemsCheckedOut.hasOwnProperty(key)){
+        resolvedItemsCheckedOut.push(itemsCheckedOut[key]);
+      }
+    }
     return (data)?
         <div id="layout" className="pure-g">
           <div className={classNames(classes["sidebar"], "pure-u-1","pure-u-md-1-4")}>
@@ -55,9 +61,12 @@ const ProviderProfile = React.createClass({
             <div>
               <div style ={{textAlign:"center"}}>
                 {
-                  (itemsCheckedOut && itemsCheckedOut.length>0)?
-                    <RaisedButton>
-                    </RaisedButton>
+                  (resolvedItemsCheckedOut && resolvedItemsCheckedOut.length>0)?
+                    <RaisedButton
+                      label="Checkout"
+                      style={{width:'30%'}}
+                      secondary={true}
+                    />
                     :
                     undefined
                 }
@@ -115,8 +124,63 @@ const ProviderProfile = React.createClass({
                               </div>
                   })
                 }
-
               </div>
+              {
+                (resolvedItemsCheckedOut && resolvedItemsCheckedOut.length>0)?
+                <div>
+                  <h1 className={classes["content-subhead"]}>Checked out items</h1>
+                  {
+                    resolvedItemsCheckedOut.map(function(itemCheckedOut){
+                      return <div key={itemCheckedOut._id}> 
+                                <section className={classes["post"]}>
+                                  <div>
+                                    <div className={classNames(classes["post-avatar"],"pure-u-md-2-5")}>
+                                      <img alt={itemCheckedOut.name} height="200"  src={itemCheckedOut.img}/>
+                                    </div>
+                                    <div className="pure-u-md-3-5">
+                                      <header className={classes["post-header"]}>
+                                        <h2 className={classes["post-title"]}>{itemCheckedOut.name}</h2>
+                                      </header>
+                                      <div className={classes["post-description"]}>
+                                          <table className={classNames("pure-table",classes["remove-border"])}>
+                                            <tbody>
+                                                <tr>
+                                                    <td className={classes["reduce-padding"]}>Choose</td>
+                                                    <td>quantity</td>
+                                                    <td>
+                                                      <select>
+                                                        <option></option>
+                                                      </select>
+                                                    </td>                           
+                                                </tr>
+                                                <tr>
+                                                    <td className={classes["reduce-padding"]}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg></td>
+                                                    <td>order by</td>
+                                                    <td>{itemCheckedOut.placeOrderBy}</td>                           
+                                                </tr>
+                                                <tr>
+                                                    <td className={classes["reduce-padding"]}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></td>
+                                                    <td>ready on</td>
+                                                    <td>{itemCheckedOut.serviceDate}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className={classes["reduce-padding"]}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/></svg></td>
+                                                    <td>pick-up</td>
+                                                    <td>3PM - 6PM</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </section>  
+                              </div>
+                    })
+                  }
+                </div>
+                :
+                undefined
+              }
               <div className={classes["footer"]}>
                   <div className="pure-menu pure-menu-horizontal">
                       <ul>
@@ -127,7 +191,7 @@ const ProviderProfile = React.createClass({
                   </div>
               </div>
             </div> 
-          </div> 
+          </div>
         </div>
         :
         <div></div>
