@@ -15,11 +15,10 @@ export const PROVIDER_FOOD_ITEM_CHECKOUT = "PROVIDER_FOOD_ITEM_CHECKOUT";
 // Action Handlers
 // ------------------------------------
 
-export function providerFoodItemCheckout(providerId, itemCheckedOut) {
+export function providerFoodItemCheckout(itemCheckedOut) {
     return {
         type: PROVIDER_FOOD_ITEM_CHECKOUT,
         payload: {
-            providerId: providerId,
             itemCheckedOut: itemCheckedOut
         }
     }
@@ -32,8 +31,8 @@ const ACTION_HANDLERS = {
         return state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], List()) },
     [RECEIVE_DATA_PROVIDER]: (state, action) => { console.log("reaching here with", action);
         return state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data) },
-    [PROVIDER_FOOD_ITEM_CHECKOUT]: (state, action) => { console.log("reaching here with", state.get('selectedProvider'));
-        return state.setIn['selectedProvider', action.payload.providerId], Map(), () => action.payload.itemCheckedOut }
+    [PROVIDER_FOOD_ITEM_CHECKOUT]: (state, action) => { console.log("reaching here with", state.get('itemsCheckedOut'));
+        return state.setIn(['itemsCheckedOut', action.payload.itemCheckedOut.name],action.payload.itemCheckedOut) }
 }
 
 // ------------------------------------
@@ -45,7 +44,7 @@ const initialState = Map({
         error: false,
         data: undefined
     }),
-    selectedProvider: Map({
+    itemsCheckedOut: Map({
 
     })
 })
