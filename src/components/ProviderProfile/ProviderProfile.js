@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import classes from './providerProfile.scss'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import classNames from 'classnames';
@@ -11,13 +12,44 @@ import CommunicationChat from 'material-ui/svg-icons/communication/chat';
 import ActionPermContactCalendar from 'material-ui/svg-icons/action/perm-contact-calendar';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import Scroll from 'react-scroll'
 
 const ProviderProfile = React.createClass({
+  getInitialState() {
+      return {
+          counter:0,
+          itemCheckOutClick:false
+      };
+  },
   componentDidMount() {
       this.props.fetchMayBeSecuredData('/api/users/me','providerProfileCall','PROVIDER');
   },
+  componentDidUpdate() {
+    //check whether clicking on add to cart made component update
+    if(this.state.counter===1 && this.state.itemCheckOutClick){
+      this.scrollToElement('checkoutsection');
+      this.setState({itemCheckOutClick:false})
+    }
+  },
   checkOutItem(event,foodItem){
     this.props.providerFoodItemCheckout(foodItem);
+    if(this.state.counter === 0){
+      this.setState({
+        counter:this.state.counter+1,
+        itemCheckOutClick:true
+      })
+    }
+  },
+  checkoutClick(){
+    this.scrollToElement('checkoutsection');
+  },
+  scrollToElement(elementName){
+    let scroller = Scroll.scroller;
+    scroller.scrollTo(elementName, {
+      duration: 1500,
+      delay: 100,
+      smooth: true,
+    })
   },
   render() {
     const {providerProfileCall,itemsCheckedOut} = this.props.providerProfile.toJS();
@@ -27,7 +59,9 @@ const ProviderProfile = React.createClass({
       if(itemsCheckedOut.hasOwnProperty(key)){
         resolvedItemsCheckedOut.push(itemsCheckedOut[key]);
       }
-    }
+    };
+    let Element = Scroll.Element;
+    
     return (data)?
         <div id="layout" className="pure-g">
           <div className={classNames(classes["sidebar"], "pure-u-1","pure-u-md-1-4")}>
@@ -66,6 +100,7 @@ const ProviderProfile = React.createClass({
                       label="Checkout"
                       style={{width:'30%'}}
                       secondary={true}
+                      onClick={this.checkoutClick}
                     />
                     :
                     undefined
@@ -128,7 +163,7 @@ const ProviderProfile = React.createClass({
               {
                 (resolvedItemsCheckedOut && resolvedItemsCheckedOut.length>0)?
                 <div>
-                  <h1 className={classes["content-subhead"]}>Checked out items</h1>
+                  <Element name="checkoutsection" className={classes["content-subhead"]}>Checked out items</Element>
                   {
                     resolvedItemsCheckedOut.map(function(itemCheckedOut){
                       return <div key={itemCheckedOut._id}> 
