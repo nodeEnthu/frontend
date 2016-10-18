@@ -25,7 +25,8 @@ const FoodItemEntryForm= React.createClass({
         name: required,
         placeOrderBy: required,
         serviceDate: required,
-        cuisineType: required
+        cuisineType: required,
+        price:required
     },
     changeStoreTimeAndDateVals(event, date, storeKey){
         this.props.addFoodItemInfo({
@@ -180,7 +181,7 @@ const FoodItemEntryForm= React.createClass({
         }
     },
     render() {
-        let { name, nameErrorMsg, description, cuisineType, descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
+        let { name, nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
         let resolvedServiceDate = null;
         if(serviceDate){
             resolvedServiceDate = (serviceDate instanceof Date)? serviceDate : new Date(serviceDate);
@@ -209,34 +210,48 @@ const FoodItemEntryForm= React.createClass({
                 }
                 <form className="pure-form pure-form-stacked">
                     <fieldset className="pure-group">
-                        <input type="text"  className="pure-u-1" placeholder="*title" name="name" value={name}
-                            onChange={this.changeStoreVal}
-                            onBlur={this.handleChange} 
-                            onFocus={this.handleFocus}
-                        />
-                        <span className = {classes["error-message"]}>{(nameErrorMsg)?'*'+nameErrorMsg:undefined}</span>
-                        <textarea className = "pure-u-1" name="description" placeholder="description" value={description}
-                            onBlur={this.handleChange} 
-                            onFocus={this.handleFocus} 
-                            onChange={this.changeStoreVal}
-                        >   
-                        </textarea>
-                        <span className = {classes["error-message"]}>{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
-                        {/* <div>{chars_left}/100</div>*/}
-                        <select id="cuisine-type"  className="pure-u-1"
-                            placeholder="Cuisine type"
-                            name="cuisineType"
-                            onBlur={this.handleChange} 
-                            onFocus={this.handleFocus}
-                            onChange={this.changeStoreVal}
-                            value={cuisineType}
-                        >
-                            <option value=''>*Please select the cuisine type</option>
-                            {CUISINE_TYPES.map((cuisine)=>{
-                                return <option>{cuisine.type}</option>
-                            })}
-                        </select>
-                        <span className = {classes["error-message"]}>{(nameErrorMsg)?'*'+nameErrorMsg:undefined}</span>
+                        <div className="pure-g">
+                            <input type="text"  className="pure-u-1" placeholder="*title" name="name" value={name}
+                                onChange={this.changeStoreVal}
+                                onBlur={this.handleChange} 
+                                onFocus={this.handleFocus}
+                            />
+                            <span className = {classes["error-message"]}>{(nameErrorMsg)?'*'+nameErrorMsg:undefined}</span>
+                            <textarea className = "pure-u-1" name="description" placeholder="description" value={description}
+                                onBlur={this.handleChange} 
+                                onFocus={this.handleFocus} 
+                                onChange={this.changeStoreVal}
+                            >   
+                            </textarea>
+                            <span className = {classes["error-message"]}>{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
+                            <div  className="pure-u-1 pure-u-md-1-2">
+                                <label>*Cuisine-type</label>
+                                <select id="cuisine-type" 
+                                    placeholder="Cuisine type"
+                                    name="cuisineType"
+                                    onBlur={this.handleChange} 
+                                    onFocus={this.handleFocus}
+                                    onChange={this.changeStoreVal}
+                                    value={cuisineType}
+                                >
+                                    <option value=''></option>
+                                    {CUISINE_TYPES.map((cuisine)=>{
+                                        return <option key={cuisine.type}>{cuisine.type}</option>
+                                    })}
+                                </select>
+                                <span className = {classes["error-message"]}>{(cuisineTypeErrorMsg)?'*'+cuisineTypeErrorMsg:undefined}</span>
+                            </div>
+                            
+                            <div  className="pure-u-1 pure-u-md-1-2">
+                                <label>*Price</label>
+                                <input type="text"  placeholder="*price" name="price" value={price}
+                                    onChange={this.changeStoreVal}
+                                    onBlur={this.handleChange} 
+                                    onFocus={this.handleFocus}
+                                />
+                                <span className = {classes["error-message"]}>{(priceErrorMsg)?'*'+priceErrorMsg:undefined}</span>
+                            </div>
+                        </div> 
                     </fieldset>
                     <fieldset className = "pure-group">
                         <div className="pure-g">
@@ -253,9 +268,9 @@ const FoodItemEntryForm= React.createClass({
                                         underlineStyle={{display: 'none'}}
                                         hintText="Order ready date"
                                     />
-                                <span className = {classes["error-message"]}>{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
                             </div>
-                             <div className = "pure-u-1 pure-u-md-1-2" >
+                            <span className = {classes["error-message"]}>{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
+                            <div className = "pure-u-1 pure-u-md-1-2" >
                                 <label>People can order</label>
                                 <select id="order-by-date" 
                                     name="placeOrderBy"

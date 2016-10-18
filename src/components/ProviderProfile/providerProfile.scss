@@ -46,9 +46,15 @@ h3 {
     color: rgb(176, 202, 219);
 }
 .profile-img{
-        max-height: 100%;
-        max-width:100%;
-    }
+    max-height: 100%;
+    max-width:100%;
+}
+.food-item{
+    max-width:100%;
+}
+.checkout-details{
+    margin-left:20px;
+}
 .nav-list {
     margin: 0;
     padding: 0;
@@ -103,7 +109,6 @@ h3 {
 }
 .post-description {
     color: #444;
-    line-height: 1.8em;
 }
 .post-meta {
     color: #999;
@@ -118,18 +123,22 @@ h3 {
     background: #999;
     font-size: 80%;
 }
-    .post-category-design {
-        background: #5aba59;
-    }
-    .post-category-pure {
-        background: #4d85d1;
-    }
-    .post-category-yui {
-        background: #8156a7;
-    }
-    .post-category-js {
-        background: #df2d4f;
-    }
+
+.post-category-design {
+    background: #5aba59;
+}
+
+.post-category-pure {
+    background: #4d85d1;
+}
+
+.post-category-yui {
+    background: #8156a7;
+}
+
+.post-category-js {
+    background: #df2d4f;
+}
 
 .post-images {
     margin: 1em 0;
@@ -159,9 +168,11 @@ td.reduce-padding{
 }
 
 table.remove-border, table.remove-border td{
-    font-size:12px;
     border:none;
-    padding: 2px;
+}
+
+table td.item-details {
+    padding-bottom:8px; 
 }
 
 @media (min-width: 48em) {

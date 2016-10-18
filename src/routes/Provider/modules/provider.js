@@ -141,6 +141,8 @@ const initialState =
             serviceDate:new Date(),
             serviceDateErrorMsg:'',
             deliveryFlag: false,
+            price:'',
+            priceErrorMsg:'',
             pickUpStartTime:undefined,
             pickUpEndTime:undefined,
             organic:false,
