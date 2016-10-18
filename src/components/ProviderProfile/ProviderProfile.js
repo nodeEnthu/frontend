@@ -52,7 +52,6 @@ const ProviderProfile = React.createClass({
     })
   },
   changeStoreVal(event) {
-    console.log(event.target.name,event.target.value);
     let foodItemId = event.target.name;
     let updatedQuantity = event.target.value
     this.props.updateCheckedOutQty(foodItemId,updatedQuantity);
@@ -61,9 +60,14 @@ const ProviderProfile = React.createClass({
     const {providerProfileCall,itemsCheckedOut} = this.props.providerProfile.toJS();
     let data = providerProfileCall.data;
     let resolvedItemsCheckedOut= [];
+    let grandTotal = 0;
     for(var key in itemsCheckedOut){
       if(itemsCheckedOut.hasOwnProperty(key)){
         resolvedItemsCheckedOut.push(itemsCheckedOut[key]);
+        // by default checkout quantity as one
+        let quantity = itemsCheckedOut[key].quantity || 1;
+        console.log(grandTotal,itemsCheckedOut[key].price,itemsCheckedOut[key].quantity);
+        grandTotal = grandTotal + parseInt(itemsCheckedOut[key].price * parseInt(quantity));
       }
     };
     let Element = Scroll.Element;
@@ -246,6 +250,13 @@ const ProviderProfile = React.createClass({
                               </div>
                     })
                   }
+                  <div style={{textAlign:"center"}}>
+                    <RaisedButton
+                      primary={true}
+                      style={{width:'40%'}}
+                    >{'Checkout (Grand total '+grandTotal+ ' $ + taxes)'}
+                    </RaisedButton>
+                  </div>
                 </div>
                 :
                 undefined
