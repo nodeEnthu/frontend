@@ -234,7 +234,7 @@ const CounterWrapper = React.createClass({
 											    		</div>
 											    	</div>
 											    	<div className={classes["provider-info-section"]}>
-											    		<div>{foodItem._creator.name}</div>
+											    		<div>{foodItem.name}</div>
 											    		<div>
 											    			<div className={classes["provider-star-rating"]}>
 													    		<StarRatingComponent 
