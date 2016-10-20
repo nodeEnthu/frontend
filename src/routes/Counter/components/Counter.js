@@ -108,6 +108,10 @@ const CounterWrapper = React.createClass({
     		searchActivated:true
     	})
     },
+    goToProvider(event,foodItem){
+    	this.props.history.push('/providerProfile/'+foodItem._creator)
+    	console.log(event,foodItem._creator);
+    },
     render() {
         let { data, addtnlQuery, dietSelectedMap } = this.props.counter.toJS();
         const { pageNum } = this.state;
@@ -117,8 +121,8 @@ const CounterWrapper = React.createClass({
                 data[i].foodItems[j].distance = (data[i].distance / 1600).toFixed(2);
             }
             resolvedData = resolvedData.concat(data[i].foodItems);
-
         }
+        let self = this;
         return (
             <div>
             	<div className={classes["date-title"]}>
@@ -221,7 +225,8 @@ const CounterWrapper = React.createClass({
 					<div className="pure-g">
 					{	(resolvedData)? 
 								resolvedData.map(function(foodItem,index){
-									return 	<div key={index} className={classNames("pure-u-1 pure-u-md-1-3")}>
+									return 	<div key={index} className={classNames("pure-u-1 pure-u-md-1-3")}
+												onClick={(event)=>self.goToProvider(event,foodItem)}	>
 												<div className={classes["provider-profile-wrapper"]}>
 											    	<div className={classes["provider-img-section"]}>
 											    		<div className={classes["img-avatar"]}>

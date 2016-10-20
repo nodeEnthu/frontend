@@ -13,16 +13,30 @@ import ActionPermContactCalendar from 'material-ui/svg-icons/action/perm-contact
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Scroll from 'react-scroll'
+import Modal from 'react-modal';
 
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        minWidth:'50%',
+        minHeight:'60%',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)'
+    }
+};
 const ProviderProfile = React.createClass({
   getInitialState() {
       return {
           counter:0,
-          itemCheckOutClick:false
+          itemCheckOutClick:false,
+          submitOrderModalOPen:false
       };
   },
   componentDidMount() {
-      this.props.fetchMayBeSecuredData('/api/users/me','providerProfileCall','PROVIDER');
+      this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall','PROVIDER');
   },
   componentDidUpdate() {
     //check whether clicking on add to cart made component update
@@ -32,6 +46,9 @@ const ProviderProfile = React.createClass({
     }
   },
   checkOutItem(event,foodItem){
+    // initialize the quantity checked out to 1
+    foodItem.quantity =1;
+    console.log(foodItem);
     this.props.providerFoodItemCheckout(foodItem);
     if(this.state.counter === 0){
       this.setState({
@@ -40,8 +57,13 @@ const ProviderProfile = React.createClass({
       })
     }
   },
-  checkoutClick(){
+  checkoutLinkClick(){
     this.scrollToElement('checkoutsection');
+  },
+  checkOutItems(){
+    this.setState({
+      submitOrderModalOPen:true
+    })
   },
   scrollToElement(elementName){
     let scroller = Scroll.scroller;
@@ -56,17 +78,28 @@ const ProviderProfile = React.createClass({
     let updatedQuantity = event.target.value
     this.props.updateCheckedOutQty(foodItemId,updatedQuantity);
   },
+  deleteCheckedOutItem(event){
+    this.props.deleteCheckedOutItem(event.target.name);
+  },
+  closeModal(){
+    this.setState({
+      submitOrderModalOPen:false
+    })
+  },
+  componentWillUnmount() {
+      this.props.removeAllCheckedOutItems();  
+  },
   render() {
     const {providerProfileCall,itemsCheckedOut} = this.props.providerProfile.toJS();
     let data = providerProfileCall.data;
     let resolvedItemsCheckedOut= [];
     let grandTotal = 0;
     for(var key in itemsCheckedOut){
+      console.log(key,this.props.params.id);
       if(itemsCheckedOut.hasOwnProperty(key)){
         resolvedItemsCheckedOut.push(itemsCheckedOut[key]);
         // by default checkout quantity as one
         let quantity = itemsCheckedOut[key].quantity || 1;
-        console.log(grandTotal,itemsCheckedOut[key].price,itemsCheckedOut[key].quantity);
         grandTotal = grandTotal + parseInt(itemsCheckedOut[key].price * parseInt(quantity));
       }
     };
@@ -110,7 +143,7 @@ const ProviderProfile = React.createClass({
                       label="Checkout"
                       style={{width:'30%'}}
                       secondary={true}
-                      onClick={this.checkoutClick}
+                      onClick={this.checkoutLinkClick}
                     />
                     :
                     undefined
@@ -120,15 +153,13 @@ const ProviderProfile = React.createClass({
                   <h1 className={classes["content-subhead"]}>Menu Items</h1>
                   { 
                     data.foodItems.map((foodItem)=>{
-                      return <div key={foodItem._id}> 
+                      return <div key={foodItem._id}>
+
                                 <section className={classes["post"]}>
                                   <div>
                                     <div className="pure-u-md-3-5">
                                       <header className={classes["post-header"]}>
                                         <h2 className={classes["post-title"]}>{foodItem.name}</h2>
-                                        {/*<p className={classes["post-meta"]}>
-                                            By <a href="#" className={classes["post-author"]}>Tilo Mitra</a> under <a className={classNames(classes["post-category",classes["post-category-design"]])} href="#">CSS</a> 
-                                        </p>*/}
                                       </header>
                                       <div className={classes["post-description"]}>
                                           <p>{foodItem.description}</p>
@@ -137,12 +168,12 @@ const ProviderProfile = React.createClass({
                                                 <tr>
                                                     <td className={classes["reduce-padding"]}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg></td>
                                                     <td className={classes["item-details"]}>order by :</td>
-                                                    <td className={classes["item-details"]}>{foodItem.placeOrderBy}</td>                           
+                                                    <td className={classes["item-details"]}>{new Date(foodItem.placeOrderBy).toDateString()}</td>                           
                                                 </tr>
                                                 <tr>
                                                     <td className={classes["reduce-padding"]}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></td>
                                                     <td className = {classes["item-details"]}>ready on : </td>
-                                                    <td className = {classes["item-details"]}>{foodItem.serviceDate}</td>
+                                                    <td className = {classes["item-details"]}>{new Date(foodItem.serviceDate).toDateString()}</td>
                                                 </tr>
                                                 <tr>
                                                     <td className={classes["reduce-padding"]}>
@@ -182,7 +213,7 @@ const ProviderProfile = React.createClass({
               {
                 (resolvedItemsCheckedOut && resolvedItemsCheckedOut.length>0)?
                 <div>
-                  <Element name="checkoutsection" className={classes["content-subhead"]}>Checked out items</Element>
+                  <Element name="checkoutsection" className={classes["content-subhead"]}>Your Order</Element>
                   {
                     resolvedItemsCheckedOut.map(function(itemCheckedOut){
                       return <div key={itemCheckedOut._id}> 
@@ -194,6 +225,11 @@ const ProviderProfile = React.createClass({
                                       </div>
                                       <div className="pure-u-md-3-5">
                                         <div className={classes["checkout-details"]}>
+                                          <div className={classes["cross-sign"]}
+                                            onClick={self.deleteCheckedOutItem}
+                                          >
+                                            <img name={itemCheckedOut._id} src="/general/cancel.png"></img>
+                                          </div> 
                                           <header className={classes["post-header"]}>
                                             <h2 className={classes["post-title"]}>{itemCheckedOut.name}</h2>
                                           </header>
@@ -221,7 +257,7 @@ const ProviderProfile = React.createClass({
                                                     <tr>
                                                         <td className={classes["reduce-padding"]}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></td>
                                                         <td className = {classes["item-details"]}>ready on</td>
-                                                        <td className = {classes["item-details"]}>{itemCheckedOut.serviceDate}</td>
+                                                        <td className = {classes["item-details"]}>{new Date(itemCheckedOut.serviceDate).toDateString()}</td>
                                                     </tr>
                                                     <tr>
                                                         <td className={classes["reduce-padding"]}>
@@ -254,7 +290,8 @@ const ProviderProfile = React.createClass({
                     <RaisedButton
                       primary={true}
                       style={{width:'40%'}}
-                    >{'Checkout (Grand total '+grandTotal+ ' $ + taxes)'}
+                      onClick={this.checkOutItems}
+                    >{'Checkout (Grand total '+grandTotal+ '$)'}
                     </RaisedButton>
                   </div>
                 </div>
@@ -272,6 +309,42 @@ const ProviderProfile = React.createClass({
               </div>
             </div> 
           </div>
+          <Modal
+            isOpen={this.state.submitOrderModalOPen}
+            onRequestClose={this.closeModal}
+            style={customStyles} >
+            <div className={classes["order-submit"]}>
+              <div className={classes["order-title"]}>
+                Order summary
+              </div>
+              <div className="pure-g">
+                
+              </div>
+              <table className="pure-table pure-table-horizontal">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {
+                    resolvedItemsCheckedOut.map(function(itemCheckedOut,index){
+                      return <tr key={itemCheckedOut._id}>
+                              <td>{index+1}</td>
+                              <td>{itemCheckedOut.name}</td>
+                              <td>{itemCheckedOut.quantity}</td>
+                              <td>{itemCheckedOut.price}</td>
+                            </tr>
+                    })
+                  }
+                  
+                </tbody>
+              </table>
+            </div>
+          </Modal>
         </div>
         :
         <div></div>
@@ -284,5 +357,7 @@ ProviderProfile.propTypes = {
   providerProfile:React.PropTypes.object.isRequired,
   providerFoodItemCheckout:React.PropTypes.func.isRequired,
   fetchMayBeSecuredData:React.PropTypes.func.isRequired,
-  updateCheckedOutQty:React.PropTypes.func.isRequired
+  updateCheckedOutQty:React.PropTypes.func.isRequired,
+  deleteCheckedOutItem:React.PropTypes.func.isRequired,
+  removeAllCheckedOutItems:React.PropTypes.func.isRequired
 }

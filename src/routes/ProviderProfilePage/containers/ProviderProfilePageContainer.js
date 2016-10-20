@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import {providerFoodItemCheckout,updateCheckedOutQty} from './../modules/providerProfilePage'
+import {providerFoodItemCheckout,updateCheckedOutQty,deleteCheckedOutItem,removeAllCheckedOutItems} from './../modules/providerProfilePage'
 import {fetchMayBeSecuredData} from 'utils/actionUtils/defaultHttpActions';
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -16,7 +16,9 @@ import ProviderProfilePage from './../ProviderProfilePage'
 const mapDispatchtoProps = {
   fetchMayBeSecuredData,
   providerFoodItemCheckout,
-  updateCheckedOutQty
+  updateCheckedOutQty,
+  deleteCheckedOutItem,
+  removeAllCheckedOutItems
 }
 
 const mapStateToProps = (state) => ({
