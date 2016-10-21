@@ -23,6 +23,7 @@ const mapDispatchtoProps = {
 
 const mapStateToProps = (state) => ({
   providerProfile: state.providerProfile,
+  globalState: state
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

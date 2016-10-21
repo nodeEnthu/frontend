@@ -19,6 +19,7 @@ ProviderProfile.propTypes = {
   fetchMayBeSecuredData:React.PropTypes.func.isRequired,
   providerProfile:React.PropTypes.object.isRequired,
   updateCheckedOutQty:React.PropTypes.func.isRequired,
-  deleteCheckedOutItem:React.PropTypes.func.isRequired
+  deleteCheckedOutItem:React.PropTypes.func.isRequired,
+  globalState:React.PropTypes.object.isRequired
 }
 export default ProviderProfilePage;

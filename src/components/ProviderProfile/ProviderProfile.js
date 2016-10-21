@@ -47,8 +47,7 @@ const ProviderProfile = React.createClass({
   },
   checkOutItem(event,foodItem){
     // initialize the quantity checked out to 1
-    foodItem.quantity =1;
-    console.log(foodItem);
+    foodItem.quantity =1; 
     this.props.providerFoodItemCheckout(foodItem);
     if(this.state.counter === 0){
       this.setState({
@@ -95,7 +94,6 @@ const ProviderProfile = React.createClass({
     let resolvedItemsCheckedOut= [];
     let grandTotal = 0;
     for(var key in itemsCheckedOut){
-      console.log(key,this.props.params.id);
       if(itemsCheckedOut.hasOwnProperty(key)){
         resolvedItemsCheckedOut.push(itemsCheckedOut[key]);
         // by default checkout quantity as one
@@ -105,6 +103,8 @@ const ProviderProfile = React.createClass({
     };
     let Element = Scroll.Element;
     let self = this;
+    const {user} = this.props.globalState.core.toJS();
+    console.log(data);
     return (data)?
         <div id="layout" className="pure-g">
           <div className={classNames(classes["sidebar"], "pure-u-1","pure-u-md-1-4")}>
@@ -313,12 +313,22 @@ const ProviderProfile = React.createClass({
             isOpen={this.state.submitOrderModalOPen}
             onRequestClose={this.closeModal}
             style={customStyles} >
-            <div className={classes["order-submit"]}>
+            <div className={classNames(classes["order-submit"])}>
               <div className={classes["order-title"]}>
-                Order summary
-              </div>
-              <div className="pure-g">
-                
+                <div className={classes["order-header"]}>
+                  Order summary
+                </div>
+                <div className="pure-u-1 pure-u-md-1-2">
+                  <div className={classes["order-address-heading"]}>Deliver to:</div>
+                  <div>
+                    {user.userSeachLocations[user.deliveryAddressIndex].searchText}
+                  </div>
+                </div>
+                <div className={classNames("pure-u-1","pure-u-md-1-2",classes["provider-address"])}>
+                  <div className={classes["order-address-heading"]}>Provider:</div>
+                  <div>{data.name}</div>
+                  <div>{data.userSeachLocations[data.deliveryAddressIndex].searchText}</div>
+                </div>
               </div>
               <table className="pure-table pure-table-horizontal">
                 <thead>
@@ -359,5 +369,6 @@ ProviderProfile.propTypes = {
   fetchMayBeSecuredData:React.PropTypes.func.isRequired,
   updateCheckedOutQty:React.PropTypes.func.isRequired,
   deleteCheckedOutItem:React.PropTypes.func.isRequired,
-  removeAllCheckedOutItems:React.PropTypes.func.isRequired
+  removeAllCheckedOutItems:React.PropTypes.func.isRequired,
+  globalState:React.PropTypes.object.isRequired
 }
