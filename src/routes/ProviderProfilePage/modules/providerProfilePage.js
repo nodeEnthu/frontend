@@ -5,6 +5,11 @@ import { Map, List } from 'immutable'
 export const REQUEST_DATA_PROVIDER = "REQUEST_DATA_PROVIDER";
 export const FAIL_DATA_PROVIDER = "FAIL_DATA_PROVIDER";
 export const RECEIVE_DATA_PROVIDER = "RECEIVE_DATA_PROVIDER";
+
+export const REQUEST_DATA_ORDER_SUBMIT = "REQUEST_DATA_ORDER_SUBMIT";
+export const FAIL_DATA_ORDER_SUBMIT = "FAIL_DATA_ORDER_SUBMIT";
+export const RECEIVE_DATA_ORDER_SUBMIT = "RECEIVE_DATA_ORDER_SUBMIT";
+
 export const PROVIDER_FOOD_ITEM_CHECKOUT = "PROVIDER_FOOD_ITEM_CHECKOUT";
 export const DELETE_CHECKED_OUT_ITEM = "DELETE_CHECKED_OUT_ITEM";
 export const UPDATE_CHECKED_OUT_QTY = "UPDATE_CHECKED_OUT_QTY";
@@ -23,7 +28,6 @@ export function providerFoodItemCheckout(itemCheckedOut) {
     return {
         type: PROVIDER_FOOD_ITEM_CHECKOUT,
         payload: {
-
             itemCheckedOut: itemCheckedOut
         }
     }
@@ -54,6 +58,11 @@ const ACTION_HANDLERS = {
     [REQUEST_DATA_PROVIDER]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
     [FAIL_DATA_PROVIDER]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], List()),
     [RECEIVE_DATA_PROVIDER]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
+    
+    [REQUEST_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
+    [FAIL_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], List()),
+    [RECEIVE_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
+
     [PROVIDER_FOOD_ITEM_CHECKOUT]: (state, action) => state.setIn(['itemsCheckedOut', action.payload.itemCheckedOut._id],Map(action.payload.itemCheckedOut)),
     [UPDATE_CHECKED_OUT_QTY]:(state,action)=>state.setIn(['itemsCheckedOut', action.payload.foodItemId,'quantity'],action.payload.quantity),
     [DELETE_CHECKED_OUT_ITEM]:(state,action)=> state.deleteIn(['itemsCheckedOut',action.foodItemId]),
@@ -68,6 +77,11 @@ const initialState = Map({
         isLoading: false,
         error: false,
         data: undefined
+    }),
+    submitOrder:Map({
+        isLoading:false,
+        error:false,
+        data:undefined
     }),
     itemsCheckedOut: Map({
     })

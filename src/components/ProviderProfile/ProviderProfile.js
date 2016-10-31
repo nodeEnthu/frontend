@@ -28,6 +28,7 @@ const customStyles = {
     }
 };
 const ProviderProfile = React.createClass({
+  checkOutOrderDetails:{},
   getInitialState() {
       return {
           counter:0,
@@ -36,6 +37,7 @@ const ProviderProfile = React.createClass({
       };
   },
   componentDidMount() {
+      // (url_to_call, state_property_to_change,action_name_to_be_appended)
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall','PROVIDER');
   },
   componentDidUpdate() {
@@ -88,6 +90,11 @@ const ProviderProfile = React.createClass({
   componentWillUnmount() {
       this.props.removeAllCheckedOutItems();  
   },
+  confirmOrderSubmit(){
+    // (url_to_call, state_property_to_change,action_name_to_be_appended)
+    console.log(this.props);
+    this.props.postSecuredData('/api/emails/order-submit','orderSubmit','ORDER_SUBMIT',this.checkOutOrderDetails); 
+  },
   render() {
     const {providerProfileCall,itemsCheckedOut} = this.props.providerProfile.toJS();
     let data = providerProfileCall.data;
@@ -101,10 +108,24 @@ const ProviderProfile = React.createClass({
         grandTotal = grandTotal + parseInt(itemsCheckedOut[key].price * parseInt(quantity));
       }
     };
+    this.checkOutOrderDetails.grandTotal = grandTotal;
     let Element = Scroll.Element;
     let self = this;
     const {user} = this.props.globalState.core.toJS();
-    console.log(data);
+    // make the checkout object here to be submitted once submit is clicked
+    this.checkOutOrderDetails={
+      itemsCheckedOut:itemsCheckedOut,
+      providerName:(data)?data.title : undefined,
+      customerName:(user)?user.name : undefined,
+      providerAddress:(data)?data.userSeachLocations[data.deliveryAddressIndex].searchText:undefined,
+      customerAddress: (user)?user.userSeachLocations[user.deliveryAddressIndex].searchText:undefined,
+      subTotal:grandTotal,
+      orderId:'tbd',
+      tip:'tbd',
+      orderType:'Pickup',
+      modeOfPayment:'Cash/CreditCard'
+    }
+    // ends here
     return (data)?
         <div id="layout" className="pure-g">
           <div className={classNames(classes["sidebar"], "pure-u-1","pure-u-md-1-4")}>
@@ -119,7 +140,7 @@ const ProviderProfile = React.createClass({
                     editing={false}
                     renderStarIcon={() => <span>&#11088;</span>}
                     starCount={5}
-                    value={4}
+                    value={3}
                   />
                 </div>
                 <IconButton><CommunicationEmail/></IconButton>
@@ -320,14 +341,15 @@ const ProviderProfile = React.createClass({
                 </div>
                 <div className="pure-u-1 pure-u-md-1-2">
                   <div className={classes["order-address-heading"]}>Deliver to:</div>
-                  <div>
-                    {user.userSeachLocations[user.deliveryAddressIndex].searchText}
+                  <div>{this.checkOutOrderDetails.customerName}</div>
+                  <div className={classes["delivery-box"]}>
+                    {this.checkOutOrderDetails.customerAddress}
                   </div>
                 </div>
                 <div className={classNames("pure-u-1","pure-u-md-1-2",classes["provider-address"])}>
                   <div className={classes["order-address-heading"]}>Provider:</div>
                   <div>{data.name}</div>
-                  <div>{data.userSeachLocations[data.deliveryAddressIndex].searchText}</div>
+                  <div className={classes["delivery-box"]}>{this.checkOutOrderDetails.providerAddress}</div>
                 </div>
               </div>
               <table className="pure-table pure-table-horizontal">
@@ -353,11 +375,19 @@ const ProviderProfile = React.createClass({
                   
                 </tbody>
               </table>
+              <div className={classes["move-center"]}>
+                <RaisedButton
+                  label="Submit your order"
+                  primary={true}
+                  style={{marginTop:'20px'}}
+                  onClick={()=>this.confirmOrderSubmit()}
+                />
+              </div>
             </div>
           </Modal>
         </div>
         :
-        <div></div>
+        <div></div> 
     }
 });
 
@@ -369,6 +399,7 @@ ProviderProfile.propTypes = {
   fetchMayBeSecuredData:React.PropTypes.func.isRequired,
   updateCheckedOutQty:React.PropTypes.func.isRequired,
   deleteCheckedOutItem:React.PropTypes.func.isRequired,
-  removeAllCheckedOutItems:React.PropTypes.func.isRequired,
-  globalState:React.PropTypes.object.isRequired
+  removeAllCheckedOutItems:React.PropTypes.func,
+  globalState:React.PropTypes.object.isRequired,
+  postSecuredData:React.PropTypes.func.isRequired
 }

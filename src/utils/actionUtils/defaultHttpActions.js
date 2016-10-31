@@ -66,6 +66,7 @@ export function fetchSecuredData(url,storeKey,actionType,queryParams) {
             .catch(err => dispatch(failData({ storeKey: storeKey, data: err },actionType)));
     };
 }
+
 export function postSecuredData(url, storeKey,actionType,queryParams) {
     return (dispatch) => {
         dispatch(requestData({ storeKey: storeKey },actionType));
