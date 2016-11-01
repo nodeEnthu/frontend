@@ -112,13 +112,14 @@ const ProviderProfile = React.createClass({
     let Element = Scroll.Element;
     let self = this;
     const {user} = this.props.globalState.core.toJS();
+    console.log(user);
     // make the checkout object here to be submitted once submit is clicked
     this.checkOutOrderDetails={
       itemsCheckedOut:itemsCheckedOut,
       providerName:(data)?data.title : undefined,
-      customerName:(user)?user.name : undefined,
+      customerName:(user && user.name)?user.name : undefined,
       providerAddress:(data)?data.userSeachLocations[data.deliveryAddressIndex].searchText:undefined,
-      customerAddress: (user)?user.userSeachLocations[user.deliveryAddressIndex].searchText:undefined,
+      customerAddress: (user && user.name) ? user.userSeachLocations[user.deliveryAddressIndex].searchText:undefined,
       subTotal:grandTotal,
       orderId:'tbd',
       tip:'tbd',
@@ -126,7 +127,7 @@ const ProviderProfile = React.createClass({
       modeOfPayment:'Cash/CreditCard'
     }
     // ends here
-    return (data)?
+    return (data && user && user.name)?
         <div id="layout" className="pure-g">
           <div className={classNames(classes["sidebar"], "pure-u-1","pure-u-md-1-4")}>
             <div className={classes["header"]}>

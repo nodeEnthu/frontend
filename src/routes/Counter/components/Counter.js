@@ -39,8 +39,14 @@ const CounterWrapper = React.createClass({
         // if user is logged in then that means the most recent address is updated in the db ... no need to pas latitude longitude
         if (this.props.globalState.core.get('userLoggedIn')) {
             this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data');
+        } else{
+        	// get the latitude and longitude from the place_id
+        	const {place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
+        	if(place_id){
+        		// valid search 
+        		 this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data', undefined ,{place_id:place_id});
+        	}
         }
-        // else  #TODO Gautam
     },
     loadMore() {
        	let newPageNum = this.state.pageNum + 1;
@@ -110,17 +116,19 @@ const CounterWrapper = React.createClass({
     },
     goToProvider(event,foodItem){
     	this.props.history.push('/providerProfile/'+foodItem._creator)
-    	console.log(event,foodItem._creator);
     },
     render() {
         let { data, addtnlQuery, dietSelectedMap } = this.props.counter.toJS();
         const { pageNum } = this.state;
         let resolvedData = [];
         for (let i = 0; i < data.length; i++) {
-            for (let j = 0; j < data[i].foodItems.length; j++) {
-                data[i].foodItems[j].distance = (data[i].distance / 1600).toFixed(2);
-            }
-            resolvedData = resolvedData.concat(data[i].foodItems);
+        	if(data[i].foodItems && data[i].foodItems.length>0){
+        		for (let j = 0; j < data[i].foodItems.length; j++) {
+                	data[i].foodItems[j].distance = (data[i].distance / 1600).toFixed(2);
+            	}
+            	resolvedData = resolvedData.concat(data[i].foodItems);
+        	}
+            
         }
         let self = this;
         return (

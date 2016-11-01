@@ -11,8 +11,9 @@ export  class Header extends React.Component {
         this.removeToken = this.removeToken.bind(this);
     }
     removeToken(){
-      this.props.dispatch(actions.addToken(''))
+      this.props.dispatch(actions.addToken(''));
       sessionStorage.removeItem('token');
+      location.reload();
     }
     componentDidMount() {
            

@@ -25,10 +25,6 @@ var Login = React.createClass({
         const { dispatch } = this.props;
         dispatch(actions.openLoginModal());
     },
-    afterOpenModal() {
-        // references are now sync'd and can be accessed.
-        //this.refs.subtitle.style.color = '#f00';
-    },
     closeModal() {
         const { dispatch } = this.props;
         dispatch(actions.closeLoginModal());
@@ -81,7 +77,6 @@ var Login = React.createClass({
             <button onClick={this.openModal}>Open Modal</button>
             <Modal
               isOpen={loginModalOPen}
-              onAfterOpen={this.afterOpenModal}
               onRequestClose={this.closeModal}
               style={customStyles} >
               <div ref="subtitle"

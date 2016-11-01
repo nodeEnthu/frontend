@@ -27,19 +27,19 @@ const HomeView = React.createClass({
     	let self = this;
     	this.state.showBackDrop = true;
         if (page === 'counter') {
-        	const {searchText,place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
-            //register this at a new location if possible as the user needs to be logged in for this
-            if(this.props.globalState.core.get('userLoggedIn')){
-            	// register the address as most recently used 
-            	securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
+        	if(this.props.globalState.core.get('userLoggedIn')){
+        		const {searchText,place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
+        		//register this at a new location if possible as the user needs to be logged in for this
+           		// register the address as most recently used
+           		securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
             		.then(function(result){
             			self.state.showBackDrop = false;
             			self.context.router.push(page);
-            		});
-            }else{
-            	// user is not logged in ... add it to cookie so that it is saved in the session and we dont make another call
+            		}); 
+        	} else{
+        		// user is not logged in ... add it to cookie so that it is saved in the session and we dont make another call
             	this.context.router.push(page);
-            }
+        	}
         } else{
         	this.context.router.push(page);
         }
@@ -88,7 +88,9 @@ const HomeView = React.createClass({
 							        	apiUrl:'/api/locations/addressTypeAssist',
 							        	action:this.props.userAddressSearchChange,
 							        	setPlaceId:this.props.userAddressUpdatePlaceId,
-							        	detectChange:this.props.userAddressUpdateDetect
+							        	detectChange:this.props.userAddressUpdateDetect,
+							        	globalState:this.props.globalState,
+							        	onSuggestionSelected:()=>this.goToPage('counter')
 							        }}/>
 							        <IconButton
 							        	style = {{

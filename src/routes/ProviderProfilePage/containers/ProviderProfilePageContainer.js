@@ -21,7 +21,7 @@ const mapDispatchtoProps = {
   removeAllCheckedOutItems,
   postSecuredData,
 }
-console.log("postSecuredData",postSecuredData);
+
 const mapStateToProps = (state) => ({
   providerProfile: state.providerProfile,
   globalState: state

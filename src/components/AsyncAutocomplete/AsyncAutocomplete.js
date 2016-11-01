@@ -4,7 +4,8 @@ import Autosuggest from 'react-autosuggest'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import debounce from 'lodash.debounce'
 import { getCall } from 'utils/httpUtils/apiCallWrapper';
-import React from 'react'
+import React from 'react';
+
 
 
 /* --------------- */
@@ -32,7 +33,9 @@ class AsyncAutocomplete extends React.Component {
             apiUrl: props.settings.apiUrl,
             changeGlobalState: props.settings.action,
             changeGlobalPlaceId: props.settings.setPlaceId,
-            detectChange:props.settings.detectChange
+            detectChange:props.settings.detectChange,
+            globalState:props.settings.globalState,
+            onSuggestionSelected:props.settings.onSuggestionSelected
         };
 
         this.onChange = this.onChange.bind(this);
@@ -50,6 +53,10 @@ class AsyncAutocomplete extends React.Component {
         if(this.state.detectChange){
              this.state.detectChange(true);
         }
+        let self = this;
+        setTimeout(function(){
+            self.state.onSuggestionSelected();
+        },200)
         return suggestion.address;
     }
     loadSuggestions(value) {
@@ -76,7 +83,6 @@ class AsyncAutocomplete extends React.Component {
 
             });
     }
-
     getSuggestions(value, { debounce } = {}) {
         if (debounce === true) {
             this.debouncedLoadSuggestions(value);
