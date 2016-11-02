@@ -48,15 +48,22 @@ const ProviderProfile = React.createClass({
     }
   },
   checkOutItem(event,foodItem){
-    // initialize the quantity checked out to 1
-    foodItem.quantity =1; 
-    this.props.providerFoodItemCheckout(foodItem);
-    if(this.state.counter === 0){
-      this.setState({
-        counter:this.state.counter+1,
-        itemCheckOutClick:true
-      })
+    // check whether user is logged in 
+    if(this.props.globalState.core.get('userLoggedIn')){
+      // initialize the quantity checked out to 1
+      foodItem.quantity =1; 
+      this.props.providerFoodItemCheckout(foodItem);
+      if(this.state.counter === 0){
+        this.setState({
+          counter:this.state.counter+1,
+          itemCheckOutClick:true
+        })
+      }
+    }else{
+      // open the modal for user login
+      this.props.openLoginModal(true);
     }
+
   },
   checkoutLinkClick(){
     this.scrollToElement('checkoutsection');
@@ -92,7 +99,6 @@ const ProviderProfile = React.createClass({
   },
   confirmOrderSubmit(){
     // (url_to_call, state_property_to_change,action_name_to_be_appended)
-    console.log(this.props);
     this.props.postSecuredData('/api/emails/order-submit','orderSubmit','ORDER_SUBMIT',this.checkOutOrderDetails); 
   },
   render() {
@@ -112,7 +118,7 @@ const ProviderProfile = React.createClass({
     let Element = Scroll.Element;
     let self = this;
     const {user} = this.props.globalState.core.toJS();
-    console.log(user);
+
     // make the checkout object here to be submitted once submit is clicked
     this.checkOutOrderDetails={
       itemsCheckedOut:itemsCheckedOut,
@@ -127,7 +133,8 @@ const ProviderProfile = React.createClass({
       modeOfPayment:'Cash/CreditCard'
     }
     // ends here
-    return (data && user && user.name)?
+
+    return (data && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="pure-g">
           <div className={classNames(classes["sidebar"], "pure-u-1","pure-u-md-1-4")}>
             <div className={classes["header"]}>
@@ -402,5 +409,6 @@ ProviderProfile.propTypes = {
   deleteCheckedOutItem:React.PropTypes.func.isRequired,
   removeAllCheckedOutItems:React.PropTypes.func,
   globalState:React.PropTypes.object.isRequired,
-  postSecuredData:React.PropTypes.func.isRequired
+  postSecuredData:React.PropTypes.func.isRequired,
+  openLoginModal:React.PropTypes.func.isRequired
 }

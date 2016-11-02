@@ -24,15 +24,12 @@ export  class Header extends React.Component {
         return (
             <div className={classes["header"]}>
             <div className={classNames(classes["home-menu"], "pure-menu","pure-menu-horizontal")}>
-              <a className="pure-menu-heading" href="">Your Site</a>
+              <span className="pure-menu-heading">fillurtummy</span>
               <ul className="pure-menu-list">
-                  <li className="pure-menu-item pure-menu-selected">
+                  <li className="pure-menu-item">
                     <IndexLink to='/' className="pure-menu-link">
                       Home
                     </IndexLink>
-                  </li>
-                  <li className="pure-menu-item">
-                      <Link to='/providerProfile/12345' className="pure-menu-link">Tour</Link>
                   </li>
                   {(globalState.core.get('token').length>0 )?
                     <li className="pure-menu-item">

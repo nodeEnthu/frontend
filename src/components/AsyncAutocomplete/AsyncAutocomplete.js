@@ -53,10 +53,6 @@ class AsyncAutocomplete extends React.Component {
         if(this.state.detectChange){
              this.state.detectChange(true);
         }
-        let self = this;
-        setTimeout(function(){
-            self.state.onSuggestionSelected();
-        },200)
         return suggestion.address;
     }
     loadSuggestions(value) {
@@ -90,11 +86,9 @@ class AsyncAutocomplete extends React.Component {
             this.loadSuggestions(value);
         }
     }
-
     onChange(event, { newValue }) {
         this.state.changeGlobalState(newValue);
     }
-
     onSuggestionsUpdateRequested({ value, reason }) {
         if (value && value.length > 2) {
             this.getSuggestions(value, {
@@ -102,7 +96,6 @@ class AsyncAutocomplete extends React.Component {
             });
         }
     }
-
     render() {
         const { value, suggestions, isLoading,onFocusProp,onBlurProp,name } = this.state;
         const inputProps = {

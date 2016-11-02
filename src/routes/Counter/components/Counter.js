@@ -36,16 +36,14 @@ const CounterWrapper = React.createClass({
             this.props.flushOutStaleData();
             this.props.userAddressUpdateDetect(false);
         }
-        // if user is logged in then that means the most recent address is updated in the db ... no need to pas latitude longitude
-        if (this.props.globalState.core.get('userLoggedIn')) {
-            this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data');
+        let combinedQuery = this.createQuery();
+        // if user is logged in then that means the most recent address is updated in the db ... no need to pass latitude longitude
+        if ((this.props.globalState.core.get('userLoggedIn') && this.props.addressChange) ||    // user is logged in and address change is detected
+        	(combinedQuery.guestLocation.place_id && this.props.addressChange)	// user is not logged in and we are carrying place_id from home page
+        	) {
+            this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery);
         } else{
-        	// get the latitude and longitude from the place_id
-        	const {place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
-        	if(place_id){
-        		// valid search 
-        		 this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data', undefined ,{place_id:place_id});
-        	}
+    
         }
     },
     loadMore() {
@@ -59,7 +57,9 @@ const CounterWrapper = React.createClass({
 	            })
     },
     createQuery() {
-        let combinedQuery = {}
+        let combinedQuery = {};
+        const {place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
+        combinedQuery.guestLocation = {'place_id':place_id};
         combinedQuery.cuisineSelectedMap = this.props.counter.get('cuisineSelectedMap').toJS();
         combinedQuery.dietSelectedMap = this.props.counter.get('dietSelectedMap').toJS();
         combinedQuery.addtnlQuery = this.props.counter.get('addtnlQuery').toJS();

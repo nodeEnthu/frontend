@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import {providerFoodItemCheckout,updateCheckedOutQty,deleteCheckedOutItem,removeAllCheckedOutItems} from './../modules/providerProfilePage'
 import {fetchMayBeSecuredData,postSecuredData} from 'utils/actionUtils/defaultHttpActions';
+import {openLoginModal} from './../../../layouts/CoreLayout/coreReducer';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -20,6 +21,7 @@ const mapDispatchtoProps = {
   deleteCheckedOutItem,
   removeAllCheckedOutItems,
   postSecuredData,
+  openLoginModal
 }
 
 const mapStateToProps = (state) => ({

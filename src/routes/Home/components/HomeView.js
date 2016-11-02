@@ -56,8 +56,10 @@ const HomeView = React.createClass({
                     const { latitude, longitude } = pos.coords;
                     getCall('api/locations/address', { latitude: latitude, longitude: longitude })
                         .then(function(response) {
+                        	self.props.userAddressUpdateDetect(true);
                             self.props.userAddressSearchChange(response.data.address);
                             self.props.userAddressUpdatePlaceId(response.data.place_id);
+
                             self.setState({
                                 fetchingAddresses: false
                             })
