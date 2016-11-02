@@ -33,7 +33,8 @@ const ProviderProfile = React.createClass({
       return {
           counter:0,
           itemCheckOutClick:false,
-          submitOrderModalOPen:false
+          submitOrderModalOPen:false,
+          reviewFoodItemModalOpen:false
       };
   },
   componentDidMount() {
@@ -91,7 +92,8 @@ const ProviderProfile = React.createClass({
   },
   closeModal(){
     this.setState({
-      submitOrderModalOPen:false
+      submitOrderModalOPen:false,
+      reviewFoodItemModalOpen:false,
     })
   },
   componentWillUnmount() {
@@ -101,8 +103,70 @@ const ProviderProfile = React.createClass({
     // (url_to_call, state_property_to_change,action_name_to_be_appended)
     this.props.postSecuredData('/api/emails/order-submit','orderSubmit','ORDER_SUBMIT',this.checkOutOrderDetails); 
   },
+  writeReviewModal(foodItem){
+    this.setState({
+      reviewFoodItemModalOpen:true
+    });
+    this.props.selectItemForReview(foodItem);
+  },
+  starRating(nextVal,prevVal,name){
+    // reset the error if it exists
+    this.props.reviewError({
+      storeKey:'ratingError',
+      errorMsg:''
+    });
+    this.props.selectStarRating(nextVal);
+  },
+  updateReview(event){
+    let newValue = event.target.value;
+    console.log(newValue);
+    this.props.submitTypedReview(newValue);
+  },
+  reviewFocus(event){
+    // reset the error if it exists
+    this.props.reviewError({
+      storeKey:'reviewError',
+      errorMsg:''
+    });
+  },
+  reviewBlur(event){
+    let value= event.target.value;
+    // check if the value is greater than 0
+    if(value.length>0){
+      this.props.reviewError({
+        storeKey:'reviewError',
+        errorMsg:''
+      });
+    }else{
+      this.props.reviewError({
+        storeKey:'reviewError',
+        errorMsg:'Please write a review'
+      });
+    }
+  },
+  submitReview(){
+    // check whether both the star rating and review are entered
+    let {review} = this.props.providerProfile.toJS();
+    if(review.rating && review.review){
+      // everything is cool and dandy
+    }else{
+      // check whether start rating or review is empty
+      if(!review.review){
+        this.props.reviewError({
+          storeKey:'reviewError',
+          errorMsg:'Please write a review'
+        })
+      }
+      if(!review.rating){
+        this.props.reviewError({
+          storeKey:'ratingError',
+          errorMsg:'Please give a star rating'
+        });
+      }
+    }
+  },
   render() {
-    const {providerProfileCall,itemsCheckedOut} = this.props.providerProfile.toJS();
+    const {providerProfileCall,itemsCheckedOut,review} = this.props.providerProfile.toJS();
     let data = providerProfileCall.data;
     let resolvedItemsCheckedOut= [];
     let grandTotal = 0;
@@ -225,6 +289,10 @@ const ProviderProfile = React.createClass({
                                     </div>
                                     <div className={classNames(classes["post-avatar"],"pure-u-md-2-5")}>
                                       <img alt={foodItem.name} className = {classes["food-item"]} src={foodItem.img}/>
+                                      <div className={classNames(classes["move-center"],classes["review-submit-link"])}
+                                        onClick={()=>this.writeReviewModal(foodItem)}>
+                                        Please submit a review
+                                      </div>
                                       <RaisedButton
                                         labelPosition="before"
                                         label="Add to the cart" primary={true}
@@ -393,6 +461,41 @@ const ProviderProfile = React.createClass({
               </div>
             </div>
           </Modal>
+          <Modal
+            isOpen={this.state.reviewFoodItemModalOpen}
+            onRequestClose={this.closeModal}
+          >
+          <div>
+            <div className={classNames("pure-form",classes["move-center"])}>
+              <div className="pure-group">
+                <div className={classes["review-item-name"]}>
+                  {review.item.name}
+                </div>
+                <img alt={review.item.name} className = {classes["food-item"]} src={review.item.img}/>
+                <div>
+                  <StarRatingComponent
+                    name="rating"
+                    starCount={5}
+                    value={review.item.rating}
+                    onStarClick={this.starRating}
+                  />
+                  <div className = {classNames(classes["error-message"],classes["move-center"])}>{(review.ratingError)?'*'+review.ratingError:undefined}</div>
+                </div>
+                <textarea className="pure-input-1" placeholder="Please write your review here"
+                  name="review"
+                  value={review.review}
+                  onFocus={this.reviewFocus}
+                  onBlur = {this.reviewBlur}
+                  onChange={this.updateReview}
+                ></textarea>
+                <span className = {classes["error-message"]}>{(review.reviewError)?'*'+review.reviewError:undefined}</span>
+              </div>
+              <button className={classNames("pure-button pure-input-1-2 pure-button-primary",classes["review-submit-button"])}
+                onClick={this.submitReview}
+              >Submit</button>
+            </div>
+          </div>
+          </Modal>
         </div>
         :
         <div></div> 
@@ -410,5 +513,9 @@ ProviderProfile.propTypes = {
   removeAllCheckedOutItems:React.PropTypes.func,
   globalState:React.PropTypes.object.isRequired,
   postSecuredData:React.PropTypes.func.isRequired,
-  openLoginModal:React.PropTypes.func.isRequired
+  openLoginModal:React.PropTypes.func.isRequired,
+  selectItemForReview:React.PropTypes.func.isRequired,
+  selectStarRating:React.PropTypes.func.isRequired,
+  submitTypedReview:React.PropTypes.func.isRequired,
+  reviewError:React.PropTypes.func.isRequired
 }

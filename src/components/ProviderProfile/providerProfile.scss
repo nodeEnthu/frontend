@@ -132,6 +132,22 @@ h3 {
 .order-address-heading{
     margin-bottom: 0.5em;
 }
+.review-item-name{
+    text-transform: capitalize;
+    padding:0.5em;
+}
+.review-submit-link{
+    font-size: 0.7em;
+    padding:.2em;
+}
+.review-submit-link:hover{
+    text-decoration: underline;
+    color:blue;
+}
+.review-submit-button{
+    margin-top:1.5em;
+}
+
 .delivery-box{
     width:70%;
 }
@@ -173,6 +189,10 @@ table.remove-border, table.remove-border td{
 
 table td.item-details {
     padding-bottom:8px; 
+}
+.error-message{
+    color:red;
+    padding-bottom:.7em;
 }
 
 @media (min-width: 48em) {

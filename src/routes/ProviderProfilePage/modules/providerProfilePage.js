@@ -13,7 +13,17 @@ export const RECEIVE_DATA_ORDER_SUBMIT = "RECEIVE_DATA_ORDER_SUBMIT";
 export const PROVIDER_FOOD_ITEM_CHECKOUT = "PROVIDER_FOOD_ITEM_CHECKOUT";
 export const DELETE_CHECKED_OUT_ITEM = "DELETE_CHECKED_OUT_ITEM";
 export const UPDATE_CHECKED_OUT_QTY = "UPDATE_CHECKED_OUT_QTY";
-export const REMOVE_ALL_CHECKED_OUT_ITEMS="REMOVE_ALL_CHECKED_OUT_ITEMS"
+export const REMOVE_ALL_CHECKED_OUT_ITEMS="REMOVE_ALL_CHECKED_OUT_ITEMS";
+
+export const SELECT_ITEM_FOR_REVIEW = "SELECT_ITEM_FOR_REVIEW";
+export const SELECT_STAR_RATING = "SELECT_STAR_RATING";
+export const SUBMIT_TYPED_REVIEW = "SUBMIT_TYPED_REVIEW";
+export const REVIEW_WORDS = "REVIEW_WORDS";
+export const REVIEW_ERROR = "REVIEW_ERROR";
+
+export const REQUEST_DATA_SUBMIT_REVIEW = "REQUEST_DATA_ORDER_SUBMIT";
+export const FAIL_DATA_SUBMIT_REVIEW = "FAIL_DATA_SUBMIT_REVIEW";
+export const RECEIVE_DATA_SUBMIT_REVIEW = "RECEIVE_DATA_SUBMIT_REVIEW";
 
 // ------------------------------------
 // Actions
@@ -54,19 +64,57 @@ export function removeAllCheckedOutItems(){
     }
 }
 
+// Actions for review
+export function selectItemForReview(foodItem){
+    return{
+        type:SELECT_ITEM_FOR_REVIEW,
+        foodItem:foodItem
+    }
+}
+export function selectStarRating(rating){
+    return{
+        type:SELECT_STAR_RATING,
+        rating:rating
+    }
+}
+
+export function submitTypedReview(review){
+    return{
+        type:SUBMIT_TYPED_REVIEW,
+        review:review
+    }
+}
+export function reviewError(obj){
+    return{
+        type:REVIEW_ERROR,
+        storeKey:obj.storeKey,
+        errorMsg:obj.errorMsg
+    }
+}
+
 const ACTION_HANDLERS = {
     [REQUEST_DATA_PROVIDER]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
-    [FAIL_DATA_PROVIDER]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], List()),
+    [FAIL_DATA_PROVIDER]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
     [RECEIVE_DATA_PROVIDER]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
     
     [REQUEST_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
-    [FAIL_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], List()),
+    [FAIL_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
     [RECEIVE_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
 
     [PROVIDER_FOOD_ITEM_CHECKOUT]: (state, action) => state.setIn(['itemsCheckedOut', action.payload.itemCheckedOut._id],Map(action.payload.itemCheckedOut)),
     [UPDATE_CHECKED_OUT_QTY]:(state,action)=>state.setIn(['itemsCheckedOut', action.payload.foodItemId,'quantity'],action.payload.quantity),
     [DELETE_CHECKED_OUT_ITEM]:(state,action)=> state.deleteIn(['itemsCheckedOut',action.foodItemId]),
-    [REMOVE_ALL_CHECKED_OUT_ITEMS]:(state,action)=>state.delete('itemsCheckedOut')
+    [REMOVE_ALL_CHECKED_OUT_ITEMS]:(state,action)=>state.delete('itemsCheckedOut'),
+
+    [SELECT_ITEM_FOR_REVIEW]:(state,action)=>state.setIn(['review','item'],Map(action.foodItem)),
+    [SELECT_STAR_RATING]:(state,action)=>state.setIn(['review','rating'],action.rating),
+    [SUBMIT_TYPED_REVIEW]:(state,action)=>state.setIn(['review','review'],action.review),
+    [REVIEW_ERROR]:(state,action)=>state.setIn(['review',action.storeKey],action.errorMsg),
+
+    [REQUEST_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
+    [FAIL_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
+    [RECEIVE_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
+    
 }
 
 // ------------------------------------
@@ -84,6 +132,18 @@ const initialState = Map({
         data:undefined
     }),
     itemsCheckedOut: Map({
+    }),
+    review:Map({
+        item:Map(),
+        review:'',
+        rating:undefined,
+        ratingError:'',
+        reviewError:''
+    }),
+    submitReview:Map({
+        isLoading:false,
+        error:false,
+        data:undefined
     })
 })
 export default function counterReducer(state = initialState, action) {
