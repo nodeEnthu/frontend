@@ -148,7 +148,16 @@ const ProviderProfile = React.createClass({
     // check whether both the star rating and review are entered
     let {review} = this.props.providerProfile.toJS();
     if(review.rating && review.review){
-      // everything is cool and dandy
+      const {user} = this.props.globalState.core.toJS();
+      let combinedQuery={
+        foodItemId:review.item._id,
+        creatorId:user._id,
+        reviewDate:new Date() ,
+        creatorName: user.name,
+        rating:review.rating,
+        review:review.review
+      }
+      this.props.postSecuredData('/api/providers/foodItem/review',review,'SUBMIT_REVIEW',combinedQuery);
     }else{
       // check whether start rating or review is empty
       if(!review.review){

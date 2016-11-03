@@ -112,8 +112,8 @@ const ACTION_HANDLERS = {
     [REVIEW_ERROR]:(state,action)=>state.setIn(['review',action.storeKey],action.errorMsg),
 
     [REQUEST_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
-    [FAIL_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
-    [RECEIVE_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
+    [FAIL_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
+    [RECEIVE_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
     
 }
 
