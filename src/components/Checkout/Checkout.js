@@ -1,15 +1,41 @@
 import React from 'react'
-import classes from './checkout.scss'
-
+import classes from './../ProviderProfile/providerProfile.scss'
+import Scroll from 'react-scroll'
+import RaisedButton from 'material-ui/RaisedButton';
+import classNames from 'classnames';
+import OrderSubmitModal from 'components/OrderSubmitModal';
 const Checkout = React.createClass({
   getInitialState() {
       return {
-            
+         submitOrderModalOPen:false   
       };
   },
+  changeStoreVal(event) {
+    let foodItemId = event.target.name;
+    let updatedQuantity = event.target.value
+    this.props.updateCheckedOutQty(foodItemId,updatedQuantity);
+  },
+  deleteCheckedOutItem(event){
+    this.props.deleteCheckedOutItem(event.target.name);
+  },
+  checkOutItems(){
+    this.props.openModal({storeKey:'orderSubmitModalOpen', openModal:true})
+  },
   render(){
-    return <div>
-            <Element name="checkoutsection" className={classes["content-subhead"]}>Your Order</Element>
+    const {itemsCheckedOut} = this.props.providerProfile.toJS();
+    let resolvedItemsCheckedOut= [];
+    let grandTotal = 0;
+    for(var key in itemsCheckedOut){
+      if(itemsCheckedOut.hasOwnProperty(key)){
+        resolvedItemsCheckedOut.push(itemsCheckedOut[key]);
+        let quantity = itemsCheckedOut[key].quantity || 1;
+        grandTotal = grandTotal + parseInt(itemsCheckedOut[key].price * parseInt(quantity));
+      }
+    };
+    let self= this;
+    return (resolvedItemsCheckedOut && resolvedItemsCheckedOut.length)?
+          <div>
+            <div className={classes["content-subhead"]}>Your Order</div>
             {
               resolvedItemsCheckedOut.map(function(itemCheckedOut){
                 return <div key={itemCheckedOut._id}> 
@@ -89,7 +115,10 @@ const Checkout = React.createClass({
               >{'Checkout (Grand total '+grandTotal+ '$)'}
               </RaisedButton>
             </div>
+            <OrderSubmitModal{... this.props}/>
           </div>
+          :
+          <div></div>
   }
 })
 

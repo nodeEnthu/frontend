@@ -20,6 +20,7 @@ export const SELECT_STAR_RATING = "SELECT_STAR_RATING";
 export const SUBMIT_TYPED_REVIEW = "SUBMIT_TYPED_REVIEW";
 export const REVIEW_WORDS = "REVIEW_WORDS";
 export const REVIEW_ERROR = "REVIEW_ERROR";
+export const OPEN_MODAL = "OPEN_MODAL";
 
 export const REQUEST_DATA_SUBMIT_REVIEW = "REQUEST_DATA_ORDER_SUBMIT";
 export const FAIL_DATA_SUBMIT_REVIEW = "FAIL_DATA_SUBMIT_REVIEW";
@@ -84,11 +85,20 @@ export function submitTypedReview(review){
         review:review
     }
 }
+
 export function reviewError(obj){
     return{
         type:REVIEW_ERROR,
         storeKey:obj.storeKey,
         errorMsg:obj.errorMsg
+    }
+}
+
+export function openModal(obj){
+    return{
+        'type':OPEN_MODAL,
+        'storeKey':obj.storeKey,
+        'openModal':obj.openModal
     }
 }
 
@@ -110,6 +120,8 @@ const ACTION_HANDLERS = {
     [SELECT_STAR_RATING]:(state,action)=>state.setIn(['review','rating'],action.rating),
     [SUBMIT_TYPED_REVIEW]:(state,action)=>state.setIn(['review','review'],action.review),
     [REVIEW_ERROR]:(state,action)=>state.setIn(['review',action.storeKey],action.errorMsg),
+
+    [OPEN_MODAL]:(state,action)=>state.set(action.storeKey,action.openModal),
 
     [REQUEST_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
     [FAIL_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
@@ -144,7 +156,9 @@ const initialState = Map({
         isLoading:false,
         error:false,
         data:undefined
-    })
+    }),
+    reviewSubmitModalOpen:false,
+    orderSubmitModalOpen:false
 })
 export default function counterReducer(state = initialState, action) {
     const handler = ACTION_HANDLERS[action.type]
