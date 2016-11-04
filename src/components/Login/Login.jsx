@@ -73,40 +73,38 @@ var Login = React.createClass({
     render: function() {
         const { loginModalOPen } = this.props.globalState.core.toJS();
         return (
-            <div>
-            <li className="pure-menu-item">
-                <a className="pure-menu-link"
-                  onClick={this.openModal}
-                  >Login</a>
-            </li>
-            <Modal
-              isOpen={loginModalOPen}
-              onRequestClose={this.closeModal}
-              style={customStyles} >
-              <div ref="subtitle"
-                style={{
-                  textAlign:'center',
-                  marginBottom:'10%'
-                }}
-              >Please login with your facebook or gmail account</div>
-              <div style = {{width:'70%', margin:'0 auto'}}>
-                <FacebookLogin
-                  style = {{textAlign:'center'}}
-                  appId="116207178810953"
-                  autoLoad={true}
-                  fields="id,email,name,link,picture"
-                  callback={this.successfullFbLogin} 
-                />
+              <div className="pure-menu-item">
+                  <a className="pure-menu-link"
+                    onClick={this.openModal}
+                    >Login</a>
+                <Modal
+                  isOpen={loginModalOPen}
+                  onRequestClose={this.closeModal}
+                  style={customStyles} >
+                  <div ref="subtitle"
+                    style={{
+                      textAlign:'center',
+                      marginBottom:'10%'
+                    }}
+                  >Please login with your facebook or gmail account</div>
+                  <div style = {{width:'70%', margin:'0 auto'}}>
+                    <FacebookLogin
+                      style = {{textAlign:'center'}}
+                      appId="116207178810953"
+                      autoLoad={true}
+                      fields="id,email,name,link,picture"
+                      callback={this.successfullFbLogin} 
+                    />
+                  </div>
+                  <div style = {{width:'70%', margin:'0 auto', marginTop:'20px'}}>
+                    <GoogleLogin
+                      clientId="1038006636920-ilhv28295jr3l244jhvf79u9j115bl9e.apps.googleusercontent.com"
+                      buttonText="Login"
+                      callback={this.successfullGmailLogin} 
+                    />
+                  </div>
+                </Modal>
               </div>
-              <div style = {{width:'70%', margin:'0 auto', marginTop:'20px'}}>
-                <GoogleLogin
-                  clientId="1038006636920-ilhv28295jr3l244jhvf79u9j115bl9e.apps.googleusercontent.com"
-                  buttonText="Login"
-                  callback={this.successfullGmailLogin} 
-                />
-              </div>
-            </Modal>
-          </div>
         );
     }
 });

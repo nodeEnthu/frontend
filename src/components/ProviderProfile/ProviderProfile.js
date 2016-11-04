@@ -14,6 +14,7 @@ import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Scroll from 'react-scroll'
 import Modal from 'react-modal';
+import { Link, IndexLink } from 'react-router';
 
 const customStyles = {
     content: {
@@ -157,7 +158,9 @@ const ProviderProfile = React.createClass({
         rating:review.rating,
         review:review.review
       }
-      this.props.postSecuredData('/api/providers/foodItem/review',review,'SUBMIT_REVIEW',combinedQuery);
+      this.props.postSecuredData('/api/foodItem/'+review.item._id+'/review',review,'SUBMIT_REVIEW',combinedQuery);
+      // close the modal
+      this.closeModal();
     }else{
       // check whether start rating or review is empty
       if(!review.review){
@@ -301,6 +304,11 @@ const ProviderProfile = React.createClass({
                                       <div className={classNames(classes["move-center"],classes["review-submit-link"])}
                                         onClick={()=>this.writeReviewModal(foodItem)}>
                                         Please submit a review
+                                      </div>
+                                      <div className={classNames(classes["move-center"],classes["review-submit-link"])}>
+                                        <Link to={'/foodItem/'+foodItem._id+'/reviews'} className="pure-menu-link">
+                                          See all reviews
+                                        </Link>
                                       </div>
                                       <RaisedButton
                                         labelPosition="before"
