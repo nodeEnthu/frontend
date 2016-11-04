@@ -19,14 +19,15 @@ const ReviewsPage= React.createClass({
 									}}>
 									<div className = "pure-u-1" style={{marginBottom:'-20px'}}>
 										<StarRatingComponent 
-											name="rate2" 
+											name={review._id}
 											editing={false}
-											renderStarIcon={() => <span>&#11088;</span>}
 											starCount={5}
-											value={review.rating}
-											/>
+											value={parseInt(review.rating)}
+										/>
 									</div>
-									{review.review}
+									<div style={{padding:'0.5em'}}>
+										{review.review}
+									</div>
 									<div>
 										--&nbsp;{review.creatorName} &nbsp;&nbsp;{new Date(review.reviewDate).toDateString()}
 									</div>

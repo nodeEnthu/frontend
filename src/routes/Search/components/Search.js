@@ -1,8 +1,7 @@
 import React from 'react'
-import Counter from 'components/Counter'
 import { CUISINE_TYPES, DIET_TYPES, RADIUS_OPTIONS, ORDER_TYPE } from './../constants/searchFilters'
 import Carousel from 'nuka-carousel'
-import classes from './counter.scss'
+import classes from './search.scss'
 import classNames from 'classnames'
 import StarRatingComponent from 'react-star-rating-component';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -12,7 +11,7 @@ import Select from 'react-select';
 import DatePicker from 'material-ui/DatePicker';
 
 
-const CounterWrapper = React.createClass({
+const Search = React.createClass({
     getInitialState() {
         return {
             pageNum: 1,
@@ -60,9 +59,9 @@ const CounterWrapper = React.createClass({
         let combinedQuery = {};
         const {place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
         combinedQuery.guestLocation = {'place_id':place_id};
-        combinedQuery.cuisineSelectedMap = this.props.counter.get('cuisineSelectedMap').toJS();
-        combinedQuery.dietSelectedMap = this.props.counter.get('dietSelectedMap').toJS();
-        combinedQuery.addtnlQuery = this.props.counter.get('addtnlQuery').toJS();
+        combinedQuery.cuisineSelectedMap = this.props.search.get('cuisineSelectedMap').toJS();
+        combinedQuery.dietSelectedMap = this.props.search.get('dietSelectedMap').toJS();
+        combinedQuery.addtnlQuery = this.props.search.get('addtnlQuery').toJS();
         combinedQuery.filterspageNum = this.state.pageNum;
         return combinedQuery;
     },
@@ -76,7 +75,7 @@ const CounterWrapper = React.createClass({
     	this.fetchQueryData();
     },
     selectDietType(dietTypes) {
-        const dietSelectedMap = this.props.counter.get('dietSelectedMap').toJS();
+        const dietSelectedMap = this.props.search.get('dietSelectedMap').toJS();
         let newDietsSelected = [];
         /* 
          * get the one which was most recently added or removed from the list
@@ -118,7 +117,7 @@ const CounterWrapper = React.createClass({
     	this.props.history.push('/providerProfile/'+foodItem._creator)
     },
     render() {
-        let { data, addtnlQuery, dietSelectedMap } = this.props.counter.toJS();
+        let { data, addtnlQuery, dietSelectedMap } = this.props.search.toJS();
         const { pageNum } = this.state;
         let resolvedData = [];
         for (let i = 0; i < data.length; i++) {
@@ -165,7 +164,7 @@ const CounterWrapper = React.createClass({
 						{CUISINE_TYPES.map((cuisine,index)=>{
 							return <img alt={cuisine.type} 
 										key={index}
-										src={(this.props.counter.get('cuisineSelectedMap').get(cuisine.type))? '/selection/dark-green-check-mark-md.svg': undefined}
+										src={(this.props.search.get('cuisineSelectedMap').get(cuisine.type))? '/selection/dark-green-check-mark-md.svg': undefined}
 										name={cuisine.type}
 										style={
 											{
@@ -246,15 +245,14 @@ const CounterWrapper = React.createClass({
 											    		<div>
 											    			<div className={classes["provider-star-rating"]}>
 													    		<StarRatingComponent 
-										                            name="rate2" 
+										                            name={foodItem._id} 
 										                            editing={false}
-										                            renderStarIcon={() => <span>&#11088;</span>}
 										                            starCount={5}
-										                            value={4}
+										                            value={foodItem.rating}
 										                         />
 									                         </div>
 									                         <div className={classes["num-of-reviews"]}>
-									                         	(45)
+									                         	{(foodItem.numOfReviews)? foodItem.numOfReviews+' review': undefined}
 									                         </div>
 									                         <div className={classes["miles-away"]}><span>{foodItem.distance}</span><span>mi</span></div>
 											    		</div>
@@ -320,7 +318,7 @@ const CounterWrapper = React.createClass({
         );
     }
 })
-CounterWrapper.propTypes = {
+Search.propTypes = {
     globalState: React.PropTypes.object.isRequired,
     addressChange: React.PropTypes.bool.isRequired,
     flushOutStaleData: React.PropTypes.func.isRequired,
@@ -328,7 +326,7 @@ CounterWrapper.propTypes = {
     fetchMayBeSecuredData: React.PropTypes.func.isRequired,
     selectCuisineOrDiet: React.PropTypes.func.isRequired,
     selectAddtnlQuery: React.PropTypes.func.isRequired,
-    counter: React.PropTypes.object.isRequired
+    search: React.PropTypes.object.isRequired
 };
 
-export default CounterWrapper;
+export default Search;

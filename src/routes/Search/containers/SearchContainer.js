@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import {selectCuisineOrDiet,flushOutStaleData,selectAddtnlQuery } from '../modules/counter'
+import {selectCuisineOrDiet,flushOutStaleData,selectAddtnlQuery } from '../modules/search'
 import {fetchMayBeSecuredData} from 'utils/actionUtils/defaultHttpActions';
 import { userAddressUpdateDetect } from '../../../layouts/CoreLayout/coreReducer'
  
@@ -8,7 +8,7 @@ import { userAddressUpdateDetect } from '../../../layouts/CoreLayout/coreReducer
     wiring in the actions and state necessary to render a presentational
     component - in this case, the counter:   */
 
-import CounterWrapper from 'routes/Counter/components/Counter'
+import Search from 'routes/Search/components/Search'
 
 /*  Object of action creators (can also be function that returns object).
     Keys will be passed as props to presentational components. Here we are
@@ -24,22 +24,8 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state) => ({
   globalState:state,
-  counter: state.counter,
+  search: state.search,
   addressChange:state.core.get('userAddressSearch').get('newAddress')
 })
 
-/*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
-
-    import { createSelector } from 'reselect'
-    const counter = (state) => state.counter
-    const tripleCount = createSelector(counter, (count) => count * 3)
-    const mapStateToProps = (state) => ({
-      counter: tripleCount(state)
-    })
-
-    Selectors can compute derived data, allowing Redux to store the minimal possible state.
-    Selectors are efficient. A selector is not recomputed unless one of its arguments change.
-    Selectors are composable. They can be used as input to other selectors.
-    https://github.com/reactjs/reselect    */
-
-export default connect(mapStateToProps, mapDispatchToProps)(CounterWrapper)
+export default connect(mapStateToProps, mapDispatchToProps)(Search)

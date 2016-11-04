@@ -26,7 +26,7 @@ const HomeView = React.createClass({
     goToPage(page) {
     	let self = this;
     	this.state.showBackDrop = true;
-        if (page === 'counter') {
+        if (page === 'search') {
         	if(this.props.globalState.core.get('userLoggedIn')){
         		const {searchText,place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
         		//register this at a new location if possible as the user needs to be logged in for this
@@ -92,7 +92,7 @@ const HomeView = React.createClass({
 							        	setPlaceId:this.props.userAddressUpdatePlaceId,
 							        	detectChange:this.props.userAddressUpdateDetect,
 							        	globalState:this.props.globalState,
-							        	onSuggestionSelected:()=>this.goToPage('counter')
+							        	onSuggestionSelected:()=>this.goToPage('search')
 							        }}/>
 							        <IconButton
 							        	style = {{
@@ -115,7 +115,7 @@ const HomeView = React.createClass({
 							        />
 							        <p className={classes["is-center"]}>
 							        	<button className="pure-button pure-button-primary"
-							        		onClick={()=>this.goToPage('counter')}>
+							        		onClick={()=>this.goToPage('search')}>
 							        		Get Started
 							        	</button>
 							        </p>

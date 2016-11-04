@@ -39,7 +39,6 @@ const ProviderProfile = React.createClass({
       };
   },
   componentDidMount() {
-      // (url_to_call, state_property_to_change,action_name_to_be_appended)
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall','PROVIDER');
   },
   componentDidUpdate() {
@@ -120,7 +119,6 @@ const ProviderProfile = React.createClass({
   },
   updateReview(event){
     let newValue = event.target.value;
-    console.log(newValue);
     this.props.submitTypedReview(newValue);
   },
   reviewFocus(event){
@@ -218,15 +216,6 @@ const ProviderProfile = React.createClass({
                 <div className="pure-u-1">
                   <img className = {classes["profile-img"]}src={StaffImg}/>
                 </div>
-               <div className = "pure-u-1" style={{marginBottom:'-20px'}}>
-                  <StarRatingComponent 
-                    name="rate2" 
-                    editing={false}
-                    renderStarIcon={() => <span>&#11088;</span>}
-                    starCount={5}
-                    value={3}
-                  />
-                </div>
                 <IconButton><CommunicationEmail/></IconButton>
                 <IconButton><CommunicationCall/></IconButton>
                 <IconButton><CommunicationChat/></IconButton>
@@ -259,12 +248,24 @@ const ProviderProfile = React.createClass({
                   { 
                     data.foodItems.map((foodItem)=>{
                       return <div key={foodItem._id}>
-
                                 <section className={classes["post"]}>
                                   <div>
                                     <div className="pure-u-md-3-5">
                                       <header className={classes["post-header"]}>
-                                        <h2 className={classes["post-title"]}>{foodItem.name}</h2>
+                                        <h2 className={classes["post-title"]} style={{display:'inline-block'}}>{foodItem.name}</h2>
+                                          <div
+                                            style={{display:'inline-block', padding:'0 0.5em'}}
+                                          >
+                                            <StarRatingComponent
+                                              name={foodItem._id} 
+                                              editing={false}
+                                              starCount={5}
+                                              value={parseInt(foodItem.rating)}
+                                            />
+                                          </div>
+                                          <Link to={'/foodItem/'+foodItem._id+'/reviews'} style={{display:'inline-block'}}>
+                                            {foodItem.numOfReviews+ ' reviews'}
+                                          </Link>
                                       </header>
                                       <div className={classes["post-description"]}>
                                           <p>{foodItem.description}</p>
@@ -306,9 +307,6 @@ const ProviderProfile = React.createClass({
                                         Please submit a review
                                       </div>
                                       <div className={classNames(classes["move-center"],classes["review-submit-link"])}>
-                                        <Link to={'/foodItem/'+foodItem._id+'/reviews'} className="pure-menu-link">
-                                          See all reviews
-                                        </Link>
                                       </div>
                                       <RaisedButton
                                         labelPosition="before"
@@ -392,7 +390,6 @@ const ProviderProfile = React.createClass({
                                             </table>
                                           </div>
                                         </div>
-
                                       </div>
                                     </div>
                                   </form>
