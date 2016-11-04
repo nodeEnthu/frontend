@@ -67,9 +67,6 @@ const ProviderProfile = React.createClass({
       smooth: true,
     })
   },
-  componentWillUnmount() {
-      this.props.removeAllCheckedOutItems();  
-  },
   render() {
     const {providerProfileCall} = this.props.providerProfile.toJS();
     let data = providerProfileCall.data;
@@ -98,19 +95,6 @@ const ProviderProfile = React.createClass({
           </div>
           <div className = { classNames(classes["content"], "pure-u-1")}>
             <div>
-              {/*<div style ={{textAlign:"center"}}>
-                {
-                  (resolvedItemsCheckedOut && resolvedItemsCheckedOut.length>0)?
-                    <RaisedButton
-                      label="Checkout"
-                      style={{width:'30%'}}
-                      secondary={true}
-                      onClick={this.checkoutLinkClick}
-                    />
-                    :
-                    undefined
-                }
-              </div>*/}
               <div className={classes["posts"]}>
                   <h1 className={classes["content-subhead"]}>Menu Items</h1>
                   { 
