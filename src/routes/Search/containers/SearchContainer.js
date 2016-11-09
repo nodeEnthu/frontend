@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
 import {selectCuisineOrDiet,flushOutStaleData,selectAddtnlQuery } from '../modules/search'
 import {fetchMayBeSecuredData} from 'utils/actionUtils/defaultHttpActions';
-import { userAddressUpdateDetect } from '../../../layouts/CoreLayout/coreReducer'
  
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -18,7 +17,6 @@ const mapDispatchToProps = {
   fetchMayBeSecuredData,
   flushOutStaleData,
   selectCuisineOrDiet,
-  userAddressUpdateDetect,
   selectAddtnlQuery
 }
 

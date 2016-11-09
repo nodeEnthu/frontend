@@ -75,7 +75,7 @@ export function addProviderEntryState(obj) {
 // ------------------------------------
 const ACTION_HANDLERS = {
     [Add_Provider_Info]: (state, action) => {
-        //console.log(" reducer Add_Provider_Info is invoked with ", action);
+        console.log(" reducer Add_Provider_Info is invoked with ", action);
         return state.setIn(['providerEntryForm', action.storeKey], action.payload)
     },
     [Add_Provider_Error_Msg]: (state, action) => {
@@ -116,7 +116,7 @@ const initialState =
             place_id: '',
             keepAddressPrivateFlag: false,
             includeAddressInEmail:true,
-            emailId: '',
+            email: '',
             pickUpFlag:true,
             pickUpAddtnlComments:'',
             doYouDeliverFlag:false,
@@ -125,7 +125,7 @@ const initialState =
             deliveryAddtnlComments:'',
             allClear: false,
             titleErrorMsg: '',
-            emailIdErrorMsg: '',
+            emailErrorMsg: '',
             descriptionErrorMsg: '',
             providerAddressJustificationModalOpen:false
         }),

@@ -24,43 +24,17 @@ class AsyncAutocomplete extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            value: props.settings.userSearchText.get('searchText'),
-            onFocusProp:props.settings.onFocus,
-            onBlurProp:props.settings.onBlur,
-            name:props.settings.name,
-            suggestions: [],
-            isLoading: false,
-            apiUrl: props.settings.apiUrl,
-            changeGlobalState: props.settings.action,
-            changeGlobalPlaceId: props.settings.setPlaceId,
-            detectChange:props.settings.detectChange,
-            globalState:props.settings.globalState,
-            onSuggestionSelected:props.settings.onSuggestionSelected
-        };
-
-        this.onChange = this.onChange.bind(this);
-        this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
-        this.debouncedLoadSuggestions = debounce(this.loadSuggestions, 500);
-        this.getSuggestionValue = this.getSuggestionValue.bind(this);
-    }
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            value: nextProps.settings.userSearchText.get('searchText')
-        });
-    }
-    getSuggestionValue(suggestion) {
-        this.state.changeGlobalPlaceId(suggestion.place_id);
-        if(this.state.detectChange){
-             this.state.detectChange(true);
+            suggestions:[],
         }
-        return suggestion.address;
+        this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
+        this.debouncedLoadSuggestions = debounce(this.loadSuggestions, 500);        
     }
     loadSuggestions(value) {
         let self = this;
         this.setState({
             isLoading: true
         });
-        getCall(this.state.apiUrl, { searchText: value })
+        getCall(this.props.apiUrl, { searchText: value })
             .then(function(resolvedResponse) {
                 let result = [];
                 // greater than 5 take first 5
@@ -86,9 +60,6 @@ class AsyncAutocomplete extends React.Component {
             this.loadSuggestions(value);
         }
     }
-    onChange(event, { newValue }) {
-        this.state.changeGlobalState(newValue);
-    }
     onSuggestionsUpdateRequested({ value, reason }) {
         if (value && value.length > 2) {
             this.getSuggestions(value, {
@@ -97,21 +68,20 @@ class AsyncAutocomplete extends React.Component {
         }
     }
     render() {
-        const { value, suggestions, isLoading,onFocusProp,onBlurProp,name } = this.state;
+        const {suggestions} = this.state;
         const inputProps = {
-            name,
-            onFocus:onFocusProp,
-            onBlur:onBlurProp,
+            name:this.props.name,
             placeholder: "street address",
-            value,
-            onChange: this.onChange
+            value:this.props.userSearchText,
+            onChange: this.props.onChange
         };
         return (
             <Autosuggest suggestions={suggestions}
-                           onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                           getSuggestionValue={this.getSuggestionValue}
-                           renderSuggestion={renderSuggestion}
-                           inputProps={inputProps}
+                         onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+                         getSuggestionValue={this.props.getSuggestionValue}
+                         renderSuggestion={renderSuggestion}
+                         inputProps={inputProps}
+                         onSuggestionSelected={this.props.onSuggestionSelected}
             />
         );
     }

@@ -5,6 +5,9 @@ export const CUISINE_TYPES = [{
     type: 'american',
     src: 'cuisines/american.jpeg'
 }, {
+    type: 'indian',
+    src: 'cuisines/indian.jpeg'
+}, {
     type: 'african',
     src: 'cuisines/african.jpg'
 }, {
@@ -28,9 +31,6 @@ export const CUISINE_TYPES = [{
 }, {
     type: 'viatnamese',
     src: 'cuisines/viatnamese.jpeg'
-}, {
-    type: 'indian',
-    src: 'cuisines/indian.jpeg'
 }]
 
 export const DIET_TYPES = [{

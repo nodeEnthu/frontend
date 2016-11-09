@@ -1,7 +1,8 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-import { Map, List } from 'immutable'
+import { Map, List } from 'immutable';
+export const MAX_COUNT_PROVIDER_DESC = 100;
 export const REQUEST_DATA_PROVIDER = "REQUEST_DATA_PROVIDER";
 export const FAIL_DATA_PROVIDER = "FAIL_DATA_PROVIDER";
 export const RECEIVE_DATA_PROVIDER = "RECEIVE_DATA_PROVIDER";
@@ -25,6 +26,8 @@ export const OPEN_MODAL = "OPEN_MODAL";
 export const REQUEST_DATA_SUBMIT_REVIEW = "REQUEST_DATA_ORDER_SUBMIT";
 export const FAIL_DATA_SUBMIT_REVIEW = "FAIL_DATA_SUBMIT_REVIEW";
 export const RECEIVE_DATA_SUBMIT_REVIEW = "RECEIVE_DATA_SUBMIT_REVIEW";
+
+
 
 // ------------------------------------
 // Actions
@@ -157,6 +160,11 @@ const initialState = Map({
         error:false,
         data:undefined
     }),
+    providerEntryEditForm: {
+        isLoading:false,
+        error:false,
+        data:undefined
+    },
     reviewSubmitModalOpen:false,
     orderSubmitModalOpen:false
 })

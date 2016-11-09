@@ -14,6 +14,13 @@ import FoodItemEntryForm from '../../../components/FoodItemEntryForm/FoodItemEnt
 
 class Provider extends React.Component {
   state = this.props.providerEntryState.toJS();
+  onAllClear=()=>{
+    const stepIndex = this.props.providerEntryState.get('stepIndex');
+    this.props.addProviderEntryState({
+      storeKey: "stepIndex",
+      payload:stepIndex +1
+    });
+  };
   handleNext = () => {
     if(this.props.providerEntryState.get('stepIndex')===0){
       this.refs.providerform.formSubmit();
@@ -22,7 +29,6 @@ class Provider extends React.Component {
       this.refs.foodItemEntryForm.formSubmit();
     }
   };
-
   handlePrev = () => {
    const stepIndex = this.props.providerEntryState.get('stepIndex');
     if (!this.props.providerEntryState.get('loading')) {
@@ -42,15 +48,9 @@ class Provider extends React.Component {
       case 0:
         return (
           <div>
-            <p>
-              Please give a brief history about your cooking skills along with a picture showcasing you/your business.
-            </p>
-            <div className={classes["is-center"]}>
-                <ImageUploader/>
-            </div>
-            <ProviderEntryForm {...this.props} ref="providerform"/>
+            <ProviderEntryForm {...this.props} onAllClear = {this.onAllClear} ref="providerform"/>
           </div>
-            
+          
         );
       case 1:
         return (
@@ -61,7 +61,7 @@ class Provider extends React.Component {
             <div className={classes["is-center"]}>
                 <ImageUploader/>
             </div>
-            <FoodItemEntryForm {...this.props} ref="foodItemEntryForm"/>
+            <FoodItemEntryForm {...this.props} onAllClear = {this.onAllClear} ref="foodItemEntryForm"/>
           </div>
         );
       case 2:

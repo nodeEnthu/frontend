@@ -12,7 +12,7 @@ import Snackbar from 'material-ui/Snackbar';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Chip from 'material-ui/Chip';
 import { securedPostCall, securedGetCall } from 'utils/httpUtils/apiCallWrapper';
-import { CUISINE_TYPES} from './../../routes/Counter/constants/searchFilters'
+import { CUISINE_TYPES} from './../../routes/Search/constants/searchFilters'
 const maxCount = 100;
 
 const FoodItemEntryForm= React.createClass({
@@ -103,7 +103,6 @@ const FoodItemEntryForm= React.createClass({
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
-        console.log(input,stateKeyName);
         this.props.addFoodItemInfo({
             storeKey: stateKeyName,
             payload: input
@@ -115,7 +114,7 @@ const FoodItemEntryForm= React.createClass({
         for (let key in this.mapFieldsToValidationType) {
             if (this.mapFieldsToValidationType.hasOwnProperty(key)) {
                 let errorMsg = this.mapFieldsToValidationType[key](this.props.foodItemEntryForm.get(key));
-                console.log(errorMsg + '  for key: ' + key + '  whose value is ' + this.props.foodItemEntryForm.get(key));
+                //console.log(errorMsg + '  for key: ' + key + '  whose value is ' + this.props.foodItemEntryForm.get(key));
                 if (errorMsg) {
                     noErrorsInform = false;
                     let errorStateKey = [key] + 'ErrorMsg';

@@ -27,7 +27,6 @@ const initialState = Map({
     userAddressSearch: Map({
         searchText: '',
         place_id: '',
-        newAddress:false
     })
 })
 
@@ -72,12 +71,7 @@ export function userAddressUpdatePlaceId(val) {
         payload: val
     }
 }
-export function userAddressUpdateDetect(val) {
-    return {
-        type: USER_ADDRESS_UPDATE_DETECT,
-        payload:val
-    }
-}
+
 
 
 const ACTION_HANDLERS = {
@@ -103,9 +97,6 @@ const ACTION_HANDLERS = {
     },
     [USER_ADDRESS_UPDATE_PLACE_ID]: (state, action) => {
         return state.updateIn(['userAddressSearch', 'place_id'], value => action.payload);
-    },
-    [USER_ADDRESS_UPDATE_DETECT]: (state, action) => {
-        return state.updateIn(['userAddressSearch', 'newAddress'], value => action.payload);
     }
 }
 

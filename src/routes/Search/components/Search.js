@@ -30,20 +30,9 @@ const Search = React.createClass({
     },
     // defaults for the first time you load the page 
     componentDidMount() {
-        // check  whether the search address has changed and if yes then flush out the old data in store
-        if (this.props.addressChange) {
-            this.props.flushOutStaleData();
-            this.props.userAddressUpdateDetect(false);
-        }
+        this.props.flushOutStaleData();       
         let combinedQuery = this.createQuery();
-        // if user is logged in then that means the most recent address is updated in the db ... no need to pass latitude longitude
-        if ((this.props.globalState.core.get('userLoggedIn') && this.props.addressChange) ||    // user is logged in and address change is detected
-        	(combinedQuery.guestLocation.place_id && this.props.addressChange)	// user is not logged in and we are carrying place_id from home page
-        	) {
-            this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery);
-        } else{
-    
-        }
+        this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery);
     },
     loadMore() {
        	let newPageNum = this.state.pageNum + 1;
@@ -320,9 +309,7 @@ const Search = React.createClass({
 })
 Search.propTypes = {
     globalState: React.PropTypes.object.isRequired,
-    addressChange: React.PropTypes.bool.isRequired,
     flushOutStaleData: React.PropTypes.func.isRequired,
-    userAddressUpdateDetect: React.PropTypes.func.isRequired,
     fetchMayBeSecuredData: React.PropTypes.func.isRequired,
     selectCuisineOrDiet: React.PropTypes.func.isRequired,
     selectAddtnlQuery: React.PropTypes.func.isRequired,

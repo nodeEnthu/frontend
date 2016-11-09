@@ -7,25 +7,22 @@ import Modal from 'react-modal';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import AsyncAutocomplete from 'components/AsyncAutocomplete'
+import ImageUploader from 'components/ImageUploader'
+
 
 const maxCount = 100;
-class ProviderEntryForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = this.props.providerEntryForm;
-        this.mapFieldsToValidationType = {
-            title: required,
-            emailId: email,
-            description: maxLength,
-            searchText:required
-        }
-        this.handleChange = this.handleChange.bind(this);
-        this.handleFocus = this.handleFocus.bind(this);
-        this.formSubmit = this.formSubmit.bind(this);
-        this.changeStoreVal = this.changeStoreVal.bind(this);
-        this.toggle = this.toggle.bind(this);
-        this.validateForm = this.validateForm.bind(this);
-    }
+const ProviderEntryForm = React.createClass({
+    componentDidMount() {
+        if (this.props.id){
+            // that means its an edit and we should make an ajax call to prefil data
+        }  
+    },
+    mapFieldsToValidationType : {
+        title: required,
+        email: email,
+        description: maxLength,
+        searchText:required
+    },
     handleChange(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
@@ -50,13 +47,13 @@ class ProviderEntryForm extends React.Component {
             payload:input
         })
        
-    }
+    },
     toggle(storeKey) {
         this.props.addProviderInfo({
             storeKey: storeKey,
             payload:!this.props.providerEntryForm.get(storeKey)
         })
-    }
+    },
     handleFocus(event) {
         let stateKeyName = event.target.name;
         if (stateKeyName) {
@@ -67,18 +64,7 @@ class ProviderEntryForm extends React.Component {
                 payload:null
             });
         }
-    }
-    setCount(event) {
-        let input = event.target.value;
-        let stateKeyName = event.target.name;
-        this.setState({
-            description: input,
-            chars_left: maxCount - input.length
-        })
-        this.props.providerEntryForm.chars_left = maxCount - input.length; // hacky 
-        this.props.providerEntryForm.description = input; // hacky 
-    }
-
+    },
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
@@ -86,7 +72,7 @@ class ProviderEntryForm extends React.Component {
                 storeKey:stateKeyName,
                 payload:input
             });
-    }
+    },
     validateForm(){
         let self = this;
         let noErrorsInform = true;
@@ -104,19 +90,15 @@ class ProviderEntryForm extends React.Component {
             }
         }
         return noErrorsInform;
-    }
+    },
     formSubmit(event) {
         if(this.validateForm()){
-            let token = sessionStorage.getItem('token');
             securedPostCall('/api/providers/registration' , this.props.providerEntryForm.toJS());
-            this.props.addProviderEntryState({
-                storeKey: "stepIndex",
-                payload:1
-            });
+            this.props.onAllClear();
         }
-    }
+    },
     render() {
-        let { chars_left, title, description, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg } = this.props.providerEntryForm.toJS();
+        let { chars_left, title, description, email, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg } = this.props.providerEntryForm.toJS();
         const styles = {
           block: {
             maxWidth: 250,
@@ -127,6 +109,12 @@ class ProviderEntryForm extends React.Component {
         };
         return (
             <div>
+                <p>
+                    Please give a brief history about your cooking skills along with a picture showcasing you/your business.
+                </p>
+                <div className={classes["is-center"]}>
+                    <ImageUploader/>
+                </div>
                 <form className="pure-form pure-form-stacked">
                     <fieldset className="pure-group">
                         <input type="text"  className="pure-u-1" placeholder="*title" name="title" value={this.props.providerEntryForm.get('title')}
@@ -145,12 +133,12 @@ class ProviderEntryForm extends React.Component {
                         <div>{chars_left}/100</div>
                     </fieldset>
                     <fieldset className="pure-group">
-                        <input type="text" name="emailId" placeholder="*email" style = {{marginBottom:0.5+'em'}} value={emailId}
+                        <input type="text" name="email" placeholder="*email" style = {{marginBottom:0.5+'em'}} value={email}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus}
                             onChange={this.changeStoreVal}
                             className={"pure-u-1"}/>
-                        <span className = {classes["error-message"]}>{(emailIdErrorMsg)?'*'+emailIdErrorMsg:undefined}</span>
+                        <span className = {classes["error-message"]}>{(emailErrorMsg)?'*'+emailErrorMsg:undefined}</span>
                     </fieldset>
                     <fieldset className="pure-group">
                         <legend className={classes["pull-left"]}>
@@ -334,9 +322,8 @@ class ProviderEntryForm extends React.Component {
             </div>
         )
     }
-}
+});
 ProviderEntryForm.propTypes = {
-    providerEntryState: React.PropTypes.object.isRequired,
     providerEntryForm: React.PropTypes.object.isRequired
 };
 export default ProviderEntryForm;

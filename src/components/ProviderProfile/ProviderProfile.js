@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {Map} from 'immutable'
 import classes from './providerProfile.scss'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import classNames from 'classnames';
@@ -11,11 +12,13 @@ import StarRatingComponent from 'react-star-rating-component';
 import CommunicationEmail from 'material-ui/svg-icons/communication/email';
 import CommunicationCall from 'material-ui/svg-icons/communication/call';
 import CommunicationChat from 'material-ui/svg-icons/communication/chat';
+import ContentCreate from 'material-ui/svg-icons/content/create';
+import ProviderEntryForm from 'components/ProviderEntryForm/ProviderEntryForm'
 import ActionPermContactCalendar from 'material-ui/svg-icons/action/perm-contact-calendar';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link, IndexLink } from 'react-router';
-
+import Modal from 'react-modal';
 
 const ProviderProfile = React.createClass({
   getInitialState() {
@@ -68,7 +71,7 @@ const ProviderProfile = React.createClass({
     })
   },
   render() {
-    const {providerProfileCall} = this.props.providerProfile.toJS();
+    const {providerProfileCall,providerEditModalOpen} = this.props.providerProfile.toJS();
     let data = providerProfileCall.data;
     let self = this;
     const {user} = this.props.globalState.core.toJS();
@@ -153,6 +156,13 @@ const ProviderProfile = React.createClass({
                                       </div>
                                     </div>
                                     <div className={classNames(classes["post-avatar"],"pure-u-md-2-5")}>
+                                      <div className={classes["move-right"]}>
+                                         <IconButton
+                                           onClick = {this.editProviderModal}
+                                          >
+                                          <ContentCreate/>
+                                        </IconButton>
+                                      </div>
                                       <img alt={foodItem.name} className = {classes["food-item"]} src={foodItem.img}/>
                                       <div className={classNames(classes["move-center"],classes["review-submit-link"])}
                                         onClick={()=>this.writeReviewModal(foodItem)}>
@@ -175,7 +185,7 @@ const ProviderProfile = React.createClass({
                 }
               </div>
               <Element name="checkoutsection"/>
-              <Checkout{... this.props}/> 
+              <Checkout{... this.props}/>
               <div className={classes["footer"]}>
                   <div className="pure-menu pure-menu-horizontal">
                       <ul>
