@@ -109,7 +109,6 @@ const initialState =
             stepIndex: 0
         }),
         providerEntryForm: Map({
-            chars_left: MAX_COUNT_PROVIDER_DESC,
             title: '',
             description: '',
             searchText: '',

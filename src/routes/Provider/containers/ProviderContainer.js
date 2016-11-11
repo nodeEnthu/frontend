@@ -1,7 +1,5 @@
 import { connect } from 'react-redux'
-import {
-    
-} from '../modules/provider'
+import {userAddressSearchChange} from './../../../layouts/CoreLayout/coreReducer'
 import {
     charsLeft,
     addProviderInfo,
@@ -33,6 +31,8 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => ({
+    globalState:state,
+    userAddressSearchChange:userAddressSearchChange,
     providerEntryForm: state.provider.get('providerEntryForm'),
     providerEntryState: state.provider.get('providerEntryState'),
     foodItemEntryForm: state.provider.get('foodItemEntryForm')

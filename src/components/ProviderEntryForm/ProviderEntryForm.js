@@ -13,9 +13,8 @@ import ImageUploader from 'components/ImageUploader'
 const maxCount = 100;
 const ProviderEntryForm = React.createClass({
     componentDidMount() {
-        if (this.props.id){
-            // that means its an edit and we should make an ajax call to prefil data
-        }  
+        //make an ajax call to get data
+        
     },
     mapFieldsToValidationType : {
         title: required,
@@ -72,6 +71,16 @@ const ProviderEntryForm = React.createClass({
                 storeKey:stateKeyName,
                 payload:input
             });
+    },
+    onSuggestionSelected(event,{suggestion}){
+        this.props.addProviderInfo({
+            storeKey:'searchText',
+            payload:suggestion.address
+        });
+        this.props.addProviderInfo({
+            storeKey:'place_id',
+            payload:suggestion.place_id
+        });
     },
     validateForm(){
         let self = this;
@@ -158,21 +167,15 @@ const ProviderEntryForm = React.createClass({
                                 </a> 
                             </div>  
                         </legend>
-                        <AsyncAutocomplete settings={{
-                                        name:'searchText',
-                                        onBlur: this.handleChange,
-                                        onFocus:this.handleFocus,
-                                        userSearchText : this.props.providerEntryForm,
-                                        apiUrl:'/api/locations/addressTypeAssist',
-                                        action:(address)=>this.props.addProviderInfo({
-                                                                                        storeKey:'searchText',
-                                                                                        payload:address
-                                                                                    }),
-                                        setPlaceId:(placeId)=>this.props.addProviderInfo({
-                                                                                        storeKey:'place_id',
-                                                                                        payload:placeId
-                                                                                    })
-                                    }}/>
+                        <AsyncAutocomplete  name='searchText'
+                                            onBlur= {this.handleChange}
+                                            onFocus={this.handleFocus}
+                                            userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
+                                            apiUrl={'/api/locations/addressTypeAssist'}
+                                            getSuggestionValue={(suggestion)=>suggestion.address}
+                                            onChange = {(event, value)=>this.props.userAddressSearchChange(value.newValue)}
+                                            onSuggestionSelected = {this.onSuggestionSelected}
+                        />
                         <span className = {classes["error-message"]}>{(searchTextErrorMsg)?'*'+searchTextErrorMsg:undefined}</span>
                     </fieldset>
                     {(keepAddressPrivateFlag)?
@@ -324,6 +327,8 @@ const ProviderEntryForm = React.createClass({
     }
 });
 ProviderEntryForm.propTypes = {
-    providerEntryForm: React.PropTypes.object.isRequired
+    globalState:React.PropTypes.object.isRequired,
+    providerEntryForm: React.PropTypes.object.isRequired,
+    userAddressSearchChange:React.PropTypes.func.isRequired
 };
 export default ProviderEntryForm;

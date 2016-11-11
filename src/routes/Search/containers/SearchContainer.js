@@ -23,7 +23,6 @@ const mapDispatchToProps = {
 const mapStateToProps = (state) => ({
   globalState:state,
   search: state.search,
-  addressChange:state.core.get('userAddressSearch').get('newAddress')
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search)
