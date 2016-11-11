@@ -13,8 +13,11 @@ import ImageUploader from 'components/ImageUploader'
 const maxCount = 100;
 const ProviderEntryForm = React.createClass({
     componentDidMount() {
-        //make an ajax call to get data
-        
+        // check whether its an edit to an already present provider
+        console.log('this.props.params.id ',this.props.params.id);
+        if(this.props.params.id){
+            this.props.fetchSecuredData('/api/users/'+this.props.params.id , 'providerProfileCall','PROVIDER_PROFILE');
+        }
     },
     mapFieldsToValidationType : {
         title: required,
@@ -329,6 +332,7 @@ const ProviderEntryForm = React.createClass({
 ProviderEntryForm.propTypes = {
     globalState:React.PropTypes.object.isRequired,
     providerEntryForm: React.PropTypes.object.isRequired,
-    userAddressSearchChange:React.PropTypes.func.isRequired
+    userAddressSearchChange:React.PropTypes.func.isRequired,
+    fetchSecuredData:React.PropTypes.func.isRequired
 };
 export default ProviderEntryForm;

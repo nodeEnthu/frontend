@@ -157,11 +157,9 @@ const ProviderProfile = React.createClass({
                                     </div>
                                     <div className={classNames(classes["post-avatar"],"pure-u-md-2-5")}>
                                       <div className={classes["move-right"]}>
-                                         <IconButton
-                                           onClick = {this.editProviderModal}
-                                          >
-                                          <ContentCreate/>
-                                        </IconButton>
+                                        
+                                          <Link to={'/providers/'+user._id+'/edit'}>Edit profile</Link>
+                                         
                                       </div>
                                       <img alt={foodItem.name} className = {classes["food-item"]} src={foodItem.img}/>
                                       <div className={classNames(classes["move-center"],classes["review-submit-link"])}

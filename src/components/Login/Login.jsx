@@ -44,7 +44,6 @@ var Login = React.createClass({
     },
     successfullLogin(response) {
         const { dispatch } = this.props;
-       
         postCall('/api/users/signUp', JSON.stringify(response))
             .then(function(result) {
                 if (result.data.token) {

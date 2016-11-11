@@ -1,3 +1,6 @@
+
+import { Map, List } from 'immutable';
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -9,7 +12,8 @@ export const Add_Provider_Entry_State = "Add_Provider_Entry_State"
 export const Add_Food_Item_Info = 'Add_Food_Item_Info'
 export const Remove_Food_Item_Info = 'Remove_Food_Item_Info'
 export const MAX_COUNT_PROVIDER_DESC = 100;
-import { Map, List } from 'immutable'
+
+
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -74,27 +78,11 @@ export function addProviderEntryState(obj) {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-    [Add_Provider_Info]: (state, action) => {
-        console.log(" reducer Add_Provider_Info is invoked with ", action);
-        return state.setIn(['providerEntryForm', action.storeKey], action.payload)
-    },
-    [Add_Provider_Error_Msg]: (state, action) => {
-        //console.log(" reducer Add_Provider_Error_Msg is invoked with ", action);
-        return state.setIn(['providerEntryForm', action.storeKey], action.payload)
-    },
-
-    [Add_Food_Item_Info]: (state, action) => {
-        //console.log(" reducer Add_Food_Item_Info is invoked with ", action);
-        return state.setIn(['foodItemEntryForm', action.storeKey], action.payload)
-    },
-    [Remove_Food_Item_Info]: (state, action) => {
-        return state.setIn(['foodItemEntryForm', 'name'], '')
-                    .setIn(['foodItemEntryForm', 'description'], '')
-    },
-    [Add_Provider_Entry_State]:(state,action)=>{
-        //console.log(" reducer Provider_Entry_State is invoked with ", action);
-        return state.setIn(['providerEntryState', action.storeKey], action.payload)
-    }
+    [Add_Provider_Info]: (state, action) => state.setIn(['providerEntryForm', action.storeKey], action.payload),
+    [Add_Provider_Error_Msg]: (state, action) => state.setIn(['providerEntryForm', action.storeKey], action.payload),
+    [Add_Food_Item_Info]: (state, action) => state.setIn(['foodItemEntryForm', action.storeKey], action.payload),
+    [Remove_Food_Item_Info]: (state, action) => state.setIn(['foodItemEntryForm', 'name'], '').setIn(['foodItemEntryForm', 'description'], ''),
+    [Add_Provider_Entry_State]:(state,action)=>state.setIn(['providerEntryState', action.storeKey], action.payload)
 }
 
 // ------------------------------------

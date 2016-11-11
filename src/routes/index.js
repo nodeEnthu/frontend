@@ -6,6 +6,8 @@ import ProviderRoute from './Provider'
 import ProviderProfilePage from './ProviderProfilePage'
 import Search from './Search'
 import FoodItemReviews from './FoodItemReviews'
+import ProviderProfileEditPage from './ProviderProfileEditPage'
+
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -19,7 +21,8 @@ export const createRoutes = (store) => ({
     ProviderRoute(store),
     ProviderProfilePage(store),
     Search(store),
-    FoodItemReviews(store)
+    FoodItemReviews(store),
+    ProviderProfileEditPage(store)
   ]
 })
 
