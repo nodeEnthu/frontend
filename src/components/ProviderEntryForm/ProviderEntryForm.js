@@ -14,7 +14,6 @@ const maxCount = 100;
 const ProviderEntryForm = React.createClass({
     componentDidMount() {
         // check whether its an edit to an already present provider
-        console.log('this.props.params.id ',this.props.params.id);
         if(this.props.params.id){
             this.props.fetchSecuredData('/api/users/'+this.props.params.id , 'providerProfileCall','PROVIDER_PROFILE');
         }
@@ -103,10 +102,12 @@ const ProviderEntryForm = React.createClass({
         }
         return noErrorsInform;
     },
-    formSubmit(event) {
+    formSubmit() {
+        let self = this;
         if(this.validateForm()){
-            securedPostCall('/api/providers/registration' , this.props.providerEntryForm.toJS());
-            this.props.onAllClear();
+            securedPostCall('/api/providers/registration' , this.props.providerEntryForm.toJS())
+                .then(()=>self.props.onAllClear())
+            
         }
     },
     render() {

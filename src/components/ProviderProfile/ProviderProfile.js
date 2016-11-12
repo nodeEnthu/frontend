@@ -28,6 +28,7 @@ const ProviderProfile = React.createClass({
       };
   },
   componentDidMount() {
+      console.log("Am bein invoked to mount component");
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall','PROVIDER');
   },
   writeReviewModal(foodItem){
@@ -79,6 +80,9 @@ const ProviderProfile = React.createClass({
     return (data && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="pure-g">
           <div className={classNames(classes["sidebar"], "pure-u-1","pure-u-md-1-4")}>
+            <div className={classes["move-right"]}>                   
+              <Link to={'/providers/'+data._id+'/edit'}>Edit profile</Link> 
+            </div>
             <div className={classes["header"]}>
                 <h1 className={classes["brand-title"]}>{data.title}</h1>
                 <div className="pure-u-1">
@@ -156,11 +160,6 @@ const ProviderProfile = React.createClass({
                                       </div>
                                     </div>
                                     <div className={classNames(classes["post-avatar"],"pure-u-md-2-5")}>
-                                      <div className={classes["move-right"]}>
-                                        
-                                          <Link to={'/providers/'+user._id+'/edit'}>Edit profile</Link>
-                                         
-                                      </div>
                                       <img alt={foodItem.name} className = {classes["food-item"]} src={foodItem.img}/>
                                       <div className={classNames(classes["move-center"],classes["review-submit-link"])}
                                         onClick={()=>this.writeReviewModal(foodItem)}>

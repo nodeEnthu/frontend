@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import {userAddressSearchChange} from 'layouts/CoreLayout/coreReducer'
 import {fetchSecuredData} from 'utils/actionUtils/defaultHttpActions'
-
+import {addProviderInfo,addProviderErrorMsg} from './../modules/providerProfileEditPage'
 import { fromJS } from 'immutable'
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -17,7 +17,9 @@ import ProviderProfileEditPage from '../components/ProviderProfileEditPage'
 
 const mapActionCreators = {
     fetchSecuredData,
-    userAddressSearchChange
+    userAddressSearchChange,
+    addProviderInfo,
+    addProviderErrorMsg
 }
 
 const mapStateToProps = (state) => {

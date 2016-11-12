@@ -19,6 +19,9 @@ const Search = React.createClass({
             searchActivated:false
         };
     },
+    contextTypes: {
+        router: React.PropTypes.object.isRequired
+    },
     filterCuisineOrDietType(valOrevent, cuisineOrDiet) {
         let selectedCuisineOrDiet = (valOrevent && valOrevent.target) ? valOrevent.target.alt : valOrevent;
         let storeKey = cuisineOrDiet + 'SelectedMap'
@@ -103,7 +106,7 @@ const Search = React.createClass({
     	})
     },
     goToProvider(event,foodItem){
-    	this.props.history.push('/providerProfile/'+foodItem._creator)
+    	this.context.router.push('/providerProfile/'+foodItem._creator);
     },
     render() {
         let { data, addtnlQuery, dietSelectedMap } = this.props.search.toJS();
