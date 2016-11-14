@@ -73,7 +73,7 @@ class AsyncAutocomplete extends React.Component {
             name:this.props.name,
             placeholder: "street address",
             value:this.props.userSearchText,
-            onChange: this.props.onChange || undefined,
+            onChange: this.props.onChange,
             onFocus:this.props.onFocus || undefined,
             onBlur:this.props.onBlur || undefined
         };

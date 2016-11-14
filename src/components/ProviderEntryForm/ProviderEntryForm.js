@@ -171,11 +171,9 @@ const ProviderEntryForm = React.createClass({
                                 </a> 
                             </div>  
                         </legend>
-                        <AsyncAutocomplete  name='searchText'
-                                            onBlur= {this.handleChange}
-                                            onFocus={this.handleFocus}
+                        <AsyncAutocomplete  name={'searchText'}
                                             userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
-                                            apiUrl={'/api/locations/addressTypeAssist'}
+                                            apiUrl = {'/api/locations/addressTypeAssist'}
                                             getSuggestionValue={(suggestion)=>suggestion.address}
                                             onChange = {(event, value)=>this.props.userAddressSearchChange(value.newValue)}
                                             onSuggestionSelected = {this.onSuggestionSelected}

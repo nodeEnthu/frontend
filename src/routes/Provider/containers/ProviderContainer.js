@@ -22,12 +22,12 @@ const mapActionCreators = {
     addFoodItemInfo,
     removeFoodItemInfo,
     addProviderEntryState,
+    userAddressSearchChange,
     fetchSecuredData
 }
 
 const mapStateToProps = (state) => ({
     globalState:state,
-    userAddressSearchChange:userAddressSearchChange,
     providerEntryForm: state.provider.get('providerEntryForm'),
     providerEntryState: state.provider.get('providerEntryState'),
     foodItemEntryForm: state.provider.get('foodItemEntryForm')

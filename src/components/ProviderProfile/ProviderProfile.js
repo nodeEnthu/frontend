@@ -81,7 +81,7 @@ const ProviderProfile = React.createClass({
         <div id="layout" className="pure-g">
           <div className={classNames(classes["sidebar"], "pure-u-1","pure-u-md-1-4")}>
             <div className={classes["move-right"]}>                   
-              <Link to={'/providers/'+data._id+'/edit'}>Edit profile</Link> 
+              <Link style={{color:'white'}}to={'/providers/'+data._id+'/edit'}>Edit profile</Link> 
             </div>
             <div className={classes["header"]}>
                 <h1 className={classes["brand-title"]}>{data.title}</h1>

@@ -39,6 +39,7 @@ var Login = React.createClass({
               .then(function(result) {
                   dispatch(actions.addUser(result.data));
                   dispatch(actions.addToken(token));
+                  dispatch(actions.userAddressSearchChange(result.data.userSeachLocations[result.data.deliveryAddressIndex].searchText))
               })
       }
     },
