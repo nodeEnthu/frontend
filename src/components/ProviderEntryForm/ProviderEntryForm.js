@@ -84,12 +84,11 @@ const ProviderEntryForm = React.createClass({
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
-        if(input){
-           this.props.addProviderInfo({
-                storeKey:stateKeyName,
-                payload:input
-            }); 
-        }    
+        this.props.addProviderInfo({
+            storeKey:stateKeyName,
+            payload:input
+        }); 
+       
     },
     onSuggestionSelected(event,{suggestion}){
         this.props.addProviderInfo({
@@ -187,7 +186,10 @@ const ProviderEntryForm = React.createClass({
                                             userSearchText = {this.props.providerEntryForm.get('searchText')}
                                             apiUrl = {'/api/locations/addressTypeAssist'}
                                             getSuggestionValue={(suggestion)=>suggestion.address}
-                                            onChange = {(event, value)=>this.changeStoreVal(event)}
+                                            onChange = {(event, value)=>this.props.addProviderInfo({
+                                                                                                storeKey:'searchText',
+                                                                                                payload:value.newValue
+                                                                                            })}
                                             onSuggestionSelected = {this.onSuggestionSelected}
                         />
                         <span className = {classes["error-message"]}>{(searchTextErrorMsg)?'*'+searchTextErrorMsg:undefined}</span>

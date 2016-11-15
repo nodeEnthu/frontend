@@ -78,7 +78,7 @@ export function addProviderEntryState(obj) {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-    [Add_Provider_Info]: (state, action) => state.setIn(['providerEntryForm', action.storeKey], action.payload),
+    [Add_Provider_Info]: (state, action) => {console.log("Entering "+ action.type+" with "+action.payload);return state.setIn(['providerEntryForm', action.storeKey], action.payload)},
     [Add_Provider_Error_Msg]: (state, action) => state.setIn(['providerEntryForm', action.storeKey], action.payload),
     [Add_Food_Item_Info]: (state, action) => state.setIn(['foodItemEntryForm', action.storeKey], action.payload),
     [Remove_Food_Item_Info]: (state, action) => state.setIn(['foodItemEntryForm', 'name'], '').setIn(['foodItemEntryForm', 'description'], ''),
