@@ -18,7 +18,6 @@ const maxCount = 100;
 const FoodItemEntryForm= React.createClass({
     componentDidMount() {
         // check whether its an edit to an already present provider
-        console.log("I am being mounted ******** ");
         if(this.props.params.id){
             this.props.fetchData('/api/foodItem/'+this.props.params.id , 'foodItemCall','FOOD_ITEM')
             .then((res)=>{
@@ -55,16 +54,18 @@ const FoodItemEntryForm= React.createClass({
     handleChange(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
-        let actionObj = {
-            storeKey: stateKeyName,
-            payload: input
-        }
         let validation = this.mapFieldsToValidationType[stateKeyName];
         let errorMsg;
+        // got to treat date differently
+        if(stateKeyName === 'serviceDate' && input){
+            // careful here ... front end gives time in local timezone and 
+            // backend saves in UTC .. so we got to add the offset
+            let orignalDate = new Date(input);
+            input = new Date(orignalDate.getTime()+orignalDate.getTimezoneOffset()*60000);
+        }
         if (validation) {
             errorMsg = validation(input);
         }
-
         if (errorMsg) {
             let errorMsgkey = stateKeyName + 'ErrorMsg';
             this.props.addFoodItemInfo({
@@ -94,6 +95,8 @@ const FoodItemEntryForm= React.createClass({
     },
     handleFocus(event) {
         let stateKeyName = event.target.name;
+                console.log('handleChange',stateKeyName);
+
         if (stateKeyName) {
             // clear the error msg if it exists
             let errorMsgkey = stateKeyName + 'ErrorMsg';
@@ -191,7 +194,6 @@ const FoodItemEntryForm= React.createClass({
        
     },
     render() {
-        console.log("render ******")
         let { name, nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
         let resolvedServiceDate = null;
         if(serviceDate){
@@ -203,7 +205,6 @@ const FoodItemEntryForm= React.createClass({
             return newDate
         }
         return (
-            (serviceDate)?
             <div>
                 {
                     (!firstItem && !this.state.chipDeleted)?
@@ -272,6 +273,7 @@ const FoodItemEntryForm= React.createClass({
                                     <DatePicker
                                         value={resolvedServiceDate}
                                         name="serviceDate"
+                                        autoOk={true}
                                         onBlur={this.handleChange} 
                                         onFocus={this.handleFocus}
                                         onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'serviceDate')}
@@ -382,8 +384,6 @@ const FoodItemEntryForm= React.createClass({
                     />
                 </div>
             </div>
-            :
-            <div></div>
         )
     }
 })
