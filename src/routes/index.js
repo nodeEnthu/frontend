@@ -7,6 +7,8 @@ import ProviderProfilePage from './ProviderProfilePage'
 import Search from './Search'
 import FoodItemReviews from './FoodItemReviews'
 import ProviderProfileEditPage from './ProviderProfileEditPage'
+import FoodItemEditPage from './FoodItemEditPage'
+
 
 
 /*  Note: Instead of using JSX, we recommend using react-router
@@ -22,7 +24,8 @@ export const createRoutes = (store) => ({
     ProviderProfilePage(store),
     Search(store),
     FoodItemReviews(store),
-    ProviderProfileEditPage(store)
+    ProviderProfileEditPage(store),
+    FoodItemEditPage(store)
   ]
 })
 

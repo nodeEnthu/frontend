@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
-import {userAddressSearchChange} from './../../../layouts/CoreLayout/coreReducer'
 import {charsLeft, addProviderInfo, addProviderErrorMsg, addFoodItemInfo, removeFoodItemInfo, addProviderEntryState} from '../modules/provider'
-import {fetchSecuredData} from 'utils/actionUtils/defaultHttpActions'
+import {fetchData,fetchSecuredData} from 'utils/actionUtils/defaultHttpActions'
 
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -22,7 +21,7 @@ const mapActionCreators = {
     addFoodItemInfo,
     removeFoodItemInfo,
     addProviderEntryState,
-    userAddressSearchChange,
+    fetchData,
     fetchSecuredData
 }
 

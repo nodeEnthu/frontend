@@ -11,11 +11,30 @@ import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import Snackbar from 'material-ui/Snackbar';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Chip from 'material-ui/Chip';
-import { securedPostCall, securedGetCall } from 'utils/httpUtils/apiCallWrapper';
+import { securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import { CUISINE_TYPES} from './../../routes/Search/constants/searchFilters'
 const maxCount = 100;
 
 const FoodItemEntryForm= React.createClass({
+    componentDidMount() {
+        // check whether its an edit to an already present provider
+        console.log(this.props.params.id,'this.props.params.id');
+        if(this.props.params.id){
+            this.props.fetchData('/api/foodItems/'+this.props.params.id , 'foodItemCall','FOOD_ITEM')
+            .then((res)=>{
+                if(res && res.payload &&res.payload.data && res.payload.data.data && res.payload.data.data.loc){
+                    this.props.addProviderInfo({
+                        storeKey:'searchText',
+                        payload:res.payload.data.data.loc.searchText
+                    });
+                    this.props.addProviderInfo({
+                        storeKey:'place_id',
+                        payload:res.payload.data.data.loc.place_id
+                    })
+                }
+            })
+        }
+    },
     getInitialState() {
         return {
             chipDeleted: false
@@ -141,19 +160,17 @@ const FoodItemEntryForm= React.createClass({
         return noErrorsInform;
     },
     formSubmit(event) {
-        if (this.submitFoodItem()) {
-            this.props.addProviderEntryState({
-                storeKey: "stepIndex",
-                payload: 2
-            });
+        if (this.validateForm()) {
+            let self = this;
+            this.submitFoodItem()
+                .then(()=>self.props.onAllClear());
         }
     },
     submitFoodItem() {
         let result = false;
         let self = this;
-        if (this.validateForm()) {
-            // send it to server and clear out some of the item specific info
-            securedPostCall('/api/providers/addOrEditFoodItem', this.props.foodItemEntryForm.toJS())
+        // send it to server and clear out some of the item specific info
+        return securedPostCall('/api/providers/addOrEditFoodItem', this.props.foodItemEntryForm.toJS())
                 .then(function(response) {
                     // show the chip for last food item entered
                     self.props.addFoodItemInfo({
@@ -177,7 +194,7 @@ const FoodItemEntryForm= React.createClass({
                         storeKeys: ['name', 'description']
                     });
                 })
-        }
+       
     },
     render() {
         let { name, nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
@@ -186,6 +203,7 @@ const FoodItemEntryForm= React.createClass({
             resolvedServiceDate = (serviceDate instanceof Date)? serviceDate : new Date(serviceDate);
         } 
         function daysBeforeOrderDate(days){
+            console.log('serviceDate',serviceDate);
             let newDate = new Date(serviceDate.toString());
             newDate.setDate(newDate.getDate()-days);
             return newDate
@@ -392,6 +410,11 @@ const FoodItemEntryForm= React.createClass({
     }
 })
 FoodItemEntryForm.propTypes = {
-    providerEntryState: React.PropTypes.object.isRequired,
+    onAllClear : React.PropTypes.func.isRequired, 
+    foodItemEntryForm : React.PropTypes.object.isRequired,
+    addFoodItemInfo : React.PropTypes.func.isRequired, 
+    fetchData : React.PropTypes.func.isRequired,
+    removeFoodItemInfo: React.PropTypes.func.isRequired,
+    params:React.PropTypes.object
 };
 export default FoodItemEntryForm;

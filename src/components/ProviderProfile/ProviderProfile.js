@@ -160,6 +160,9 @@ const ProviderProfile = React.createClass({
                                       </div>
                                     </div>
                                     <div className={classNames(classes["post-avatar"],"pure-u-md-2-5")}>
+                                      <div className={classes["move-right"]}>                   
+                                        <Link to={'/foodItems/'+foodItem._id+'/edit'}>Edit</Link> 
+                                      </div>
                                       <img alt={foodItem.name} className = {classes["food-item"]} src={foodItem.img}/>
                                       <div className={classNames(classes["move-center"],classes["review-submit-link"])}
                                         onClick={()=>this.writeReviewModal(foodItem)}>

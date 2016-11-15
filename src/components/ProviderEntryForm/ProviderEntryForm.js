@@ -15,7 +15,22 @@ const ProviderEntryForm = React.createClass({
     componentDidMount() {
         // check whether its an edit to an already present provider
         if(this.props.params.id){
-            this.props.fetchSecuredData('/api/users/'+this.props.params.id , 'providerProfileCall','PROVIDER_PROFILE');
+            this.props.fetchSecuredData('/api/users/'+this.props.params.id , 'providerProfileCall','PROVIDER_PROFILE')
+            // we dont save the searchText or place_id in the db .. so we got to manually wire up search text here
+            // a bit hacky but we had to do it to automate form validation
+            // note to Gautam: see this is what we have to do when state does not match the things we save in db
+            .then((res)=>{
+                if(res && res.payload &&res.payload.data && res.payload.data.data && res.payload.data.data.loc){
+                    this.props.addProviderInfo({
+                        storeKey:'searchText',
+                        payload:res.payload.data.data.loc.searchText
+                    });
+                    this.props.addProviderInfo({
+                        storeKey:'place_id',
+                        payload:res.payload.data.data.loc.place_id
+                    })
+                }
+            })
         }
     },
     mapFieldsToValidationType : {
@@ -69,10 +84,12 @@ const ProviderEntryForm = React.createClass({
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
-            this.props.addProviderInfo({
+        if(input){
+           this.props.addProviderInfo({
                 storeKey:stateKeyName,
                 payload:input
-            });
+            }); 
+        }    
     },
     onSuggestionSelected(event,{suggestion}){
         this.props.addProviderInfo({
@@ -107,7 +124,6 @@ const ProviderEntryForm = React.createClass({
         if(this.validateForm()){
             securedPostCall('/api/providers/registration' , this.props.providerEntryForm.toJS())
                 .then(()=>self.props.onAllClear())
-            
         }
     },
     render() {
@@ -122,12 +138,6 @@ const ProviderEntryForm = React.createClass({
         };
         return (
             <div>
-                <p>
-                    Please give a brief history about your cooking skills along with a picture showcasing you/your business.
-                </p>
-                <div className={classes["is-center"]}>
-                    <ImageUploader/>
-                </div>
                 <form className="pure-form pure-form-stacked">
                     <fieldset className="pure-group">
                         <input type="text"  className="pure-u-1" placeholder="*title" name="title" value={this.props.providerEntryForm.get('title')}
@@ -172,10 +182,12 @@ const ProviderEntryForm = React.createClass({
                             </div>  
                         </legend>
                         <AsyncAutocomplete  name={'searchText'}
-                                            userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
+                                            onBlur={this.handleChange} 
+                                            onFocus={this.handleFocus}
+                                            userSearchText = {this.props.providerEntryForm.get('searchText')}
                                             apiUrl = {'/api/locations/addressTypeAssist'}
                                             getSuggestionValue={(suggestion)=>suggestion.address}
-                                            onChange = {(event, value)=>this.props.userAddressSearchChange(value.newValue)}
+                                            onChange = {(event, value)=>this.changeStoreVal(event)}
                                             onSuggestionSelected = {this.onSuggestionSelected}
                         />
                         <span className = {classes["error-message"]}>{(searchTextErrorMsg)?'*'+searchTextErrorMsg:undefined}</span>
@@ -329,9 +341,7 @@ const ProviderEntryForm = React.createClass({
     }
 });
 ProviderEntryForm.propTypes = {
-    globalState:React.PropTypes.object.isRequired,
     providerEntryForm: React.PropTypes.object.isRequired,
-    userAddressSearchChange:React.PropTypes.func.isRequired,
     fetchSecuredData:React.PropTypes.func.isRequired
 };
 export default ProviderEntryForm;

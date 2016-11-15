@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import {userAddressSearchChange} from 'layouts/CoreLayout/coreReducer'
 import {fetchSecuredData} from 'utils/actionUtils/defaultHttpActions'
 import {addProviderInfo,addProviderErrorMsg} from './../modules/providerProfileEditPage'
 import { fromJS } from 'immutable'
@@ -17,7 +16,6 @@ import ProviderProfileEditPage from '../components/ProviderProfileEditPage'
 
 const mapActionCreators = {
     fetchSecuredData,
-    userAddressSearchChange,
     addProviderInfo,
     addProviderErrorMsg
 }

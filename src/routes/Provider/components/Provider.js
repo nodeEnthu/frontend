@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-  Step,
-  Stepper,
-  StepLabel,
-} from 'material-ui/Stepper'
+import { Step,Stepper,StepLabel} from 'material-ui/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import ExpandTransition from 'material-ui/internal/ExpandTransition'
@@ -48,7 +44,19 @@ class Provider extends React.Component {
       case 0:
         return (
           <div>
-            <ProviderEntryForm {...this.props} onAllClear = {this.onAllClear} ref="providerform"/>
+            <p>
+              Please give a brief history about your cooking skills along with a picture showcasing you/your business.
+            </p>
+            <div className={classes["is-center"]}>
+              <ImageUploader/>
+            </div>
+            <ProviderEntryForm  providerEntryForm = {this.props.providerEntryForm}
+                                addProviderInfo = {this.props.addProviderInfo}
+                                addProviderErrorMsg = {this.props.addProviderErrorMsg}
+                                onAllClear = {this.onAllClear}
+                                fetchSecuredData = {this.props.fetchSecuredData} 
+                                ref="providerform"
+            />
           </div>
           
         );
@@ -61,7 +69,13 @@ class Provider extends React.Component {
             <div className={classes["is-center"]}>
                 <ImageUploader/>
             </div>
-            <FoodItemEntryForm {...this.props} onAllClear = {this.onAllClear} ref="foodItemEntryForm"/>
+            <FoodItemEntryForm  onAllClear = {this.onAllClear} 
+                                foodItemEntryForm = {this.props.foodItemEntryForm}
+                                addFoodItemInfo = {this.props.addFoodItemInfo}
+                                fetchData = {this.props.fetchData}
+                                removeFoodItemInfo = {this.props.removeFoodItemInfo} 
+                                ref="foodItemEntryForm"
+            />
           </div>
         );
       case 2:
@@ -145,7 +159,17 @@ class Provider extends React.Component {
 }
 
 Provider.propTypes= {
-    providerEntryForm: React.PropTypes.object.isRequired,
+    globalState:React.PropTypes.object.isRequired,
     providerEntryState: React.PropTypes.object.isRequired,
+    providerEntryForm: React.PropTypes.object.isRequired,
+    foodItemEntryForm: React.PropTypes.object.isRequired,
+    charsLeft:React.PropTypes.func.isRequired,
+    addProviderInfo:React.PropTypes.func.isRequired,
+    addProviderErrorMsg:React.PropTypes.func.isRequired,
+    addFoodItemInfo:React.PropTypes.func.isRequired,
+    removeFoodItemInfo:React.PropTypes.func.isRequired,
+    addProviderEntryState:React.PropTypes.func.isRequired,
+    fetchData:React.PropTypes.func.isRequired,
+    fetchSecuredData:React.PropTypes.func.isRequired
 };
 export default Provider;
