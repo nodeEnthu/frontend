@@ -18,20 +18,14 @@ const maxCount = 100;
 const FoodItemEntryForm= React.createClass({
     componentDidMount() {
         // check whether its an edit to an already present provider
-        console.log(this.props.params.id,'this.props.params.id');
+        console.log("I am being mounted ******** ");
         if(this.props.params.id){
-            this.props.fetchData('/api/foodItems/'+this.props.params.id , 'foodItemCall','FOOD_ITEM')
+            this.props.fetchData('/api/foodItem/'+this.props.params.id , 'foodItemCall','FOOD_ITEM')
             .then((res)=>{
-                if(res && res.payload &&res.payload.data && res.payload.data.data && res.payload.data.data.loc){
-                    this.props.addProviderInfo({
-                        storeKey:'searchText',
-                        payload:res.payload.data.data.loc.searchText
-                    });
-                    this.props.addProviderInfo({
-                        storeKey:'place_id',
-                        payload:res.payload.data.data.loc.place_id
-                    })
-                }
+                this.props.addFoodItemInfo({
+                    storeKey:'firstItem',
+                    payload:true
+                }) 
             })
         }
     },
@@ -197,18 +191,19 @@ const FoodItemEntryForm= React.createClass({
        
     },
     render() {
+        console.log("render ******")
         let { name, nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
         let resolvedServiceDate = null;
         if(serviceDate){
             resolvedServiceDate = (serviceDate instanceof Date)? serviceDate : new Date(serviceDate);
         } 
         function daysBeforeOrderDate(days){
-            console.log('serviceDate',serviceDate);
             let newDate = new Date(serviceDate.toString());
             newDate.setDate(newDate.getDate()-days);
             return newDate
         }
         return (
+            (serviceDate)?
             <div>
                 {
                     (!firstItem && !this.state.chipDeleted)?
@@ -297,9 +292,6 @@ const FoodItemEntryForm= React.createClass({
                                     value={placeOrderBy}
                                 >
                                     <option value={serviceDate}>Same Day</option>
-                                    <option value={daysBeforeOrderDate(1)}>Atleast 1 day before</option>
-                                    <option value={daysBeforeOrderDate(2)}>Atleast 2 days before</option>
-                                    <option value={daysBeforeOrderDate(3)}>Atleast 3 days before</option>
                                 </select>
                                 <span className = {classes["error-message"]}>{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
                             </div>
@@ -310,28 +302,12 @@ const FoodItemEntryForm= React.createClass({
                             <fieldset className="pure-group">
                                 <div className = "pure-g">
                                     <div className = "pure-u-1 pure-u-md-1-2">
-                                        <label>Pick-up start time</label>
-                                        <TimePicker
-                                            format="ampm"
-                                            value={pickUpStartTime}
-                                            onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'pickUpStartTime')}
-                                            style = {{width:'100%'}}
-                                            inputStyle={{border:"1px solid #ccc",width:"95%", padding:'10px',borderRadius:'5px'}}
-                                            underlineStyle={{display: 'none'}}
-                                            hintText="pick-up start time" 
-                                        />
+                                        
+                                        
                                     </div>
                                     <div className = "pure-u-1 pure-u-md-1-2">
-                                         <label>Pick-up end time</label>
-                                        <TimePicker
-                                            format="ampm"
-                                            onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'pickUpEndTime',borderRadius:'5px')}
-                                            value={pickUpEndTime}
-                                            style = {{width:'100%'}}
-                                            inputStyle={{border:"1px solid #ccc",width:"95%",padding:'10px',borderRadius:'5px'}}
-                                            underlineStyle={{display: 'none'}}
-                                            hintText="pick-up end time" 
-                                        />
+                                         
+                                        
                                     </div>
                                 </div>
                             </fieldset>
@@ -399,13 +375,15 @@ const FoodItemEntryForm= React.createClass({
                         Add another item
                     </div>
                     <Snackbar
-                      open={snackBarOpen}
-                      message={snackBarMessage}
+                      open={snackBarOpen || false}
+                      message={snackBarMessage || ''}
                       autoHideDuration={5000}
                       onRequestClose={()=>{this.toggleFlags('snackBarOpen')}} 
                     />
                 </div>
             </div>
+            :
+            <div></div>
         )
     }
 })

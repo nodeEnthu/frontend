@@ -46,7 +46,6 @@ export function fetchData(url,storeKey,actionType,queryParams) {
         dispatch(requestData({ storeKey: storeKey },actionType));
         return getCall(url, queryParams)
             .then(res => dispatch(receiveData({ storeKey: storeKey, data: res },actionType)))
-            .catch(err => dispatch(failData({ storeKey: storeKey, data: err })));
     };
 }
 

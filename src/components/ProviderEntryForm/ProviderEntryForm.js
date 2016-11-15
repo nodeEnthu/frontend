@@ -342,6 +342,7 @@ const ProviderEntryForm = React.createClass({
 });
 ProviderEntryForm.propTypes = {
     providerEntryForm: React.PropTypes.object.isRequired,
-    fetchSecuredData:React.PropTypes.func.isRequired
+    fetchSecuredData:React.PropTypes.func.isRequired,
+    params:React.PropTypes.object
 };
 export default ProviderEntryForm;

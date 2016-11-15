@@ -5,7 +5,7 @@ import FoodEntryForm from 'components/FoodItemEntryForm/FoodItemEntryForm';
 
 const FoodItemEditPage = React.createClass({
 	submitForm(){
-		this.refs.providerform.formSubmit();
+		this.refs.foodItemEntryForm.formSubmit();
 	},
 	contextTypes: {
         router: React.PropTypes.object.isRequired
@@ -16,13 +16,14 @@ const FoodItemEditPage = React.createClass({
 	render(){
 		return(
 			<div className={classes["pageSettings"]}>
-				<div style={{textAlign:'center'}}>
+				<div>
 					<FoodEntryForm 	foodItemEntryForm = {this.props.foodItemEntryForm}
 									onAllClear = {this.onAllClear}
 									fetchData = {this.props.fetchData}
 									addFoodItemInfo = {this.props.addFoodItemInfo}
 									removeFoodItemInfo = {this.props.removeFoodItemInfo}
 									params={this.props.params}
+									ref="foodItemEntryForm"
 					/>
 					<RaisedButton
 						style={{width:'30%',color:'white'}}

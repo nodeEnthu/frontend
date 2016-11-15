@@ -55,6 +55,7 @@ class Provider extends React.Component {
                                 addProviderErrorMsg = {this.props.addProviderErrorMsg}
                                 onAllClear = {this.onAllClear}
                                 fetchSecuredData = {this.props.fetchSecuredData} 
+                                params = {this.props.params}
                                 ref="providerform"
             />
           </div>
@@ -73,7 +74,8 @@ class Provider extends React.Component {
                                 foodItemEntryForm = {this.props.foodItemEntryForm}
                                 addFoodItemInfo = {this.props.addFoodItemInfo}
                                 fetchData = {this.props.fetchData}
-                                removeFoodItemInfo = {this.props.removeFoodItemInfo} 
+                                removeFoodItemInfo = {this.props.removeFoodItemInfo}
+                                params = {this.props.params} 
                                 ref="foodItemEntryForm"
             />
           </div>
