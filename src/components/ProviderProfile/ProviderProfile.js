@@ -28,7 +28,6 @@ const ProviderProfile = React.createClass({
       };
   },
   componentDidMount() {
-      console.log("Am bein invoked to mount component");
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall','PROVIDER');
   },
   writeReviewModal(foodItem){

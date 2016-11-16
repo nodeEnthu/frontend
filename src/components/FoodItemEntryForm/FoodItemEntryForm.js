@@ -202,9 +202,10 @@ const FoodItemEntryForm= React.createClass({
         function daysBeforeOrderDate(days){
             let newDate = new Date(serviceDate.toString());
             newDate.setDate(newDate.getDate()-days);
-            return newDate
+            return newDate;
         }
         return (
+            (serviceDate)?
             <div>
                 {
                     (!firstItem && !this.state.chipDeleted)?
@@ -292,8 +293,12 @@ const FoodItemEntryForm= React.createClass({
                                     onFocus={this.handleFocus}
                                     onChange={this.changeStoreVal}
                                     value={placeOrderBy}
+                                    defaultValue = {serviceDate}
                                 >
                                     <option value={serviceDate}>Same Day</option>
+                                    <option value={daysBeforeOrderDate(1)}>Atleast 1 day before</option>        
+                                    <option value={daysBeforeOrderDate(2)}>Atleast 2 days before</option>     
+                                    <option value={daysBeforeOrderDate(3)}>Atleast 3 days before</option>
                                 </select>
                                 <span className = {classes["error-message"]}>{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
                             </div>
@@ -384,6 +389,8 @@ const FoodItemEntryForm= React.createClass({
                     />
                 </div>
             </div>
+            :
+            <div></div>
         )
     }
 })
