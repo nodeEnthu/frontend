@@ -81,7 +81,7 @@ const ProviderProfile = React.createClass({
     console.log(user,data);
     return (data && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="pure-g">
-          <div className={classNames(classes["sidebar"], "pure-u-1","pure-u-md-1-4")}>
+          <div className={classNames(classes["sidebar"], "pure-u-1", "pure-u-md-1-4")}>
             <div className={classes["move-right"]}>                   
               <Link style={{color:'white'}}to={'/providers/'+data._id+'/edit'}>Edit profile</Link> 
             </div>
@@ -102,7 +102,7 @@ const ProviderProfile = React.createClass({
                 </nav>
             </div>
           </div>
-          <div className = { classNames(classes["content"], "pure-u-1")}>
+          <div className = {classNames(classes["content"], "pure-u-1", "pure-u-md-3-4")}>
             <div>
               <div className={classes["posts"]}>
                   <h1 className={classes["content-subhead"]}>Menu Items</h1>
@@ -170,15 +170,18 @@ const ProviderProfile = React.createClass({
                                         onClick={()=>this.writeReviewModal(foodItem)}>
                                         Please submit a review
                                       </div>
-                                      <div className={classNames(classes["move-center"],classes["review-submit-link"])}>
-                                      </div>
-                                      <RaisedButton
-                                        labelPosition="before"
-                                        label="Add to the cart" primary={true}
-                                        style={{display:"block"}}
-                                        onClick={(event)=>this.checkOutItem(event,foodItem)}
-                                      >
-                                      </RaisedButton>
+                                      {(this.props.mode != 'providerEntry')?
+                                        <RaisedButton
+                                          labelPosition="before"
+                                          label="Add to the cart" primary={true}
+                                          style={{display:"block"}}
+                                          onClick={(event)=>this.checkOutItem(event,foodItem)}
+                                        >
+                                        </RaisedButton>
+                                        :
+                                        undefined
+                                      }
+                                      
                                     </div>
                                   </div>
                                 </section>  

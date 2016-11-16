@@ -83,7 +83,7 @@ class Provider extends React.Component {
         );
       case 2:
         return (
-          <div>
+          <div style={{position:'flex',top:'150px'}}>
             <ProviderProfile  params = {{id:'582a955e621e8a3334aa4069'}}
                               providerProfile = {this.props.provider}
                               globalState = {this.props.globalState}
@@ -122,7 +122,7 @@ class Provider extends React.Component {
     return (
       <div style={contentStyle} >
         <div >{this.getStepContent(stepIndex)}</div>
-        <div style={{display:'block', clear:'both', marginTop: 24, marginBottom: 12}}>
+        <div style={{display:'block', clear:'both', marginTop: 24, marginBottom: 12, textAlign:'center'}}>
           <FlatButton
             label="Back"
             disabled={stepIndex === 0}

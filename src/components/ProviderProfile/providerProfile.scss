@@ -210,7 +210,8 @@ table td.item-details {
     }
 
     .sidebar {
-        position: fixed;
+        position: absolute;
+        height:auto;
         top: 0;
         bottom: 0;
     }
