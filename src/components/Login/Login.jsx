@@ -30,18 +30,6 @@ var Login = React.createClass({
         dispatch(actions.closeLoginModal());
     },
     componentDidMount() {
-      let token = sessionStorage.getItem('token');
-      const { dispatch } = this.props;
-      if (token) {
-          // send an ajax call to get the user back 
-          // this makes sure user is authenticated with us
-          securedGetCall('/api/users/me')
-              .then(function(result) {
-                  dispatch(actions.addUser(result.data));
-                  dispatch(actions.addToken(token));
-                  dispatch(actions.userAddressSearchChange(result.data.userSeachLocations[result.data.deliveryAddressIndex].searchText))
-              })
-      }
     },
     successfullLogin(response) {
         const { dispatch } = this.props;

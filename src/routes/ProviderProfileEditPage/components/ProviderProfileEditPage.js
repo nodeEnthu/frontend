@@ -20,6 +20,7 @@ const ProviderProfileEditPage = React.createClass({
 				<ProviderEntryForm 	ref="providerform"
 									{... this.props} 
 									onAllClear = {this.onAllClear}
+									mode = {"editMode"}
 				/>
 				<div style={{textAlign:'center'}}>
 					<RaisedButton
