@@ -5,14 +5,18 @@ import * as actions from '../../layouts/CoreLayout/coreReducer'
 import Login from '../Login/Login'
 import classes from './Header.scss'
 import classNames from 'classnames'
-export default class Header extends React.Component {
+export  class Header extends React.Component {
     constructor(props) {
         super(props);
         this.removeToken = this.removeToken.bind(this);
     }
     removeToken(){
-      this.props.dispatch(actions.addToken(''))
+      this.props.dispatch(actions.addToken(''));
       sessionStorage.removeItem('token');
+      location.reload();
+    }
+    componentDidMount() {
+           
     }
     render() {
         const { globalState } = this.props;
@@ -20,15 +24,12 @@ export default class Header extends React.Component {
         return (
             <div className={classes["header"]}>
             <div className={classNames(classes["home-menu"], "pure-menu","pure-menu-horizontal")}>
-              <a className="pure-menu-heading" href="">Your Site</a>
+              <span className="pure-menu-heading">fillurtummy</span>
               <ul className="pure-menu-list">
-                  <li className="pure-menu-item pure-menu-selected">
+                  <li className="pure-menu-item">
                     <IndexLink to='/' className="pure-menu-link">
                       Home
                     </IndexLink>
-                  </li>
-                  <li className="pure-menu-item">
-                      <Link to='/providerProfile' className="pure-menu-link">Tour</Link>
                   </li>
                   {(globalState.core.get('token').length>0 )?
                     <li className="pure-menu-item">

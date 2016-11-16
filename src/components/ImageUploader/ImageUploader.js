@@ -49,7 +49,6 @@ class ImageUploader extends React.Component {
 
   render() {
     let {imagePreviewUrl} = this.state;
-    console.log(this.state);
     let $imagePreview = null;
     if (imagePreviewUrl) {
       $imagePreview = (<img src={imagePreviewUrl} />);

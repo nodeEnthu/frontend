@@ -1,30 +1,44 @@
 import React, { Component, PropTypes } from 'react';
 import classes from './providerentryform.scss';
-import { email, maxLength, required } from './../../utils/formValidation';
+import { email, maxLength, required } from './../../utils/formUtils/formValidation';
 import Toggle from 'react-toggle';
 import classNames from 'classnames';
 import Modal from 'react-modal';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import {securedPostCall} from 'utils/apiCallWrapper';
+import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
+import AsyncAutocomplete from 'components/AsyncAutocomplete'
+import ImageUploader from 'components/ImageUploader'
+
 
 const maxCount = 100;
-class ProviderEntryForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = this.props.providerEntryForm;
-        this.mapFieldsToValidationType = {
-            title: required,
-            emailId: email,
-            description: maxLength,
-            city: required
+const ProviderEntryForm = React.createClass({
+    componentDidMount() {
+        // check whether its an edit to an already present provider
+        if(this.props.params.id){
+            this.props.fetchSecuredData('/api/users/'+this.props.params.id , 'providerProfileCall','PROVIDER_PROFILE')
+            // we dont save the searchText or place_id in the db .. so we got to manually wire up search text here
+            // a bit hacky but we had to do it to automate form validation
+            // note to Gautam: see this is what we have to do when state does not match the things we save in db
+            .then((res)=>{
+                if(res && res.payload &&res.payload.data && res.payload.data.data && res.payload.data.data.loc){
+                    this.props.addProviderInfo({
+                        storeKey:'searchText',
+                        payload:res.payload.data.data.loc.searchText
+                    });
+                    this.props.addProviderInfo({
+                        storeKey:'place_id',
+                        payload:res.payload.data.data.loc.place_id
+                    })
+                }
+            })
         }
-        this.handleChange = this.handleChange.bind(this);
-        this.handleFocus = this.handleFocus.bind(this);
-        this.formSubmit = this.formSubmit.bind(this);
-        this.changeStoreVal = this.changeStoreVal.bind(this);
-        this.toggle = this.toggle.bind(this);
-        this.validateForm = this.validateForm.bind(this);
-    }
+    },
+    mapFieldsToValidationType : {
+        title: required,
+        email: email,
+        description: maxLength,
+        searchText:required
+    },
     handleChange(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
@@ -49,13 +63,13 @@ class ProviderEntryForm extends React.Component {
             payload:input
         })
        
-    }
+    },
     toggle(storeKey) {
         this.props.addProviderInfo({
             storeKey: storeKey,
             payload:!this.props.providerEntryForm.get(storeKey)
         })
-    }
+    },
     handleFocus(event) {
         let stateKeyName = event.target.name;
         if (stateKeyName) {
@@ -66,26 +80,26 @@ class ProviderEntryForm extends React.Component {
                 payload:null
             });
         }
-    }
-    setCount(event) {
-        let input = event.target.value;
-        let stateKeyName = event.target.name;
-        this.setState({
-            description: input,
-            chars_left: maxCount - input.length
-        })
-        this.props.providerEntryForm.chars_left = maxCount - input.length; // hacky 
-        this.props.providerEntryForm.description = input; // hacky 
-    }
-
+    },
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
         this.props.addProviderInfo({
             storeKey:stateKeyName,
             payload:input
+        }); 
+       
+    },
+    onSuggestionSelected(event,{suggestion}){
+        this.props.addProviderInfo({
+            storeKey:'searchText',
+            payload:suggestion.address
         });
-    }
+        this.props.addProviderInfo({
+            storeKey:'place_id',
+            payload:suggestion.place_id
+        });
+    },
     validateForm(){
         let self = this;
         let noErrorsInform = true;
@@ -103,19 +117,16 @@ class ProviderEntryForm extends React.Component {
             }
         }
         return noErrorsInform;
-    }
-    formSubmit(event) {
+    },
+    formSubmit() {
+        let self = this;
         if(this.validateForm()){
-            let token = sessionStorage.getItem('token');
-            securedPostCall('/api/providers/registration' , this.props.providerEntryForm.toJS());
-            this.props.addProviderEntryState({
-                storeKey: "stepIndex",
-                payload:1
-            });
+            securedPostCall('/api/providers/registration' , this.props.providerEntryForm.toJS())
+                .then(()=>self.props.onAllClear())
         }
-    }
+    },
     render() {
-        let { chars_left, title, description, streetName, crosStreetName, city, emailId, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailIdErrorMsg, keepEmailPrivateFlag, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag } = this.props.providerEntryForm.toJS();
+        let { chars_left, title, description, email, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg } = this.props.providerEntryForm.toJS();
         const styles = {
           block: {
             maxWidth: 250,
@@ -144,12 +155,12 @@ class ProviderEntryForm extends React.Component {
                         <div>{chars_left}/100</div>
                     </fieldset>
                     <fieldset className="pure-group">
-                        <input type="text" name="emailId" placeholder="*email" style = {{marginBottom:0.5+'em'}} value={emailId}
+                        <input type="text" name="email" placeholder="*email" style = {{marginBottom:0.5+'em'}} value={email}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus}
                             onChange={this.changeStoreVal}
                             className={"pure-u-1"}/>
-                        <span className = {classes["error-message"]}>{(emailIdErrorMsg)?'*'+emailIdErrorMsg:undefined}</span>
+                        <span className = {classes["error-message"]}>{(emailErrorMsg)?'*'+emailErrorMsg:undefined}</span>
                     </fieldset>
                     <fieldset className="pure-group">
                         <legend className={classes["pull-left"]}>
@@ -159,32 +170,29 @@ class ProviderEntryForm extends React.Component {
                             <div>
                                 <span style={{fontSize:'0.75em'}}>Display this on my public profile page</span>
                                 <Toggle
-                                defaultChecked={!keepAddressPrivateFlag}
-                                onChange={()=>{this.toggle('keepAddressPrivateFlag')}}
-                                className = {classes["input-hidden"]} 
+                                    defaultChecked={!keepAddressPrivateFlag}
+                                    onChange={()=>{this.toggle('keepAddressPrivateFlag')}}
+                                    className = {classes["input-hidden"]} 
                                 />
                                 <a className={classNames("pure-menu-link",classes["address-justification"])} 
                                     onClick={()=>{this.toggle('providerAddressJustificationModalOpen')}}>
                                     why we need it?
                                 </a> 
-                            </div>
-                            
+                            </div>  
                         </legend>
-                        <input type="text"  name="streetName" placeholder="address line1" value = {streetName}
-                            onChange={this.changeStoreVal}
-                            className="pure-u-1" 
-                         />
-                        <input type="text" name="crosStreetName" placeholder="address line 2" value = {crosStreetName}
-                            onChange={this.changeStoreVal}
-                            className="pure-u-1" 
+                        <AsyncAutocomplete  name={'searchText'}
+                                            onBlur={this.handleChange} 
+                                            onFocus={this.handleFocus}
+                                            userSearchText = {this.props.providerEntryForm.get('searchText')}
+                                            apiUrl = {'/api/locations/addressTypeAssist'}
+                                            getSuggestionValue={(suggestion)=>suggestion.address}
+                                            onChange = {(event, value)=>this.props.addProviderInfo({
+                                                                                                storeKey:'searchText',
+                                                                                                payload:value.newValue
+                                                                                            })}
+                                            onSuggestionSelected = {this.onSuggestionSelected}
                         />
-                        <input type="text"  name="city"  placeholder="*city" value = {city}
-                            onBlur={this.handleChange} 
-                            onFocus={this.handleFocus}
-                            onChange={this.changeStoreVal}
-                            className="pure-u-1"
-                        />
-                        <span className = {classes["error-message"]}>{(cityErrorMsg)?'*'+cityErrorMsg:undefined}</span>
+                        <span className = {classes["error-message"]}>{(searchTextErrorMsg)?'*'+searchTextErrorMsg:undefined}</span>
                     </fieldset>
                     {(keepAddressPrivateFlag)?
                         <fieldset className="pure-group">
@@ -333,9 +341,10 @@ class ProviderEntryForm extends React.Component {
             </div>
         )
     }
-}
+});
 ProviderEntryForm.propTypes = {
-    providerEntryState: React.PropTypes.object.isRequired,
-    providerEntryForm: React.PropTypes.object.isRequired
+    providerEntryForm: React.PropTypes.object.isRequired,
+    fetchSecuredData:React.PropTypes.func.isRequired,
+    params:React.PropTypes.object
 };
 export default ProviderEntryForm;

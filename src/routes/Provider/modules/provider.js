@@ -1,3 +1,6 @@
+
+import { Map, List } from 'immutable';
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -8,8 +11,14 @@ export const Add_Provider_Entry_State = "Add_Provider_Entry_State"
 
 export const Add_Food_Item_Info = 'Add_Food_Item_Info'
 export const Remove_Food_Item_Info = 'Remove_Food_Item_Info'
+
+export const REQUEST_DATA_PROVIDER_ENTRY = "REQUEST_DATA_PROVIDER_ENTRY";
+export const FAIL_DATA_PROVIDER_ENTRY = "FAIL_DATA_PROVIDER_ENTRY";
+export const RECEIVE_DATA_PROVIDER_ENTRY = "RECEIVE_DATA_PROVIDER_ENTRY";
+
 export const MAX_COUNT_PROVIDER_DESC = 100;
-import { Map, List } from 'immutable'
+
+
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -74,27 +83,16 @@ export function addProviderEntryState(obj) {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-    [Add_Provider_Info]: (state, action) => {
-        console.log(" reducer Add_Provider_Info is invoked with ", action);
-        return state.setIn(['providerEntryForm', action.storeKey], action.payload)
-    },
-    [Add_Provider_Error_Msg]: (state, action) => {
-        //console.log(" reducer Add_Provider_Error_Msg is invoked with ", action);
-        return state.setIn(['providerEntryForm', action.storeKey], action.payload)
-    },
+    [Add_Provider_Info]: (state, action) => {console.log("Entering "+ action.type+" with ",action.payload);return state.setIn(['providerEntryForm', action.storeKey], action.payload)},
+    [Add_Provider_Error_Msg]: (state, action) => state.setIn(['providerEntryForm', action.storeKey], action.payload),
+    [Add_Food_Item_Info]: (state, action) => state.setIn(['foodItemEntryForm', action.storeKey], action.payload),
+    [Remove_Food_Item_Info]: (state, action) => state.setIn(['foodItemEntryForm', 'name'], '').setIn(['foodItemEntryForm', 'description'], ''),
+    [Add_Provider_Entry_State]:(state,action)=>state.setIn(['providerEntryState', action.storeKey], action.payload),
 
-    [Add_Food_Item_Info]: (state, action) => {
-        //console.log(" reducer Add_Food_Item_Info is invoked with ", action);
-        return state.setIn(['foodItemEntryForm', action.storeKey], action.payload)
-    },
-    [Remove_Food_Item_Info]: (state, action) => {
-        return state.setIn(['foodItemEntryForm', 'name'], '')
-                    .setIn(['foodItemEntryForm', 'description'], '')
-    },
-    [Add_Provider_Entry_State]:(state,action)=>{
-        console.log(" reducer Provider_Entry_State is invoked with ", action);
-        return state.setIn(['providerEntryState', action.storeKey], action.payload)
-    }
+    [REQUEST_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
+    [FAIL_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
+    [RECEIVE_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
+    
 }
 
 // ------------------------------------
@@ -109,16 +107,13 @@ const initialState =
             stepIndex: 0
         }),
         providerEntryForm: Map({
-            chars_left: MAX_COUNT_PROVIDER_DESC,
             title: '',
             description: '',
-            streetName: '',
+            searchText: '',
+            place_id: '',
             keepAddressPrivateFlag: false,
             includeAddressInEmail:true,
-            crosStreetName: '',
-            city: '',
-            emailId: '',
-            keepEmailPrivateFlag: false,
+            email: '',
             pickUpFlag:true,
             pickUpAddtnlComments:'',
             doYouDeliverFlag:false,
@@ -127,22 +122,24 @@ const initialState =
             deliveryAddtnlComments:'',
             allClear: false,
             titleErrorMsg: '',
-            emailIdErrorMsg: '',
+            emailErrorMsg: '',
             descriptionErrorMsg: '',
-            cityErrorMsg: '',
-            deliveryAddtnlComments:'',
             providerAddressJustificationModalOpen:false
         }),
         foodItemEntryForm: Map({
             name: '',
             nameErrMsg:'',
             description: '',
+            cuisineType:'',
+            cuisineTypeErrorMsg:'',
             descriptionErrorMsg:'',
             placeOrderBy: undefined,
             placeOrderByErrorMsg:'',
-            serviceDate:undefined,
+            serviceDate:new Date(),
             serviceDateErrorMsg:'',
             deliveryFlag: false,
+            price:'',
+            priceErrorMsg:'',
             pickUpStartTime:undefined,
             pickUpEndTime:undefined,
             organic:false,
@@ -158,7 +155,12 @@ const initialState =
             snackBarOpen:false,
             snackBarMessage:'',
             firstItem:true
-        })
+        }),
+        providerProfileCall: Map({
+            isLoading: false,
+            error: false,
+            data: undefined
+        }),
     })
 export default function providerReducer(state = initialState, action) {
     const handler = ACTION_HANDLERS[action.type]

@@ -7,12 +7,9 @@
     display: inline-block;
     position: relative;
     margin: 0px auto;
-    width: 200px;
 }
 
 .react-autosuggest__input {
-    width: 200px;
-    height: 30px;
     padding: 10px;
     font-family: Helvetica, sans-serif;
     font-weight: 300;
@@ -32,9 +29,10 @@
 
 .react-autosuggest__suggestions-container {
     position: absolute;
-    width: 200px;
     margin: 0px auto;
     padding: 0;
+    text-align:left;
+    overflow-x: hidden;
     list-style-type: none;
     border: 1px solid #aaa;
     background-color: #fff;

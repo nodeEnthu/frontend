@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { userZipSearchChange } from '../modules/homeview'
+import { userAddressSearchChange,userAddressUpdatePlaceId,userAddressUpdateDetect } from '../../../layouts/CoreLayout/coreReducer'
 
 import { fromJS } from 'immutable'
 /*  This is a container component. Notice it does not contain any JSX,
@@ -14,14 +14,14 @@ import HomeView from '../components/HomeView'
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapActionCreators = {
-    userZipSearchChange:(val)=>userZipSearchChange(val)
+    userAddressSearchChange,
+    userAddressUpdatePlaceId,
+    userAddressUpdateDetect
 }
 
 const mapStateToProps = (state) => {
     return {
-        globalState:state,
-        homepage: state.homepage,
-        userZipSearchChange:userZipSearchChange
+        globalState:state
     }
 }
 

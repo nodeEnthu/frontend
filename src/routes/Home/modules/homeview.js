@@ -1,43 +1,33 @@
+import {Map} from 'immutable';
+
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const USER_ZIP_SEARCH_CHANGE = 'USER_ZIP_SEARCH_CHANGE'
+export const PLACE_HOLDER = "PLACE_HOLDER"
 
-import { Map, fromJS } from 'immutable'
 // ------------------------------------
 // Actions
 // ------------------------------------
-
-export function userZipSearchChange(val) {
-    return {
-        type: USER_ZIP_SEARCH_CHANGE,
-        payload:val
-    }
-}
-
-export const actions = {
-    userZipSearchChange
+export function placeholder(){
+	return{
+		type:PLACE_HOLDER
+	}
 }
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-    [USER_ZIP_SEARCH_CHANGE]:(state,action)=>{
-        let newState = state.updateIn(['userZipSearch','searchText'],value=>action.payload);
-        return newState;
-    }
+   [PLACE_HOLDER]:(state,action)=>{return state;}
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-let initialState = Map({
-    userZipSearch: Map({
-        searchText: ''
-    })
-});
-export function homeviewReducer(state = initialState, action) {
-    const handler = ACTION_HANDLERS[action.type]
+
+const initialState = Map({});
+
+export default function homepage(state = initialState, action) {
+    const handler = ACTION_HANDLERS[action.type];
     return handler ? handler(state, action) : state
-}
+};

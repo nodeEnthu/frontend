@@ -3,21 +3,20 @@ import classes from './AsyncAutocomplete.scss'
 import Autosuggest from 'react-autosuggest'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import debounce from 'lodash.debounce'
-//import dropRight from 'lodash.dropRight'
-import React from 'react'
+import { getCall } from 'utils/httpUtils/apiCallWrapper';
+import React from 'react';
+
 
 
 /* --------------- */
 /*    Component    */
 /* --------------- */
 
-function getSuggestionValue(suggestion) {
-    return suggestion._id;
-}
+
 
 function renderSuggestion(suggestion) {
     return (
-        <span>{suggestion._id}</span>
+        <span>{suggestion.address}</span>
     );
 }
 
@@ -25,47 +24,35 @@ class AsyncAutocomplete extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            value: props.settings.userSearchText.get('searchText'),
-            suggestions: [],
-            isLoading: false,
-            apiUrl:props.settings.apiUrl,
-            changeGlobalState: props.settings.action
-        };
-
-        this.onChange = this.onChange.bind(this);
+            suggestions:[],
+        }
         this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
-        this.debouncedLoadSuggestions = debounce(this.loadSuggestions, 500);
-    }
-    componentWillReceiveProps (nextProps) {
-        this.setState({
-            value: nextProps.settings.userSearchText.get('searchText')
-        });
+        this.debouncedLoadSuggestions = debounce(this.loadSuggestions, 500);        
     }
     loadSuggestions(value) {
         let self = this;
         this.setState({
             isLoading: true
         });
-        
-        fetch(this.state.apiUrl +'?search='+value , { method: 'get' })
-            .then(function(response) {
-                return response.json();
-            })
+        getCall(this.props.apiUrl, { searchText: value })
             .then(function(resolvedResponse) {
-              if(resolvedResponse.length>5){
-                const resultsToIgnore = resolvedResponse.length -3;
-                //resolvedResponse = dropRight(resolvedResponse,resultsToIgnore);
-              }
-              self.setState({
-                  isLoading: false,
-                  suggestions: resolvedResponse
-              });
+                let result = [];
+                // greater than 5 take first 5
+                if (resolvedResponse.data.addresses.length > 5) {
+                    for (var i = 0; i < 4; i++) {
+                        result.push(resolvedResponse.data.addresses[i]);
+                    }
+                } else { result = resolvedResponse.data.addresses; }
+
+                self.setState({
+                    isLoading: false,
+                    suggestions: result
+                });
             })
             .catch(function(err) {
 
             });
     }
-
     getSuggestions(value, { debounce } = {}) {
         if (debounce === true) {
             this.debouncedLoadSuggestions(value);
@@ -73,11 +60,6 @@ class AsyncAutocomplete extends React.Component {
             this.loadSuggestions(value);
         }
     }
-
-    onChange(event, { newValue }) {
-        this.state.changeGlobalState(newValue); 
-    }
-
     onSuggestionsUpdateRequested({ value, reason }) {
         if (value && value.length > 2) {
             this.getSuggestions(value, {
@@ -85,23 +67,24 @@ class AsyncAutocomplete extends React.Component {
             });
         }
     }
-
     render() {
-        console.log("child render",this.state);
-        const { value, suggestions, isLoading } = this.state;
+        const {suggestions} = this.state;
         const inputProps = {
-            placeholder: "Please enter zip code",
-            value,
-            onChange: this.onChange
+            name:this.props.name,
+            placeholder: "street address",
+            value:this.props.userSearchText || '',
+            onChange: this.props.onChange,
+            onFocus:this.props.onFocus || undefined,
+            onBlur:this.props.onBlur || undefined
         };
-        const status = (isLoading ? 'Loading...' : 'Type to load suggestions');
-
         return (
-              <Autosuggest suggestions={suggestions}
-                           onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                           getSuggestionValue={getSuggestionValue}
-                           renderSuggestion={renderSuggestion}
-                           inputProps={inputProps} />
+            <Autosuggest suggestions={suggestions}
+                         onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+                         getSuggestionValue={this.props.getSuggestionValue}
+                         renderSuggestion={renderSuggestion}
+                         inputProps={inputProps}
+                         onSuggestionSelected={this.props.onSuggestionSelected}
+            />
         );
     }
 }

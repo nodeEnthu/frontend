@@ -2,8 +2,10 @@ import { applyMiddleware, compose, createStore } from 'redux'
 import { routerMiddleware } from 'react-router-redux'
 import thunk from 'redux-thunk'
 import makeRootReducer from './reducers'
+import 'react-fastclick';
 
 // Actions
+import * as actions from 'layouts/CoreLayout/coreReducer'
 
 export default (initialState = {}, history) => {
   // ======================================================
@@ -33,7 +35,16 @@ export default (initialState = {}, history) => {
       ...enhancers
     )
   )
-  store.asyncReducers = {}
+  store.asyncReducers = {};
+
+  // initializing code goes here .. bit of a hack .. should be improved
+  if(sessionStorage.getItem('token')){
+    store.dispatch(actions.userLoggedIn(true));
+    // now get the logged in persone information to fill the reducer
+  } // else  default is fault to start with so no else condition
+  // initialization code ends here
+
+
   if (module.hot) {
     module.hot.accept('./reducers', () => {
       const reducers = require('./reducers').default
