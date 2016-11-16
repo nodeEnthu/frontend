@@ -123,12 +123,18 @@ class Provider extends React.Component {
       <div style={contentStyle} >
         <div >{this.getStepContent(stepIndex)}</div>
         <div style={{display:'block', clear:'both', marginTop: 24, marginBottom: 12, textAlign:'center'}}>
-          <FlatButton
-            label="Back"
-            disabled={stepIndex === 0}
-            onTouchTap={this.handlePrev}
-            style={{marginRight: 12}}
-          />
+          {
+            (stepIndex === 2)?
+              undefined
+              :
+              <FlatButton
+                label="Back"
+                disabled={stepIndex === 0}
+                onTouchTap={this.handlePrev}
+                style={{marginRight: 12}}
+              />
+          }
+          
           <RaisedButton
             label={stepIndex === 2 ? 'Finish' : 'Next'}
             primary={true}
