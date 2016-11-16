@@ -28,7 +28,7 @@ const ProviderProfile = React.createClass({
       };
   },
   componentDidMount() {
-      this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall','PROVIDER');
+      this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
   },
   writeReviewModal(foodItem){
     this.props.openModal({storeKey:'reviewSubmitModalOpen', openModal:true})
@@ -74,8 +74,11 @@ const ProviderProfile = React.createClass({
     const {providerProfileCall,providerEditModalOpen} = this.props.providerProfile.toJS();
     let data = providerProfileCall.data;
     let self = this;
+
     const {user} = this.props.globalState.core.toJS();
+    console.log(this.props.providerProfile.toJS());
     let Element = Scroll.Element;
+    console.log(user,data);
     return (data && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="pure-g">
           <div className={classNames(classes["sidebar"], "pure-u-1","pure-u-md-1-4")}>
@@ -183,8 +186,16 @@ const ProviderProfile = React.createClass({
                   })
                 }
               </div>
-              <Element name="checkoutsection"/>
-              <Checkout{... this.props}/>
+              {(this.props.mode != 'providerEntry')?
+                <div>
+                  <Element name="checkoutsection"/>
+                  <Checkout{... this.props}/>
+                  <ReviewSubmitModal{... this.props}/>
+                </div>
+                :
+                undefined
+              }
+              
               <div className={classes["footer"]}>
                   <div className="pure-menu pure-menu-horizontal">
                       <ul>
@@ -196,7 +207,6 @@ const ProviderProfile = React.createClass({
               </div>
             </div> 
           </div>
-          <ReviewSubmitModal{... this.props}/>
         </div>
         :
         <div></div> 
@@ -206,17 +216,19 @@ const ProviderProfile = React.createClass({
 export default ProviderProfile
 
 ProviderProfile.propTypes = {
-  providerProfile:React.PropTypes.object.isRequired,
-  providerFoodItemCheckout:React.PropTypes.func.isRequired,
-  fetchMayBeSecuredData:React.PropTypes.func.isRequired,
-  updateCheckedOutQty:React.PropTypes.func.isRequired,
-  deleteCheckedOutItem:React.PropTypes.func.isRequired,
+  providerProfile:React.PropTypes.object,
+  providerFoodItemCheckout:React.PropTypes.func,
+  fetchMayBeSecuredData:React.PropTypes.func,
+  updateCheckedOutQty:React.PropTypes.func,
+  deleteCheckedOutItem:React.PropTypes.func,
   removeAllCheckedOutItems:React.PropTypes.func,
-  globalState:React.PropTypes.object.isRequired,
-  postSecuredData:React.PropTypes.func.isRequired,
-  openLoginModal:React.PropTypes.func.isRequired,
-  selectItemForReview:React.PropTypes.func.isRequired,
-  selectStarRating:React.PropTypes.func.isRequired,
-  submitTypedReview:React.PropTypes.func.isRequired,
-  reviewError:React.PropTypes.func.isRequired
+  globalState:React.PropTypes.object,
+  postSecuredData:React.PropTypes.func,
+  openLoginModal:React.PropTypes.func,
+  selectItemForReview:React.PropTypes.func,
+  selectStarRating:React.PropTypes.func,
+  submitTypedReview:React.PropTypes.func,
+  reviewError:React.PropTypes.func,
+  actionName:React.PropTypes.string,
+  mode:React.PropTypes.string
 }

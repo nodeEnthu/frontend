@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import {charsLeft, addProviderInfo, addProviderErrorMsg, addFoodItemInfo, removeFoodItemInfo, addProviderEntryState} from '../modules/provider'
-import {fetchData,fetchSecuredData} from 'utils/actionUtils/defaultHttpActions'
+import {fetchData,fetchSecuredData,fetchMayBeSecuredData} from 'utils/actionUtils/defaultHttpActions'
 
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -22,14 +22,16 @@ const mapActionCreators = {
     removeFoodItemInfo,
     addProviderEntryState,
     fetchData,
-    fetchSecuredData
+    fetchSecuredData,
+    fetchMayBeSecuredData
 }
 
 const mapStateToProps = (state) => ({
     globalState:state,
     providerEntryForm: state.provider.get('providerEntryForm'),
     providerEntryState: state.provider.get('providerEntryState'),
-    foodItemEntryForm: state.provider.get('foodItemEntryForm')
+    foodItemEntryForm: state.provider.get('foodItemEntryForm'),
+    provider:state.provider
 })
 
 

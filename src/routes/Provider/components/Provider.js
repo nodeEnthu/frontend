@@ -7,6 +7,7 @@ import ImageUploader from '../../../components/ImageUploader/index'
 import classes from './provider.scss'
 import ProviderEntryForm from '../../../components/ProviderEntryForm/ProviderEntryForm'
 import FoodItemEntryForm from '../../../components/FoodItemEntryForm/FoodItemEntryForm'
+import ProviderProfile from 'components/ProviderProfile'
 
 class Provider extends React.Component {
   state = this.props.providerEntryState.toJS();
@@ -82,9 +83,15 @@ class Provider extends React.Component {
         );
       case 2:
         return (
-          <p>
-            Please indicate the relavent dates and delivery/pick-up  options
-          </p>
+          <div>
+            <ProviderProfile  params = {{id:'582a955e621e8a3334aa4069'}}
+                              providerProfile = {this.props.provider}
+                              globalState = {this.props.globalState}
+                              fetchMayBeSecuredData = {this.props.fetchMayBeSecuredData}
+                              actionName = {"PROVIDER_ENTRY"}
+                              mode={"providerEntry"}
+            />
+          </div>
         );
       default:
         return 'Youre a long way from home sonny jim!';
@@ -172,6 +179,8 @@ Provider.propTypes= {
     removeFoodItemInfo:React.PropTypes.func.isRequired,
     addProviderEntryState:React.PropTypes.func.isRequired,
     fetchData:React.PropTypes.func.isRequired,
-    fetchSecuredData:React.PropTypes.func.isRequired
+    fetchSecuredData:React.PropTypes.func,
+    provider:React.PropTypes.object,
+    fetchMayBeSecuredData:React.PropTypes.func
 };
 export default Provider;
