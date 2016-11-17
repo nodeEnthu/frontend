@@ -17,6 +17,8 @@ const maxCount = 100;
 
 const FoodItemEntryForm= React.createClass({
     componentDidMount() {
+        //scroll to the top
+        window.scrollTo(0, 23);
         // check whether its an edit to an already present provider
         if(this.props.params.id){
             this.props.fetchData('/api/foodItem/'+this.props.params.id , 'foodItemCall','FOOD_ITEM')
