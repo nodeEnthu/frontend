@@ -9,7 +9,7 @@ const ProviderProfilePage = React.createClass({
 	},
     render() {
         return (
-            <div style={{position:'absolute',top:'60px'}}>
+            <div style={{position:'relative'}}>
 	        	<ProviderProfile {... this.props}
                               actionName="PROVIDER"
             />

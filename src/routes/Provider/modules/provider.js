@@ -90,8 +90,8 @@ const ACTION_HANDLERS = {
     [Add_Provider_Entry_State]:(state,action)=>state.setIn(['providerEntryState', action.storeKey], action.payload),
 
     [REQUEST_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
-    [FAIL_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
-    [RECEIVE_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
+    [FAIL_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).set('providerEntryForm', Map()),
+    [RECEIVE_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).set('providerEntryForm', Map(action.payload.data.data)),
     
 }
 
@@ -158,8 +158,7 @@ const initialState =
         }),
         providerProfileCall: Map({
             isLoading: false,
-            error: false,
-            data: undefined
+            error: false
         }),
     })
 export default function providerReducer(state = initialState, action) {

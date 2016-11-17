@@ -40,7 +40,7 @@ class Provider extends React.Component {
     }
   };
 
-  getStepContent(stepIndex) {
+  getStepContent(stepIndex,user) {
     switch (stepIndex) {
       case 0:
         return (
@@ -56,7 +56,7 @@ class Provider extends React.Component {
                                 addProviderErrorMsg = {this.props.addProviderErrorMsg}
                                 onAllClear = {this.onAllClear}
                                 fetchSecuredData = {this.props.fetchSecuredData} 
-                                params = {this.props.params}
+                                params = {{id:user._id}}
                                 ref="providerform"
             />
           </div>
@@ -84,8 +84,8 @@ class Provider extends React.Component {
       case 2:
         return (
           <div style={{position:'flex',top:'150px'}}>
-            <ProviderProfile  params = {{id:'582a955e621e8a3334aa4069'}}
-                              providerProfile = {this.props.provider}
+            <ProviderProfile  params = {{id:user._id}}
+                              providerProfile = {this.props.provider.get('providerEntryForm')}
                               globalState = {this.props.globalState}
                               fetchMayBeSecuredData = {this.props.fetchMayBeSecuredData}
                               actionName = {"PROVIDER_ENTRY"}
@@ -100,6 +100,7 @@ class Provider extends React.Component {
 
   renderContent() {
     const {finished, stepIndex} = this.props.providerEntryState.toJS();
+    const {user} = this.props.globalState.core.toJS();
     const contentStyle = {margin: '0 16px'};
 
     if (finished) {
@@ -118,10 +119,9 @@ class Provider extends React.Component {
         </div>
       );
     }
-
     return (
       <div style={contentStyle} >
-        <div >{this.getStepContent(stepIndex)}</div>
+        <div >{this.getStepContent(stepIndex,user)}</div>
         <div style={{display:'block', clear:'both', marginTop: 24, marginBottom: 12, textAlign:'center'}}>
           {
             (stepIndex === 2)?
@@ -134,7 +134,6 @@ class Provider extends React.Component {
                 style={{marginRight: 12}}
               />
           }
-          
           <RaisedButton
             label={stepIndex === 2 ? 'Finish' : 'Next'}
             primary={true}
@@ -166,8 +165,7 @@ class Provider extends React.Component {
             <ExpandTransition loading={loading} open={true} >
               {this.renderContent()}
             </ExpandTransition>
-          </div>
-       
+          </div> 
       </div>
     );
   }

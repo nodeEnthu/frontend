@@ -62,7 +62,7 @@ export function fetchSecuredData(url,storeKey,actionType,queryParams) {
         dispatch(requestData({ storeKey: storeKey },actionType));
         return securedGetCall(url, queryParams)
             .then(res => dispatch(receiveData({ storeKey: storeKey, data: res },actionType)))
-            .catch(err => dispatch(failData({ storeKey: storeKey, data: err },actionType)));
+            
     };
 }
 
@@ -71,6 +71,5 @@ export function postSecuredData(url, storeKey,actionType,queryParams) {
         dispatch(requestData({ storeKey: storeKey },actionType));
         return securedPostCall(url, queryParams)
             .then(res => dispatch(receiveData({ storeKey: storeKey, data: res },actionType)))
-            .catch(err => dispatch(failData({ storeKey: storeKey, data: err },actionType)));
     };
 }

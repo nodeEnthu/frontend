@@ -15,7 +15,7 @@ const ProviderEntryForm = React.createClass({
     componentDidMount() {
         // check whether its an edit to an already present provider
         if(this.props.params.id){
-            this.props.fetchSecuredData('/api/users/'+this.props.params.id , 'providerProfileCall','PROVIDER_PROFILE')
+            this.props.fetchSecuredData('/api/users/'+this.props.params.id , 'providerProfileCall','PROVIDER_ENTRY')
             // we dont save the searchText or place_id in the db .. so we got to manually wire up search text here
             // a bit hacky but we had to do it to automate form validation
             // note to Gautam: see this is what we have to do when state does not match the things we save in db
@@ -127,6 +127,7 @@ const ProviderEntryForm = React.createClass({
     },
     render() {
         let { chars_left, title, description, email, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg } = this.props.providerEntryForm.toJS();
+        console.log(this.props.providerEntryForm.toJS());
         const styles = {
           block: {
             maxWidth: 250,
