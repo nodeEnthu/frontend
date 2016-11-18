@@ -21,6 +21,7 @@ const ProviderEntryForm = React.createClass({
             // note to Gautam: see this is what we have to do when state does not match the things we save in db
             .then((res)=>{
                 if(res && res.payload &&res.payload.data && res.payload.data.data && res.payload.data.data.loc){
+                    this.props.prefilProviderEntryForm(res.payload.data.data);
                     this.props.addProviderInfo({
                         storeKey:'searchText',
                         payload:res.payload.data.data.loc.searchText
@@ -30,6 +31,7 @@ const ProviderEntryForm = React.createClass({
                         payload:res.payload.data.data.loc.place_id
                     })
                 }
+
             })
         }
     },
@@ -346,6 +348,7 @@ const ProviderEntryForm = React.createClass({
 ProviderEntryForm.propTypes = {
     providerEntryForm: React.PropTypes.object.isRequired,
     fetchSecuredData:React.PropTypes.func.isRequired,
-    params:React.PropTypes.object
+    params:React.PropTypes.object,
+    prefilProviderEntryForm:React.PropTypes.func
 };
 export default ProviderEntryForm;

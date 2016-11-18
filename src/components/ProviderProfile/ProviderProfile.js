@@ -28,7 +28,6 @@ const ProviderProfile = React.createClass({
       };
   },
   componentWillMount() {
-    console.log('componentDidMount ****');
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
   },
   writeReviewModal(foodItem){
@@ -79,7 +78,7 @@ const ProviderProfile = React.createClass({
     const {user} = this.props.globalState.core.toJS();
     let Element = Scroll.Element;
     console.log(this.props.actionName,'this.props.actionName', this.props.params.id,user,data);
-    return (data  && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
+    return (data && data.foodItems && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="pure-g">
           <div className={classNames(classes["sidebar"], "pure-u-1", "pure-u-md-1-4")}>
             {

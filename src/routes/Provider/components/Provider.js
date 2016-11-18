@@ -58,6 +58,7 @@ class Provider extends React.Component {
                                 fetchSecuredData = {this.props.fetchSecuredData} 
                                 params = {{id:user._id}}
                                 actionName = {"PROVIDER_ENTRY"}
+                                prefilProviderEntryForm = {this.props.prefilProviderEntryForm}
                                 ref="providerform" 
             />
           </div>
@@ -186,6 +187,7 @@ Provider.propTypes= {
     fetchData:React.PropTypes.func.isRequired,
     fetchSecuredData:React.PropTypes.func,
     provider:React.PropTypes.object,
-    fetchMayBeSecuredData:React.PropTypes.func
+    fetchMayBeSecuredData:React.PropTypes.func,
+    prefilProviderEntryForm:React.PropTypes.func
 };
 export default Provider;
