@@ -32,7 +32,11 @@ var Login = React.createClass({
     componentDidMount() {
     },
     successfullLogin(response) {
-        const { dispatch } = this.props;
+        const {globalState,dispatch } = this.props;
+        const {userAddressSearch} = (globalState && globalState.core)?globalState.core.toJS():undefined;
+        if(userAddressSearch){
+          response.userAddressSearch = userAddressSearch;
+        }
         postCall('/api/users/signUp', JSON.stringify(response))
             .then(function(result) {
                 if (result.data.token) {

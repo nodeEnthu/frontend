@@ -89,7 +89,7 @@ const ACTION_HANDLERS = {
     [Remove_Food_Item_Info]: (state, action) => state.setIn(['foodItemEntryForm', 'name'], '').setIn(['foodItemEntryForm', 'description'], ''),
     [Add_Provider_Entry_State]:(state,action)=>state.setIn(['providerEntryState', action.storeKey], action.payload),
 
-    [REQUEST_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
+    [REQUEST_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true).set('providerEntryForm', Map()),
     [FAIL_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).set('providerEntryForm', Map()),
     [RECEIVE_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).set('providerEntryForm', Map(action.payload.data.data)),
     
@@ -158,7 +158,8 @@ const initialState =
         }),
         providerProfileCall: Map({
             isLoading: false,
-            error: false
+            error: false,
+            data:Map()
         }),
     })
 export default function providerReducer(state = initialState, action) {

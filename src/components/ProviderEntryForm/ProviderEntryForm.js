@@ -12,7 +12,7 @@ import ImageUploader from 'components/ImageUploader'
 
 const maxCount = 100;
 const ProviderEntryForm = React.createClass({
-    componentDidMount() {
+    componentWillMount() {
         // check whether its an edit to an already present provider
         if(this.props.params.id){
             this.props.fetchSecuredData('/api/users/'+this.props.params.id , 'providerProfileCall','PROVIDER_ENTRY')
@@ -127,7 +127,7 @@ const ProviderEntryForm = React.createClass({
     },
     render() {
         let { chars_left, title, description, email, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg } = this.props.providerEntryForm.toJS();
-        console.log(this.props.providerEntryForm.toJS());
+        console.log(chars_left, title, description, email, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg,);
         const styles = {
           block: {
             maxWidth: 250,
@@ -140,7 +140,7 @@ const ProviderEntryForm = React.createClass({
             <div>
                 <form className="pure-form pure-form-stacked">
                     <fieldset className="pure-group">
-                        <input type="text"  className="pure-u-1" placeholder="*title" name="title" value={this.props.providerEntryForm.get('title')}
+                        <input type="text"  className="pure-u-1" placeholder="*title" name="title" value={title}
                         onChange={this.changeStoreVal}
                         onBlur={this.handleChange} 
                         onFocus={this.handleFocus}

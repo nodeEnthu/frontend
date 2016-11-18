@@ -27,7 +27,8 @@ const ProviderProfile = React.createClass({
           itemCheckOutClick:false,
       };
   },
-  componentDidMount() {
+  componentWillMount() {
+    console.log('componentDidMount ****');
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
   },
   writeReviewModal(foodItem){
@@ -71,12 +72,14 @@ const ProviderProfile = React.createClass({
     })
   },
   render() {
+    
     const {providerProfileCall,providerEditModalOpen} = this.props.providerProfile.toJS();
     let data = providerProfileCall.data;
     let self = this;
     const {user} = this.props.globalState.core.toJS();
     let Element = Scroll.Element;
-    return (data && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
+    console.log(this.props.actionName,'this.props.actionName', this.props.params.id,user,data);
+    return (data  && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="pure-g">
           <div className={classNames(classes["sidebar"], "pure-u-1", "pure-u-md-1-4")}>
             {
@@ -222,7 +225,7 @@ const ProviderProfile = React.createClass({
         </div>
         :
         <div></div> 
-    }
+    } 
 });
 
 export default ProviderProfile

@@ -1,13 +1,13 @@
 // We only need to import the modules necessary for initial render
 import CoreLayout from '../layouts/CoreLayout/CoreLayout'
 import Home from './Home'
-import ChatRoute from './Chat'
 import ProviderRoute from './Provider'
 import ProviderProfilePage from './ProviderProfilePage'
 import Search from './Search'
 import FoodItemReviews from './FoodItemReviews'
 import ProviderProfileEditPage from './ProviderProfileEditPage'
 import FoodItemEditPage from './FoodItemEditPage'
+import { onMainPageEnter } from 'utils/auth/onEnterAuth'
 
 
 
@@ -15,18 +15,19 @@ import FoodItemEditPage from './FoodItemEditPage'
     PlainRoute objects to build route definitions.   */
 
 export const createRoutes = (store) => ({
-  path: '/',
-  component: CoreLayout,
-  indexRoute: Home,
-  childRoutes: [
-    ChatRoute(store),
-    ProviderRoute(store),
-    ProviderProfilePage(store),
-    Search(store),
-    FoodItemReviews(store),
-    ProviderProfileEditPage(store),
-    FoodItemEditPage(store)
-  ]
+    path: '/',
+    component: CoreLayout,
+    childRoutes: [{
+            indexRoute: Home,
+            onEnter: (nextState, replace) => onMainPageEnter(nextState, replace, store)
+        },
+        ProviderRoute(store),
+        ProviderProfilePage(store),
+        Search(store),
+        FoodItemReviews(store),
+        ProviderProfileEditPage(store),
+        FoodItemEditPage(store)
+    ]
 })
 
 /*  Note: childRoutes can be chunked or otherwise loaded programmatically

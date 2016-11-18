@@ -46,9 +46,12 @@ export default (initialState = {}, history, cb) => {
         store.dispatch(actions.userLoggedIn(true));
         store.dispatch(actions.addUser(result.data));
         store.dispatch(actions.addToken(token));
+        cb(store);
     })
-    // now get the logged in persone information to fill the reducer
-  } // else  default is fault to start with so no else condition
+  } else{
+    store.dispatch(actions.userLoggedIn(false));
+    cb(store);
+  }
   // initialization code ends here
 
 
@@ -58,6 +61,4 @@ export default (initialState = {}, history, cb) => {
       store.replaceReducer(reducers(store.asyncReducers))
     })
   }
-
-  cb(store)
 }

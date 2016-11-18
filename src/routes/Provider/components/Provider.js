@@ -46,7 +46,7 @@ class Provider extends React.Component {
         return (
           <div>
             <p>
-              Please give a brief history about your cooking skills along with a picture showcasing you/your business.
+              Please give a brief history about your cooking skills along with a picture showcasing you/your business
             </p>
             <div className={classes["is-center"]}>
               <ImageUploader/>
@@ -57,7 +57,8 @@ class Provider extends React.Component {
                                 onAllClear = {this.onAllClear}
                                 fetchSecuredData = {this.props.fetchSecuredData} 
                                 params = {{id:user._id}}
-                                ref="providerform"
+                                actionName = {"PROVIDER_ENTRY"}
+                                ref="providerform" 
             />
           </div>
           
@@ -85,7 +86,7 @@ class Provider extends React.Component {
         return (
           <div style={{position:'flex',top:'150px'}}>
             <ProviderProfile  params = {{id:user._id}}
-                              providerProfile = {this.props.provider.get('providerEntryForm')}
+                              providerProfile = {this.props.provider}
                               globalState = {this.props.globalState}
                               fetchMayBeSecuredData = {this.props.fetchMayBeSecuredData}
                               actionName = {"PROVIDER_ENTRY"}
