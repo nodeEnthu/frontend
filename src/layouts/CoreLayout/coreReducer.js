@@ -8,7 +8,6 @@ export const CLOSE_MODAL_LOGIN = 'CLOSE_MODAL_LOGIN';
 export const USER_LOGGED_IN = 'USER_LOGGED_IN';
 export const USER_ADDRESS_SEARCH_CHANGE = 'USER_ADDRESS_SEARCH_CHANGE'
 export const USER_ADDRESS_UPDATE_PLACE_ID = 'USER_ADDRESS_UPDATE_PLACE_ID'
-export const USER_ADDRESS_UPDATE_DETECT = 'USER_ADDRESS_UPDATE_DETECT'
 
 const initialState = Map({
     token: '',
@@ -89,7 +88,6 @@ const ACTION_HANDLERS = {
         return state.set('loginModalOPen', false)
     },
     [USER_LOGGED_IN]: (state, action) => {
-        console.log('USER_LOGGED_IN is invoked with ', action.payload);
         return state.set('userLoggedIn', action.payload);
     },
     [USER_ADDRESS_SEARCH_CHANGE]: (state, action) => {

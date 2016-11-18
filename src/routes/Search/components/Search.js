@@ -9,6 +9,7 @@ import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Select from 'react-select';
 import DatePicker from 'material-ui/DatePicker';
+import AsyncAutocomplete from 'components/AsyncAutocomplete';
 
 
 const Search = React.createClass({
@@ -109,7 +110,7 @@ const Search = React.createClass({
     	this.context.router.push('/providerProfile/'+foodItem._creator);
     },
     render() {
-        let { data, addtnlQuery, dietSelectedMap } = this.props.search.toJS();
+        let { data, addtnlQuery, dietSelectedMap,userAddressSearch } = this.props.search.toJS();
         const { pageNum } = this.state;
         let resolvedData = [];
         for (let i = 0; i < data.length; i++) {
@@ -146,6 +147,15 @@ const Search = React.createClass({
     					onChange={(event, date)=>this.selectOption('date',date)}
 
     					/>
+            	</div>
+            	<div>
+            		<AsyncAutocomplete  name={'addressSearch'}
+                                        userSearchText = {userAddressSearch.searchText}
+                                        apiUrl = {'/api/locations/addressTypeAssist'}
+                                        getSuggestionValue={(suggestion)=>suggestion.address}
+                                        onChange = {(event, value)=>this.props.userSearchAddressChange(value.newValue)}
+                                        
+                    />
             	</div>
 				<div onClick={(event)=>this.filterCuisineOrDietType(event,'cuisine')}>
 					<Carousel
@@ -316,7 +326,9 @@ Search.propTypes = {
     fetchMayBeSecuredData: React.PropTypes.func.isRequired,
     selectCuisineOrDiet: React.PropTypes.func.isRequired,
     selectAddtnlQuery: React.PropTypes.func.isRequired,
-    search: React.PropTypes.object.isRequired
+    search: React.PropTypes.object.isRequired,
+    userSearchAddressChange:React.PropTypes.func.isRequired,
+    userSearchAddressUpdatePlaceId:React.PropTypes.func.isRequired
 };
 
 export default Search;
