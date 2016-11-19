@@ -8,8 +8,6 @@ export const RECEIVE_DATA = "RECEIVE_DATA";
 export const SELECT_CUISINE_OR_DIET_TYPE = "SELECT_CUISINE_OR_DIET_TYPE";
 export const FLUSH_OUT_STALE_DATA = "FLUSH_OUT_STALE_DATA";
 export const SELECT_ADDTNL_QUERY = "SELECT_ADDTNL_QUERY";
-export const USER_SEARCH_ADDRESS_CHANGE = 'USER_SEARCH_ADDRESS_CHANGE'
-export const USER_SEARCH_ADDRESS_UPDATE_PLACE_ID = 'USER_SEARCH_ADDRESS_UPDATE_PLACE_ID'
 
 // ------------------------------------
 // Actions
@@ -36,18 +34,6 @@ export function flushOutStaleData() {
     };
 }
 
-export function userSearchAddressChange(val) {
-    return {
-        type: USER_SEARCH_ADDRESS_CHANGE,
-        payload: val
-    }
-}
-export function userSearchAddressUpdatePlaceId(val) {
-    return {
-        type: USER_SEARCH_ADDRESS_UPDATE_PLACE_ID,
-        payload: val
-    }
-}
 
 
 // ------------------------------------
@@ -64,12 +50,7 @@ const ACTION_HANDLERS = {
             return state.deleteIn([action.key, action.payload])
         } else return state.updateIn([action.key, action.payload], false, selected => !selected)
     },
-     [USER_SEARCH_ADDRESS_CHANGE]: (state, action) => {
-        return state.updateIn(['userAddressSearch', 'searchText'], value => action.payload);
-    },
-    [USER_SEARCH_ADDRESS_UPDATE_PLACE_ID]: (state, action) => {
-        return state.updateIn(['userAddressSearch', 'place_id'], value => action.payload);
-    }
+
 }
 
 // ------------------------------------
@@ -85,10 +66,6 @@ const initialState = Map({
         orderMode: undefined,
         providerRadius: undefined,
         date: new Date()
-    }),
-    userAddressSearch: Map({
-        searchText: '',
-        place_id: '',
     })
 });
 

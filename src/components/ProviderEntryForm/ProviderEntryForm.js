@@ -129,7 +129,6 @@ const ProviderEntryForm = React.createClass({
     },
     render() {
         let { chars_left, title, description, email, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg } = this.props.providerEntryForm.toJS();
-        console.log(chars_left, title, description, email, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg,);
         const styles = {
           block: {
             maxWidth: 250,
