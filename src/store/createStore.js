@@ -3,11 +3,12 @@ import { routerMiddleware } from 'react-router-redux'
 import thunk from 'redux-thunk'
 import makeRootReducer from './reducers'
 import 'react-fastclick';
+import {getCall,postCall,securedGetCall} from 'utils/httpUtils/apiCallWrapper';
 
 // Actions
 import * as actions from 'layouts/CoreLayout/coreReducer'
 
-export default (initialState = {}, history) => {
+export default (initialState = {}, history, cb) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
@@ -38,10 +39,19 @@ export default (initialState = {}, history) => {
   store.asyncReducers = {};
 
   // initializing code goes here .. bit of a hack .. should be improved
+  let token = sessionStorage.getItem('token');
   if(sessionStorage.getItem('token')){
-    store.dispatch(actions.userLoggedIn(true));
-    // now get the logged in persone information to fill the reducer
-  } // else  default is fault to start with so no else condition
+    securedGetCall('/api/users/me')
+    .then(function(result) {
+        store.dispatch(actions.userLoggedIn(true));
+        store.dispatch(actions.addUser(result.data));
+        store.dispatch(actions.addToken(token));
+        cb(store);
+    })
+  } else{
+    store.dispatch(actions.userLoggedIn(false));
+    cb(store);
+  }
   // initialization code ends here
 
 
@@ -51,6 +61,4 @@ export default (initialState = {}, history) => {
       store.replaceReducer(reducers(store.asyncReducers))
     })
   }
-
-  return store
 }

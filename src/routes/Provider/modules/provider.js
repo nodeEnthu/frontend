@@ -16,6 +16,9 @@ export const REQUEST_DATA_PROVIDER_ENTRY = "REQUEST_DATA_PROVIDER_ENTRY";
 export const FAIL_DATA_PROVIDER_ENTRY = "FAIL_DATA_PROVIDER_ENTRY";
 export const RECEIVE_DATA_PROVIDER_ENTRY = "RECEIVE_DATA_PROVIDER_ENTRY";
 
+export const PREFIL_PROVIDER_ENTRY_FORM = "PREFIL_PROVIDER_ENTRY_FORM";
+
+
 export const MAX_COUNT_PROVIDER_DESC = 100;
 
 
@@ -49,6 +52,12 @@ export function addProviderErrorMsg(obj) {
     }
 }
 
+export function prefilProviderEntryForm(data){
+    return {
+        type:PREFIL_PROVIDER_ENTRY_FORM,
+        payload:data
+    }
+}
 
 ////////////////////////////////
 //actions for food item entry
@@ -79,6 +88,8 @@ export function addProviderEntryState(obj) {
     }
 }
 
+
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -88,6 +99,8 @@ const ACTION_HANDLERS = {
     [Add_Food_Item_Info]: (state, action) => state.setIn(['foodItemEntryForm', action.storeKey], action.payload),
     [Remove_Food_Item_Info]: (state, action) => state.setIn(['foodItemEntryForm', 'name'], '').setIn(['foodItemEntryForm', 'description'], ''),
     [Add_Provider_Entry_State]:(state,action)=>state.setIn(['providerEntryState', action.storeKey], action.payload),
+
+    [PREFIL_PROVIDER_ENTRY_FORM]:(state,action)=>state.set('providerEntryForm', Map(action.payload)),
 
     [REQUEST_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
     [FAIL_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
@@ -159,7 +172,7 @@ const initialState =
         providerProfileCall: Map({
             isLoading: false,
             error: false,
-            data: undefined
+            data:Map()
         }),
     })
 export default function providerReducer(state = initialState, action) {

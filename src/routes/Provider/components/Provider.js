@@ -40,13 +40,13 @@ class Provider extends React.Component {
     }
   };
 
-  getStepContent(stepIndex) {
+  getStepContent(stepIndex,user) {
     switch (stepIndex) {
       case 0:
         return (
           <div>
             <p>
-              Please give a brief history about your cooking skills along with a picture showcasing you/your business.
+              Please give a brief history about your cooking skills along with a picture showcasing you/your business
             </p>
             <div className={classes["is-center"]}>
               <ImageUploader/>
@@ -56,8 +56,10 @@ class Provider extends React.Component {
                                 addProviderErrorMsg = {this.props.addProviderErrorMsg}
                                 onAllClear = {this.onAllClear}
                                 fetchSecuredData = {this.props.fetchSecuredData} 
-                                params = {this.props.params}
-                                ref="providerform"
+                                params = {{id:user._id}}
+                                actionName = {"PROVIDER_ENTRY"}
+                                prefilProviderEntryForm = {this.props.prefilProviderEntryForm}
+                                ref="providerform" 
             />
           </div>
           
@@ -83,8 +85,8 @@ class Provider extends React.Component {
         );
       case 2:
         return (
-          <div>
-            <ProviderProfile  params = {{id:'582a955e621e8a3334aa4069'}}
+          <div style={{position:'flex',top:'150px'}}>
+            <ProviderProfile  params = {{id:user._id}}
                               providerProfile = {this.props.provider}
                               globalState = {this.props.globalState}
                               fetchMayBeSecuredData = {this.props.fetchMayBeSecuredData}
@@ -100,6 +102,7 @@ class Provider extends React.Component {
 
   renderContent() {
     const {finished, stepIndex} = this.props.providerEntryState.toJS();
+    const {user} = this.props.globalState.core.toJS();
     const contentStyle = {margin: '0 16px'};
 
     if (finished) {
@@ -118,17 +121,21 @@ class Provider extends React.Component {
         </div>
       );
     }
-
     return (
       <div style={contentStyle} >
-        <div >{this.getStepContent(stepIndex)}</div>
-        <div style={{display:'block', clear:'both', marginTop: 24, marginBottom: 12}}>
-          <FlatButton
-            label="Back"
-            disabled={stepIndex === 0}
-            onTouchTap={this.handlePrev}
-            style={{marginRight: 12}}
-          />
+        <div >{this.getStepContent(stepIndex,user)}</div>
+        <div style={{display:'block', clear:'both', marginTop: 24, marginBottom: 12, textAlign:'center'}}>
+          {
+            (stepIndex === 2)?
+              undefined
+              :
+              <FlatButton
+                label="Back"
+                disabled={stepIndex === 0}
+                onTouchTap={this.handlePrev}
+                style={{marginRight: 12}}
+              />
+          }
           <RaisedButton
             label={stepIndex === 2 ? 'Finish' : 'Next'}
             primary={true}
@@ -160,8 +167,7 @@ class Provider extends React.Component {
             <ExpandTransition loading={loading} open={true} >
               {this.renderContent()}
             </ExpandTransition>
-          </div>
-       
+          </div> 
       </div>
     );
   }
@@ -181,6 +187,7 @@ Provider.propTypes= {
     fetchData:React.PropTypes.func.isRequired,
     fetchSecuredData:React.PropTypes.func,
     provider:React.PropTypes.object,
-    fetchMayBeSecuredData:React.PropTypes.func
+    fetchMayBeSecuredData:React.PropTypes.func,
+    prefilProviderEntryForm:React.PropTypes.func
 };
 export default Provider;

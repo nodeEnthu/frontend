@@ -34,6 +34,8 @@ export function flushOutStaleData() {
     };
 }
 
+
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -47,7 +49,8 @@ const ACTION_HANDLERS = {
         if (state.getIn([action.key, action.payload])) {
             return state.deleteIn([action.key, action.payload])
         } else return state.updateIn([action.key, action.payload], false, selected => !selected)
-    }
+    },
+
 }
 
 // ------------------------------------

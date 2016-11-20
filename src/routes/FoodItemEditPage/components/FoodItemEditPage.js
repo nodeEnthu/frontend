@@ -24,6 +24,7 @@ const FoodItemEditPage = React.createClass({
 									removeFoodItemInfo = {this.props.removeFoodItemInfo}
 									params={this.props.params}
 									ref="foodItemEntryForm"
+									mode = {"editMode"}
 					/>
 					<RaisedButton
 						style={{width:'30%',color:'white'}}

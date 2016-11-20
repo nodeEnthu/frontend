@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import {charsLeft, addProviderInfo, addProviderErrorMsg, addFoodItemInfo, removeFoodItemInfo, addProviderEntryState} from '../modules/provider'
+import {charsLeft, addProviderInfo, addProviderErrorMsg, prefilProviderEntryForm, addFoodItemInfo, removeFoodItemInfo, addProviderEntryState} from '../modules/provider'
 import {fetchData,fetchSecuredData,fetchMayBeSecuredData} from 'utils/actionUtils/defaultHttpActions'
 
 
@@ -21,6 +21,7 @@ const mapActionCreators = {
     addFoodItemInfo,
     removeFoodItemInfo,
     addProviderEntryState,
+    prefilProviderEntryForm,
     fetchData,
     fetchSecuredData,
     fetchMayBeSecuredData

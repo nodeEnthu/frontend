@@ -17,6 +17,8 @@ const maxCount = 100;
 
 const FoodItemEntryForm= React.createClass({
     componentDidMount() {
+        //scroll to the top
+        window.scrollTo(0, 23);
         // check whether its an edit to an already present provider
         if(this.props.params.id){
             this.props.fetchData('/api/foodItem/'+this.props.params.id , 'foodItemCall','FOOD_ITEM')
@@ -371,23 +373,29 @@ const FoodItemEntryForm= React.createClass({
                         </div>
                     </fieldset>
                 </form>
-                <div>
-                    <IconButton
-                    onClick = {this.submitFoodItem}
-                    style={{top:'6px'}}
-                    >
-                        <ContentAddBox/>
-                    </IconButton>
-                    <div style={{display:'inline-block'}}>
-                        Add another item
+                {
+                    (this.props.mode != 'editMode')?
+                    <div>
+                        <IconButton
+                        onClick = {this.submitFoodItem}
+                        style={{top:'6px'}}
+                        >
+                            <ContentAddBox/>
+                        </IconButton>
+                        <div style={{display:'inline-block'}}>
+                            Add another item
+                        </div>
+                        <Snackbar
+                          open={snackBarOpen || false}
+                          message={snackBarMessage || ''}
+                          autoHideDuration={5000}
+                          onRequestClose={()=>{this.toggleFlags('snackBarOpen')}} 
+                        />
                     </div>
-                    <Snackbar
-                      open={snackBarOpen || false}
-                      message={snackBarMessage || ''}
-                      autoHideDuration={5000}
-                      onRequestClose={()=>{this.toggleFlags('snackBarOpen')}} 
-                    />
-                </div>
+                    :
+                    undefined
+                }
+                
             </div>
             :
             <div></div>
@@ -400,6 +408,7 @@ FoodItemEntryForm.propTypes = {
     addFoodItemInfo : React.PropTypes.func.isRequired, 
     fetchData : React.PropTypes.func.isRequired,
     removeFoodItemInfo: React.PropTypes.func.isRequired,
-    params:React.PropTypes.object
+    params:React.PropTypes.object,
+    mode:React.PropTypes.string
 };
 export default FoodItemEntryForm;

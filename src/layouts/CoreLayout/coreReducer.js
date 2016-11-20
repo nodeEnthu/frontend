@@ -8,27 +8,8 @@ export const CLOSE_MODAL_LOGIN = 'CLOSE_MODAL_LOGIN';
 export const USER_LOGGED_IN = 'USER_LOGGED_IN';
 export const USER_ADDRESS_SEARCH_CHANGE = 'USER_ADDRESS_SEARCH_CHANGE'
 export const USER_ADDRESS_UPDATE_PLACE_ID = 'USER_ADDRESS_UPDATE_PLACE_ID'
-export const USER_ADDRESS_UPDATE_DETECT = 'USER_ADDRESS_UPDATE_DETECT'
 
-const initialState = Map({
-    token: '',
-    user: Map({
-        name: '',
-        email: '',
-        provider: '',
-        img: '',
-        fbUserID: '',
-        gmailUserID: ''
-    }),
-    loginModalOPen: false,
-    userLoggedIn: false,
-    address: '',
-    placeId: '',
-    userAddressSearch: Map({
-        searchText: '',
-        place_id: '',
-    })
-})
+
 
 export function addToken(value) {
     return {
@@ -89,16 +70,35 @@ const ACTION_HANDLERS = {
         return state.set('loginModalOPen', false)
     },
     [USER_LOGGED_IN]: (state, action) => {
-        console.log('USER_LOGGED_IN is invoked with ', action.payload);
         return state.set('userLoggedIn', action.payload);
     },
     [USER_ADDRESS_SEARCH_CHANGE]: (state, action) => {
-        return state.updateIn(['userAddressSearch', 'searchText'], value => action.payload);
+        return state.setIn(['userAddressSearch', 'searchText'],action.payload);
     },
     [USER_ADDRESS_UPDATE_PLACE_ID]: (state, action) => {
-        return state.updateIn(['userAddressSearch', 'place_id'], value => action.payload);
+        return state.setIn(['userAddressSearch', 'place_id'],action.payload);
     }
 }
+
+const initialState = Map({
+    token: '',
+    user: Map({
+        name: '',
+        email: '',
+        provider: '',
+        img: '',
+        fbUserID: '',
+        gmailUserID: ''
+    }),
+    loginModalOPen: false,
+    userLoggedIn: false,
+    address: '',
+    placeId: '',
+    userAddressSearch: Map({
+        searchText: '',
+        place_id: '',
+    })
+})
 
 export function coreReducer(state = initialState, action) {
     const handler = ACTION_HANDLERS[action.type]

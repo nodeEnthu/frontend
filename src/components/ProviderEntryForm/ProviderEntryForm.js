@@ -12,15 +12,16 @@ import ImageUploader from 'components/ImageUploader'
 
 const maxCount = 100;
 const ProviderEntryForm = React.createClass({
-    componentDidMount() {
+    componentWillMount() {
         // check whether its an edit to an already present provider
         if(this.props.params.id){
-            this.props.fetchSecuredData('/api/users/'+this.props.params.id , 'providerProfileCall','PROVIDER_PROFILE')
+            this.props.fetchSecuredData('/api/users/'+this.props.params.id , 'providerProfileCall','PROVIDER_ENTRY')
             // we dont save the searchText or place_id in the db .. so we got to manually wire up search text here
             // a bit hacky but we had to do it to automate form validation
             // note to Gautam: see this is what we have to do when state does not match the things we save in db
             .then((res)=>{
                 if(res && res.payload &&res.payload.data && res.payload.data.data && res.payload.data.data.loc){
+                    this.props.prefilProviderEntryForm(res.payload.data.data);
                     this.props.addProviderInfo({
                         storeKey:'searchText',
                         payload:res.payload.data.data.loc.searchText
@@ -30,6 +31,7 @@ const ProviderEntryForm = React.createClass({
                         payload:res.payload.data.data.loc.place_id
                     })
                 }
+
             })
         }
     },
@@ -139,7 +141,7 @@ const ProviderEntryForm = React.createClass({
             <div>
                 <form className="pure-form pure-form-stacked">
                     <fieldset className="pure-group">
-                        <input type="text"  className="pure-u-1" placeholder="*title" name="title" value={this.props.providerEntryForm.get('title')}
+                        <input type="text"  className="pure-u-1" placeholder="*title" name="title" value={title}
                         onChange={this.changeStoreVal}
                         onBlur={this.handleChange} 
                         onFocus={this.handleFocus}
@@ -345,6 +347,7 @@ const ProviderEntryForm = React.createClass({
 ProviderEntryForm.propTypes = {
     providerEntryForm: React.PropTypes.object.isRequired,
     fetchSecuredData:React.PropTypes.func.isRequired,
-    params:React.PropTypes.object
+    params:React.PropTypes.object,
+    prefilProviderEntryForm:React.PropTypes.func
 };
 export default ProviderEntryForm;

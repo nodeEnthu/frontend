@@ -9,6 +9,8 @@ import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Select from 'react-select';
 import DatePicker from 'material-ui/DatePicker';
+import AsyncAutocomplete from 'components/AsyncAutocomplete';
+import { getCall,securedGetCall } from 'utils/httpUtils/apiCallWrapper';
 
 
 const Search = React.createClass({
@@ -37,6 +39,9 @@ const Search = React.createClass({
         let combinedQuery = this.createQuery();
         this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery);
     },
+    componentWillReceiveProps(nextProps){
+    	const {userAddressSearch} = nextProps.globalState.core.toJS();
+    },
     loadMore() {
        	let newPageNum = this.state.pageNum + 1;
        	let self = this;
@@ -46,6 +51,27 @@ const Search = React.createClass({
 	                    pageNum: newPageNum
 	                })
 	            })
+    },
+    onSuggestionSelected(event,{suggestion}){
+    	this.props.userAddressSearchChange(suggestion.address);
+        this.props.userAddressUpdatePlaceId(suggestion.place_id);
+        const {searchText,place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
+        //remove whats in there currently in the state
+        this.props.flushOutStaleData(); 
+        // now make the search call with the required params
+        this.fetchQueryData();
+        // also register this address in the address book if the user is logged in
+        if(this.props.globalState.core.get('userLoggedIn')){
+    		//register this at a new location if possible as the user needs to be logged in for this
+       		// register the address as most recently used
+       		if(searchText && place_id){
+	       		securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
+	        		.then(function(result){
+	        			self.state.showBackDrop = false;
+	        			self.context.router.push(page);
+	        		}); 	
+       		}
+    	} 
     },
     createQuery() {
         let combinedQuery = {};
@@ -111,6 +137,7 @@ const Search = React.createClass({
     render() {
         let { data, addtnlQuery, dietSelectedMap } = this.props.search.toJS();
         const { pageNum } = this.state;
+        const {userAddressSearch} = this.props.globalState.core.toJS();
         let resolvedData = [];
         for (let i = 0; i < data.length; i++) {
         	if(data[i].foodItems && data[i].foodItems.length>0){
@@ -145,8 +172,18 @@ const Search = React.createClass({
     					name="serviceDate"
     					onChange={(event, date)=>this.selectOption('date',date)}
 
-    					/>
+    				/>
+    				<div style={{display:'inline-block', marginLeft:'3em'}}>
+	            		<AsyncAutocomplete  name={'addressSearch'}
+	                                        userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
+	                                        apiUrl = {'/api/locations/addressTypeAssist'}
+	                                        getSuggestionValue={(suggestion)=>suggestion.address}
+	                                        onChange = {(event, value)=>this.props.userAddressSearchChange(value.newValue)}
+	                                        onSuggestionSelected = {this.onSuggestionSelected}
+	                    />
+	            	</div>
             	</div>
+            	
 				<div onClick={(event)=>this.filterCuisineOrDietType(event,'cuisine')}>
 					<Carousel
 						slidesToShow={5}
@@ -316,7 +353,9 @@ Search.propTypes = {
     fetchMayBeSecuredData: React.PropTypes.func.isRequired,
     selectCuisineOrDiet: React.PropTypes.func.isRequired,
     selectAddtnlQuery: React.PropTypes.func.isRequired,
-    search: React.PropTypes.object.isRequired
+    search: React.PropTypes.object.isRequired,
+    userAddressSearchChange: React.PropTypes.func.isRequired,
+    userAddressUpdatePlaceId: React.PropTypes.func.isRequired
 };
 
 export default Search;

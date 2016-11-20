@@ -55,7 +55,7 @@ const OrderSubmitModal = React.createClass({
       itemsCheckedOut:itemsCheckedOut,
       providerName:(data)?data.title : undefined,
       customerName:(user && user.name)?user.name : undefined,
-      providerAddress:(data)?data.userSeachLocations[data.deliveryAddressIndex].searchText:undefined,
+      providerAddress:(data)?data.loc.searchText:undefined,
       customerAddress: (user && user.name) ? user.userSeachLocations[user.deliveryAddressIndex].searchText:undefined,
       orderId:'tbd',
       tip:'tbd',
