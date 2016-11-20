@@ -73,11 +73,9 @@ const ACTION_HANDLERS = {
         return state.set('userLoggedIn', action.payload);
     },
     [USER_ADDRESS_SEARCH_CHANGE]: (state, action) => {
-        console.log("reaching here with "+action.payload);
         return state.setIn(['userAddressSearch', 'searchText'],action.payload);
     },
     [USER_ADDRESS_UPDATE_PLACE_ID]: (state, action) => {
-        console.log("reaching here with "+action.payload);
         return state.setIn(['userAddressSearch', 'place_id'],action.payload);
     }
 }

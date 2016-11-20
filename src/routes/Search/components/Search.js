@@ -53,11 +53,9 @@ const Search = React.createClass({
 	            })
     },
     onSuggestionSelected(event,{suggestion}){
-    	console.log('BEFORE: ',this.props.globalState.core.get('userAddressSearch').toJS());
     	this.props.userAddressSearchChange(suggestion.address);
         this.props.userAddressUpdatePlaceId(suggestion.place_id);
         const {searchText,place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
-        console.log('AFTER: ','searchText: ' + searchText,'place_id: ' +  place_id, suggestion);
         //remove whats in there currently in the state
         this.props.flushOutStaleData(); 
         // now make the search call with the required params
@@ -137,7 +135,6 @@ const Search = React.createClass({
     	this.context.router.push('/providerProfile/'+foodItem._creator);
     },
     render() {
-    	console.log("rerender");
         let { data, addtnlQuery, dietSelectedMap } = this.props.search.toJS();
         const { pageNum } = this.state;
         const {userAddressSearch} = this.props.globalState.core.toJS();

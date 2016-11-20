@@ -33,7 +33,6 @@ const HomeView = React.createClass({
         if (page === 'search') {
         	if(this.props.globalState.core.get('userLoggedIn')){
         		const {searchText,place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
-                console.log('searchText,place_id   from home view',searchText,place_id);
         		//register this at a new location if possible as the user needs to be logged in for this
            		// register the address as most recently used
            		securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
@@ -79,7 +78,6 @@ const HomeView = React.createClass({
         }
     },
     render() {
-        console.log("rerender");
         return (
             <div>
 				<div className={classNames(classes["splash-container"],classes["pure-override-letter-spacing"])}>
