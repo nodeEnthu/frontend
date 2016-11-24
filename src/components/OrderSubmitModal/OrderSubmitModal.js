@@ -51,6 +51,7 @@ const OrderSubmitModal = React.createClass({
       }
     };
     // make the checkout object here to be submitted once submit is clicked
+    console.log();
     this.checkOutOrderDetails={
       itemsCheckedOut:itemsCheckedOut,
       providerName:(data)?data.title : undefined,
