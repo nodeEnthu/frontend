@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import classes from './providerentryform.scss';
+import './providerentryform.scss';
 import { email, maxLength, required } from './../../utils/formUtils/formValidation';
 import Toggle from 'react-toggle';
 import classNames from 'classnames';
@@ -146,14 +146,14 @@ const ProviderEntryForm = React.createClass({
                         onBlur={this.handleChange} 
                         onFocus={this.handleFocus}
                     />
-                        <span className = {classes["error-message"]}>{(titleErrorMsg)?'*'+titleErrorMsg:undefined}</span>
+                        <span className = "error-message">{(titleErrorMsg)?'*'+titleErrorMsg:undefined}</span>
                         <textarea className = "pure-u-1"name="description" placeholder="background" value={description}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus} 
                             onChange={this.changeStoreVal} 
                         >   
                         </textarea>
-                        <span className = {classes["error-message"]}>{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
+                        <span className = "error-message">{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
                         <div>{chars_left}/100</div>
                     </fieldset>
                     <fieldset className="pure-group">
@@ -162,10 +162,10 @@ const ProviderEntryForm = React.createClass({
                             onFocus={this.handleFocus}
                             onChange={this.changeStoreVal}
                             className={"pure-u-1"}/>
-                        <span className = {classes["error-message"]}>{(emailErrorMsg)?'*'+emailErrorMsg:undefined}</span>
+                        <span className = "error-message">{(emailErrorMsg)?'*'+emailErrorMsg:undefined}</span>
                     </fieldset>
                     <fieldset className="pure-group">
-                        <legend className={classes["pull-left"]}>
+                        <legend className="pull-left">
                             <div>
                                 Address:
                             </div>
@@ -174,9 +174,9 @@ const ProviderEntryForm = React.createClass({
                                 <Toggle
                                     defaultChecked={!keepAddressPrivateFlag}
                                     onChange={()=>{this.toggle('keepAddressPrivateFlag')}}
-                                    className = {classes["input-hidden"]} 
+                                    className = "input-hidden"
                                 />
-                                <a className={classNames("pure-menu-link",classes["address-justification"])} 
+                                <a className="pure-menu-link address-justification" 
                                     onClick={()=>{this.toggle('providerAddressJustificationModalOpen')}}>
                                     why we need it?
                                 </a> 
@@ -194,7 +194,7 @@ const ProviderEntryForm = React.createClass({
                                                                                             })}
                                             onSuggestionSelected = {this.onSuggestionSelected}
                         />
-                        <span className = {classes["error-message"]}>{(searchTextErrorMsg)?'*'+searchTextErrorMsg:undefined}</span>
+                        <span className = "error-message">{(searchTextErrorMsg)?'*'+searchTextErrorMsg:undefined}</span>
                     </fieldset>
                     {(keepAddressPrivateFlag)?
                         <fieldset className="pure-group">
@@ -230,7 +230,7 @@ const ProviderEntryForm = React.createClass({
                         <Toggle
                             defaultChecked={pickUpFlag}
                             onChange={()=>{this.toggle('pickUpFlag')}}
-                            className = {classes["input-hidden"]}
+                            className = "input-hidden"
                         />
                     </fieldset>
                     {(pickUpFlag)?
@@ -249,12 +249,12 @@ const ProviderEntryForm = React.createClass({
                         undefined
                     }
                     <fieldset className="pure-group">
-                        <legend className={classes["pull-left"]}>
+                        <legend className="pull-left">
                                 We can deliver 
                             <Toggle
                                 defaultChecked={doYouDeliverFlag}
                                 onChange={()=>{this.toggle('doYouDeliverFlag')}}
-                                className = {classes["input-hidden"]} 
+                                className = "input-hidden"
                             /> 
                         </legend>
                             {(doYouDeliverFlag)?

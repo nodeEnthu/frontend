@@ -3,8 +3,7 @@ import { Link, IndexLink } from 'react-router';
 import { connect } from 'react-redux'
 import * as actions from '../../layouts/CoreLayout/coreReducer'
 import Login from '../Login/Login'
-import classes from './Header.scss'
-import classNames from 'classnames'
+import './Header.scss'
 export  class Header extends React.Component {
     constructor(props) {
         super(props);
@@ -22,8 +21,8 @@ export  class Header extends React.Component {
         const { globalState } = this.props;
         const {img} = globalState.core.get('user').toJS();
         return (
-            <div className={classes["header"]}>
-            <div className={classNames(classes["home-menu"], "pure-menu","pure-menu-horizontal")}>
+            <div className="header">
+            <div className="home-menu pure-menu pure-menu-horizontal">
               <span className="pure-menu-heading">fillurtummy</span>
               <ul className="pure-menu-list">
                   <li className="pure-menu-item">
@@ -69,3 +68,4 @@ function mapStateToProps(state) {
     };
 }
 export default connect(mapStateToProps)(Header)
+

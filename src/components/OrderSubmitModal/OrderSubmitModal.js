@@ -1,5 +1,5 @@
 import React from 'react'
-import classes from './../ProviderProfile/providerProfile.scss'
+import './../ProviderProfile/providerProfile.scss'
 import Modal from 'react-modal';
 import classNames from 'classnames';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -70,22 +70,22 @@ const OrderSubmitModal = React.createClass({
             isOpen={orderSubmitModalOpen}
             onRequestClose={this.closeModal}
             style={customStyles} >
-            <div className={classNames(classes["order-submit"])}>
-              <div className={classes["order-title"]}>
-                <div className={classes["order-header"]}>
+            <div className="order-submit">
+              <div className="order-title">
+                <div className="order-header">
                   Order summary
                 </div>
                 <div className="pure-u-1 pure-u-md-1-2">
-                  <div className={classes["order-address-heading"]}>Deliver to:</div>
+                  <div className="order-address-heading">Deliver to:</div>
                   <div>{this.checkOutOrderDetails.customerName}</div>
-                  <div className={classes["delivery-box"]}>
+                  <div className="delivery-box">
                     {this.checkOutOrderDetails.customerAddress}
                   </div>
                 </div>
-                <div className={classNames("pure-u-1","pure-u-md-1-2",classes["provider-address"])}>
-                  <div className={classes["order-address-heading"]}>Provider:</div>
+                <div className="pure-u-1 pure-u-md-1-2 provider-address">
+                  <div className="order-address-heading">Provider:</div>
                   <div>{data.name}</div>
-                  <div className={classes["delivery-box"]}>{this.checkOutOrderDetails.providerAddress}</div>
+                  <div className="delivery-box">{this.checkOutOrderDetails.providerAddress}</div>
                 </div>
               </div>
               <table className="pure-table pure-table-horizontal">
@@ -110,7 +110,7 @@ const OrderSubmitModal = React.createClass({
                   }
                 </tbody>
               </table>
-              <div className={classes["move-center"]}>
+              <div className="move-center">
                 <RaisedButton
                   label="Submit your order"
                   primary={true}

@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import ExpandTransition from 'material-ui/internal/ExpandTransition'
 import ImageUploader from '../../../components/ImageUploader/index'
-import classes from './provider.scss'
+import './provider.scss'
 import ProviderEntryForm from '../../../components/ProviderEntryForm/ProviderEntryForm'
 import FoodItemEntryForm from '../../../components/FoodItemEntryForm/FoodItemEntryForm'
 import ProviderProfile from 'components/ProviderProfile'
@@ -48,7 +48,7 @@ class Provider extends React.Component {
             <p>
               Please give a brief history about your cooking skills along with a picture showcasing you/your business
             </p>
-            <div className={classes["is-center"]}>
+            <div className="is-center">
               <ImageUploader/>
             </div>
             <ProviderEntryForm  providerEntryForm = {this.props.providerEntryForm}
@@ -70,7 +70,7 @@ class Provider extends React.Component {
             <p>
               Enter the food item you wish to provide
             </p>
-            <div className={classes["is-center"]}>
+            <div className="is-center">
                 <ImageUploader/>
             </div>
             <FoodItemEntryForm  onAllClear = {this.onAllClear} 
@@ -151,7 +151,7 @@ class Provider extends React.Component {
     const {loading, stepIndex} = this.props.providerEntryState.toJS();
 
     return (
-      <div className="pure-g" className = {classes["pure-override-letter-spacing"]}>
+      <div className="pure-g" className = "pure-override-letter-spacing">
         <div className = "counter-fixed-menu">
             <Stepper activeStep={stepIndex}>
               <Step>
