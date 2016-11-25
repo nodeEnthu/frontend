@@ -1,5 +1,5 @@
 // import React from 'react'
-import classes from './AsyncAutocomplete.scss'
+import './AsyncAutocomplete.scss'
 import Autosuggest from 'react-autosuggest'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import debounce from 'lodash.debounce'
