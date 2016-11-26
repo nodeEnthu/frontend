@@ -90,6 +90,7 @@ class GoogleLogin extends Component {
         labelPosition="before"
         label="Login With Gmail" 
         style={{display:"block"}}
+        disableTouchRipple={true}
         onClick={ this.onBtnClick }
       >
       </RaisedButton>

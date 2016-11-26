@@ -131,6 +131,7 @@ class FacebookLogin extends React.Component {
           labelPosition="before"
           label="Login With Facebook" primary={true}
           style={{display:"block"}}
+          disableTouchRipple={true}
           onClick={this.click}
         >
         </RaisedButton>

@@ -116,6 +116,7 @@ const OrderSubmitModal = React.createClass({
                   primary={true}
                   style={{marginTop:'20px'}}
                   onClick={()=>this.confirmOrderSubmit()}
+                  disableTouchRipple={true}
                 />
               </div>
             </div>

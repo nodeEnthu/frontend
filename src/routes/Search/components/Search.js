@@ -254,7 +254,8 @@ const Search = React.createClass({
 						style={{
 							width:'40%'
 						}}
-						onClick={this.createNewQuery} 
+						onClick={this.createNewQuery}
+						disableTouchRipple={true} 
 					/>
 				</div>
 				<div className="providers-wrapper">
@@ -337,6 +338,7 @@ const Search = React.createClass({
 								primary={true} 
 								style={{width:'50%'}}
 								onClick={this.loadMore}
+								disableTouchRipple={true}
 						/>
 						</div>
 						:

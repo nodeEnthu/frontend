@@ -2,7 +2,6 @@ import React from 'react'
 import './../ProviderProfile/providerProfile.scss'
 import Modal from 'react-modal';
 import classNames from 'classnames';
-import RaisedButton from 'material-ui/RaisedButton';
 import StarRatingComponent from 'react-star-rating-component';
 
 

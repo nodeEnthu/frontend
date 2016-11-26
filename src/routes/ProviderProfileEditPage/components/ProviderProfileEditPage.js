@@ -26,7 +26,8 @@ const ProviderProfileEditPage = React.createClass({
 					<RaisedButton
 						style={{width:'30%',color:'white'}}
 						primary={true}
-						onClick={this.submitForm} 
+						onClick={this.submitForm}
+						disableTouchRipple={true} 
 					>
 						Done
 					</RaisedButton>

@@ -140,6 +140,7 @@ class Provider extends React.Component {
             label={stepIndex === 2 ? 'Finish' : 'Next'}
             primary={true}
             onTouchTap={this.handleNext}
+            disableTouchRipple={true}
           />
         </div>
       </div>

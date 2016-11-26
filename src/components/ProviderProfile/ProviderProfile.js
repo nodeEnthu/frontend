@@ -187,6 +187,7 @@ const ProviderProfile = React.createClass({
                                           label="Add to the cart" primary={true}
                                           style={{display:"block"}}
                                           onClick={(event)=>this.checkOutItem(event,foodItem)}
+                                          disableTouchRipple={true}
                                         >
                                         </RaisedButton>
                                         :

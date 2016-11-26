@@ -112,6 +112,7 @@ const Checkout = React.createClass({
                 primary={true}
                 style={{width:'40%'}}
                 onClick={this.checkOutItems}
+                disableTouchRipple={true}
               >{'Checkout (Grand total '+grandTotal+ '$)'}
               </RaisedButton>
             </div>

@@ -63,6 +63,7 @@ class ImageUploader extends React.Component {
             label="Choose an Image"
             labelPosition="before"
             style={styles.button}
+            disableTouchRipple={true}
           >
             <input  type="file" style={styles.exampleImageInput} onChange={(e)=>this._handleImageChange(e)} />
           </RaisedButton>
