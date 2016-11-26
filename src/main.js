@@ -1,42 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import createBrowserHistory from 'history/lib/createBrowserHistory'
-import { useRouterHistory } from 'react-router'
-import { syncHistoryWithStore } from 'react-router-redux'
 import createStore from './store/createStore'
 import AppContainer from './containers/AppContainer'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-// ========================================================
-// Browser History Setup
-// ========================================================
-const browserHistory = useRouterHistory(createBrowserHistory)({
-  basename: __BASENAME__
-})
 
 // ========================================================
-// Store and History Instantiation
+// Store Instantiation
 // ========================================================
-// Create redux store and sync with react-router-redux. We have installed the
-// react-router-redux reducer under the routerKey "router" in src/routes/index.js,
-// so we need to provide a custom `selectLocationState` to inform
-// react-router-redux of its location.
-const initialState = window.___INITIAL_STATE__
-createStore(initialState, browserHistory,function(store){
-  const history = syncHistoryWithStore(browserHistory, store, {
-    selectLocationState: (state) => state.router
-  })
-
-  // ========================================================
-  // Developer Tools Setup
-  // ========================================================
-  if (__DEBUG__) {
-    if (window.devToolsExtension) {
-      window.devToolsExtension.open()
-    }
-  }
-
+const initialState = window.___INITIAL_STATE__;
+injectTapEventPlugin();
+createStore(initialState,function(store){
   // ========================================================
   // Render Setup
   // ========================================================
@@ -46,19 +21,23 @@ createStore(initialState, browserHistory,function(store){
     const routes = require('./routes/index').default(store)
 
     ReactDOM.render(
-
-  // Enable HMR and catch runtime errors in RedBox
-
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <AppContainer
           store={store}
-          history={history}
           routes={routes}
         />
       </MuiThemeProvider>,MOUNT_NODE
-    )
+    );
   }
-  injectTapEventPlugin();
+
+  // ========================================================
+  // Developer Tools Setup
+  // ========================================================
+  if (__DEV__) {
+    if (window.devToolsExtension) {
+      window.devToolsExtension.open()
+    }
+  }
 
   // This code is excluded from production bundle
   if (__DEV__) {
@@ -81,12 +60,12 @@ createStore(initialState, browserHistory,function(store){
       }
 
       // Setup hot module replacement
-      module.hot.accept('./routes/index', () => {
-        setTimeout(() => {
+      module.hot.accept('./routes/index', () =>
+        setImmediate(() => {
           ReactDOM.unmountComponentAtNode(MOUNT_NODE)
           render()
         })
-      })
+      )
     }
   }
 

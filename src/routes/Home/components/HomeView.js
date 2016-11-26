@@ -7,8 +7,7 @@ import store from 'store/createStore'
 import IconButton from 'material-ui/IconButton'
 import CommunicationLocationOn from 'material-ui/svg-icons/communication/location-on'
 import Spinner from 'react-spinkit'
-import classes from './HomeView.scss'
-import classNames from 'classnames';
+import './HomeView.scss'
 import { getCall,securedGetCall } from 'utils/httpUtils/apiCallWrapper';
 const HomeView = React.createClass({
     getInitialState() {
@@ -80,12 +79,12 @@ const HomeView = React.createClass({
     render() {
         return (
             <div>
-				<div className={classNames(classes["splash-container"],classes["pure-override-letter-spacing"])}>
-					<div className={classes["banner-wrapper"]}>
+				<div className="splash-container pure-override-letter-spacing">
+					<div className="banner-wrapper">
 						<div className="pure-g">
 							<div className = "pure-u-1 pure-u-md-1-2">
-							    <div className={classes["splash"]}>
-							        <h1 className={classes["splash-head"]}>
+							    <div className="splash">
+							        <h1 className="splash-head">
 							        	Please enter address to find food close to you.
 							        </h1>
 							        <AsyncAutocomplete
@@ -115,7 +114,7 @@ const HomeView = React.createClass({
 							        				top:'5px'
 							        			}}
 							        />
-							        <p className={classes["is-center"]}>
+							        <p className="is-center">
 							        	<button className="pure-button pure-button-primary"
 							        		onClick={()=>this.goToPage('search')}>
 							        		Get Started
@@ -124,11 +123,11 @@ const HomeView = React.createClass({
 							    </div>
 						    </div>
 						    <div className = "pure-u-1 pure-u-md-1-2">
-							   <div className={classes["splash"]}>
-							        <div className={classes["splash-head"]}>
+							   <div className="splash">
+							        <div className="splash-head">
 							        	Advertise your food right away in 3 easy steps
 							        </div>
-							        <p className={classes["is-center"]}>
+							        <p className="is-center">
 							        	<button className="pure-button pure-button-primary"
 							        		onClick={()=>this.goToPage('provider')}>
 							        		Get Started
@@ -149,5 +148,6 @@ HomeView.propTypes = {
     userAddressSearchChange: React.PropTypes.func.isRequired,
     userAddressUpdatePlaceId: React.PropTypes.func.isRequired,
 }
+
 
 export default HomeView

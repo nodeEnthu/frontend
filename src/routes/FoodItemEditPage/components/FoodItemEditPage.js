@@ -1,5 +1,5 @@
 import React from 'react'
-import classes from './foodItemEditPage.scss'
+import './foodItemEditPage.scss'
 import RaisedButton from 'material-ui/RaisedButton'
 import FoodEntryForm from 'components/FoodItemEntryForm/FoodItemEntryForm';
 
@@ -15,7 +15,7 @@ const FoodItemEditPage = React.createClass({
 	},
 	render(){
 		return(
-			<div className={classes["pageSettings"]}>
+			<div className="pageSettings">
 				<div>
 					<FoodEntryForm 	foodItemEntryForm = {this.props.foodItemEntryForm}
 									onAllClear = {this.onAllClear}
@@ -29,7 +29,8 @@ const FoodItemEditPage = React.createClass({
 					<RaisedButton
 						style={{width:'30%',color:'white'}}
 						primary={true}
-						onClick={this.submitForm} 
+						onClick={this.submitForm}
+						disableTouchRipple={true} 
 					>
 						Done
 					</RaisedButton>

@@ -1,6 +1,6 @@
 import React from 'react';
 import ProviderEntryForm from 'components/ProviderEntryForm/ProviderEntryForm';
-import classes from './providerProfileEditPage.scss';
+import './providerProfileEditPage.scss';
 import RaisedButton from 'material-ui/RaisedButton';
 
 
@@ -16,7 +16,7 @@ const ProviderProfileEditPage = React.createClass({
 	},
 	render(){
 		return(
-			<div className={classes["pageSettings"]}>
+			<div className="pageSettings">
 				<ProviderEntryForm 	ref="providerform"
 									{... this.props} 
 									onAllClear = {this.onAllClear}
@@ -26,7 +26,8 @@ const ProviderProfileEditPage = React.createClass({
 					<RaisedButton
 						style={{width:'30%',color:'white'}}
 						primary={true}
-						onClick={this.submitForm} 
+						onClick={this.submitForm}
+						disableTouchRipple={true} 
 					>
 						Done
 					</RaisedButton>

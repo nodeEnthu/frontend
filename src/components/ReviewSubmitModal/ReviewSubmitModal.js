@@ -1,8 +1,7 @@
 import React from 'react'
-import classes from './../ProviderProfile/providerProfile.scss'
+import './../ProviderProfile/providerProfile.scss'
 import Modal from 'react-modal';
 import classNames from 'classnames';
-import RaisedButton from 'material-ui/RaisedButton';
 import StarRatingComponent from 'react-star-rating-component';
 
 
@@ -100,12 +99,12 @@ const ReviewSubmitModal = React.createClass({
             onRequestClose={this.closeModal}
           >
           <div>
-            <div className={classNames("pure-form",classes["move-center"])}>
+            <div className="pure-form move-center">
               <div className="pure-group">
-                <div className={classes["review-item-name"]}>
+                <div className="review-item-name">
                   {review.item.name}
                 </div>
-                <img alt={review.item.name} className = {classes["food-item"]} src={review.item.img}/>
+                <img alt={review.item.name} className = "food-item" src={review.item.img}/>
                 <div>
                   <StarRatingComponent
                     name="rating"
@@ -113,7 +112,7 @@ const ReviewSubmitModal = React.createClass({
                     value={review.item.rating}
                     onStarClick={this.starRating}
                   />
-                  <div className = {classNames(classes["error-message"],classes["move-center"])}>{(review.ratingError)?'*'+review.ratingError:undefined}</div>
+                  <div className = "error-message move-center">{(review.ratingError)?'*'+review.ratingError:undefined}</div>
                 </div>
                 <textarea className="pure-input-1" placeholder="Please write your review here"
                   name="review"
@@ -122,9 +121,9 @@ const ReviewSubmitModal = React.createClass({
                   onBlur = {this.reviewBlur}
                   onChange={this.updateReview}
                 ></textarea>
-                <span className = {classes["error-message"]}>{(review.reviewError)?'*'+review.reviewError:undefined}</span>
+                <span className = "error-message">{(review.reviewError)?'*'+review.reviewError:undefined}</span>
               </div>
-              <button className={classNames("pure-button pure-input-1-2 pure-button-primary",classes["review-submit-button"])}
+              <button className="pure-button pure-input-1-2 pure-button-primary review-submit-button"
                 onClick={this.submitReview}
               >Submit</button>
             </div>

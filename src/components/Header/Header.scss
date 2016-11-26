@@ -1,12 +1,16 @@
-
 .home-menu {
-    padding: 0.5em;
+    padding: .5em;
     text-align: center;
-    box-shadow: 0 1px 1px rgba(0,0,0, 0.10);
-}
-.home-menu {
+    box-shadow: 0 1px 1px rgba(0,0,0,.1);
     background: #2d3e50;
 }
+
+.route--active {
+  font-weight: bold;
+  text-decoration: underline;
+
+}
+
 .pure-menu.pure-menu-fixed {
     /* Fixed menus normally have a border at the bottom. */
     border-bottom: none;
@@ -33,4 +37,3 @@
     border: none;
     color: #AECFE5;
 }
-

@@ -1,6 +1,6 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import classes from './ImageUploader.scss'
+import './ImageUploader.scss'
 
 const styles = {
   button: {
@@ -53,22 +53,23 @@ class ImageUploader extends React.Component {
     if (imagePreviewUrl) {
       $imagePreview = (<img src={imagePreviewUrl} />);
     } else {
-      $imagePreview = (<div className={classes["previewText"]}></div>);
+      $imagePreview = (<div className="previewText"></div>);
     }
 
     return (
-      <div className={classes["previewComponent"]}>
+      <div className="previewComponent">
         <form onSubmit={(e)=>this._handleSubmit(e)}>
           <RaisedButton
             label="Choose an Image"
             labelPosition="before"
             style={styles.button}
+            disableTouchRipple={true}
           >
             <input  type="file" style={styles.exampleImageInput} onChange={(e)=>this._handleImageChange(e)} />
           </RaisedButton>
           {/*<button className={classes["submitButton"]} type="submit" onClick={(e)=>this._handleSubmit(e)}>Upload Image</button>*/}
         </form>
-        <div className={classes["imgPreview"]}>
+        <div className="imgPreview">
           {$imagePreview}
         </div>
       </div>

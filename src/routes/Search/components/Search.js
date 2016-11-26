@@ -1,7 +1,7 @@
 import React from 'react'
 import { CUISINE_TYPES, DIET_TYPES, RADIUS_OPTIONS, ORDER_TYPE } from './../constants/searchFilters'
 import Carousel from 'nuka-carousel'
-import classes from './search.scss'
+import './search.scss'
 import classNames from 'classnames'
 import StarRatingComponent from 'react-star-rating-component';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -132,6 +132,7 @@ const Search = React.createClass({
     	})
     },
     goToProvider(event,foodItem){
+    	console.log("going to the provider");
     	this.context.router.push('/providerProfile/'+foodItem._creator);
     },
     render() {
@@ -151,7 +152,7 @@ const Search = React.createClass({
         let self = this;
         return (
             <div>
-            	<div className={classes["date-title"]}>
+            	<div className="date-title">
             		Order date:  
     				<DatePicker
     					container="inline"
@@ -184,7 +185,7 @@ const Search = React.createClass({
 	            	</div>
             	</div>
             	
-				<div onClick={(event)=>this.filterCuisineOrDietType(event,'cuisine')}>
+				<div className = 'cuisine-carousel-wrapper' onClick={(event)=>this.filterCuisineOrDietType(event,'cuisine')}>
 					<Carousel
 						slidesToShow={5}
 						cellSpacing={10}
@@ -200,7 +201,7 @@ const Search = React.createClass({
 												background:'url('+cuisine.src+') center',
 											}
 										}
-										className={classes["carousel-img"]}
+										className="carousel-img"
 									/>
 						})}
 					</Carousel>
@@ -246,7 +247,7 @@ const Search = React.createClass({
 						</div>
 				    </CardText>
 				</Card>
-				<div className={classes["query-btn-center"]}>
+				<div className="query-btn-center">
 					<RaisedButton 
 						label="Search" 
 						primary={true}
@@ -254,25 +255,26 @@ const Search = React.createClass({
 						style={{
 							width:'40%'
 						}}
-						onClick={this.createNewQuery} 
+						onClick={this.createNewQuery}
+						disableTouchRipple={true} 
 					/>
 				</div>
-				<div className={classes["providers-wrapper"]}>
+				<div className="providers-wrapper">
 					<div className="pure-g">
 					{	(resolvedData)? 
 								resolvedData.map(function(foodItem,index){
-									return 	<div key={index} className={classNames("pure-u-1 pure-u-md-1-3")}
+									return 	<div key={index} className="pure-u-1 pure-u-md-1-3"
 												onClick={(event)=>self.goToProvider(event,foodItem)}	>
-												<div className={classes["provider-profile-wrapper"]}>
-											    	<div className={classes["provider-img-section"]}>
-											    		<div className={classes["img-avatar"]}>
+												<div className="provider-profile-wrapper">
+											    	<div className="provider-img-section">
+											    		<div className="img-avatar">
 											    			<img src={foodItem.img}/>
 											    		</div>
 											    	</div>
-											    	<div className={classes["provider-info-section"]}>
+											    	<div className="provider-info-section">
 											    		<div>{foodItem.name}</div>
 											    		<div>
-											    			<div className={classes["provider-star-rating"]}>
+											    			<div className="provider-star-rating">
 													    		<StarRatingComponent 
 										                            name={foodItem._id} 
 										                            editing={false}
@@ -280,10 +282,10 @@ const Search = React.createClass({
 										                            value={foodItem.rating}
 										                         />
 									                         </div>
-									                         <div className={classes["num-of-reviews"]}>
+									                         <div className="num-of-reviews">
 									                         	{(foodItem.numOfReviews)? foodItem.numOfReviews+' review': undefined}
 									                         </div>
-									                         <div className={classes["miles-away"]}><span>{foodItem.distance}</span><span>mi</span></div>
+									                         <div className="miles-away"><span>{foodItem.distance}</span><span>mi</span></div>
 											    		</div>
 											    		{
 											    			
@@ -331,12 +333,13 @@ const Search = React.createClass({
 					</div>
 					{
 						(data  && data.length >=12*pageNum)?
-						<div className={classes["load-more-center"]}>
+						<div className="load-more-center">
 							<RaisedButton 
 								label="Show more results" 
 								primary={true} 
 								style={{width:'50%'}}
 								onClick={this.loadMore}
+								disableTouchRipple={true}
 						/>
 						</div>
 						:

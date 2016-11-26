@@ -10,7 +10,6 @@ import FoodItemEditPage from './FoodItemEditPage'
 import { onMainPageEnter } from 'utils/auth/onEnterAuth'
 
 
-
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
 
@@ -28,6 +27,7 @@ export const createRoutes = (store) => ({
         ProviderProfileEditPage(store),
         FoodItemEditPage(store)
     ]
+
 })
 
 /*  Note: childRoutes can be chunked or otherwise loaded programmatically
