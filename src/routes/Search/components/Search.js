@@ -132,6 +132,7 @@ const Search = React.createClass({
     	})
     },
     goToProvider(event,foodItem){
+    	console.log("going to the provider");
     	this.context.router.push('/providerProfile/'+foodItem._creator);
     },
     render() {
@@ -184,7 +185,7 @@ const Search = React.createClass({
 	            	</div>
             	</div>
             	
-				<div onClick={(event)=>this.filterCuisineOrDietType(event,'cuisine')}>
+				<div className = 'cuisine-carousel-wrapper' onClick={(event)=>this.filterCuisineOrDietType(event,'cuisine')}>
 					<Carousel
 						slidesToShow={5}
 						cellSpacing={10}
