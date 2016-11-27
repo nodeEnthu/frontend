@@ -146,7 +146,7 @@ const initialState =
             cuisineType:'',
             cuisineTypeErrorMsg:'',
             descriptionErrorMsg:'',
-            placeOrderBy: undefined,
+            placeOrderBy: 0,
             placeOrderByErrorMsg:'',
             serviceDate:new Date(),
             serviceDateErrorMsg:'',

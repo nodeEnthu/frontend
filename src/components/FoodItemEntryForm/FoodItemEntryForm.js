@@ -1,18 +1,20 @@
 import React, { Component, PropTypes } from 'react';
-import classes from './fooditementryform.scss';
+import './fooditementryform.scss';
 import { email, maxLength, required, regexTime, regexDate } from './../../utils/formUtils/formValidation';
 import Toggle from 'react-toggle';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton'
 import classNames from 'classnames';
-import DatePicker from 'material-ui/DatePicker';
+import DatePicker from 'react-datepicker';
 import TimePicker from 'material-ui/TimePicker';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import Snackbar from 'material-ui/Snackbar';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Chip from 'material-ui/Chip';
+import TimeInput from 'react-time-input';
 import { securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import { CUISINE_TYPES} from './../../routes/Search/constants/searchFilters'
+import moment from 'moment';
 const maxCount = 100;
 
 const FoodItemEntryForm= React.createClass({
@@ -42,10 +44,14 @@ const FoodItemEntryForm= React.createClass({
         cuisineType: required,
         price:required
     },
-    changeStoreTimeAndDateVals(event, date, storeKey){
+    addTimeOffset(orignalDate){
+        return new Date(orignalDate.getTime()+orignalDate.getTimezoneOffset()*60000) ;
+    },
+    changeStoreTimeAndDateVals(date, storeKey){
+        let orignalDate = date.toDate();
         this.props.addFoodItemInfo({
             storeKey: storeKey,
-            payload: date
+            payload: this.addTimeOffset(orignalDate)
         })
     },
     handleDeleteChip() {
@@ -54,17 +60,12 @@ const FoodItemEntryForm= React.createClass({
         })
     },
     handleChange(event) {
+        console.log(event);
         let input = event.target.value;
         let stateKeyName = event.target.name;
         let validation = this.mapFieldsToValidationType[stateKeyName];
         let errorMsg;
-        // got to treat date differently
-        if(stateKeyName === 'serviceDate' && input){
-            // careful here ... front end gives time in local timezone and 
-            // backend saves in UTC .. so we got to add the offset
-            let orignalDate = new Date(input);
-            input = new Date(orignalDate.getTime()+orignalDate.getTimezoneOffset()*60000);
-        }
+        
         if (validation) {
             errorMsg = validation(input);
         }
@@ -124,6 +125,12 @@ const FoodItemEntryForm= React.createClass({
         this.props.addFoodItemInfo({
             storeKey: stateKeyName,
             payload: input
+        });
+    },
+    onTimeChangeHandler(stateKeyName,value){
+        this.props.addFoodItemInfo({
+            storeKey: stateKeyName,
+            payload: value
         });
     },
     validateForm() {
@@ -199,7 +206,7 @@ const FoodItemEntryForm= React.createClass({
         let { name, nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
         let resolvedServiceDate = null;
         if(serviceDate){
-            resolvedServiceDate = (serviceDate instanceof Date)? serviceDate : new Date(serviceDate);
+            resolvedServiceDate = (serviceDate instanceof Date)? moment(serviceDate):moment(new Date(serviceDate));
         } 
         function daysBeforeOrderDate(days){
             let newDate = new Date(serviceDate.toString());
@@ -232,14 +239,14 @@ const FoodItemEntryForm= React.createClass({
                                 onBlur={this.handleChange} 
                                 onFocus={this.handleFocus}
                             />
-                            <span className = {classes["error-message"]}>{(nameErrorMsg)?'*'+nameErrorMsg:undefined}</span>
+                            <span className = "error-message">{(nameErrorMsg)?'*'+nameErrorMsg:undefined}</span>
                             <textarea className = "pure-u-1" name="description" placeholder="description" value={description}
                                 onBlur={this.handleChange} 
                                 onFocus={this.handleFocus} 
                                 onChange={this.changeStoreVal}
                             >   
                             </textarea>
-                            <span className = {classes["error-message"]}>{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
+                            <span className = "error-message">{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
                             <div  className="pure-u-1 pure-u-md-1-2">
                                 <label>*Cuisine-type</label>
                                 <select id="cuisine-type" 
@@ -249,13 +256,14 @@ const FoodItemEntryForm= React.createClass({
                                     onFocus={this.handleFocus}
                                     onChange={this.changeStoreVal}
                                     value={cuisineType}
+                                    style={{width:'100%'}}
                                 >
                                     <option value=''></option>
                                     {CUISINE_TYPES.map((cuisine)=>{
                                         return <option key={cuisine.type}>{cuisine.type}</option>
                                     })}
                                 </select>
-                                <span className = {classes["error-message"]}>{(cuisineTypeErrorMsg)?'*'+cuisineTypeErrorMsg:undefined}</span>
+                                <span className = "error-message">{(cuisineTypeErrorMsg)?'*'+cuisineTypeErrorMsg:undefined}</span>
                             </div>
                             
                             <div  className="pure-u-1 pure-u-md-1-2">
@@ -265,7 +273,7 @@ const FoodItemEntryForm= React.createClass({
                                     onBlur={this.handleChange} 
                                     onFocus={this.handleFocus}
                                 />
-                                <span className = {classes["error-message"]}>{(priceErrorMsg)?'*'+priceErrorMsg:undefined}</span>
+                                <span className = "error-message">{(priceErrorMsg)?'*'+priceErrorMsg:undefined}</span>
                             </div>
                         </div> 
                     </fieldset>
@@ -274,19 +282,14 @@ const FoodItemEntryForm= React.createClass({
                             <div className = "pure-u-1 pure-u-md-1-2">
                                 <label>*Order ready date</label>
                                     <DatePicker
-                                        value={resolvedServiceDate}
+                                        selected={resolvedServiceDate}
                                         name="serviceDate"
-                                        autoOk={true}
                                         onBlur={this.handleChange} 
                                         onFocus={this.handleFocus}
-                                        onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'serviceDate')}
-                                        style = {{width:'100%'}}
-                                        inputStyle={{border:"1px solid #ccc",width:"100%", padding:'10px',borderRadius:'5px'}}
-                                        underlineStyle={{display: 'none'}}
-                                        hintText="Order ready date"
+                                        onChange={(date)=>this.changeStoreTimeAndDateVals(date,'serviceDate')}
                                     />
                             </div>
-                            <span className = {classes["error-message"]}>{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
+                            <span className = "error-message">{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
                             <div className = "pure-u-1 pure-u-md-1-2" >
                                 <label>People can order</label>
                                 <select id="order-by-date" 
@@ -295,14 +298,14 @@ const FoodItemEntryForm= React.createClass({
                                     onFocus={this.handleFocus}
                                     onChange={this.changeStoreVal}
                                     value={placeOrderBy}
-                                    defaultValue = {serviceDate}
+                                    style={{width:'100%'}}
                                 >
-                                    <option value={serviceDate}>Same Day</option>
-                                    <option value={daysBeforeOrderDate(1)}>Atleast 1 day before</option>        
-                                    <option value={daysBeforeOrderDate(2)}>Atleast 2 days before</option>     
-                                    <option value={daysBeforeOrderDate(3)}>Atleast 3 days before</option>
+                                    <option value={0}>Same Day</option>
+                                    <option value={1}>Atleast 1 day before</option>        
+                                    <option value={2}>Atleast 2 days before</option>     
+                                    <option value={3}>Atleast 3 days before</option>
                                 </select>
-                                <span className = {classes["error-message"]}>{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
+                                <span className = "error-message">{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
                             </div>
                         </div> 
                     </fieldset>
@@ -311,12 +314,26 @@ const FoodItemEntryForm= React.createClass({
                             <fieldset className="pure-group">
                                 <div className = "pure-g">
                                     <div className = "pure-u-1 pure-u-md-1-2">
-                                        
-                                        
+                                        <label>Pick-up start time (hh:mm)</label>
+                                        <TimeInput
+                                            placeholder="pick-up start time"
+                                            name="pickUpStartTime"
+                                            onTimeChange={(value)=>this.onTimeChangeHandler('pickUpStartTime',value)}
+                                            value={pickUpStartTime}
+                                            style={{width:'100%'}}
+                                            initTime={pickUpStartTime}
+                                        /> 
                                     </div>
                                     <div className = "pure-u-1 pure-u-md-1-2">
-                                         
-                                        
+                                        <label>Pick-up end time (hh:mm)</label>
+                                        <TimeInput
+                                            placeholder="pick-up end time"
+                                            name="pickUpEndTime"
+                                            onTimeChange={(value)=>this.onTimeChangeHandler('pickUpEndTime',value)}
+                                            value={pickUpEndTime}
+                                            style={{width:'100%'}}
+                                            initTime={pickUpEndTime}
+                                        />   
                                     </div>
                                 </div>
                             </fieldset>
@@ -330,13 +347,13 @@ const FoodItemEntryForm= React.createClass({
                         <Toggle
                             defaultChecked={deliveryFlag}
                             onChange={()=>{this.toggleFlags('deliveryFlag')}} 
-                            className = {classes["input-hidden"]}
+                            className = "input-hidden"
                         />
                     </fieldset>
                    
                     
                     <fieldset className="pure-group">
-                        <legend className={classes["pull-left"]}>
+                        <legend className="pull-left">
                             Tag your food:
                         </legend>
                         <div style={{display:'inline-block'}}>

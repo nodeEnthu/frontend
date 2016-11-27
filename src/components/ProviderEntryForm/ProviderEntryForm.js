@@ -271,6 +271,7 @@ const ProviderEntryForm = React.createClass({
                                                     onFocus={this.handleFocus}
                                                     onChange={this.changeStoreVal}
                                                     value={deliveryRadius}
+                                                    style={{width:'100%'}}
                                                 >
                                                     <option  value="0">Please select miles</option>
                                                     <option>5</option>

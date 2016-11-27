@@ -8,9 +8,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Select from 'react-select';
-import DatePicker from 'material-ui/DatePicker';
+import DatePicker from 'react-datepicker';
 import AsyncAutocomplete from 'components/AsyncAutocomplete';
 import { getCall,securedGetCall } from 'utils/httpUtils/apiCallWrapper';
+import moment from 'moment';
 
 
 const Search = React.createClass({
@@ -154,26 +155,15 @@ const Search = React.createClass({
             <div>
             	<div className="date-title">
             		Order date:  
-    				<DatePicker
-    					container="inline"
-    					underlineStyle={{
-    						width:"100px",
-    						border: "1px dotted grey"
-    					}}
-    					inputStyle={{
-    						width:"100px",
-    					}}
-    					style={{
-    						display:'inline-block',
-    						marginLeft:'10px',
-    						width:'100px'
-    					}}
-    					defaultDate={addtnlQuery.date}
-    					autoOk={true}
-    					name="serviceDate"
-    					onChange={(event, date)=>this.selectOption('date',date)}
 
-    				/>
+    				<DatePicker
+    					style={{display:'inline'}}
+                        selected={moment(addtnlQuery.date)}
+                        name="serviceDate"
+                        onBlur={this.handleChange} 
+                        onFocus={this.handleFocus}
+                        onChange={(date)=>this.selectOption('date',date.toDate())}
+                    />
     				<div style={{display:'inline-block', marginLeft:'3em'}}>
 	            		<AsyncAutocomplete  name={'addressSearch'}
 	                                        userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
