@@ -235,5 +235,7 @@ ProviderProfile.propTypes = {
   submitTypedReview:React.PropTypes.func,
   reviewError:React.PropTypes.func,
   actionName:React.PropTypes.string,
-  mode:React.PropTypes.string
+  mode:React.PropTypes.string,
+  flushOutStaleReviewData:React.PropTypes.func
+
 }

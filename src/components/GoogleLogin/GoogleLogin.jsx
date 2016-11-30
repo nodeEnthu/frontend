@@ -63,7 +63,9 @@ class GoogleLogin extends Component {
           callback(data);
         });
     } else {
-      auth2.signIn()
+      auth2.signIn({
+      'scope': 'profile email'
+      })
         .then((response) => {
           callback(response);
         });

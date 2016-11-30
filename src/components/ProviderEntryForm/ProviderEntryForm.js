@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import './providerentryform.scss';
 import { email, maxLength, required } from './../../utils/formUtils/formValidation';
-import Toggle from 'react-toggle';
+import Toggle from 'material-ui/Toggle';
 import classNames from 'classnames';
 import Modal from 'react-modal';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
@@ -171,11 +171,13 @@ const ProviderEntryForm = React.createClass({
                             </div>
                             <div>
                                 <span style={{fontSize:'0.75em'}}>Display this on my public profile page</span>
-                                <Toggle
-                                    defaultChecked={!keepAddressPrivateFlag}
-                                    onChange={()=>{this.toggle('keepAddressPrivateFlag')}}
-                                    className = "input-hidden"
-                                />
+                                <div style={{maxWidth:100, display:'inline-block'}}>
+                                    <Toggle
+                                        defaultToggled={!keepAddressPrivateFlag}
+                                        onToggle={()=>{this.toggle('keepAddressPrivateFlag')}}
+                                    />
+                                </div>
+                                
                                 <a className="pure-menu-link address-justification" 
                                     onClick={()=>{this.toggle('providerAddressJustificationModalOpen')}}>
                                     why we need it?
@@ -227,11 +229,12 @@ const ProviderEntryForm = React.createClass({
                     }
                     <fieldset className="pure-group">
                         We are pick-up service
-                        <Toggle
-                            defaultChecked={pickUpFlag}
-                            onChange={()=>{this.toggle('pickUpFlag')}}
-                            className = "input-hidden"
-                        />
+                        <div style={{maxWidth:100, display:'inline-block'}}>
+                            <Toggle
+                                defaultToggled={pickUpFlag}
+                                onToggle={()=>{this.toggle('pickUpFlag')}}
+                            />
+                        </div>
                     </fieldset>
                     {(pickUpFlag)?
                         <div>
@@ -251,11 +254,12 @@ const ProviderEntryForm = React.createClass({
                     <fieldset className="pure-group">
                         <legend className="pull-left">
                                 We can deliver 
-                            <Toggle
-                                defaultChecked={doYouDeliverFlag}
-                                onChange={()=>{this.toggle('doYouDeliverFlag')}}
-                                className = "input-hidden"
-                            /> 
+                            <div style={{maxWidth:100, display:'inline-block'}}>
+                                <Toggle
+                                    defaultToggled={doYouDeliverFlag}
+                                    onToggle={()=>{this.toggle('doYouDeliverFlag')}} 
+                                />
+                            </div> 
                         </legend>
                             {(doYouDeliverFlag)?
                                 <div>

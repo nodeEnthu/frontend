@@ -68,7 +68,7 @@ const HomeView = React.createClass({
                         })
                 },
                 function(err) {
-                    this.setState({
+                    self.setState({
                         fetchingAddresses: true
                     })
                 });

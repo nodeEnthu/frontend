@@ -40,9 +40,6 @@ const Search = React.createClass({
         let combinedQuery = this.createQuery();
         this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery);
     },
-    componentWillReceiveProps(nextProps){
-    	const {userAddressSearch} = nextProps.globalState.core.toJS();
-    },
     loadMore() {
        	let newPageNum = this.state.pageNum + 1;
        	let self = this;
@@ -56,20 +53,14 @@ const Search = React.createClass({
     onSuggestionSelected(event,{suggestion}){
     	this.props.userAddressSearchChange(suggestion.address);
         this.props.userAddressUpdatePlaceId(suggestion.place_id);
-        const {searchText,place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
-        //remove whats in there currently in the state
-        this.props.flushOutStaleData(); 
-        // now make the search call with the required params
-        this.fetchQueryData();
         // also register this address in the address book if the user is logged in
         if(this.props.globalState.core.get('userLoggedIn')){
     		//register this at a new location if possible as the user needs to be logged in for this
        		// register the address as most recently used
-       		if(searchText && place_id){
-	       		securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
+       		if(suggestion.place_id){
+	       		securedGetCall('api/locations/registerMostRecentSearchLocation',{address:suggestion.address,place_id:suggestion.place_id})
 	        		.then(function(result){
-	        			self.state.showBackDrop = false;
-	        			self.context.router.push(page);
+	        			// dont do anything
 	        		}); 	
        		}
     	} 
@@ -86,9 +77,10 @@ const Search = React.createClass({
     },
     fetchQueryData() {
     	let combinedQuery = this.createQuery();
+    	//console.log("making the call with ",combinedQuery)
         return this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery);
     },
-    createNewQuery(){
+    createAndFetchNewQuery(){
     	// flush out old data
     	this.props.flushOutStaleData();
     	this.fetchQueryData();
@@ -102,6 +94,7 @@ const Search = React.createClass({
          * there should only be one such element as the function is called for every change
          */
         let oldDietSelectedMapKeys = Object.keys(dietSelectedMap);
+        console.log(oldDietSelectedMapKeys)
         dietTypes.forEach(function(dietType, index) {
             newDietsSelected.push(dietType.value);
         })
@@ -112,12 +105,22 @@ const Search = React.createClass({
         })
         this.filterCuisineOrDietType(uniqueDietAdded[0], 'diet');
     },
+    componentDidUpdate(prevProps){
+    	const newState = this.props.globalState;
+    	const oldState =  prevProps.globalState;
+    	const newPlaceId = newState.core.toJS().userAddressSearch.place_id;
+    	const oldPlaceId = oldState.core.toJS().userAddressSearch.place_id;
+    	const newDate = newState.search.toJS().addtnlQuery.date;
+    	const prevDate = oldState.search.toJS().addtnlQuery.date;
+    	// compare whether the place_id OR dates have changed
+    	if(prevDate != newDate || newPlaceId != oldPlaceId){
+    		this.createAndFetchNewQuery();
+    	}
+    },
     selectOption(stateKey, option) {
         if (option) {
             if (option instanceof Date) {
-            	// in case of date being chnaged make the call instantly
             	this.props.selectAddtnlQuery(stateKey, option);
-            	this.fetchQueryData();
             } else {
             	this.props.selectAddtnlQuery(stateKey, option.value);
             	this.activateQueryButton();
@@ -133,11 +136,13 @@ const Search = React.createClass({
     	})
     },
     goToProvider(event,foodItem){
-    	console.log("going to the provider");
     	this.context.router.push('/providerProfile/'+foodItem._creator);
     },
     render() {
         let { data, addtnlQuery, dietSelectedMap } = this.props.search.toJS();
+        if(addtnlQuery.date){
+        	addtnlQuery.date = moment(addtnlQuery.date);
+        }
         const { pageNum } = this.state;
         const {userAddressSearch} = this.props.globalState.core.toJS();
         let resolvedData = [];
@@ -155,7 +160,6 @@ const Search = React.createClass({
             <div>
             	<div className="date-title">
             		Order date:  
-
     				<DatePicker
     					style={{display:'inline'}}
                         selected={moment(addtnlQuery.date)}
@@ -184,7 +188,7 @@ const Search = React.createClass({
 						{CUISINE_TYPES.map((cuisine,index)=>{
 							return <img alt={cuisine.type} 
 										key={index}
-										src={(this.props.search.get('cuisineSelectedMap').get(cuisine.type))? '/selection/dark-green-check-mark-md.svg': undefined}
+										src={(this.props.search.get('cuisineSelectedMap').get(cuisine.type))? '/selection/dark-green-check-mark-md.svg':'/transparent.png'}
 										name={cuisine.type}
 										style={
 											{
@@ -245,7 +249,7 @@ const Search = React.createClass({
 						style={{
 							width:'40%'
 						}}
-						onClick={this.createNewQuery}
+						onClick={this.createAndFetchNewQuery}
 						disableTouchRipple={true} 
 					/>
 				</div>

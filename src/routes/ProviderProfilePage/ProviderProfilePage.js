@@ -25,6 +25,7 @@ ProviderProfile.propTypes = {
   globalState:React.PropTypes.object.isRequired,
   postSecuredData:React.PropTypes.func.isRequired,
   openLoginModal:React.PropTypes.func.isRequired,
-  openModal:React.PropTypes.func.isRequired
+  openModal:React.PropTypes.func.isRequired,
+  flushOutStaleReviewData:React.PropTypes.func.isRequired
 }
 export default ProviderProfilePage;

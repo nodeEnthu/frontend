@@ -4,7 +4,6 @@ import Modal from 'react-modal';
 import classNames from 'classnames';
 import StarRatingComponent from 'react-star-rating-component';
 
-
 const customStyles = {
     content: {
         top: '50%',
@@ -22,6 +21,9 @@ const ReviewSubmitModal = React.createClass({
       return {
           reviewFoodItemModalOpen:false
       };
+  },
+  componentWillUnmount() {
+    this.props.flushOutStaleReviewData();
   },
   starRating(nextVal,prevVal,name){
     // reset the error if it exists

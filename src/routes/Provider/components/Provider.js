@@ -156,13 +156,13 @@ class Provider extends React.Component {
         <div className = "counter-fixed-menu">
             <Stepper activeStep={stepIndex}>
               <Step>
-                <StepLabel>Set-up profile</StepLabel>
+                <StepLabel>Profile</StepLabel>
               </Step>
               <Step>
-                <StepLabel>Item info</StepLabel>
+                <StepLabel>Food Item</StepLabel>
               </Step>
               <Step>
-                <StepLabel>Preview and Submit</StepLabel>
+                <StepLabel>Preview</StepLabel>
               </Step>
             </Stepper>
             <ExpandTransition loading={loading} open={true} >

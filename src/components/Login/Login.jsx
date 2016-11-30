@@ -53,12 +53,13 @@ var Login = React.createClass({
     },
     successfullGmailLogin(response){
       // normalize the data coming back
+      const BasicProfile = response.getBasicProfile();
       let normalizedResponse = {
-        name: response.w3.ig,
-        email:response.w3.U3,
-        img:response.w3.Paa,
+        name: BasicProfile.getName(),
+        email:BasicProfile.getEmail(),
+        img:BasicProfile.getImageUrl(),
         provider: 'gmail',
-        userID:response.w3.Eea
+        userID:BasicProfile.getId()
       };
       this.successfullLogin(normalizedResponse);
     },

@@ -1,6 +1,13 @@
 .date-title{
     margin:10px 0 10px 10px;
 }
+.react-datepicker__input-container input{
+    width:6em;
+    border:none;
+    margin-left:1em;
+    margin-bottom:1em;
+    border-bottom: 1px dotted black;
+}
 .cuisine-carousel-wrapper{
     cursor:pointer;
 }
@@ -92,3 +99,4 @@
     margin-top: 20px;
     text-align: center;
 }
+
