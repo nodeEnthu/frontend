@@ -18,7 +18,6 @@ import ActionPermContactCalendar from 'material-ui/svg-icons/action/perm-contact
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link, IndexLink } from 'react-router';
-import Modal from 'react-modal';
 
 const ProviderProfile = React.createClass({
   getInitialState() {
@@ -237,5 +236,4 @@ ProviderProfile.propTypes = {
   actionName:React.PropTypes.string,
   mode:React.PropTypes.string,
   flushOutStaleReviewData:React.PropTypes.func
-
 }

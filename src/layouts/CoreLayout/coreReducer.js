@@ -64,9 +64,11 @@ const ACTION_HANDLERS = {
         return state.set('user', newUser)
     },
     [OPEN_MODAL_LOGIN]: (state, action) => {
+        console.log("OPEN_MODAL_LOGIN");
         return state.set('loginModalOPen', true)
     },
     [CLOSE_MODAL_LOGIN]: (state, action) => {
+        console.log("CLOSE_MODAL_LOGIN");
         return state.set('loginModalOPen', false)
     },
     [USER_LOGGED_IN]: (state, action) => {
@@ -90,7 +92,7 @@ const initialState = Map({
         fbUserID: '',
         gmailUserID: ''
     }),
-    loginModalOPen: false,
+    loginModalOPen: undefined,
     userLoggedIn: false,
     address: '',
     placeId: '',

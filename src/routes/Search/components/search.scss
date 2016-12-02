@@ -1,12 +1,17 @@
-.date-title{
-    margin:10px 0 10px 10px;
-}
-.react-datepicker__input-container input{
-    width:6em;
-    border:none;
-    margin-left:1em;
-    margin-bottom:1em;
-    border-bottom: 1px dotted black;
+.search {
+    .react-autosuggest__container {
+        display:block;
+    }
+    .react-datepicker__input-container{
+        display:block;
+    }
+    .pure-form input[type]{
+        margin-bottom: 0px;
+    }
+    .Select-input input {
+        border:none;
+        box-shadow:none;
+    }
 }
 .cuisine-carousel-wrapper{
     cursor:pointer;

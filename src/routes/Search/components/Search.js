@@ -5,7 +5,7 @@ import './search.scss'
 import classNames from 'classnames'
 import StarRatingComponent from 'react-star-rating-component';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import { Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
@@ -94,7 +94,6 @@ const Search = React.createClass({
          * there should only be one such element as the function is called for every change
          */
         let oldDietSelectedMapKeys = Object.keys(dietSelectedMap);
-        console.log(oldDietSelectedMapKeys)
         dietTypes.forEach(function(dietType, index) {
             newDietsSelected.push(dietType.value);
         })
@@ -156,29 +155,84 @@ const Search = React.createClass({
             
         }
         let self = this;
+        let  momentDate =(addtnlQuery.date)? moment(addtnlQuery.date) : moment();
+        let displayDate = momentDate.format("MMM Do");
         return (
-            <div>
-            	<div className="date-title">
-            		Order date:  
-    				<DatePicker
-    					style={{display:'inline'}}
-                        selected={moment(addtnlQuery.date)}
-                        name="serviceDate"
-                        onBlur={this.handleChange} 
-                        onFocus={this.handleFocus}
-                        onChange={(date)=>this.selectOption('date',date.toDate())}
-                    />
-    				<div style={{display:'inline-block', marginLeft:'3em'}}>
-	            		<AsyncAutocomplete  name={'addressSearch'}
-	                                        userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
-	                                        apiUrl = {'/api/locations/addressTypeAssist'}
-	                                        getSuggestionValue={(suggestion)=>suggestion.address}
-	                                        onChange = {(event, value)=>this.props.userAddressSearchChange(value.newValue)}
-	                                        onSuggestionSelected = {this.onSuggestionSelected}
-	                    />
-	            	</div>
-            	</div>
-            	
+            <div className="search">
+            	<Card>
+				    <CardHeader
+            			title= {<div style={{fontSize:'14px'}}>Showing results for {displayDate} <span style={{float:'right'}}>Filter options</span></div>}
+				      	showExpandableButton={true}
+				      	actAsExpander = {true}
+				      	textStyle={{display:'block', paddingRight:'2em'}}/>
+				    <CardText expandable={true} style={{padding:'0 1em'}}>
+					    <div className="pure-g date-title">
+					    	<form className="pure-form pure-form-stacked">
+						        <fieldset>
+						            <div className="pure-g">
+						                <div className="pure-u-1 pure-u-md-1-3">
+						                    <label>date</label>
+						                    <DatePicker
+						    					style={{display:'inline'}}
+						                        selected={moment(addtnlQuery.date)}
+						                        name="serviceDate"
+						                        onBlur={this.handleChange} 
+						                        onFocus={this.handleFocus}
+						                        onChange={(date)=>this.selectOption('date',date.toDate())}
+						                    />
+						                </div>
+						    
+						                <div className="pure-u-1 pure-u-md-1-3">
+						                    <label>address</label>
+						                    <AsyncAutocomplete name={'addressSearch'}
+		                                        userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
+		                                        apiUrl = {'/api/locations/addressTypeAssist'}
+		                                        getSuggestionValue={(suggestion)=>suggestion.address}
+		                                        onChange = {(event, value)=>this.props.userAddressSearchChange(value.newValue)}
+		                                        onSuggestionSelected = {this.onSuggestionSelected}
+						                    />
+						                </div>
+						    
+						                <div className="pure-u-1 pure-u-md-1-3">
+						                    <label>diet-types</label>
+						                    <Select
+											    name="diet-types"
+											    placeholder="select by diet type"
+											    options={DIET_TYPES}
+											    value={Object.keys(dietSelectedMap).join(',')}
+											    multi = {true}
+											    autoBlur={true}
+											    onChange={this.selectDietType}
+											/>
+						                </div>
+						    
+						                <div className="pure-u-1 pure-u-md-1-3">
+						                    <label>pick-up delivery</label>
+						                    <Select
+											    name="order-mode"
+											    placeholder="pick-up/delivery"
+											    value={addtnlQuery.orderMode}
+											    options={ORDER_TYPE}
+											    onChange={(selectedMode)=>this.selectOption('orderMode',selectedMode)}
+											/>
+						                </div>
+						    
+						                <div className="pure-u-1 pure-u-md-1-3">
+						                    <label>provider distance</label>
+						                    <Select
+											    name="provider-radius"
+											    placeholder="pick-up radius"
+											    value={addtnlQuery.providerRadius}
+											    options={RADIUS_OPTIONS}
+											    onChange={(selectedRadius)=>this.selectOption('providerRadius',selectedRadius)}
+											/>
+						                </div>
+						            </div>
+						        </fieldset>
+						    </form>
+						</div>
+				    </CardText>
+				</Card>
 				<div className = 'cuisine-carousel-wrapper' onClick={(event)=>this.filterCuisineOrDietType(event,'cuisine')}>
 					<Carousel
 						slidesToShow={5}
@@ -200,47 +254,6 @@ const Search = React.createClass({
 						})}
 					</Carousel>
 				</div>
-				<Card>
-				    <CardHeader
-				      title="More search options"
-				      showExpandableButton={true}
-				      style={{textAlign:"center"}}
-				      actAsExpander = {true}
-				    />
-				    <CardText expandable={true}>
-					    <div className="pure-g">
-						    <div className="pure-u-1 pure-u-md-1-3"> 
-							    <Select
-								    name="diet-types"
-								    placeholder="select by diet type"
-								    options={DIET_TYPES}
-								    value={Object.keys(dietSelectedMap).join(',')}
-								    multi = {true}
-								    autoBlur={true}
-								    onChange={this.selectDietType}
-								/> 
-							</div>
-						    <div className="pure-u-1 pure-u-md-1-3"> 
-							    <Select
-								    name="order-mode"
-								    placeholder="pick-up/delivery"
-								    value={addtnlQuery.orderMode}
-								    options={ORDER_TYPE}
-								    onChange={(selectedMode)=>this.selectOption('orderMode',selectedMode)}
-								/> 
-							</div>
-						    <div className="pure-u-1 pure-u-md-1-3"> 
-							    <Select
-								    name="provider-radius"
-								    placeholder="pick-up radius"
-								    value={addtnlQuery.providerRadius}
-								    options={RADIUS_OPTIONS}
-								    onChange={(selectedRadius)=>this.selectOption('providerRadius',selectedRadius)}
-								/> 
-							</div>
-						</div>
-				    </CardText>
-				</Card>
 				<div className="query-btn-center">
 					<RaisedButton 
 						label="Search" 
@@ -303,8 +316,6 @@ const Search = React.createClass({
 											    						&#x2715; &nbsp; pickup
 											    					</div>
 											    		}
-											    			
-											    		
 											    		<div>
 											    			order by : {new Date(foodItem.placeOrderBy).toDateString()}  
 											    		</div>

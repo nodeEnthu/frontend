@@ -3,7 +3,7 @@ import './providerentryform.scss';
 import { email, maxLength, required } from './../../utils/formUtils/formValidation';
 import Toggle from 'material-ui/Toggle';
 import classNames from 'classnames';
-import Modal from 'react-modal';
+import Dialog from 'material-ui/Dialog';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import AsyncAutocomplete from 'components/AsyncAutocomplete'
@@ -317,8 +317,8 @@ const ProviderEntryForm = React.createClass({
                         }                            
                     </fieldset>
                 </form>
-                <Modal
-                  isOpen={providerAddressJustificationModalOpen}
+                <Dialog
+                  open={providerAddressJustificationModalOpen || false}
                   onRequestClose={()=>{this.toggle('providerAddressJustificationModalOpen')}}
                 >
                   <div ref="subtitle"
@@ -344,7 +344,7 @@ const ProviderEntryForm = React.createClass({
                   </p>
 
                   </div>
-                </Modal>
+                </Dialog>
             </div>
         )
     }

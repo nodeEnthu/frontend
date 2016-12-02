@@ -1,6 +1,6 @@
 import React from 'react'
 import './../ProviderProfile/providerProfile.scss'
-import Modal from 'react-modal';
+import Dialog from 'material-ui/Dialog';
 import classNames from 'classnames';
 import StarRatingComponent from 'react-star-rating-component';
 
@@ -96,8 +96,8 @@ const ReviewSubmitModal = React.createClass({
   },
   render(){
     let {review,reviewSubmitModalOpen} = this.props.providerProfile.toJS();
-    return <Modal
-            isOpen={reviewSubmitModalOpen}
+    return <Dialog
+            open={reviewSubmitModalOpen || false}
             onRequestClose={this.closeModal}
           >
           <div>
@@ -130,7 +130,7 @@ const ReviewSubmitModal = React.createClass({
               >Submit</button>
             </div>
           </div>
-          </Modal>
+          </Dialog>
   }
 })
 

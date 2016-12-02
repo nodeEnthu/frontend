@@ -1,22 +1,15 @@
 // Libs
 import React from 'react';
-import Modal from 'react-modal';
+import Dialog from 'material-ui/Dialog';
+import { Link, IndexLink } from 'react-router';
+
 import FacebookLogin from 'components/Facebook/Facebook';
 import GoogleLogin from 'components/GoogleLogin';
 import * as actions from '../../layouts/CoreLayout/coreReducer';
 import {getCall,postCall,securedGetCall} from 'utils/httpUtils/apiCallWrapper';
 
 const customStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        minWidth:'50%',
-        minHeight:'60%',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)'
-    }
+
 };
 
 
@@ -64,16 +57,19 @@ var Login = React.createClass({
       this.successfullLogin(normalizedResponse);
     },
     render: function() {
+      console.log(this.props);
         const { loginModalOPen } = this.props.globalState.core.toJS();
+        console.log(loginModalOPen);
         return (
               <div className="pure-menu-item">
                   <a className="pure-menu-link"
                     onClick={this.openModal}
-                    >Login</a>
-                <Modal
-                  isOpen={loginModalOPen}
-                  onRequestClose={this.closeModal}
-                  style={customStyles} >
+                    >Login
+                  </a>
+                <Dialog
+                  open={loginModalOPen || false}
+                  onRequestClose={()=>this.closeModal()}
+                >
                   <div ref="subtitle"
                     style={{
                       textAlign:'center',
@@ -96,7 +92,7 @@ var Login = React.createClass({
                       callback={this.successfullGmailLogin} 
                     />
                   </div>
-                </Modal>
+                </Dialog>
               </div>
         );
     }
