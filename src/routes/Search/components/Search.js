@@ -161,7 +161,7 @@ const Search = React.createClass({
             <div className="search">
             	<Card>
 				    <CardHeader
-            			title= {<div style={{fontSize:'14px'}}>Showing results for {displayDate} <span style={{float:'right'}}>Filter options</span></div>}
+            			title= {<div style={{fontSize:'14px'}}>Showing results for {displayDate} <span style={{float:'right'}}>Filter</span></div>}
 				      	showExpandableButton={true}
 				      	actAsExpander = {true}
 				      	textStyle={{display:'block', paddingRight:'2em'}}/>
@@ -229,6 +229,18 @@ const Search = React.createClass({
 						                </div>
 						            </div>
 						        </fieldset>
+						        <div className="query-btn-center">
+									<RaisedButton 
+										label="Search" 
+										primary={true}
+										disabled={!this.state.searchActivated}
+										style={{
+											width:'40%'
+										}}
+										onClick={this.createAndFetchNewQuery}
+										disableTouchRipple={true} 
+									/>
+								</div>
 						    </form>
 						</div>
 				    </CardText>
@@ -254,18 +266,7 @@ const Search = React.createClass({
 						})}
 					</Carousel>
 				</div>
-				<div className="query-btn-center">
-					<RaisedButton 
-						label="Search" 
-						primary={true}
-						disabled={!this.state.searchActivated}
-						style={{
-							width:'40%'
-						}}
-						onClick={this.createAndFetchNewQuery}
-						disableTouchRipple={true} 
-					/>
-				</div>
+				
 				<div className="providers-wrapper">
 					<div className="pure-g">
 					{	(resolvedData)? 

@@ -78,14 +78,14 @@ const HomeView = React.createClass({
     },
     render() {
         return (
-            <div>
+            <div className="home">
 				<div className="splash-container pure-override-letter-spacing">
 					<div className="banner-wrapper">
 						<div className="pure-g">
 							<div className = "pure-u-1 pure-u-md-1-2">
 							    <div className="splash">
 							        <h1 className="splash-head">
-							        	Please enter address to find food close to you.
+							        	Find food
 							        </h1>
 							        <AsyncAutocomplete
 							        	name={"home_view"} 
@@ -125,14 +125,14 @@ const HomeView = React.createClass({
 						    <div className = "pure-u-1 pure-u-md-1-2">
 							   <div className="splash">
 							        <div className="splash-head">
-							        	Advertise your food right away in 3 easy steps
+							        	Provide food right away in 3 easy steps
 							        </div>
-							        <p className="is-center">
+							        <div className="is-center" style={{marginBottom:'1em'}}>
 							        	<button className="pure-button pure-button-primary"
 							        		onClick={()=>this.goToPage('provider')}>
 							        		Get Started
 							        	</button>
-							        </p>
+							        </div>
 							    </div>
 						    </div>
 						</div>

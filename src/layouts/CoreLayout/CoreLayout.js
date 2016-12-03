@@ -6,7 +6,7 @@ import Header from '../../components/Header/index'
 export const CoreLayout = ({ children }) => (
   <div className='container'>
   	<Header/>
-    <div className='mainContainer'>
+    <div className='content'>
       {children}
     </div>
     <div className="footer">
