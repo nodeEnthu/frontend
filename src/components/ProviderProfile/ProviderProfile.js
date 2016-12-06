@@ -78,7 +78,7 @@ const ProviderProfile = React.createClass({
     let Element = Scroll.Element;
     console.log(this.props.actionName,'this.props.actionName', this.props.params.id,user,data);
     return (data && data.foodItems && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
-        <div id="layout" className="pure-g">
+        <div id="layout" className="provider-profile">
           <div className="sidebar pure-u-1 pure-u-md-1-4">
             {
               (this.props.params.id === this.props.globalState.core.toJS().user._id)?

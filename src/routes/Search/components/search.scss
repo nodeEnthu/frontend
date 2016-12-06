@@ -1,107 +1,103 @@
 .search {
-    .react-autosuggest__container {
-        display:block;
+    .react-datepicker__input-container {
+        width: 100%;
+        input{
+            width:100%;
+        }
     }
-    .react-datepicker__input-container{
-        display:block;
+    .react-autosuggest__container{
+        width:100%;
     }
-    .pure-form input[type]{
+    .react-autosuggest__input {
+        width: inherit;
+    }
+    .pure-form input[type] {
         margin-bottom: 0px;
+        margin-top: 0px;
     }
     .Select-input input {
-        border:none;
-        box-shadow:none;
+        border: none;
+        box-shadow: none;
+    }
+    .cuisine-carousel-wrapper {
+        cursor: pointer;
+    }
+    .carousel-img {
+        opacity: 0.9;
+        text-align: center;
+        font-weight: 700;
+    }
+    .select-cuisine {
+        background-image: url("/selection/dark-green-check-mark-md.png");
+        background-color: white;
+    }
+    .diet-wrapper {
+        margin-top: 50px;
+    }
+    .providers-wrapper {
+        margin-top: 50px;
+    }
+    .provider-profile-wrapper {
+        background: #fff;
+        border-radius: 2px;
+        display: inline-block;
+        margin: 5px;
+        position: relative;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.24);
+        transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+        cursor: pointer;
+    }
+    .provider-profile-wrapper:hover {
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    }
+    .provider-img-section {
+        width: 150px;
+        height: 150px;
+        display: inline-block;
+    }
+    .img-avatar {
+        margin: 0 auto;
+        width: 150px;
+        height: 150px;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+        img {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 10px;
+            right: 0px;
+            margin: auto;
+            max-height: 100%;
+            max-width: 100%;
+        }
+    }
+    .provider-info-section {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: 10px;
+        margin-right: 10px;
+        font-size: 14px;
+    }
+    .provider-star-rating {
+        display: inline-block;
+    }
+    .num-of-reviews {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: 10px;
+        font-size: 10px;
+    }
+    .miles-away {
+        float: right;
+        font-size: 12px;
+    }
+    .load-more-center {
+        text-align: center;
+    }
+    .query-btn-center {
+        margin-top: 20px;
+        text-align: center;
     }
 }
-.cuisine-carousel-wrapper{
-    cursor:pointer;
-}
-.carousel-img {
-    height: 120px;
-    width: 240px;
-    opacity: 0.9;
-    text-align: center;
-    font-weight: 700;
-}
-
-.select-cuisine {
-    background-image: url("/selection/dark-green-check-mark-md.png");
-    background-color: white;
-}
-
-.diet-wrapper {
-    margin-top: 50px;
-}
-
-.providers-wrapper {
-    margin-top: 50px;
-}
-
-.provider-profile-wrapper {
-    background: #fff;
-    border-radius: 2px;
-    display: inline-block;
-    margin: 5px;
-    position: relative;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.24);
-    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-    cursor: pointer;
-
-}
-.provider-profile-wrapper:hover {
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-}
-
-.provider-img-section {
-    width: 150px;
-    height: 150px;
-    display: inline-block;
-}
-
-.img-avatar {
-    margin: 0 auto;
-    width: 150px;
-    height: 150px;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    img {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 10px;
-        right: 0px;
-        margin: auto;
-        max-height: 100%;
-        max-width: 100%;
-    }
-}
-
-.provider-info-section{
-	display:inline-block;
-	vertical-align:top;
-	margin-left:10px;
-	margin-right:10px;
-	font-size:14px;
-}
-.provider-star-rating{
-	display:inline-block;
-}
-.num-of-reviews{
-	display:inline-block;
-	vertical-align:top;
-	margin-left:10px;
-	font-size:10px;
-}
-.miles-away{
-	float:right;
-	font-size:12px;
-}
-.load-more-center{
-    text-align:center;
-}
-.query-btn-center{
-    margin-top: 20px;
-    text-align: center;
-}
-

@@ -166,10 +166,10 @@ const Search = React.createClass({
 				      	actAsExpander = {true}
 				      	textStyle={{display:'block', paddingRight:'2em'}}/>
 				    <CardText expandable={true} style={{padding:'0 1em'}}>
-					    <div className="pure-g date-title">
+					    <div className="date-title">
 					    	<form className="pure-form pure-form-stacked">
 						        <fieldset>
-						            <div className="pure-g">
+						            <div>
 						                <div className="pure-u-1 pure-u-md-1-3">
 						                    <label>date</label>
 						                    <DatePicker
@@ -258,7 +258,8 @@ const Search = React.createClass({
 										name={cuisine.type}
 										style={
 											{
-												background:'url('+cuisine.src+') center',
+												background:'url('+cuisine.src+') center no-repeat',
+												backgroundSize:'cover'
 											}
 										}
 										className="carousel-img"
