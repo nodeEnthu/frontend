@@ -20,6 +20,7 @@ import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import RaisedButton from 'material-ui/RaisedButton';
 import FoodItemInProviderProfile from 'components/FoodItemInProviderProfile';
 import { Link } from 'react-router';
+import moment from 'moment';
 
 const ProviderProfile = React.createClass({
   getInitialState() {
@@ -83,6 +84,15 @@ const ProviderProfile = React.createClass({
         userViewingOwnProfile=true;
       }
     }
+    // seperate between current and past items
+    let currentItems=[] , pastItems=[], currentDate;
+    if(data && data.foodItems){
+      data.foodItems.forEach(function(foodItem){
+        if(moment(foodItem.serviceDate).isAfter(new Date(), 'day')){
+          currentItems.push(foodItem);
+        } else pastItems.push(foodItem);
+      })
+    }
     return (data && data.foodItems && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="provider-profile">
           <div className="sidebar pure-u-1 pure-u-md-1-4">
@@ -115,7 +125,8 @@ const ProviderProfile = React.createClass({
           <div className = "content pure-u-1 pure-u-md-3-4">
             <div>
               <div className="posts">
-                  <Link to={'/foodItems/add'}>
+                  {(userViewingOwnProfile)?
+                    <Link to={'/foodItems/add'}>
                         <IconButton
                           style={{top:'6px'}}
                         >
@@ -125,9 +136,17 @@ const ProviderProfile = React.createClass({
                             Add another item
                         </div>
                     </Link>
-                  <h1 className="content-subhead">Menu Items</h1>
+                    :
+                    undefined
+                  }
+                  {
+                    (currentItems && currentItems.length>0)?
+                      <h1 className="content-subhead">Current Items</h1>
+                      :
+                      undefined
+                  }
                   { 
-                    data.foodItems.map((foodItem)=>{
+                    currentItems.map((foodItem)=>{
                       return <div key={foodItem._id}>
                                 <FoodItemInProviderProfile
                                   userViewingOwnProfile={userViewingOwnProfile}
@@ -136,8 +155,26 @@ const ProviderProfile = React.createClass({
                                   foodItem={foodItem}
                                 />
                               </div>
-                  })
-                }
+                    })
+                  }
+                  {
+                    (pastItems && pastItems.length>0)?
+                      <h1 className="content-subhead">Past Items</h1>
+                      :
+                      undefined
+                  }
+                  { 
+                    pastItems.map((foodItem)=>{
+                      return <div key={foodItem._id}>
+                                <FoodItemInProviderProfile
+                                  userViewingOwnProfile={userViewingOwnProfile}
+                                  checkout = {self.checkout}
+                                  writeReviewModal = {self.writeReviewModal}
+                                  foodItem={foodItem}
+                                />
+                              </div>
+                    })
+                  }
               </div>
               {(this.props.mode != 'providerEntry')?
                 <div>
