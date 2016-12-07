@@ -80,7 +80,7 @@ const FoodItemInProviderProfile = React.createClass({
                     undefined
                 }
                 
-                {(this.props.mode != 'providerEntry' && !this.props.userViewingOwnProfile )?
+                {(this.props.mode != 'providerEntry' && !this.props.userViewingOwnProfile && !this.props.pastItem )?
                   <RaisedButton
                     labelPosition="before"
                     label="Add to the cart" primary={true}

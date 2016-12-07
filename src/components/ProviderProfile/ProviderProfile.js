@@ -171,6 +171,7 @@ const ProviderProfile = React.createClass({
                                   checkout = {self.checkout}
                                   writeReviewModal = {self.writeReviewModal}
                                   foodItem={foodItem}
+                                  pastItem={true}
                                 />
                               </div>
                     })
