@@ -138,7 +138,7 @@ const ProviderEntryForm = React.createClass({
           },
         };
         return (
-            <div>
+            <div className="provider-entry-form">
                 <form className="pure-form pure-form-stacked">
                     <fieldset className="pure-group">
                         <input type="text"  className="pure-u-1" placeholder="*title" name="title" value={title}
@@ -173,6 +173,7 @@ const ProviderEntryForm = React.createClass({
                                 <span style={{fontSize:'0.75em'}}>Display this on my public profile page</span>
                                 <div style={{maxWidth:100, display:'inline-block'}}>
                                     <Toggle
+                                        style={{top:'8px'}}
                                         defaultToggled={!keepAddressPrivateFlag}
                                         onToggle={()=>{this.toggle('keepAddressPrivateFlag')}}
                                     />
@@ -231,6 +232,7 @@ const ProviderEntryForm = React.createClass({
                         We are pick-up service
                         <div style={{maxWidth:100, display:'inline-block'}}>
                             <Toggle
+                                style={{top:'8px'}}
                                 defaultToggled={pickUpFlag}
                                 onToggle={()=>{this.toggle('pickUpFlag')}}
                             />
@@ -256,6 +258,7 @@ const ProviderEntryForm = React.createClass({
                                 We can deliver 
                             <div style={{maxWidth:100, display:'inline-block'}}>
                                 <Toggle
+                                     style={{top:'8px'}}
                                     defaultToggled={doYouDeliverFlag}
                                     onToggle={()=>{this.toggle('doYouDeliverFlag')}} 
                                 />

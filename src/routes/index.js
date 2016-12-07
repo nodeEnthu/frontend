@@ -7,6 +7,8 @@ import Search from './Search'
 import FoodItemReviews from './FoodItemReviews'
 import ProviderProfileEditPage from './ProviderProfileEditPage'
 import FoodItemEditPage from './FoodItemEditPage'
+import FoodItemAddPage from './FoodItemAddPage'
+
 import { onMainPageEnter } from 'utils/auth/onEnterAuth'
 
 
@@ -25,7 +27,8 @@ export const createRoutes = (store) => ({
         Search(store),
         FoodItemReviews(store),
         ProviderProfileEditPage(store),
-        FoodItemEditPage(store)
+        FoodItemEditPage(store),
+        FoodItemAddPage(store)
     ]
 
 })

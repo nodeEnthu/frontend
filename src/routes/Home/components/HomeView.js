@@ -115,12 +115,12 @@ const HomeView = React.createClass({
                                                                                         top:'5px'
                                                                                     }}
                                                                         />*/}
-							        <p className="is-center">
+							        <div className="is-center">
 							        	<button className="pure-button pure-button-primary"
 							        		onClick={()=>this.goToPage('search')}>
 							        		Get Started
 							        	</button>
-							        </p>
+							        </div>
 							    </div>
 						    </div>
 						    <div className = "pure-u-1 pure-u-md-1-2">
