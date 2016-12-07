@@ -72,13 +72,17 @@ const ProviderProfile = React.createClass({
     })
   },
   render() {
-    
     const {providerProfileCall,providerEditModalOpen} = this.props.providerProfile.toJS();
     let data = providerProfileCall.data;
     let self = this;
     const {user} = this.props.globalState.core.toJS();
     let Element = Scroll.Element;
-    
+    let userViewingOwnProfile = false;
+    if(this.props.params && this.props.params.id && user && user._id){
+      if(this.props.params.id === user._id){
+        userViewingOwnProfile=true;
+      }
+    }
     return (data && data.foodItems && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="provider-profile">
           <div className="sidebar pure-u-1 pure-u-md-1-4">
@@ -126,12 +130,10 @@ const ProviderProfile = React.createClass({
                     data.foodItems.map((foodItem)=>{
                       return <div key={foodItem._id}>
                                 <FoodItemInProviderProfile
-                                  globalState={self.props.globalState}
-                                  user={user}
+                                  userViewingOwnProfile={userViewingOwnProfile}
                                   checkout = {self.checkout}
                                   writeReviewModal = {self.writeReviewModal}
                                   foodItem={foodItem}
-                                  params={self.props.params}
                                 />
                               </div>
                   })

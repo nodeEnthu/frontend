@@ -6,14 +6,7 @@ import { Link } from 'react-router';
 
 const FoodItemInProviderProfile = React.createClass({
   render(){
-    let {user,foodItem}= this.props;
-    let userViewingOwnProfile = false;
-    if(this.props.params && this.props.params.id && user && user._id){
-      if(this.props.params.id === user._id){
-        userViewingOwnProfile=true;
-      }
-    }
-   
+    let {foodItem}= this.props;
     return <section className="post">
             <div>
               <div className="pure-u-md-3-5">
@@ -68,7 +61,7 @@ const FoodItemInProviderProfile = React.createClass({
               </div>
               <div className="post-avatar pure-u-md-2-5">
                 {
-                  (this.props.params.id === this.props.globalState.core.toJS().user._id)?
+                  (this.props.userViewingOwnProfile)?
                     <div className="move-right">                   
                       <Link to={'/foodItems/'+foodItem._id+'/edit'}>Edit</Link> 
                     </div>
@@ -78,7 +71,7 @@ const FoodItemInProviderProfile = React.createClass({
                 
                 <img alt={foodItem.name} className = "food-item" src={foodItem.img}/>
                 {
-                  (!userViewingOwnProfile)?
+                  (!this.props.userViewingOwnProfile)?
                     <div className="move-center review-submit-link"
                       onClick={()=>this.props.writeReviewModal(foodItem)}>
                       Please submit a review
@@ -87,7 +80,7 @@ const FoodItemInProviderProfile = React.createClass({
                     undefined
                 }
                 
-                {(this.props.mode != 'providerEntry' && !userViewingOwnProfile )?
+                {(this.props.mode != 'providerEntry' && !this.props.userViewingOwnProfile )?
                   <RaisedButton
                     labelPosition="before"
                     label="Add to the cart" primary={true}
