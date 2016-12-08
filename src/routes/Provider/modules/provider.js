@@ -89,7 +89,6 @@ export function addProviderEntryState(obj) {
 }
 
 
-
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -99,13 +98,10 @@ const ACTION_HANDLERS = {
     [Add_Food_Item_Info]: (state, action) => state.setIn(['foodItemEntryForm', action.storeKey], action.payload),
     [Remove_Food_Item_Info]: (state, action) => state.setIn(['foodItemEntryForm', 'name'], '').setIn(['foodItemEntryForm', 'description'], ''),
     [Add_Provider_Entry_State]:(state,action)=>state.setIn(['providerEntryState', action.storeKey], action.payload),
-
     [PREFIL_PROVIDER_ENTRY_FORM]:(state,action)=>state.set('providerEntryForm', Map(action.payload)),
-
     [REQUEST_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
     [FAIL_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
-    [RECEIVE_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
-    
+    [RECEIVE_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data)
 }
 
 // ------------------------------------
@@ -125,6 +121,7 @@ const initialState =
             searchText: '',
             place_id: '',
             keepAddressPrivateFlag: false,
+            userType:'provider',
             includeAddressInEmail:true,
             email: '',
             pickUpFlag:true,
@@ -137,7 +134,7 @@ const initialState =
             titleErrorMsg: '',
             emailErrorMsg: '',
             descriptionErrorMsg: '',
-            providerAddressJustificationModalOpen:false
+            providerAddressJustificationModalOpen:false,
         }),
         foodItemEntryForm: Map({
             name: '',

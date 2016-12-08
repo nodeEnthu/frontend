@@ -8,25 +8,37 @@ import './provider.scss'
 import ProviderEntryForm from '../../../components/ProviderEntryForm/ProviderEntryForm'
 import FoodItemEntryForm from '../../../components/FoodItemEntryForm/FoodItemEntryForm'
 import ProviderProfile from 'components/ProviderProfile'
+import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 
-class Provider extends React.Component {
-  state = this.props.providerEntryState.toJS();
-  onAllClear=()=>{
+const Provider = React.createClass ({
+  onAllClear(){
     const stepIndex = this.props.providerEntryState.get('stepIndex');
     this.props.addProviderEntryState({
       storeKey: "stepIndex",
       payload:stepIndex +1
     });
-  };
-  handleNext = () => {
+  },
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+  handleNext(){
     if(this.props.providerEntryState.get('stepIndex')===0){
       this.refs.providerform.formSubmit();
     }
     if(this.props.providerEntryState.get('stepIndex')===1){
       this.refs.foodItemEntryForm.formSubmit();
     }
-  };
-  handlePrev = () => {
+    if(this.props.providerEntryState.get('stepIndex')===2){
+      let self = this;
+      securedPostCall('/api/providers/publish')
+        .then(function(res){
+          if(res && res.data && res.data._id){
+            self.context.router.push('/providerProfile/'+res.data._id);
+          }
+        })
+    }
+  },
+  handlePrev(){
    const stepIndex = this.props.providerEntryState.get('stepIndex');
     if (!this.props.providerEntryState.get('loading')) {
         this.props.addProviderEntryState({
@@ -38,8 +50,7 @@ class Provider extends React.Component {
           payload:stepIndex -1
         });
     }
-  };
-
+  },
   getStepContent(stepIndex,user) {
     switch (stepIndex) {
       case 0:
@@ -98,8 +109,7 @@ class Provider extends React.Component {
       default:
         return 'Youre a long way from home sonny jim!';
     }
-  }
-
+  },
   renderContent() {
     const {finished, stepIndex} = this.props.providerEntryState.toJS();
     const {user} = this.props.globalState.core.toJS();
@@ -137,7 +147,7 @@ class Provider extends React.Component {
               />
           }
           <RaisedButton
-            label={stepIndex === 2 ? 'Finish' : 'Next'}
+            label={stepIndex === 2 ? 'Publish' : 'Next'}
             primary={true}
             onTouchTap={this.handleNext}
             disableTouchRipple={true}
@@ -145,12 +155,9 @@ class Provider extends React.Component {
         </div>
       </div>
     );
-  }
-
-  render() {
-     
+  },
+  render() { 
     const {loading, stepIndex} = this.props.providerEntryState.toJS();
-
     return (
       <div className="pure-g" className = "pure-override-letter-spacing">
         <div className = "counter-fixed-menu">
@@ -172,23 +179,24 @@ class Provider extends React.Component {
       </div>
     );
   }
-}
+})
 
 Provider.propTypes= {
-    globalState:React.PropTypes.object.isRequired,
-    providerEntryState: React.PropTypes.object.isRequired,
-    providerEntryForm: React.PropTypes.object.isRequired,
-    foodItemEntryForm: React.PropTypes.object.isRequired,
-    charsLeft:React.PropTypes.func.isRequired,
-    addProviderInfo:React.PropTypes.func.isRequired,
-    addProviderErrorMsg:React.PropTypes.func.isRequired,
-    addFoodItemInfo:React.PropTypes.func.isRequired,
-    removeFoodItemInfo:React.PropTypes.func.isRequired,
-    addProviderEntryState:React.PropTypes.func.isRequired,
-    fetchData:React.PropTypes.func.isRequired,
+    globalState:React.PropTypes.object,
+    providerEntryState: React.PropTypes.object,
+    providerEntryForm: React.PropTypes.object,
+    foodItemEntryForm: React.PropTypes.object,
+    charsLeft:React.PropTypes.func,
+    addProviderInfo:React.PropTypes.func,
+    addProviderErrorMsg:React.PropTypes.func,
+    addFoodItemInfo:React.PropTypes.func,
+    removeFoodItemInfo:React.PropTypes.func,
+    addProviderEntryState:React.PropTypes.func,
+    fetchData:React.PropTypes.func,
     fetchSecuredData:React.PropTypes.func,
     provider:React.PropTypes.object,
     fetchMayBeSecuredData:React.PropTypes.func,
-    prefilProviderEntryForm:React.PropTypes.func
-};
+    prefilProviderEntryForm:React.PropTypes.func,
+    securedPostCall:React.PropTypes.func
+  };
 export default Provider;

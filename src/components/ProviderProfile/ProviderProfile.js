@@ -125,7 +125,7 @@ const ProviderProfile = React.createClass({
           <div className = "content pure-u-1 pure-u-md-3-4">
             <div>
               <div className="posts">
-                  {(userViewingOwnProfile)?
+                  {(userViewingOwnProfile && (this.props.mode != 'providerEntry'))?
                     <Link to={'/foodItems/add'}>
                         <IconButton
                           style={{top:'6px'}}
@@ -150,7 +150,7 @@ const ProviderProfile = React.createClass({
                       return <div key={foodItem._id}>
                                 <FoodItemInProviderProfile
                                   userViewingOwnProfile={userViewingOwnProfile}
-                                  checkout = {self.checkout}
+                                  checkOutItem = {self.checkOutItem}
                                   writeReviewModal = {self.writeReviewModal}
                                   foodItem={foodItem}
                                 />
@@ -168,7 +168,7 @@ const ProviderProfile = React.createClass({
                       return <div key={foodItem._id}>
                                 <FoodItemInProviderProfile
                                   userViewingOwnProfile={userViewingOwnProfile}
-                                  checkout = {self.checkout}
+                                  checkOutItem = {self.checkOutItem}
                                   writeReviewModal = {self.writeReviewModal}
                                   foodItem={foodItem}
                                   pastItem={true}
