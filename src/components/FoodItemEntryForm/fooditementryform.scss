@@ -1,53 +1,52 @@
-
-.retain-letter-spacing {
-    letter-spacing: normal;
-}
-
-.text-align-left {
-    text-align: left;
-}
-
-   
-.display-inline {
-    display: inline-block;
-}
-
-.pull-left {
-    float:left;
-    text-align: left;
-}
-
-.remove-margin-bottom{
-	margin-bottom:0px;
-}
-
-.pure-override-letter-spacing{
-	letter-spacing:normal;
-}
-
-input:required:focus {
-  border: normal;
-  outline: none;
-}
-
-input:invalid {
-        border: 1px solid red; 
+.food-item-entry {
+    .react-datepicker__input-container{
+        display: block;
     }
-.error-message{
-    float:left;
-    color:red;
-}
-.add-some-margin{
-    margin: 0 auto;
-    margin-left:10px;
-}
-.input-hidden{
-    display:none !important;
-}
-.item-added-msg{
-    background: #fef6e8;
-    padding:1%;
-}
-.is-center{
-    margin:0 auto;
+    .retain-letter-spacing {
+        letter-spacing: normal;
+    }
+    .text-align-left {
+        text-align: left;
+    }
+    .display-inline {
+        display: inline-block;
+    }
+    .pull-left {
+        float: left;
+        text-align: left;
+    }
+    .remove-margin-bottom {
+        margin-bottom: 0px;
+    }
+    .pure-override-letter-spacing {
+        letter-spacing: normal;
+    }
+    input:required:focus {
+        border: normal;
+        outline: none;
+    }
+    input:invalid {
+        border: 1px solid red;
+    }
+    .error-message {
+        float: left;
+        color: red;
+    }
+    .add-some-margin {
+        margin: 0 auto;
+        margin-left: 10px;
+    }
+    .input-hidden {
+        display: none !important;
+    }
+    .item-added-msg {
+        background: #fef6e8;
+        padding: 1%;
+    }
+    .is-center {
+        margin: 0 auto;
+    }
+    .width-max{
+        width:100%;
+    }
 }
