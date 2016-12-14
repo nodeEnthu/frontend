@@ -116,6 +116,7 @@
     "react-autosuggest": "^3.7.3",
     "react-cardstack": "^0.1.1",
     "react-datepicker": "^0.34.0",
+    "react-dates": "^4.1.0",
     "react-dom": "^15.0.0",
     "react-facebook-login": "^3.1.0",
     "react-fastclick": "^2.1.2",

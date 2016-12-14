@@ -125,7 +125,7 @@ const ProviderProfile = React.createClass({
           <div className = "content pure-u-1 pure-u-md-3-4">
             <div>
               <div className="posts">
-                  {(userViewingOwnProfile && (this.props.mode != 'providerEntry'))?
+                  {(userViewingOwnProfile && (this.props.mode != 'PROVIDER_ENTRY'))?
                     <Link to={'/foodItems/add'}>
                         <IconButton
                           style={{top:'6px'}}
@@ -177,7 +177,7 @@ const ProviderProfile = React.createClass({
                     })
                   }
               </div>
-              {(this.props.mode != 'providerEntry')?
+              {(this.props.mode != 'PROVIDER_ENTRY')?
                 <div>
                   <Element name="checkoutsection"/>
                   <Checkout{... this.props}/>

@@ -5,8 +5,7 @@ import Toggle from 'material-ui/Toggle';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton'
 import classNames from 'classnames';
-import DatePicker from 'react-datepicker';
-import TimePicker from 'material-ui/TimePicker';
+import DatePicker from 'material-ui/DatePicker';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import Snackbar from 'material-ui/Snackbar';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -24,13 +23,16 @@ const FoodItemEntryForm= React.createClass({
         // check whether its an edit to an already present provider
         if(this.props.params.id){
             this.props.fetchData('/api/foodItem/'+this.props.params.id , 'foodItemCall','FOOD_ITEM')
-            .then((res)=>{
-                this.props.addFoodItemInfo({
-                    storeKey:'firstItem',
-                    payload:true
-                }) 
-            })
+                .then((res)=>{
+                    this.props.addFoodItemInfo({
+                        storeKey:'firstItem',
+                        payload:true
+                    }) 
+                });
         }
+    },
+    componentWillUnmount() {
+        this.props.removeFoodItemInfo();
     },
     getInitialState() {
         return {
@@ -48,15 +50,13 @@ const FoodItemEntryForm= React.createClass({
         return new Date(orignalDate.getTime()+orignalDate.getTimezoneOffset()*60000) ;
     },
     changeStoreTimeAndDateVals(date, storeKey){
-        let orignalDate = date.startOf('day').toDate();
         this.props.addFoodItemInfo({
             storeKey: storeKey,
-            payload: this.addTimeOffset(orignalDate)
+            payload: date
         })
     },
     daysBeforeOrderDate(referenceDate,days){
-        //let addTimeZoneDifs = this.addTimeOffset(referenceDate)
-        return moment(referenceDate).subtract(days, "days").startOf('day').toDate();
+        return moment(referenceDate).subtract(days, "days").toDate();
     },
     handleDeleteChip() {
         this.setState({
@@ -121,10 +121,8 @@ const FoodItemEntryForm= React.createClass({
         this.addFoodItemInfo.providerEntryForm.description = input; // hacky again
     },
     changeStoreVal(event) {
-
         let input = event.target.value;
         let stateKeyName = event.target.name;
-        //console.log(input,stateKeyName);
         this.props.addFoodItemInfo({
             storeKey: stateKeyName,
             payload: input
@@ -168,24 +166,24 @@ const FoodItemEntryForm= React.createClass({
         }
         return noErrorsInform;
     },
-    formSubmit(event) {
+    formSubmit() {
         if (this.validateForm()) {
             let self = this;
             this.submitFoodItem()
                 .then(()=>self.props.onAllClear());
         }
     },
-    submitFoodItem() {
+    submitFoodItem(addAnother) {
         let result = false;
         let self = this;
+        let requestBody=this.props.foodItemEntryForm.toJS();
         // send it to server and clear out some of the item specific info
-        return securedPostCall('/api/providers/addOrEditFoodItem', this.props.foodItemEntryForm.toJS())
+        if(this.props.mode ==="PROVIDER_ENTRY"){
+            requestBody.publishStage=(addAnother)? 1 : 2;
+        }
+        return securedPostCall('/api/providers/addOrEditFoodItem', requestBody)
                 .then(function(response) {
                     // show the chip for last food item entered
-                    self.props.addFoodItemInfo({
-                        storeKey: 'firstItem',
-                        payload: false
-                    });
                     self.setState({
                             chipDeleted: false,
                             lastItemAdded: response.data.name
@@ -198,25 +196,19 @@ const FoodItemEntryForm= React.createClass({
                     self.toggleFlags('snackBarOpen');
                     //scroll to the top
                     window.scrollTo(0, 23);
-                    // remove name , desc and image from last item ...keep the others as defaults for new item
-                    self.props.removeFoodItemInfo({
-                        storeKeys: ['name', 'description']
-                    });
                 })
        
     },
     render() {
-        let { name, nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
-        let resolvedServiceDate = null;
-        serviceDate = (serviceDate) ? new Date(serviceDate): new Date();
-        // date-picker wants the dats to be in form of moment object
-        resolvedServiceDate = moment(serviceDate);
+        let { name, nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();  
+        serviceDate = (serviceDate)? new Date(serviceDate): new Date();
+        serviceDate =  this.addTimeOffset(serviceDate);
         placeOrderBy = (placeOrderBy)? new Date(placeOrderBy): new Date();
         return (
-            (serviceDate && placeOrderBy)?
+            (serviceDate)?
             <div className="food-item-entry">
                 {
-                    (!firstItem && !this.state.chipDeleted)?
+                    (!firstItem && !this.state.chipDeleted && this.props.mode ==="PROVIDER_ENTRY")?
                         <div style={{display: 'flex',flexWrap: 'wrap'}}>
                             <span style={{position:'relative',top:'10px'}}>Last Item Entered</span>
                             <Chip
@@ -282,12 +274,19 @@ const FoodItemEntryForm= React.createClass({
                                 <div className = "pure-u-1 pure-u-md-1-2">
                                     <label>*Order ready date</label>
                                         <DatePicker
-                                            selected={resolvedServiceDate}
+                                            container="inline"
                                             className="width-max"
                                             name="serviceDate"
+                                            textFieldStyle={{width:'100%'}}
+                                            inputStyle={{marginTop:'0px',height:'2.25em',border: '1px solid #ccc',boxShadow: 'inset 0 1px 3px #ddd',padding: '.5em .6em'}}
+                                            underlineStyle={{display: 'none'}}
+                                            hintText=""
+                                            autoOk={true}
+                                            value={serviceDate}
                                             onBlur={this.handleChange} 
                                             onFocus={this.handleFocus}
-                                            onChange={(date)=>this.changeStoreTimeAndDateVals(date,'serviceDate')}
+                                            onChange={(event,date)=>this.changeStoreTimeAndDateVals(date,'serviceDate')}
+                                            formatDate={(date)=> date.toDateString()}
                                         />
                                 </div>
                                 <span className = "error-message">{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
@@ -386,7 +385,7 @@ const FoodItemEntryForm= React.createClass({
                     (this.props.mode != 'editMode')?
                     <div>
                         <IconButton
-                        onClick = {this.submitFoodItem}
+                        onClick = {()=>this.submitFoodItem('addAnother')}
                         style={{top:'6px'}}
                         >
                             <ContentAddBox/>

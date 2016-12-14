@@ -11,6 +11,13 @@ import ProviderProfile from 'components/ProviderProfile'
 import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 
 const Provider = React.createClass ({
+  componentDidMount() {
+    const {user} = this.props.globalState.core.toJS();
+    this.props.addProviderEntryState({
+      storeKey:'stepIndex',
+      payload: user.publishStage
+    })
+  },
   onAllClear(){
     const stepIndex = this.props.providerEntryState.get('stepIndex');
     this.props.addProviderEntryState({
@@ -52,6 +59,7 @@ const Provider = React.createClass ({
     }
   },
   getStepContent(stepIndex,user) {
+    console.log(stepIndex);
     switch (stepIndex) {
       case 0:
         return (
@@ -68,7 +76,7 @@ const Provider = React.createClass ({
                                 onAllClear = {this.onAllClear}
                                 fetchSecuredData = {this.props.fetchSecuredData} 
                                 params = {{id:user._id}}
-                                actionName = {"PROVIDER_ENTRY"}
+                                mode = {"PROVIDER_ENTRY"}
                                 prefilProviderEntryForm = {this.props.prefilProviderEntryForm}
                                 ref="providerform" 
             />
@@ -89,7 +97,8 @@ const Provider = React.createClass ({
                                 addFoodItemInfo = {this.props.addFoodItemInfo}
                                 fetchData = {this.props.fetchData}
                                 removeFoodItemInfo = {this.props.removeFoodItemInfo}
-                                params = {this.props.params} 
+                                params = {this.props.params}
+                                mode = {"PROVIDER_ENTRY"} 
                                 ref="foodItemEntryForm"
             />
           </div>
@@ -102,12 +111,12 @@ const Provider = React.createClass ({
                               globalState = {this.props.globalState}
                               fetchMayBeSecuredData = {this.props.fetchMayBeSecuredData}
                               actionName = {"PROVIDER_ENTRY"}
-                              mode={"providerEntry"}
+                              mode = {"PROVIDER_ENTRY"} 
             />
           </div>
         );
       default:
-        return 'Youre a long way from home sonny jim!';
+        return 'Youre a long way from home!';
     }
   },
   renderContent() {

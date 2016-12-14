@@ -57,9 +57,7 @@ var Login = React.createClass({
       this.successfullLogin(normalizedResponse);
     },
     render: function() {
-      console.log(this.props);
         const { loginModalOPen } = this.props.globalState.core.toJS();
-        console.log(loginModalOPen);
         return (
               <div className="pure-menu-item">
                   <a className="pure-menu-link"

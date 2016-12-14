@@ -1,6 +1,6 @@
-
 import { Map, List } from 'immutable';
-
+import FoodItem from 'models/FoodItem';
+import Provider from 'models/Provider';
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -52,10 +52,10 @@ export function addProviderErrorMsg(obj) {
     }
 }
 
-export function prefilProviderEntryForm(data){
+export function prefilProviderEntryForm(data) {
     return {
-        type:PREFIL_PROVIDER_ENTRY_FORM,
-        payload:data
+        type: PREFIL_PROVIDER_ENTRY_FORM,
+        payload: data
     }
 }
 
@@ -69,11 +69,9 @@ export function addFoodItemInfo(obj) {
         payload: obj.payload
     }
 }
-export function removeFoodItemInfo(obj) {
+export function removeFoodItemInfo() {
     return {
-        type: Remove_Food_Item_Info,
-        storeKeys: obj.storeKeys,
-        payload: ''
+        type: Remove_Food_Item_Info
     }
 }
 
@@ -96,12 +94,12 @@ const ACTION_HANDLERS = {
     [Add_Provider_Info]: (state, action) => state.setIn(['providerEntryForm', action.storeKey], action.payload),
     [Add_Provider_Error_Msg]: (state, action) => state.setIn(['providerEntryForm', action.storeKey], action.payload),
     [Add_Food_Item_Info]: (state, action) => state.setIn(['foodItemEntryForm', action.storeKey], action.payload),
-    [Remove_Food_Item_Info]: (state, action) => state.setIn(['foodItemEntryForm', 'name'], '').setIn(['foodItemEntryForm', 'description'], ''),
-    [Add_Provider_Entry_State]:(state,action)=>state.setIn(['providerEntryState', action.storeKey], action.payload),
-    [PREFIL_PROVIDER_ENTRY_FORM]:(state,action)=>state.set('providerEntryForm', Map(action.payload)),
+    [Remove_Food_Item_Info]: (state, action) => state.set('foodItemEntryForm', FoodItem),
+    [Add_Provider_Entry_State]: (state, action) => state.setIn(['providerEntryState', action.storeKey], action.payload),
+    [PREFIL_PROVIDER_ENTRY_FORM]: (state, action) => state.set('providerEntryForm', Map(action.payload)),
     [REQUEST_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
     [FAIL_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
-    [RECEIVE_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data)
+    [RECEIVE_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data).set('providerEntryForm', Map(action.payload.data.data)),
 }
 
 // ------------------------------------
@@ -115,61 +113,12 @@ const initialState =
             finished: false,
             stepIndex: 0
         }),
-        providerEntryForm: Map({
-            title: '',
-            description: '',
-            searchText: '',
-            place_id: '',
-            keepAddressPrivateFlag: false,
-            userType:'provider',
-            includeAddressInEmail:true,
-            email: '',
-            pickUpFlag:true,
-            pickUpAddtnlComments:'',
-            doYouDeliverFlag:false,
-            deliveryRadius:'',
-            deliveryMinOrder:'',
-            deliveryAddtnlComments:'',
-            allClear: false,
-            titleErrorMsg: '',
-            emailErrorMsg: '',
-            descriptionErrorMsg: '',
-            providerAddressJustificationModalOpen:false,
-        }),
-        foodItemEntryForm: Map({
-            name: '',
-            nameErrMsg:'',
-            description: '',
-            cuisineType:'',
-            cuisineTypeErrorMsg:'',
-            descriptionErrorMsg:'',
-            placeOrderBy: new Date(),
-            placeOrderByErrorMsg:'',
-            serviceDate:new Date(),
-            serviceDateErrorMsg:'',
-            deliveryFlag: false,
-            price:undefined,
-            priceErrorMsg:'',
-            pickUpStartTime:undefined,
-            pickUpEndTime:undefined,
-            organic:false,
-            vegetarian:false,
-            glutenfree:false,
-            lowcarb:false,
-            vegan:false,
-            nutfree:false,
-            oilfree:false,
-            nondairy:false,
-            indianFasting:false,
-            allClear:false,
-            snackBarOpen:false,
-            snackBarMessage:'',
-            firstItem:true
-        }),
+        providerEntryForm: Provider,
+        foodItemEntryForm: FoodItem,
         providerProfileCall: Map({
             isLoading: false,
             error: false,
-            data:Map()
+            data: Map()
         }),
     })
 export default function providerReducer(state = initialState, action) {
