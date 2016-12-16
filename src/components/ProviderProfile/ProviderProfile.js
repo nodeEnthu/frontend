@@ -88,7 +88,7 @@ const ProviderProfile = React.createClass({
     let currentItems=[] , pastItems=[], currentDate;
     if(data && data.foodItems){
       data.foodItems.forEach(function(foodItem){
-        if(moment(foodItem.serviceDate).isAfter(new Date(), 'day')){
+        if(moment(foodItem.serviceDate).isAfter(moment(), 'day') || moment(foodItem.serviceDate).isSame(moment(), 'day')){
           currentItems.push(foodItem);
         } else pastItems.push(foodItem);
       })

@@ -8,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Select from 'react-select';
-import DatePicker from 'react-datepicker';
+import DatePicker from 'material-ui/DatePicker';
 import AsyncAutocomplete from 'components/AsyncAutocomplete';
 import { getCall,securedGetCall } from 'utils/httpUtils/apiCallWrapper';
 import moment from 'moment';
@@ -139,9 +139,6 @@ const Search = React.createClass({
     },
     render() {
         let { data, addtnlQuery, dietSelectedMap } = this.props.search.toJS();
-        if(addtnlQuery.date){
-        	addtnlQuery.date = moment(addtnlQuery.date);
-        }
         const { pageNum } = this.state;
         const {userAddressSearch} = this.props.globalState.core.toJS();
         let resolvedData = [];
@@ -173,13 +170,21 @@ const Search = React.createClass({
 						                <div className="pure-u-1 pure-u-md-1-3">
 						                    <label>date</label>
 						                    <DatePicker
-						    					style={{display:'inline'}}
-						                        selected={moment(addtnlQuery.date)}
-						                        name="serviceDate"
-						                        onBlur={this.handleChange} 
-						                        onFocus={this.handleFocus}
-						                        onChange={(date)=>this.selectOption('date',date.toDate())}
-						                    />
+	                                            container="inline"
+	                                            style={{width:'100%'}}
+	                                            name="serviceDate"
+	                                            textFieldStyle={{width:'100%'}}
+	                                            inputStyle={{marginTop:'0px',height:'2.25em',border: '1px solid #ccc',boxShadow: 'inset 0 1px 3px #ddd',padding: '.5em .6em'}}
+	                                            underlineStyle={{display: 'none'}}
+	                                            hintText=""
+	                                            autoOk={true}
+	                                            value={addtnlQuery.date}
+	                                            onBlur={this.handleChange} 
+	                                            onFocus={this.handleFocus}
+	                                            onTouchTap={(event)=>event.preventDefault()}
+	                                            onChange={(event,date)=>this.selectOption('date',date)}
+	                                            formatDate={(date)=> date.toDateString()}
+	                                        />
 						                </div>
 						    
 						                <div className="pure-u-1 pure-u-md-1-3">

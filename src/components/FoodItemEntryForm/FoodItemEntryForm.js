@@ -285,6 +285,7 @@ const FoodItemEntryForm= React.createClass({
                                             value={serviceDate}
                                             onBlur={this.handleChange} 
                                             onFocus={this.handleFocus}
+                                            onTouchTap={(event)=>event.preventDefault()}
                                             onChange={(event,date)=>this.changeStoreTimeAndDateVals(date,'serviceDate')}
                                             formatDate={(date)=> date.toDateString()}
                                         />

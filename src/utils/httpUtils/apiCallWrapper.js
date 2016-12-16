@@ -23,6 +23,16 @@ export function postCall(endPoint,bodyParams) {
         data: bodyParams
     })
 }
+export function putImgCall(endPoint,data) {
+    return axios({
+        method: 'put',
+        headers: {
+            "Content-Type": "image/png"
+        },
+        url: endPoint,
+        data: data
+    })
+}
 export function securedGetCall(endPoint, params) {
     let token = sessionStorage.getItem('token');
     return axios({

@@ -1,6 +1,8 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import './ImageUploader.scss'
+import {postCall,putImgCall} from 'utils/httpUtils/apiCallWrapper'
+import './ImageUploader.scss';
+import pica from 'pica/dist/pica';
 
 const styles = {
   button: {
@@ -32,19 +34,18 @@ class ImageUploader extends React.Component {
   }
 
   _handleImageChange(e) {
+    let self = this;
     e.preventDefault();
-
-    let reader = new FileReader();
     let file = e.target.files[0];
+    let fileName = file.name;
 
-    reader.onloadend = () => {
-      this.setState({
-        file: file,
-        imagePreviewUrl: reader.result
-      });
-    }
-
-    reader.readAsDataURL(file)
+    // postCall('/api/upload/sign',{'file-name':fileName,'file-type':file.type})
+    //   .then(function(res){
+    //     putImgCall(res,file)
+    //     .then(function(res){
+    //     })
+    //   })
+    
   }
 
   render() {

@@ -42,6 +42,7 @@ var Login = React.createClass({
     },
     successfullFbLogin(response){
        response.provider = 'fb';
+       console.log("response from fb", response);
        this.successfullLogin(response);
     },
     successfullGmailLogin(response){
