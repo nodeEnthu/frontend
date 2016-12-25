@@ -5,12 +5,13 @@ import './search.scss'
 import classNames from 'classnames'
 import StarRatingComponent from 'react-star-rating-component';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import { Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Select from 'react-select';
 import DatePicker from 'material-ui/DatePicker';
 import AsyncAutocomplete from 'components/AsyncAutocomplete';
 import { getCall,securedGetCall } from 'utils/httpUtils/apiCallWrapper';
+import moment from 'moment';
 
 
 const Search = React.createClass({
@@ -39,9 +40,6 @@ const Search = React.createClass({
         let combinedQuery = this.createQuery();
         this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery);
     },
-    componentWillReceiveProps(nextProps){
-    	const {userAddressSearch} = nextProps.globalState.core.toJS();
-    },
     loadMore() {
        	let newPageNum = this.state.pageNum + 1;
        	let self = this;
@@ -55,20 +53,14 @@ const Search = React.createClass({
     onSuggestionSelected(event,{suggestion}){
     	this.props.userAddressSearchChange(suggestion.address);
         this.props.userAddressUpdatePlaceId(suggestion.place_id);
-        const {searchText,place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
-        //remove whats in there currently in the state
-        this.props.flushOutStaleData(); 
-        // now make the search call with the required params
-        this.fetchQueryData();
         // also register this address in the address book if the user is logged in
         if(this.props.globalState.core.get('userLoggedIn')){
     		//register this at a new location if possible as the user needs to be logged in for this
        		// register the address as most recently used
-       		if(searchText && place_id){
-	       		securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
+       		if(suggestion.place_id){
+	       		securedGetCall('api/locations/registerMostRecentSearchLocation',{address:suggestion.address,place_id:suggestion.place_id})
 	        		.then(function(result){
-	        			self.state.showBackDrop = false;
-	        			self.context.router.push(page);
+	        			// dont do anything
 	        		}); 	
        		}
     	} 
@@ -85,9 +77,10 @@ const Search = React.createClass({
     },
     fetchQueryData() {
     	let combinedQuery = this.createQuery();
+    	//console.log("making the call with ",combinedQuery)
         return this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery);
     },
-    createNewQuery(){
+    createAndFetchNewQuery(){
     	// flush out old data
     	this.props.flushOutStaleData();
     	this.fetchQueryData();
@@ -111,12 +104,22 @@ const Search = React.createClass({
         })
         this.filterCuisineOrDietType(uniqueDietAdded[0], 'diet');
     },
+    componentDidUpdate(prevProps){
+    	const newState = this.props.globalState;
+    	const oldState =  prevProps.globalState;
+    	const newPlaceId = newState.core.toJS().userAddressSearch.place_id;
+    	const oldPlaceId = oldState.core.toJS().userAddressSearch.place_id;
+    	const newDate = newState.search.toJS().addtnlQuery.date;
+    	const prevDate = oldState.search.toJS().addtnlQuery.date;
+    	// compare whether the place_id OR dates have changed
+    	if(prevDate != newDate || newPlaceId != oldPlaceId){
+    		this.createAndFetchNewQuery();
+    	}
+    },
     selectOption(stateKey, option) {
         if (option) {
             if (option instanceof Date) {
-            	// in case of date being chnaged make the call instantly
             	this.props.selectAddtnlQuery(stateKey, option);
-            	this.fetchQueryData();
             } else {
             	this.props.selectAddtnlQuery(stateKey, option.value);
             	this.activateQueryButton();
@@ -132,7 +135,6 @@ const Search = React.createClass({
     	})
     },
     goToProvider(event,foodItem){
-    	console.log("going to the provider");
     	this.context.router.push('/providerProfile/'+foodItem._creator);
     },
     render() {
@@ -150,41 +152,104 @@ const Search = React.createClass({
             
         }
         let self = this;
+        let  momentDate =(addtnlQuery.date)? moment(addtnlQuery.date) : moment();
+        let displayDate = momentDate.format("MMM Do");
         return (
-            <div>
-            	<div className="date-title">
-            		Order date:  
-    				<DatePicker
-    					container="inline"
-    					underlineStyle={{
-    						width:"100px",
-    						border: "1px dotted grey"
-    					}}
-    					inputStyle={{
-    						width:"100px",
-    					}}
-    					style={{
-    						display:'inline-block',
-    						marginLeft:'10px',
-    						width:'100px'
-    					}}
-    					defaultDate={addtnlQuery.date}
-    					autoOk={true}
-    					name="serviceDate"
-    					onChange={(event, date)=>this.selectOption('date',date)}
-
-    				/>
-    				<div style={{display:'inline-block', marginLeft:'3em'}}>
-	            		<AsyncAutocomplete  name={'addressSearch'}
-	                                        userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
-	                                        apiUrl = {'/api/locations/addressTypeAssist'}
-	                                        getSuggestionValue={(suggestion)=>suggestion.address}
-	                                        onChange = {(event, value)=>this.props.userAddressSearchChange(value.newValue)}
-	                                        onSuggestionSelected = {this.onSuggestionSelected}
-	                    />
-	            	</div>
-            	</div>
-            	
+            <div className="search">
+            	<Card>
+				    <CardHeader
+            			title= {<div style={{fontSize:'14px'}}>Showing results for {displayDate} <span style={{float:'right'}}>Filter</span></div>}
+				      	showExpandableButton={true}
+				      	actAsExpander = {true}
+				      	textStyle={{display:'block', paddingRight:'2em'}}/>
+				    <CardText expandable={true} style={{padding:'0 1em'}}>
+					    <div className="date-title">
+					    	<form className="pure-form pure-form-stacked">
+						        <fieldset>
+						            <div>
+						                <div className="pure-u-1 pure-u-md-1-3">
+						                    <label>date</label>
+						                    <DatePicker
+	                                            container="inline"
+	                                            style={{width:'100%'}}
+	                                            name="serviceDate"
+	                                            textFieldStyle={{width:'100%'}}
+	                                            inputStyle={{marginTop:'0px',height:'2.25em',border: '1px solid #ccc',boxShadow: 'inset 0 1px 3px #ddd',padding: '.5em .6em'}}
+	                                            underlineStyle={{display: 'none'}}
+	                                            hintText=""
+	                                            autoOk={true}
+	                                            value={addtnlQuery.date}
+	                                            onBlur={this.handleChange} 
+	                                            onFocus={this.handleFocus}
+	                                            onTouchTap={(event)=>event.preventDefault()}
+	                                            onChange={(event,date)=>this.selectOption('date',date)}
+	                                            formatDate={(date)=> date.toDateString()}
+	                                        />
+						                </div>
+						    
+						                <div className="pure-u-1 pure-u-md-1-3">
+						                    <label>address</label>
+						                    <AsyncAutocomplete name={'addressSearch'}
+		                                        userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
+		                                        apiUrl = {'/api/locations/addressTypeAssist'}
+		                                        getSuggestionValue={(suggestion)=>suggestion.address}
+		                                        onChange = {(event, value)=>this.props.userAddressSearchChange(value.newValue)}
+		                                        onSuggestionSelected = {this.onSuggestionSelected}
+						                    />
+						                </div>
+						    
+						                <div className="pure-u-1 pure-u-md-1-3">
+						                    <label>diet-types</label>
+						                    <Select
+											    name="diet-types"
+											    placeholder="select by diet type"
+											    options={DIET_TYPES}
+											    value={Object.keys(dietSelectedMap).join(',')}
+											    multi = {true}
+											    autoBlur={true}
+											    onChange={this.selectDietType}
+											/>
+						                </div>
+						    
+						                <div className="pure-u-1 pure-u-md-1-3">
+						                    <label>pick-up delivery</label>
+						                    <Select
+											    name="order-mode"
+											    placeholder="pick-up/delivery"
+											    value={addtnlQuery.orderMode}
+											    options={ORDER_TYPE}
+											    onChange={(selectedMode)=>this.selectOption('orderMode',selectedMode)}
+											/>
+						                </div>
+						    
+						                <div className="pure-u-1 pure-u-md-1-3">
+						                    <label>provider distance</label>
+						                    <Select
+											    name="provider-radius"
+											    placeholder="pick-up radius"
+											    value={addtnlQuery.providerRadius}
+											    options={RADIUS_OPTIONS}
+											    onChange={(selectedRadius)=>this.selectOption('providerRadius',selectedRadius)}
+											/>
+						                </div>
+						            </div>
+						        </fieldset>
+						        <div className="query-btn-center">
+									<RaisedButton 
+										label="Search" 
+										primary={true}
+										disabled={!this.state.searchActivated}
+										style={{
+											width:'40%'
+										}}
+										onClick={this.createAndFetchNewQuery}
+										disableTouchRipple={true} 
+									/>
+								</div>
+						    </form>
+						</div>
+				    </CardText>
+				</Card>
 				<div className = 'cuisine-carousel-wrapper' onClick={(event)=>this.filterCuisineOrDietType(event,'cuisine')}>
 					<Carousel
 						slidesToShow={5}
@@ -194,11 +259,12 @@ const Search = React.createClass({
 						{CUISINE_TYPES.map((cuisine,index)=>{
 							return <img alt={cuisine.type} 
 										key={index}
-										src={(this.props.search.get('cuisineSelectedMap').get(cuisine.type))? '/selection/dark-green-check-mark-md.svg': undefined}
+										src={(this.props.search.get('cuisineSelectedMap').get(cuisine.type))? '/selection/dark-green-check-mark-md.svg':'/transparent.png'}
 										name={cuisine.type}
 										style={
 											{
-												background:'url('+cuisine.src+') center',
+												background:'url('+cuisine.src+') center no-repeat',
+												backgroundSize:'cover'
 											}
 										}
 										className="carousel-img"
@@ -206,59 +272,7 @@ const Search = React.createClass({
 						})}
 					</Carousel>
 				</div>
-				<Card>
-				    <CardHeader
-				      title="More search options"
-				      showExpandableButton={true}
-				      style={{textAlign:"center"}}
-				      actAsExpander = {true}
-				    />
-				    <CardText expandable={true}>
-					    <div className="pure-g">
-						    <div className="pure-u-1 pure-u-md-1-3"> 
-							    <Select
-								    name="diet-types"
-								    placeholder="select by diet type"
-								    options={DIET_TYPES}
-								    value={Object.keys(dietSelectedMap).join(',')}
-								    multi = {true}
-								    autoBlur={true}
-								    onChange={this.selectDietType}
-								/> 
-							</div>
-						    <div className="pure-u-1 pure-u-md-1-3"> 
-							    <Select
-								    name="order-mode"
-								    placeholder="pick-up/delivery"
-								    value={addtnlQuery.orderMode}
-								    options={ORDER_TYPE}
-								    onChange={(selectedMode)=>this.selectOption('orderMode',selectedMode)}
-								/> 
-							</div>
-						    <div className="pure-u-1 pure-u-md-1-3"> 
-							    <Select
-								    name="provider-radius"
-								    placeholder="pick-up radius"
-								    value={addtnlQuery.providerRadius}
-								    options={RADIUS_OPTIONS}
-								    onChange={(selectedRadius)=>this.selectOption('providerRadius',selectedRadius)}
-								/> 
-							</div>
-						</div>
-				    </CardText>
-				</Card>
-				<div className="query-btn-center">
-					<RaisedButton 
-						label="Search" 
-						primary={true}
-						disabled={!this.state.searchActivated}
-						style={{
-							width:'40%'
-						}}
-						onClick={this.createNewQuery}
-						disableTouchRipple={true} 
-					/>
-				</div>
+				
 				<div className="providers-wrapper">
 					<div className="pure-g">
 					{	(resolvedData)? 
@@ -309,8 +323,6 @@ const Search = React.createClass({
 											    						&#x2715; &nbsp; pickup
 											    					</div>
 											    		}
-											    			
-											    		
 											    		<div>
 											    			order by : {new Date(foodItem.placeOrderBy).toDateString()}  
 											    		</div>

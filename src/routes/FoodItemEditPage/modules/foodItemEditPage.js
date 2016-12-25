@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-
+import FoodItem from 'models/FoodItem';
 
 
 // ------------------------------------
@@ -24,11 +24,9 @@ export function addFoodItemInfo(obj) {
         payload: obj.payload
     }
 }
-export function removeFoodItemInfo(obj) {
+export function removeFoodItemInfo() {
     return {
-        type: REMOVE_FOOD_ITEM_INFO,
-        storeKeys: obj.storeKeys,
-        payload: ''
+        type: REMOVE_FOOD_ITEM_INFO
     }
 }
 
@@ -37,13 +35,11 @@ export function removeFoodItemInfo(obj) {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-	[REQUEST_DATA_FOOD_ITEM]: (state, action) => {console.log("coming to action: " +action.type+ " with "+action.payload); return state.setIn([action.payload.storeKey, 'isLoading'], true).setIn([action.payload.storeKey, 'error'], undefined).set('foodItemEntryForm', Map())},
-    [FAIL_DATA_FOOD_ITEM]: (state, action) => {console.log("coming to action: " +action.type+ " with "+action.payload); return state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).set('foodItemEntryForm', Map())},
-    [RECEIVE_DATA_FOOD_ITEM]: (state, action) => {console.log("coming to action: " +action.type+ " with "+action.payload); return state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).set('foodItemEntryForm', Map(action.payload.data.data))},
-
-    [ADD_FOOD_ITEM_INFO]: (state, action) => state.setIn(['foodItemEntryForm', action.storeKey], action.payload),
-    [REMOVE_FOOD_ITEM_INFO]: (state, action) => state.setIn(['foodItemEntryForm', 'name'], '').setIn(['foodItemEntryForm', 'description'], ''),
-
+	[REQUEST_DATA_FOOD_ITEM]: (state, action) => {return state.setIn([action.payload.storeKey, 'isLoading'], true).setIn([action.payload.storeKey, 'error'], undefined).set('foodItemEntryForm', Map())},
+    [FAIL_DATA_FOOD_ITEM]: (state, action) => {return state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).set('foodItemEntryForm', Map())},
+    [RECEIVE_DATA_FOOD_ITEM]: (state, action) => {return state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).set('foodItemEntryForm', Map(action.payload.data.data))},
+    [REMOVE_FOOD_ITEM_INFO]: (state, action) => {return state.set('foodItemEntryForm', FoodItem)},
+    [ADD_FOOD_ITEM_INFO]: (state, action) => state.setIn(['foodItemEntryForm', action.storeKey], action.payload)
 }
 
 // ------------------------------------
@@ -55,36 +51,7 @@ const initialState = Map({
 		isLoading:false,
 		error:false
 	}),
-    foodItemEntryForm: Map({
-        name: '',
-        nameErrMsg: '',
-        description: '',
-        cuisineType: '',
-        cuisineTypeErrorMsg: '',
-        descriptionErrorMsg: '',
-        placeOrderBy: undefined,
-        placeOrderByErrorMsg: '',
-        serviceDate: new Date(),
-        serviceDateErrorMsg: '',
-        deliveryFlag: false,
-        price: '',
-        priceErrorMsg: '',
-        pickUpStartTime: undefined,
-        pickUpEndTime: undefined,
-        organic: false,
-        vegetarian: false,
-        glutenfree: false,
-        lowcarb: false,
-        vegan: false,
-        nutfree: false,
-        oilfree: false,
-        nondairy: false,
-        indianFasting: false,
-        allClear: false,
-        snackBarOpen: false,
-        snackBarMessage: '',
-        firstItem: true
-    })
+    foodItemEntryForm: FoodItem
 })
 
 

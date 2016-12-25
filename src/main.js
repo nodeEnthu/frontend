@@ -10,13 +10,12 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 // Store Instantiation
 // ========================================================
 const initialState = window.___INITIAL_STATE__;
-injectTapEventPlugin();
 createStore(initialState,function(store){
   // ========================================================
   // Render Setup
   // ========================================================
   const MOUNT_NODE = document.getElementById('root')
-
+  injectTapEventPlugin();
   let render = () => {
     const routes = require('./routes/index').default(store)
 

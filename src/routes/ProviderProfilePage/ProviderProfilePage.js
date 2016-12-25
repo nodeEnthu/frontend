@@ -10,21 +10,22 @@ const ProviderProfilePage = React.createClass({
     render() {
         return (
             <div style={{position:'relative'}}>
-	        	<ProviderProfile {... this.props}
-                              actionName="PROVIDER"
-            />
+  	        	<ProviderProfile {... this.props}
+                                actionName="PROVIDER"
+              />
 	      	</div>
         );
     }
 });
 ProviderProfile.propTypes = {
-  fetchMayBeSecuredData:React.PropTypes.func.isRequired,
-  providerProfile:React.PropTypes.object.isRequired,
-  updateCheckedOutQty:React.PropTypes.func.isRequired,
-  deleteCheckedOutItem:React.PropTypes.func.isRequired,
-  globalState:React.PropTypes.object.isRequired,
-  postSecuredData:React.PropTypes.func.isRequired,
-  openLoginModal:React.PropTypes.func.isRequired,
-  openModal:React.PropTypes.func.isRequired
+  fetchMayBeSecuredData:React.PropTypes.func,
+  providerProfile:React.PropTypes.object,
+  updateCheckedOutQty:React.PropTypes.func,
+  deleteCheckedOutItem:React.PropTypes.func,
+  globalState:React.PropTypes.object,
+  postSecuredData:React.PropTypes.func,
+  openLoginModal:React.PropTypes.func,
+  openModal:React.PropTypes.func,
+  flushOutStaleReviewData:React.PropTypes.func
 }
 export default ProviderProfilePage;

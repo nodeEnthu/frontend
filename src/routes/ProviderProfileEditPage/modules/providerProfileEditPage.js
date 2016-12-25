@@ -1,4 +1,5 @@
 import {Map} from 'immutable';
+import Provider from 'models/Provider';
 
 
 // ------------------------------------
@@ -41,13 +42,10 @@ export function addProviderErrorMsg(obj) {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-    [REQUEST_DATA_PROVIDER_PROFILE]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
-    [FAIL_DATA_PROVIDER_PROFILE]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).set('providerEntryForm', Map()),
-    [RECEIVE_DATA_PROVIDER_PROFILE]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).set('providerEntryForm', Map(action.payload.data.data)),
-
+   
     [REQUEST_DATA_PROVIDER_PROFILE_EDIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
     [FAIL_DATA_PROVIDER_PROFILE_EDIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
-    [RECEIVE_DATA_PROVIDER_PROFILE_EDIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
+    [RECEIVE_DATA_PROVIDER_PROFILE_EDIT]: (state, action) => {return state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data).set('providerEntryForm', Map(action.payload.data.data))},
     
     [ADD_PROVIDER_INFO]: (state, action) => state.setIn(['providerEntryForm', action.storeKey], action.payload),
     [ADD_PROVIDER_ERROR_MSG]: (state, action) => state.setIn(['providerEntryForm', action.storeKey], action.payload),
@@ -60,26 +58,7 @@ const ACTION_HANDLERS = {
 
 const initialState =
     Map({
-        providerEntryForm: Map({
-            title: '',
-            description: '',
-            searchText: '',
-            place_id: '',
-            keepAddressPrivateFlag: false,
-            includeAddressInEmail:true,
-            email: '',
-            pickUpFlag:true,
-            pickUpAddtnlComments:'',
-            doYouDeliverFlag:false,
-            deliveryRadius:'',
-            deliveryMinOrder:'',
-            deliveryAddtnlComments:'',
-            allClear: false,
-            titleErrorMsg: '',
-            emailErrorMsg: '',
-            descriptionErrorMsg: '',
-            providerAddressJustificationModalOpen:false
-        }),
+        providerEntryForm: Provider,
         editedProviderProfile:{
             isLoading:false,
             error:false,

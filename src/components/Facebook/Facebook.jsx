@@ -55,7 +55,6 @@ class FacebookLogin extends React.Component {
             }); {
                 /*
                   if (autoLoad || window.location.search.includes('facebookdirect')) {
-                    console.log("checking status on load");
                     window.FB.getLoginStatus(this.checkLoginState);
                   }
                 */
@@ -93,7 +92,6 @@ class FacebookLogin extends React.Component {
     };
 
     click = () => {
-        console.log("click handler is getting invoked");
         const { scope, appId } = this.props;
         if (navigator.userAgent.match('CriOS')) {
             window.location.href = `https://www.facebook.com/dialog/oauth?client_id=${appId}&redirect_uri=${window.location.href}&state=facebookdirect&${scope}`;

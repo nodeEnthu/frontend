@@ -21,7 +21,6 @@ function requestData(payload, actionType) {
 };
 
 function failData(payload, actionType) {
-    console.log("Fail data is invoked");
     return {
         type: (actionType) ? FAIL_DATA + '_' + actionType : FAIL_DATA,
         payload: {

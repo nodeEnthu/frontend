@@ -26,6 +26,7 @@ export const OPEN_MODAL = "OPEN_MODAL";
 export const REQUEST_DATA_SUBMIT_REVIEW = "REQUEST_DATA_ORDER_SUBMIT";
 export const FAIL_DATA_SUBMIT_REVIEW = "FAIL_DATA_SUBMIT_REVIEW";
 export const RECEIVE_DATA_SUBMIT_REVIEW = "RECEIVE_DATA_SUBMIT_REVIEW";
+export const FLUSH_OUT_STALE__REVIEW_DATA = "FLUSH_OUT_STALE__REVIEW_DATA";
 
 
 
@@ -104,6 +105,11 @@ export function openModal(obj){
         'openModal':obj.openModal
     }
 }
+export function flushOutStaleReviewData(){
+    return{
+        'type':FLUSH_OUT_STALE__REVIEW_DATA
+    }
+}
 
 const ACTION_HANDLERS = {
     [REQUEST_DATA_PROVIDER]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
@@ -129,7 +135,7 @@ const ACTION_HANDLERS = {
     [REQUEST_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
     [FAIL_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
     [RECEIVE_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
-    
+    [FLUSH_OUT_STALE__REVIEW_DATA]:(state,action)=> state.set('item',Map()).set('review','').set('rating',undefined).set('ratingError',undefined).set('reviewError',undefined)
 }
 
 // ------------------------------------

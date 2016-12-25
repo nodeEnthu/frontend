@@ -10,7 +10,6 @@ export function email(value) {
 
 export function required(value) {
     if (isEmpty(value)) {
-        console.log("Empty");
         return 'Required';
     }
 }

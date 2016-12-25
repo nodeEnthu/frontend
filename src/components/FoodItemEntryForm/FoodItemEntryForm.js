@@ -1,18 +1,19 @@
 import React, { Component, PropTypes } from 'react';
-import classes from './fooditementryform.scss';
+import './fooditementryform.scss';
 import { email, maxLength, required, regexTime, regexDate } from './../../utils/formUtils/formValidation';
-import Toggle from 'react-toggle';
+import Toggle from 'material-ui/Toggle';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton'
 import classNames from 'classnames';
 import DatePicker from 'material-ui/DatePicker';
-import TimePicker from 'material-ui/TimePicker';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import Snackbar from 'material-ui/Snackbar';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Chip from 'material-ui/Chip';
+import TimeInput from 'react-time-input';
 import { securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import { CUISINE_TYPES} from './../../routes/Search/constants/searchFilters'
+import moment from 'moment';
 const maxCount = 100;
 
 const FoodItemEntryForm= React.createClass({
@@ -22,13 +23,16 @@ const FoodItemEntryForm= React.createClass({
         // check whether its an edit to an already present provider
         if(this.props.params.id){
             this.props.fetchData('/api/foodItem/'+this.props.params.id , 'foodItemCall','FOOD_ITEM')
-            .then((res)=>{
-                this.props.addFoodItemInfo({
-                    storeKey:'firstItem',
-                    payload:true
-                }) 
-            })
+                .then((res)=>{
+                    this.props.addFoodItemInfo({
+                        storeKey:'firstItem',
+                        payload:true
+                    }) 
+                });
         }
+    },
+    componentWillUnmount() {
+        this.props.removeFoodItemInfo();
     },
     getInitialState() {
         return {
@@ -42,11 +46,17 @@ const FoodItemEntryForm= React.createClass({
         cuisineType: required,
         price:required
     },
-    changeStoreTimeAndDateVals(event, date, storeKey){
+    addTimeOffset(orignalDate){
+        return new Date(orignalDate.getTime()+orignalDate.getTimezoneOffset()*60000) ;
+    },
+    changeStoreTimeAndDateVals(date, storeKey){
         this.props.addFoodItemInfo({
             storeKey: storeKey,
             payload: date
         })
+    },
+    daysBeforeOrderDate(referenceDate,days){
+        return moment(referenceDate).subtract(days, "days").toDate();
     },
     handleDeleteChip() {
         this.setState({
@@ -58,13 +68,7 @@ const FoodItemEntryForm= React.createClass({
         let stateKeyName = event.target.name;
         let validation = this.mapFieldsToValidationType[stateKeyName];
         let errorMsg;
-        // got to treat date differently
-        if(stateKeyName === 'serviceDate' && input){
-            // careful here ... front end gives time in local timezone and 
-            // backend saves in UTC .. so we got to add the offset
-            let orignalDate = new Date(input);
-            input = new Date(orignalDate.getTime()+orignalDate.getTimezoneOffset()*60000);
-        }
+        
         if (validation) {
             errorMsg = validation(input);
         }
@@ -97,8 +101,6 @@ const FoodItemEntryForm= React.createClass({
     },
     handleFocus(event) {
         let stateKeyName = event.target.name;
-                console.log('handleChange',stateKeyName);
-
         if (stateKeyName) {
             // clear the error msg if it exists
             let errorMsgkey = stateKeyName + 'ErrorMsg';
@@ -124,6 +126,12 @@ const FoodItemEntryForm= React.createClass({
         this.props.addFoodItemInfo({
             storeKey: stateKeyName,
             payload: input
+        });
+    },
+    onTimeChangeHandler(stateKeyName,value){
+        this.props.addFoodItemInfo({
+            storeKey: stateKeyName,
+            payload: value
         });
     },
     validateForm() {
@@ -158,24 +166,24 @@ const FoodItemEntryForm= React.createClass({
         }
         return noErrorsInform;
     },
-    formSubmit(event) {
+    formSubmit() {
         if (this.validateForm()) {
             let self = this;
             this.submitFoodItem()
                 .then(()=>self.props.onAllClear());
         }
     },
-    submitFoodItem() {
+    submitFoodItem(addAnother) {
         let result = false;
         let self = this;
+        let requestBody=this.props.foodItemEntryForm.toJS();
         // send it to server and clear out some of the item specific info
-        return securedPostCall('/api/providers/addOrEditFoodItem', this.props.foodItemEntryForm.toJS())
+        if(this.props.mode ==="PROVIDER_ENTRY"){
+            requestBody.publishStage=(addAnother)? 1 : 2;
+        }
+        return securedPostCall('/api/providers/addOrEditFoodItem', requestBody)
                 .then(function(response) {
                     // show the chip for last food item entered
-                    self.props.addFoodItemInfo({
-                        storeKey: 'firstItem',
-                        payload: false
-                    });
                     self.setState({
                             chipDeleted: false,
                             lastItemAdded: response.data.name
@@ -188,29 +196,19 @@ const FoodItemEntryForm= React.createClass({
                     self.toggleFlags('snackBarOpen');
                     //scroll to the top
                     window.scrollTo(0, 23);
-                    // remove name , desc and image from last item ...keep the others as defaults for new item
-                    self.props.removeFoodItemInfo({
-                        storeKeys: ['name', 'description']
-                    });
                 })
        
     },
     render() {
-        let { name, nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();
-        let resolvedServiceDate = null;
-        if(serviceDate){
-            resolvedServiceDate = (serviceDate instanceof Date)? serviceDate : new Date(serviceDate);
-        } 
-        function daysBeforeOrderDate(days){
-            let newDate = new Date(serviceDate.toString());
-            newDate.setDate(newDate.getDate()-days);
-            return newDate;
-        }
+        let { name, nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();  
+        serviceDate = (serviceDate)? new Date(serviceDate): new Date();
+        serviceDate =  this.addTimeOffset(serviceDate);
+        placeOrderBy = (placeOrderBy)? new Date(placeOrderBy): new Date();
         return (
             (serviceDate)?
-            <div>
+            <div className="food-item-entry">
                 {
-                    (!firstItem && !this.state.chipDeleted)?
+                    (!firstItem && !this.state.chipDeleted && this.props.mode ==="PROVIDER_ENTRY")?
                         <div style={{display: 'flex',flexWrap: 'wrap'}}>
                             <span style={{position:'relative',top:'10px'}}>Last Item Entered</span>
                             <Chip
@@ -225,26 +223,27 @@ const FoodItemEntryForm= React.createClass({
 
                 }
                 <form className="pure-form pure-form-stacked">
-                    <fieldset className="pure-group">
-                        <div className="pure-g">
+                    <fieldset>
+                        <div>
                             <input type="text"  className="pure-u-1" placeholder="*title" name="name" value={name}
                                 onChange={this.changeStoreVal}
                                 onBlur={this.handleChange} 
                                 onFocus={this.handleFocus}
                             />
-                            <span className = {classes["error-message"]}>{(nameErrorMsg)?'*'+nameErrorMsg:undefined}</span>
+                            <span className = "error-message">{(nameErrorMsg)?'*'+nameErrorMsg:undefined}</span>
                             <textarea className = "pure-u-1" name="description" placeholder="description" value={description}
                                 onBlur={this.handleChange} 
                                 onFocus={this.handleFocus} 
                                 onChange={this.changeStoreVal}
                             >   
                             </textarea>
-                            <span className = {classes["error-message"]}>{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
+                            <span className = "error-message">{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
                             <div  className="pure-u-1 pure-u-md-1-2">
                                 <label>*Cuisine-type</label>
                                 <select id="cuisine-type" 
                                     placeholder="Cuisine type"
                                     name="cuisineType"
+                                    className="width-max"
                                     onBlur={this.handleChange} 
                                     onFocus={this.handleFocus}
                                     onChange={this.changeStoreVal}
@@ -254,122 +253,132 @@ const FoodItemEntryForm= React.createClass({
                                     {CUISINE_TYPES.map((cuisine)=>{
                                         return <option key={cuisine.type}>{cuisine.type}</option>
                                     })}
+
                                 </select>
-                                <span className = {classes["error-message"]}>{(cuisineTypeErrorMsg)?'*'+cuisineTypeErrorMsg:undefined}</span>
+                                <span className = "error-message">{(cuisineTypeErrorMsg)?'*'+cuisineTypeErrorMsg:undefined}</span>
                             </div>
-                            
-                            <div  className="pure-u-1 pure-u-md-1-2">
+                            <div className="pure-u-1 pure-u-md-1-2">
                                 <label>*Price</label>
                                 <input type="text"  placeholder="*price" name="price" value={price}
+                                    className="width-max"
                                     onChange={this.changeStoreVal}
                                     onBlur={this.handleChange} 
                                     onFocus={this.handleFocus}
                                 />
-                                <span className = {classes["error-message"]}>{(priceErrorMsg)?'*'+priceErrorMsg:undefined}</span>
+                                <span className = "error-message">{(priceErrorMsg)?'*'+priceErrorMsg:undefined}</span>
+
                             </div>
-                        </div> 
-                    </fieldset>
-                    <fieldset className = "pure-group">
-                        <div className="pure-g">
-                            <div className = "pure-u-1 pure-u-md-1-2">
-                                <label>*Order ready date</label>
-                                    <DatePicker
-                                        value={resolvedServiceDate}
-                                        name="serviceDate"
-                                        autoOk={true}
+
+                        
+                            <div>
+                                <div className = "pure-u-1 pure-u-md-1-2">
+                                    <label>*Order ready date</label>
+                                        <DatePicker
+                                            container="inline"
+                                            className="width-max"
+                                            name="serviceDate"
+                                            textFieldStyle={{width:'100%'}}
+                                            inputStyle={{marginTop:'0px',height:'2.25em',border: '1px solid #ccc',boxShadow: 'inset 0 1px 3px #ddd',padding: '.5em .6em'}}
+                                            underlineStyle={{display: 'none'}}
+                                            hintText=""
+                                            autoOk={true}
+                                            value={serviceDate}
+                                            onBlur={this.handleChange} 
+                                            onFocus={this.handleFocus}
+                                            onTouchTap={(event)=>event.preventDefault()}
+                                            onChange={(event,date)=>this.changeStoreTimeAndDateVals(date,'serviceDate')}
+                                            formatDate={(date)=> date.toDateString()}
+                                        />
+                                </div>
+                                <span className = "error-message">{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
+                                <div className = "pure-u-1 pure-u-md-1-2" >
+                                    <label>People can order</label>
+                                    <select id="order-by-date" 
+                                        name="placeOrderBy"
+                                        className="width-max"
                                         onBlur={this.handleChange} 
                                         onFocus={this.handleFocus}
-                                        onChange={(event,date)=>this.changeStoreTimeAndDateVals(event,date,'serviceDate')}
-                                        style = {{width:'100%'}}
-                                        inputStyle={{border:"1px solid #ccc",width:"100%", padding:'10px',borderRadius:'5px'}}
-                                        underlineStyle={{display: 'none'}}
-                                        hintText="Order ready date"
-                                    />
-                            </div>
-                            <span className = {classes["error-message"]}>{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
-                            <div className = "pure-u-1 pure-u-md-1-2" >
-                                <label>People can order</label>
-                                <select id="order-by-date" 
-                                    name="placeOrderBy"
-                                    onBlur={this.handleChange} 
-                                    onFocus={this.handleFocus}
-                                    onChange={this.changeStoreVal}
-                                    value={placeOrderBy}
-                                    defaultValue = {serviceDate}
-                                >
-                                    <option value={serviceDate}>Same Day</option>
-                                    <option value={daysBeforeOrderDate(1)}>Atleast 1 day before</option>        
-                                    <option value={daysBeforeOrderDate(2)}>Atleast 2 days before</option>     
-                                    <option value={daysBeforeOrderDate(3)}>Atleast 3 days before</option>
-                                </select>
-                                <span className = {classes["error-message"]}>{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
-                            </div>
-                        </div> 
-                    </fieldset>
-                    {(true)?
-                        <div>
-                            <fieldset className="pure-group">
-                                <div className = "pure-g">
-                                    <div className = "pure-u-1 pure-u-md-1-2">
-                                        
-                                        
-                                    </div>
-                                    <div className = "pure-u-1 pure-u-md-1-2">
-                                         
-                                        
-                                    </div>
+                                        onChange={this.changeStoreVal}
+                                        value={placeOrderBy}
+                                    >
+                                        <option value={serviceDate}>Same Day</option>
+                                        <option value={this.daysBeforeOrderDate(serviceDate,1)}>Atleast 1 day before</option>        
+                                        <option value={this.daysBeforeOrderDate(serviceDate,2)}>Atleast 2 days before</option>     
+                                        <option value={this.daysBeforeOrderDate(serviceDate,3)}>Atleast 3 days before</option>
+                                    </select>
+                                    <span className = "error-message">{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
                                 </div>
-                            </fieldset>
-                        </div>
-                        :
-                        undefined
-                    }
-                   
-                    <fieldset className="pure-group">
-                        Enable delivery for this item
-                        <Toggle
-                            defaultChecked={deliveryFlag}
-                            onChange={()=>{this.toggleFlags('deliveryFlag')}} 
-                            className = {classes["input-hidden"]}
-                        />
-                    </fieldset>
-                   
-                    
-                    <fieldset className="pure-group">
-                        <legend className={classes["pull-left"]}>
-                            Tag your food:
-                        </legend>
-                        <div style={{display:'inline-block'}}>
-                            <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="organic" 
-                                checked={organic} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#organic</span>
-                        </div>
-                        <div style={{display:'inline-block'}}>
-                            <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="glutenfree" 
-                                checked={glutenfree} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#gluten-free</span>
-                        </div>
-                        <div style={{display:'inline-block'}}>
-                            <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="nutfree"
-                                checked={nutfree} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#nut-free</span>
-                        </div>
-                        <div style={{display:'inline-block'}}>
-                            <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="vegetarian"
-                                checked={vegetarian} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#vegetarian</span>
-                        </div>
-                        <div style={{display:'inline-block'}}>
-                            <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="nondairy"
-                                checked={nondairy} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#non-dairy</span>
-                        </div>
-                        <div style={{display:'inline-block'}}>
-                            <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="indianFasting"
-                                checked={indianFasting} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#indian-fasting</span>
-                        </div>
-                        <div style={{display:'inline-block'}}>
-                            <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="lowcarb"
-                                checked={lowcarb} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#low-carb</span>
-                        </div>
-                        <div style={{display:'inline-block'}}>
-                            <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="oilfree"
-                                checked={oilfree} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#oil-free</span>
+                            </div> 
+                       
+                            <div>
+                                <div className = "pure-u-1 pure-u-md-1-2">
+                                    <label>Pick-up start time (hh:mm)</label>
+                                    <TimeInput
+                                        placeholder="pick-up start time"
+                                        name="pickUpStartTime"
+                                        className="width-max"
+                                        onTimeChange={(value)=>this.onTimeChangeHandler('pickUpStartTime',value)}
+                                        value={pickUpStartTime}
+                                        initTime={pickUpStartTime}
+                                    /> 
+                                </div>
+                                <div className = "pure-u-1 pure-u-md-1-2">
+                                    <label>Pick-up end time (hh:mm)</label>
+                                    <TimeInput
+                                        placeholder="pick-up end time"
+                                        name="pickUpEndTime"
+                                        className="width-max"
+                                        onTimeChange={(value)=>this.onTimeChangeHandler('pickUpEndTime',value)}
+                                        value={pickUpEndTime}
+                                        initTime={pickUpEndTime}
+                                    />   
+                                </div>
+                            </div>
+                            <div>
+                                <span>Enable delivery for this item</span>
+                                <div style={{maxWidth:100, display:'inline-block'}}>
+                                    <Toggle
+                                        defaultToggled={deliveryFlag}
+                                        onToggle={()=>{this.toggleFlags('deliveryFlag')}} 
+                                        style={{top:'3px', display:'inline-block'}}
+                                    />
+                                </div>
+                            </div> 
+                            <legend className="pull-left">
+                                Tag your food:
+                            </legend>
+                            <div style={{display:'inline-block'}}>
+                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="organic" 
+                                    checked={organic} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#organic</span>
+                            </div>
+                            <div style={{display:'inline-block'}}>
+                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="glutenfree" 
+                                    checked={glutenfree} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#gluten-free</span>
+                            </div>
+                            <div style={{display:'inline-block'}}>
+                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="nutfree"
+                                    checked={nutfree} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#nut-free</span>
+                            </div>
+                            <div style={{display:'inline-block'}}>
+                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="vegetarian"
+                                    checked={vegetarian} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#vegetarian</span>
+                            </div>
+                            <div style={{display:'inline-block'}}>
+                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="nondairy"
+                                    checked={nondairy} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#non-dairy</span>
+                            </div>
+                            <div style={{display:'inline-block'}}>
+                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="indianFasting"
+                                    checked={indianFasting} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#indian-fasting</span>
+                            </div>
+                            <div style={{display:'inline-block'}}>
+                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="lowcarb"
+                                    checked={lowcarb} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#low-carb</span>
+                            </div>
+                            <div style={{display:'inline-block'}}>
+                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="oilfree"
+                                    checked={oilfree} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#oil-free</span>
+                            </div>
                         </div>
                     </fieldset>
                 </form>
@@ -377,7 +386,7 @@ const FoodItemEntryForm= React.createClass({
                     (this.props.mode != 'editMode')?
                     <div>
                         <IconButton
-                        onClick = {this.submitFoodItem}
+                        onClick = {()=>this.submitFoodItem('addAnother')}
                         style={{top:'6px'}}
                         >
                             <ContentAddBox/>

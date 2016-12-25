@@ -1,22 +1,9 @@
 import React from 'react'
 import './../ProviderProfile/providerProfile.scss'
-import Modal from 'react-modal';
+import Dialog from 'material-ui/Dialog';
 import classNames from 'classnames';
 import RaisedButton from 'material-ui/RaisedButton';
 
-
-const customStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        minWidth:'50%',
-        minHeight:'60%',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)'
-    }
-};
 const OrderSubmitModal = React.createClass({
   checkOutOrderDetails:{},
   getInitialState() {
@@ -51,7 +38,6 @@ const OrderSubmitModal = React.createClass({
       }
     };
     // make the checkout object here to be submitted once submit is clicked
-    console.log();
     this.checkOutOrderDetails={
       itemsCheckedOut:itemsCheckedOut,
       providerName:(data)?data.title : undefined,
@@ -66,10 +52,10 @@ const OrderSubmitModal = React.createClass({
     }
     // ends here
 
-    return <Modal
-            isOpen={orderSubmitModalOpen}
+    return <Dialog
+            open={orderSubmitModalOpen}
             onRequestClose={this.closeModal}
-            style={customStyles} >
+           >
             <div className="order-submit">
               <div className="order-title">
                 <div className="order-header">
@@ -120,7 +106,7 @@ const OrderSubmitModal = React.createClass({
                 />
               </div>
             </div>
-          </Modal>
+          </Dialog>
   }
 })
 

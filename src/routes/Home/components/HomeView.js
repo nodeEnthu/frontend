@@ -68,7 +68,7 @@ const HomeView = React.createClass({
                         })
                 },
                 function(err) {
-                    this.setState({
+                    self.setState({
                         fetchingAddresses: true
                     })
                 });
@@ -78,14 +78,14 @@ const HomeView = React.createClass({
     },
     render() {
         return (
-            <div>
+            <div className="home">
 				<div className="splash-container pure-override-letter-spacing">
 					<div className="banner-wrapper">
 						<div className="pure-g">
 							<div className = "pure-u-1 pure-u-md-1-2">
 							    <div className="splash">
 							        <h1 className="splash-head">
-							        	Please enter address to find food close to you.
+							        	Find food
 							        </h1>
 							        <AsyncAutocomplete
 							        	name={"home_view"} 
@@ -102,37 +102,38 @@ const HomeView = React.createClass({
 							        			width:'0px',
 							        			top:'6px',
 							        			display:'inline-block',
+                                                marginLeft:'-1em',
 							        			visibility:(this.state.fetchingAddresses)? 'hidden':'initial'							        		
 							        		}}
 							        	onClick = {this.getLocationCordinates}
 							        >
 							        	<CommunicationLocationOn/>
 							        </IconButton>
-							        <Spinner spinnerName='circle' 
-							        	style = {{	display:'inline-block',
-							        				visibility:(this.state.fetchingAddresses)?'initial':'hidden',
-							        				top:'5px'
-							        			}}
-							        />
-							        <p className="is-center">
+							        {/*<Spinner spinnerName='circle' 
+                                                                            style = {{    display:'inline-block',
+                                                                                        visibility:(this.state.fetchingAddresses)?'initial':'hidden',
+                                                                                        top:'5px'
+                                                                                    }}
+                                                                        />*/}
+							        <div className="is-center">
 							        	<button className="pure-button pure-button-primary"
 							        		onClick={()=>this.goToPage('search')}>
 							        		Get Started
 							        	</button>
-							        </p>
+							        </div>
 							    </div>
 						    </div>
 						    <div className = "pure-u-1 pure-u-md-1-2">
 							   <div className="splash">
 							        <div className="splash-head">
-							        	Advertise your food right away in 3 easy steps
+							        	Provide food in 3 easy steps
 							        </div>
-							        <p className="is-center">
+							        <div className="is-center" style={{marginBottom:'1em'}}>
 							        	<button className="pure-button pure-button-primary"
 							        		onClick={()=>this.goToPage('provider')}>
 							        		Get Started
 							        	</button>
-							        </p>
+							        </div>
 							    </div>
 						    </div>
 						</div>

@@ -73,10 +73,10 @@ const ACTION_HANDLERS = {
         return state.set('userLoggedIn', action.payload);
     },
     [USER_ADDRESS_SEARCH_CHANGE]: (state, action) => {
-        return state.setIn(['userAddressSearch', 'searchText'],action.payload);
+        return state.setIn(['userAddressSearch', 'searchText'], action.payload);
     },
     [USER_ADDRESS_UPDATE_PLACE_ID]: (state, action) => {
-        return state.setIn(['userAddressSearch', 'place_id'],action.payload);
+        return state.setIn(['userAddressSearch', 'place_id'], action.payload);
     }
 }
 
@@ -88,9 +88,11 @@ const initialState = Map({
         provider: '',
         img: '',
         fbUserID: '',
-        gmailUserID: ''
+        gmailUserID: '',
+        publishStage: 0,
+        published: false
     }),
-    loginModalOPen: false,
+    loginModalOPen: undefined,
     userLoggedIn: false,
     address: '',
     placeId: '',

@@ -1,9 +1,8 @@
 import React from 'react'
 import './../ProviderProfile/providerProfile.scss'
-import Modal from 'react-modal';
+import Dialog from 'material-ui/Dialog';
 import classNames from 'classnames';
 import StarRatingComponent from 'react-star-rating-component';
-
 
 const customStyles = {
     content: {
@@ -22,6 +21,9 @@ const ReviewSubmitModal = React.createClass({
       return {
           reviewFoodItemModalOpen:false
       };
+  },
+  componentWillUnmount() {
+    this.props.flushOutStaleReviewData();
   },
   starRating(nextVal,prevVal,name){
     // reset the error if it exists
@@ -94,41 +96,46 @@ const ReviewSubmitModal = React.createClass({
   },
   render(){
     let {review,reviewSubmitModalOpen} = this.props.providerProfile.toJS();
-    return <Modal
-            isOpen={reviewSubmitModalOpen}
-            onRequestClose={this.closeModal}
-          >
-          <div>
-            <div className="pure-form move-center">
-              <div className="pure-group">
-                <div className="review-item-name">
-                  {review.item.name}
+    return  <Dialog
+              open={reviewSubmitModalOpen || false}
+              onRequestClose={this.closeModal}
+            >{
+              (review && review.item)?
+              <div>
+                <div className="pure-form move-center">
+                  <div className="pure-group">
+                    <div className="review-item-name">
+                      {review.item.name}
+                    </div>
+                    <img alt={review.item.name} className = "food-item" src={review.item.img}/>
+                    <div>
+                      <StarRatingComponent
+                        name="rating"
+                        starCount={5}
+                        value={review.item.rating}
+                        onStarClick={this.starRating}
+                      />
+                      <div className = "error-message move-center">{(review.ratingError)?'*'+review.ratingError:undefined}</div>
+                    </div>
+                    <textarea className="pure-input-1" placeholder="Please write your review here"
+                      name="review"
+                      value={review.review}
+                      onFocus={this.reviewFocus}
+                      onBlur = {this.reviewBlur}
+                      onChange={this.updateReview}
+                    ></textarea>
+                    <span className = "error-message">{(review.reviewError)?'*'+review.reviewError:undefined}</span>
+                  </div>
+                  <button className="pure-button pure-input-1-2 pure-button-primary review-submit-button"
+                    onClick={this.submitReview}
+                  >Submit</button>
                 </div>
-                <img alt={review.item.name} className = "food-item" src={review.item.img}/>
-                <div>
-                  <StarRatingComponent
-                    name="rating"
-                    starCount={5}
-                    value={review.item.rating}
-                    onStarClick={this.starRating}
-                  />
-                  <div className = "error-message move-center">{(review.ratingError)?'*'+review.ratingError:undefined}</div>
-                </div>
-                <textarea className="pure-input-1" placeholder="Please write your review here"
-                  name="review"
-                  value={review.review}
-                  onFocus={this.reviewFocus}
-                  onBlur = {this.reviewBlur}
-                  onChange={this.updateReview}
-                ></textarea>
-                <span className = "error-message">{(review.reviewError)?'*'+review.reviewError:undefined}</span>
               </div>
-              <button className="pure-button pure-input-1-2 pure-button-primary review-submit-button"
-                onClick={this.submitReview}
-              >Submit</button>
-            </div>
-          </div>
-          </Modal>
+              :
+              undefined
+            }
+              
+            </Dialog>
   }
 })
 

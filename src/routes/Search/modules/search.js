@@ -44,7 +44,7 @@ const ACTION_HANDLERS = {
     [FAIL_DATA]: (state, action) => state.set('isLoading', false).set('error', action.data).set('data', List()),
     [FLUSH_OUT_STALE_DATA]: (state, action) => state.set('isLoading', false).set('error', undefined).set('data', List()),
     [RECEIVE_DATA]: (state, action) => state.set('isLoading', false).set('error', undefined).set('data', state.get('data').concat(action.payload.data.data)),
-    [SELECT_ADDTNL_QUERY]: (state, action) => state.setIn(['addtnlQuery', action.storeKey], action.payload),
+    [SELECT_ADDTNL_QUERY]: (state, action) => {return state.setIn(['addtnlQuery', action.storeKey], action.payload);},
     [SELECT_CUISINE_OR_DIET_TYPE]: (state, action) => {
         if (state.getIn([action.key, action.payload])) {
             return state.deleteIn([action.key, action.payload])
