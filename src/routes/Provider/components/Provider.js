@@ -59,7 +59,6 @@ const Provider = React.createClass ({
     }
   },
   getStepContent(stepIndex,user) {
-    console.log(stepIndex);
     switch (stepIndex) {
       case 0:
         return (
@@ -67,9 +66,6 @@ const Provider = React.createClass ({
             <p>
               Please give a brief history about your cooking skills along with a picture showcasing you/your business
             </p>
-            <div className="is-center">
-              <ImageUploader/>
-            </div>
             <ProviderEntryForm  providerEntryForm = {this.props.providerEntryForm}
                                 addProviderInfo = {this.props.addProviderInfo}
                                 addProviderErrorMsg = {this.props.addProviderErrorMsg}
@@ -89,9 +85,6 @@ const Provider = React.createClass ({
             <p>
               Enter the food item you wish to provide
             </p>
-            <div className="is-center">
-                <ImageUploader/>
-            </div>
             <FoodItemEntryForm  onAllClear = {this.onAllClear} 
                                 foodItemEntryForm = {this.props.foodItemEntryForm}
                                 addFoodItemInfo = {this.props.addFoodItemInfo}

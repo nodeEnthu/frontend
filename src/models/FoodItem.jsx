@@ -1,6 +1,7 @@
 import {Map} from 'immutable'
 
 export const FoodItem = Map({
+            imgUrl:'',
             title: '',
             description: '',
             searchText: '',
@@ -19,6 +20,7 @@ export const FoodItem = Map({
             titleErrorMsg: '',
             emailErrorMsg: '',
             descriptionErrorMsg: '',
+            imgChanged:false,
             providerAddressJustificationModalOpen: false
         });
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import {postCall,putImgCall} from 'utils/httpUtils/apiCallWrapper'
 import './ImageUploader.scss';
 import pica from 'pica/dist/pica';
-
+import shortid from 'shortid';
+import {initialImageUrl} from 'utils/constants';
 const styles = {
   button: {
     margin: 12,
@@ -24,28 +24,42 @@ const styles = {
 class ImageUploader extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {file: '',imagePreviewUrl: ''};
+    this.state = {file: '',imagePreviewUrl: this.props.initialImgUrl,imgUploaded: false};
   }
-
-  _handleSubmit(e) {
-    e.preventDefault();
-    // TODO: do something with -> this.state.file
-    //console.log('handle uploading-', this.state.file);
-  }
-
+  
   _handleImageChange(e) {
     let self = this;
+    this.setState({
+      imgUploaded:true
+    });
     e.preventDefault();
     let reader = new FileReader();
     let file = e.target.files[0];
+    let fileName = file.name.substr(0, file.name.lastIndexOf('.'));
+    let fileExtn = file.name.substr(file.name.lastIndexOf('.'), file.name.length);
+    let randomNumber = shortid.generate();
+    let modifiedFileName = fileName+ randomNumber + fileExtn;
     let srcCanvas = document.getElementById('imgPreview');
     let ctx = srcCanvas.getContext('2d');
     let destCanvas = document.getElementById("myCanvas");
     reader.onload = function(event){
         var img = new Image();
         img.onload = function(){
-            srcCanvas.width = img.width;
-            srcCanvas.height = img.height;
+            srcCanvas.width   = img.width;
+            srcCanvas.height  = img.height;
+            let aspectRatio = img.width/img.height;
+            let maxiWidthLimit = 500;
+            let maxiHeightLimit = 400;
+            if(img.width >maxiWidthLimit ){
+              destCanvas.width = maxiWidthLimit;
+              destCanvas.height = destCanvas.width/aspectRatio
+            }else if (img.height > maxiHeightLimit){
+              destCanvas.height = maxiHeightLimit;
+              destCanvas.width = destCanvas.height * aspectRatio
+            } else{
+              destCanvas.width   = img.width;
+              destCanvas.height  = img.height;
+            }
             ctx.drawImage(img,0,0);
             pica.resizeCanvas(srcCanvas,destCanvas,{},function(err){
               let dataURL = destCanvas.toDataURL("image/png");
@@ -55,48 +69,42 @@ class ImageUploader extends React.Component {
                   array.push(binary.charCodeAt(i));
               }
               let s3Data= new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
-              console.log(s3Data);
-              postCall('/api/upload/sign',{'file-name':file.name,'file-type':file.type})
-                .then(function(response){
-                  putImgCall(response.data.signedRequest,s3Data)
-                  .then(function(res){
-                    console.log(response.data.url);
-                  })
-                })
-            
+              let imageUrl = initialImageUrl + modifiedFileName;
+              // this should happen pretty fast ... hoping the user does not click submit
+              self.props.onImageChange(s3Data,imageUrl,{name:modifiedFileName,type:file.type});
           });
         }
         img.src = event.target.result;
     }
     reader.readAsDataURL(file);
-
-    
- 
-    
   }
 
   render() {
-    let {imagePreviewUrl} = this.state;
+    let {imgUploaded,imagePreviewUrl} = this.state;
     let $imagePreview = (imagePreviewUrl)? (<img src={imagePreviewUrl} />) : (<div className="previewText"></div>) ;
     return (
       <div className="previewComponent">
-        <form onSubmit={(e)=>this._handleSubmit(e)}>
-          <RaisedButton
-            label="Choose an Image"
-            labelPosition="before"
-            style={styles.button}
-            disableTouchRipple={true}
-          >
-            <input  type="file" style={styles.exampleImageInput} onChange={(e)=>this._handleImageChange(e)} />
-          </RaisedButton>
-          {/*<button className={classes["submitButton"]} type="submit" onClick={(e)=>this._handleSubmit(e)}>Upload Image</button>*/}
-        </form>
-        <canvas style={{display:'none'}}id="imgPreview">
-        </canvas>
-        <canvas id="myCanvas"></canvas>
+        <RaisedButton
+          label="Choose an Image"
+          labelPosition="before"
+          style={styles.button}
+          disableTouchRipple={true}
+        >
+          <input  type="file" style={styles.exampleImageInput} onChange={(e)=>this._handleImageChange(e)} />
+        </RaisedButton>
+
+        <div style={{display:'flex', maxWidth:'400px',height:'auto', margin:'0 auto'}}>
+          {(!imgUploaded && imagePreviewUrl)? $imagePreview: undefined}
+          <canvas id="imgPreview" style={{display:'none',width:'400px',height:'auto'}}></canvas>
+          <canvas id="myCanvas" style={{display:(imgUploaded)?'inline-block':'none',flex: '1 1 0', minWidth:0}}></canvas>
+        </div>
       </div>
     )
   }
 }
-  
+
+React.propTypes={
+  onImageChange: React.PropTypes.func.isRequired
+}
+
 export default ImageUploader;

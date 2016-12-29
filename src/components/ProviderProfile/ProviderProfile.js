@@ -108,7 +108,7 @@ const ProviderProfile = React.createClass({
             <div className="header">
                 <h1 className="brand-title">{data.title}</h1>
                 <div className="pure-u-1">
-                  <img className = "profile-img" src={StaffImg}/>
+                  <img className = "profile-img" src={data.imgUrl}/>
                 </div>
                 <IconButton><CommunicationEmail/></IconButton>
                 <IconButton><CommunicationCall/></IconButton>

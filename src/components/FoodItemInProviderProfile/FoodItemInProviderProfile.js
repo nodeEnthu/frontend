@@ -70,7 +70,7 @@ const FoodItemInProviderProfile = React.createClass({
                     undefined
                 }
                 
-                <img alt={foodItem.name} className = "food-item" src={foodItem.img}/>
+                <img alt={foodItem.name} className = "food-item" src={foodItem.imgUrl}/>
                 {
                   (!this.props.userViewingOwnProfile)?
                     <div className="move-center review-submit-link"

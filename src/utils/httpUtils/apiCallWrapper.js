@@ -23,11 +23,11 @@ export function postCall(endPoint,bodyParams) {
         data: bodyParams
     })
 }
-export function putImgCall(endPoint,data) {
+export function putImgCall(endPoint,data,fileConfig) {
     return axios({
         method: 'put',
         headers: {
-            "Content-Type": "image/png"
+            "Content-Type": fileConfig["file-type"]
         },
         url: endPoint,
         data: data

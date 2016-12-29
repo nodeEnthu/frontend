@@ -1,6 +1,7 @@
 import {Map} from 'immutable';
 
 const Provider = Map({
+            imgUrl:'',
             title: '',
             description: '',
             searchText: '',
@@ -19,6 +20,7 @@ const Provider = Map({
             titleErrorMsg: '',
             emailErrorMsg: '',
             descriptionErrorMsg: '',
+            imgChanged:false,
             providerAddressJustificationModalOpen: false
         });
 

@@ -8,7 +8,7 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import AsyncAutocomplete from 'components/AsyncAutocomplete'
 import ImageUploader from 'components/ImageUploader'
-
+import s3ImageUpload from 'utils/uploader/s3ImageUpload'
 
 const maxCount = 100;
 const ProviderEntryForm = React.createClass({
@@ -119,15 +119,36 @@ const ProviderEntryForm = React.createClass({
         }
         return noErrorsInform;
     },
+    onImageChange(blob,imgUrl,fileConfig){
+        this.props.addProviderInfo({
+            storeKey:'imgChanged',
+            payload:true
+        });
+        this.props.addProviderInfo({
+            storeKey:'imgUrl',
+            payload:imgUrl
+        });
+        this.setState({imgBlob:blob, fileConfig:fileConfig});
+    },
     formSubmit() {
         let self = this;
+        let reqBody = this.props.providerEntryForm.toJS();
         if(this.validateForm()){
-            securedPostCall('/api/providers/registration' , this.props.providerEntryForm.toJS())
+            // check whether the image was changed
+            if (reqBody.imgChanged) {
+                this.props.addProviderInfo({
+                    storeKey:'imgChanged',
+                    payload:false
+                });
+                // upload and assume its gonna pass
+                s3ImageUpload(this.state.fileConfig,this.state.imgBlob);
+            }
+            securedPostCall('/api/providers/registration' , reqBody)
                 .then(()=>self.props.onAllClear())
         }
     },
     render() {
-        let { chars_left, title, description, email, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg } = this.props.providerEntryForm.toJS();
+        let { chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg } = this.props.providerEntryForm.toJS();
         const styles = {
           block: {
             maxWidth: 250,
@@ -138,6 +159,12 @@ const ProviderEntryForm = React.createClass({
         };
         return (
             <div className="provider-entry-form">
+                <div className="is-center">
+                    <ImageUploader
+                        onImageChange = {this.onImageChange}
+                        initialImgUrl={imgUrl}
+                    />
+                </div>
                 <form className="pure-form pure-form-stacked">
                     <fieldset>
                         <input type="text"  className="pure-u-1" placeholder="*title" name="title" value={title}

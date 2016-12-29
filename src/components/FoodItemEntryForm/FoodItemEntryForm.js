@@ -13,6 +13,8 @@ import Chip from 'material-ui/Chip';
 import TimeInput from 'react-time-input';
 import { securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import { CUISINE_TYPES} from './../../routes/Search/constants/searchFilters'
+import ImageUploader from 'components/ImageUploader'
+import s3ImageUpload from 'utils/uploader/s3ImageUpload'
 import moment from 'moment';
 const maxCount = 100;
 
@@ -166,9 +168,29 @@ const FoodItemEntryForm= React.createClass({
         }
         return noErrorsInform;
     },
+    onImageChange(blob,imgUrl,fileConfig){
+        this.props.addFoodItemInfo({
+            storeKey:'imgChanged',
+            payload:true
+        });
+        this.props.addFoodItemInfo({
+            storeKey:'imgUrl',
+            payload:imgUrl
+        });
+        this.setState({imgBlob:blob, fileConfig:fileConfig});
+    },
     formSubmit() {
         if (this.validateForm()) {
             let self = this;
+            let reqBody =this.props.foodItemEntryForm.toJS();
+            if (reqBody.imgChanged) {
+                this.props.addFoodItemInfo({
+                    storeKey:'imgChanged',
+                    payload:false
+                });
+                // upload and assume its gonna pass
+                s3ImageUpload(this.state.fileConfig,this.state.imgBlob);
+            }
             this.submitFoodItem()
                 .then(()=>self.props.onAllClear());
         }
@@ -200,13 +222,19 @@ const FoodItemEntryForm= React.createClass({
        
     },
     render() {
-        let { name, nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();  
+        let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();  
         serviceDate = (serviceDate)? new Date(serviceDate): new Date();
         serviceDate =  this.addTimeOffset(serviceDate);
         placeOrderBy = (placeOrderBy)? new Date(placeOrderBy): new Date();
         return (
             (serviceDate)?
             <div className="food-item-entry">
+                <div className="is-center">
+                    <ImageUploader
+                        onImageChange = {this.onImageChange}
+                        initialImgUrl={imgUrl}
+                    />
+                </div>
                 {
                     (!firstItem && !this.state.chipDeleted && this.props.mode ==="PROVIDER_ENTRY")?
                         <div style={{display: 'flex',flexWrap: 'wrap'}}>
