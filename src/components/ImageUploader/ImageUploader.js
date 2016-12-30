@@ -26,7 +26,11 @@ class ImageUploader extends React.Component {
     super(props);
     this.state = {file: '',imagePreviewUrl: this.props.initialImgUrl,imgUploaded: false};
   }
-  
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.initialImgUrl !== this.props.initialImgUrl){
+      this.setState({imagePreviewUrl: nextProps.initialImgUrl});
+    }
+  }
   _handleImageChange(e) {
     let self = this;
     this.setState({
@@ -81,30 +85,34 @@ class ImageUploader extends React.Component {
 
   render() {
     let {imgUploaded,imagePreviewUrl} = this.state;
-    let $imagePreview = (imagePreviewUrl)? (<img src={imagePreviewUrl} />) : (<div className="previewText"></div>) ;
+    let $imagePreview = (imagePreviewUrl)? (<img style={{width:'100%'}}src={imagePreviewUrl} />) : (<div className="previewText"></div>) ;
     return (
       <div className="previewComponent">
-        <RaisedButton
-          label="Choose an Image"
-          labelPosition="before"
-          style={styles.button}
-          disableTouchRipple={true}
-        >
-          <input  type="file" style={styles.exampleImageInput} onChange={(e)=>this._handleImageChange(e)} />
-        </RaisedButton>
-
         <div style={{display:'flex', maxWidth:'400px',height:'auto', margin:'0 auto'}}>
           {(!imgUploaded && imagePreviewUrl)? $imagePreview: undefined}
           <canvas id="imgPreview" style={{display:'none',width:'400px',height:'auto'}}></canvas>
           <canvas id="myCanvas" style={{display:(imgUploaded)?'inline-block':'none',flex: '1 1 0', minWidth:0}}></canvas>
         </div>
+        <div style = {{margin:"0 auto", textAlign:"center"}}>
+          <RaisedButton
+          label="Choose an Image"
+          labelPosition="before"
+          style={styles.button}
+          disableTouchRipple={true}
+          >
+          <input  type="file" style={styles.exampleImageInput} onChange={(e)=>this._handleImageChange(e)} />
+          </RaisedButton>
+        </div>
+        
+
+        
       </div>
     )
   }
 }
 
 React.propTypes={
-  onImageChange: React.PropTypes.func.isRequired
+  onImageChange: React.PropTypes.func.isRequired,
 }
 
 export default ImageUploader;

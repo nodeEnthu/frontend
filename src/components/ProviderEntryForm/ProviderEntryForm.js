@@ -9,6 +9,7 @@ import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import AsyncAutocomplete from 'components/AsyncAutocomplete'
 import ImageUploader from 'components/ImageUploader'
 import s3ImageUpload from 'utils/uploader/s3ImageUpload'
+import Spinner from 'react-spinkit'
 
 const maxCount = 100;
 const ProviderEntryForm = React.createClass({
@@ -140,15 +141,25 @@ const ProviderEntryForm = React.createClass({
                     storeKey:'imgChanged',
                     payload:false
                 });
-                // upload and assume its gonna pass
-                s3ImageUpload(this.state.fileConfig,this.state.imgBlob);
+                s3ImageUpload(this.state.fileConfig,this.state.imgBlob,function(){
+                    securedPostCall('/api/providers/registration' , reqBody)
+                        .then(()=>self.props.onAllClear())
+                });
+            }else{
+                securedPostCall('/api/providers/registration' , reqBody)
+                    .then(()=>self.props.onAllClear())
             }
-            securedPostCall('/api/providers/registration' , reqBody)
-                .then(()=>self.props.onAllClear())
+            
         }
     },
     render() {
         let { chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg } = this.props.providerEntryForm.toJS();
+        let showSpinner = false;
+        if(this.props.spinner){
+            const {providerEntrySpinner} = this.props.spinner.toJS();
+            showSpinner = (providerEntrySpinner)? true:false;
+        }
+        console.log(showSpinner);
         const styles = {
           block: {
             maxWidth: 250,
@@ -339,6 +350,12 @@ const ProviderEntryForm = React.createClass({
                 }                            
                     </fieldset>
                 </form>
+                <Spinner spinnerName='circle' 
+                    style = {{  display:'inline-block',
+                                display:(showSpinner)?'block':'none',
+                                marginBottom:'1em'
+                            }}
+                />
                 <Dialog
                   open={providerAddressJustificationModalOpen || false}
                   onRequestClose={()=>{this.toggle('providerAddressJustificationModalOpen')}}
@@ -372,9 +389,11 @@ const ProviderEntryForm = React.createClass({
     }
 });
 ProviderEntryForm.propTypes = {
+    addProviderInfo:React.PropTypes.func.isRequired,
     providerEntryForm: React.PropTypes.object.isRequired,
     fetchSecuredData:React.PropTypes.func.isRequired,
     params:React.PropTypes.object,
-    prefilProviderEntryForm:React.PropTypes.func
+    prefilProviderEntryForm:React.PropTypes.func,
+    showHideSpinner:React.PropTypes.func
 };
 export default ProviderEntryForm;

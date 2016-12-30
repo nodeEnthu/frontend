@@ -14,7 +14,8 @@ import TimeInput from 'react-time-input';
 import { securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import { CUISINE_TYPES} from './../../routes/Search/constants/searchFilters'
 import ImageUploader from 'components/ImageUploader'
-import s3ImageUpload from 'utils/uploader/s3ImageUpload'
+import s3ImageUpload from 'utils/uploader/s3ImageUpload';
+import Spinner from 'react-spinkit'
 import moment from 'moment';
 const maxCount = 100;
 
@@ -189,10 +190,15 @@ const FoodItemEntryForm= React.createClass({
                     payload:false
                 });
                 // upload and assume its gonna pass
-                s3ImageUpload(this.state.fileConfig,this.state.imgBlob);
+                s3ImageUpload(this.state.fileConfig,this.state.imgBlob,function(){
+                    self.submitFoodItem()
+                        .then(()=>self.props.onAllClear());
+                });
+            }else{
+                this.submitFoodItem()
+                    .then(()=>self.props.onAllClear());  
             }
-            this.submitFoodItem()
-                .then(()=>self.props.onAllClear());
+            
         }
     },
     submitFoodItem(addAnother) {
@@ -223,6 +229,12 @@ const FoodItemEntryForm= React.createClass({
     },
     render() {
         let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();  
+        let showSpinner = false;
+        if(this.props.spinner){
+            let {foodItemEntrySpinner} = this.props.spinner.toJS();
+            showSpinner = (foodItemEntrySpinner)? true:false;
+        }
+        
         serviceDate = (serviceDate)? new Date(serviceDate): new Date();
         serviceDate =  this.addTimeOffset(serviceDate);
         placeOrderBy = (placeOrderBy)? new Date(placeOrderBy): new Date();
@@ -233,6 +245,7 @@ const FoodItemEntryForm= React.createClass({
                     <ImageUploader
                         onImageChange = {this.onImageChange}
                         initialImgUrl={imgUrl}
+                        onImageUploadStart = {this.onImageUploadStart}
                     />
                 </div>
                 {
@@ -432,6 +445,14 @@ const FoodItemEntryForm= React.createClass({
                     :
                     undefined
                 }
+                <Spinner spinnerName='circle' 
+                    style = {{  display:'inline-block',
+                                display:(showSpinner)?'block':'none',
+                                marginBottom:'1em'
+                            }}
+                />
+
+                                    
                 
             </div>
             :

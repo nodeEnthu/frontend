@@ -20,6 +20,13 @@ const Provider = React.createClass ({
   },
   onAllClear(){
     const stepIndex = this.props.providerEntryState.get('stepIndex');
+    console.log("getting here onAllClear  ",stepIndex);
+    if(stepIndex ===0){
+      this.props.showHideSpinner({storeKey:'providerEntrySpinner',payload:false});
+    }
+    if(stepIndex ===1){
+      this.props.showHideSpinner({storeKey:'foodItemEntrySpinner',payload:false});
+    }
     this.props.addProviderEntryState({
       storeKey: "stepIndex",
       payload:stepIndex +1
@@ -30,9 +37,11 @@ const Provider = React.createClass ({
   },
   handleNext(){
     if(this.props.providerEntryState.get('stepIndex')===0){
+      this.props.showHideSpinner({storeKey:'providerEntrySpinner',payload:true});
       this.refs.providerform.formSubmit();
     }
     if(this.props.providerEntryState.get('stepIndex')===1){
+      this.props.showHideSpinner({storeKey:'foodItemEntrySpinner',payload:true});
       this.refs.foodItemEntryForm.formSubmit();
     }
     if(this.props.providerEntryState.get('stepIndex')===2){
@@ -67,10 +76,12 @@ const Provider = React.createClass ({
               Please give a brief history about your cooking skills along with a picture showcasing you/your business
             </p>
             <ProviderEntryForm  providerEntryForm = {this.props.providerEntryForm}
+                                spinner = {this.props.spinner}
                                 addProviderInfo = {this.props.addProviderInfo}
                                 addProviderErrorMsg = {this.props.addProviderErrorMsg}
                                 onAllClear = {this.onAllClear}
-                                fetchSecuredData = {this.props.fetchSecuredData} 
+                                fetchSecuredData = {this.props.fetchSecuredData}
+                                showHideSpinner={this.props.showHideSpinner} 
                                 params = {{id:user._id}}
                                 mode = {"PROVIDER_ENTRY"}
                                 prefilProviderEntryForm = {this.props.prefilProviderEntryForm}
@@ -85,10 +96,12 @@ const Provider = React.createClass ({
             <p>
               Enter the food item you wish to provide
             </p>
-            <FoodItemEntryForm  onAllClear = {this.onAllClear} 
+            <FoodItemEntryForm  onAllClear = {this.onAllClear}
+                                spinner = {this.props.spinner} 
                                 foodItemEntryForm = {this.props.foodItemEntryForm}
                                 addFoodItemInfo = {this.props.addFoodItemInfo}
                                 fetchData = {this.props.fetchData}
+                                showHideSpinner={this.props.showHideSpinner} 
                                 removeFoodItemInfo = {this.props.removeFoodItemInfo}
                                 params = {this.props.params}
                                 mode = {"PROVIDER_ENTRY"} 
@@ -114,6 +127,8 @@ const Provider = React.createClass ({
   },
   renderContent() {
     const {finished, stepIndex} = this.props.providerEntryState.toJS();
+    const{providerEntrySpinner,foodItemEntrySpinner} = this.props.spinner.toJS();
+    const showSpinner = (providerEntrySpinner || foodItemEntrySpinner)? true:false;
     const {user} = this.props.globalState.core.toJS();
     const contentStyle = {margin: '0 16px'};
 
@@ -152,6 +167,7 @@ const Provider = React.createClass ({
             label={stepIndex === 2 ? 'Publish' : 'Next'}
             primary={true}
             onTouchTap={this.handleNext}
+            disabled={showSpinner}
             disableTouchRipple={true}
           />
         </div>
@@ -188,6 +204,7 @@ Provider.propTypes= {
     providerEntryState: React.PropTypes.object,
     providerEntryForm: React.PropTypes.object,
     foodItemEntryForm: React.PropTypes.object,
+    spinner: React.PropTypes.object,
     charsLeft:React.PropTypes.func,
     addProviderInfo:React.PropTypes.func,
     addProviderErrorMsg:React.PropTypes.func,
@@ -199,6 +216,7 @@ Provider.propTypes= {
     provider:React.PropTypes.object,
     fetchMayBeSecuredData:React.PropTypes.func,
     prefilProviderEntryForm:React.PropTypes.func,
-    securedPostCall:React.PropTypes.func
+    securedPostCall:React.PropTypes.func,
+    showHideSpinner:React.PropTypes.func
   };
 export default Provider;

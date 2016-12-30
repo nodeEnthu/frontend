@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import {charsLeft, addProviderInfo, addProviderErrorMsg, prefilProviderEntryForm, addFoodItemInfo, removeFoodItemInfo, addProviderEntryState} from '../modules/provider'
+import {charsLeft, addProviderInfo, addProviderErrorMsg, prefilProviderEntryForm, addFoodItemInfo, removeFoodItemInfo, addProviderEntryState,showHideSpinner} from '../modules/provider'
 import {fetchData,fetchSecuredData,fetchMayBeSecuredData} from 'utils/actionUtils/defaultHttpActions'
 
 
@@ -24,7 +24,8 @@ const mapActionCreators = {
     prefilProviderEntryForm,
     fetchData,
     fetchSecuredData,
-    fetchMayBeSecuredData
+    fetchMayBeSecuredData,
+    showHideSpinner
 }
 
 const mapStateToProps = (state) => ({
@@ -32,6 +33,7 @@ const mapStateToProps = (state) => ({
     providerEntryForm: state.provider.get('providerEntryForm'),
     providerEntryState: state.provider.get('providerEntryState'),
     foodItemEntryForm: state.provider.get('foodItemEntryForm'),
+    spinner:state.provider.get('spinner'),
     provider:state.provider
 })
 

@@ -8,6 +8,7 @@ const FoodItemInProviderProfile = React.createClass({
   render(){
     let {foodItem}= this.props;
     let editOrReOffer=(this.props.pastItem === true)? 'Offer Again': 'Edit';
+    console.log(foodItem);
     return <section className="post">
             <div>
               <div className="pure-u-md-3-5">

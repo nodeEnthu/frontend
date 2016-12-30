@@ -282,7 +282,7 @@ const Search = React.createClass({
 												<div className="provider-profile-wrapper">
 											    	<div className="provider-img-section">
 											    		<div className="img-avatar">
-											    			<img src={foodItem.img}/>
+											    			<img src={foodItem.imgUrl}/>
 											    		</div>
 											    	</div>
 											    	<div className="provider-info-section">
