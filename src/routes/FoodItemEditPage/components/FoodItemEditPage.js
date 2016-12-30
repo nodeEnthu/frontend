@@ -14,6 +14,7 @@ const FoodItemEditPage = React.createClass({
 		this.context.router.goBack();
 	},
 	render(){
+		const{foodItemEntrySpinner} = this.props.spinner.toJS();
 		return(
 			<div className="pageSettings">
 				<div>
@@ -23,13 +24,17 @@ const FoodItemEditPage = React.createClass({
 									addFoodItemInfo = {this.props.addFoodItemInfo}
 									removeFoodItemInfo = {this.props.removeFoodItemInfo}
 									params={this.props.params}
+									showHideSpinner={this.props.showHideSpinner}
+									spinner={this.props.spinner}
 									ref="foodItemEntryForm"
 									mode = {"editMode"}
+
 					/>
 					<RaisedButton
 						style={{width:'30%',color:'white'}}
 						primary={true}
 						onClick={this.submitForm}
+						disabled={foodItemEntrySpinner}
 						disableTouchRipple={true} 
 					>
 						Done
@@ -43,6 +48,8 @@ FoodItemEditPage.propTypes={
     foodItemEntryForm:React.PropTypes.object.isRequired,
 	fetchData:React.PropTypes.func.isRequired,
     addFoodItemInfo:React.PropTypes.func.isRequired,
-    removeFoodItemInfo:React.PropTypes.func.isRequired
+    removeFoodItemInfo:React.PropTypes.func.isRequired,
+    showHideSpinner:React.PropTypes.func,
+	spinner:React.PropTypes.object
 }
 export default FoodItemEditPage;

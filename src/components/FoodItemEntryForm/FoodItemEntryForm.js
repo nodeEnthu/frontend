@@ -445,15 +445,14 @@ const FoodItemEntryForm= React.createClass({
                     :
                     undefined
                 }
-                <Spinner spinnerName='circle' 
-                    style = {{  display:'inline-block',
-                                display:(showSpinner)?'block':'none',
-                                marginBottom:'1em'
-                            }}
-                />
-
-                                    
-                
+                <div style={{margin:'0 auto', textAlign:'center'}}>
+                    <Spinner spinnerName='circle' 
+                        style = {{  display:'inline-block',
+                                    display:(showSpinner)?'block':'none',
+                                    marginBottom:'1em'
+                                }}
+                    />
+                </div>  
             </div>
             :
             <div></div>

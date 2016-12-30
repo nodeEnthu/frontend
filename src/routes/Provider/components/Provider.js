@@ -20,7 +20,6 @@ const Provider = React.createClass ({
   },
   onAllClear(){
     const stepIndex = this.props.providerEntryState.get('stepIndex');
-    console.log("getting here onAllClear  ",stepIndex);
     if(stepIndex ===0){
       this.props.showHideSpinner({storeKey:'providerEntrySpinner',payload:false});
     }
