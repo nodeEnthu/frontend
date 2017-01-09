@@ -2,21 +2,27 @@ import React from 'react'
 import { Step,Stepper,StepLabel} from 'material-ui/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
-import ExpandTransition from 'material-ui/internal/ExpandTransition'
 import ImageUploader from '../../../components/ImageUploader/index'
 import './provider.scss'
 import ProviderEntryForm from '../../../components/ProviderEntryForm/ProviderEntryForm'
 import FoodItemEntryForm from '../../../components/FoodItemEntryForm/FoodItemEntryForm'
 import ProviderProfile from 'components/ProviderProfile'
 import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
+import * as actions from 'layouts/CoreLayout/coreReducer';
 
 const Provider = React.createClass ({
   componentDidMount() {
+
     const {user} = this.props.globalState.core.toJS();
+    let userStep = (user.published)? 2:user.publishStage;
+    // user clicked back after entering an item
+    if((userStep ===1 || userStep ===0) && user.foodItemAddedInEntryMode){
+      userStep =2;
+    }
     this.props.addProviderEntryState({
       storeKey:'stepIndex',
-      payload: user.publishStage
-    })
+      payload: userStep
+    });
   },
   onAllClear(){
     const stepIndex = this.props.providerEntryState.get('stepIndex');
@@ -36,11 +42,9 @@ const Provider = React.createClass ({
   },
   handleNext(){
     if(this.props.providerEntryState.get('stepIndex')===0){
-      this.props.showHideSpinner({storeKey:'providerEntrySpinner',payload:true});
       this.refs.providerform.formSubmit();
     }
     if(this.props.providerEntryState.get('stepIndex')===1){
-      this.props.showHideSpinner({storeKey:'foodItemEntrySpinner',payload:true});
       this.refs.foodItemEntryForm.formSubmit();
     }
     if(this.props.providerEntryState.get('stepIndex')===2){
@@ -48,10 +52,17 @@ const Provider = React.createClass ({
       securedPostCall('/api/providers/publish')
         .then(function(res){
           if(res && res.data && res.data._id){
+            self.props.dispatch(actions.publishUser());
             self.context.router.push('/providerProfile/'+res.data._id);
           }
         })
     }
+  },
+  handleCancel(){
+    this.props.addProviderEntryState({
+      storeKey:'stepIndex',
+      payload: 2
+    });
   },
   handlePrev(){
    const stepIndex = this.props.providerEntryState.get('stepIndex');
@@ -104,6 +115,7 @@ const Provider = React.createClass ({
                                 removeFoodItemInfo = {this.props.removeFoodItemInfo}
                                 params = {this.props.params}
                                 mode = {"PROVIDER_ENTRY"} 
+                                dispatch={this.props.dispatch}
                                 ref="foodItemEntryForm"
             />
           </div>
@@ -125,43 +137,41 @@ const Provider = React.createClass ({
     }
   },
   renderContent() {
-    const {finished, stepIndex} = this.props.providerEntryState.toJS();
+    const {stepIndex} = this.props.providerEntryState.toJS();
     const{providerEntrySpinner,foodItemEntrySpinner} = this.props.spinner.toJS();
     const showSpinner = (providerEntrySpinner || foodItemEntrySpinner)? true:false;
     const {user} = this.props.globalState.core.toJS();
     const contentStyle = {margin: '0 16px'};
 
-    if (finished) {
-      return (
-        <div style={contentStyle}>
-          <p>
-            <a
-              href="#"
-              onClick={(event) => {
-                event.preventDefault();
-                this.setState({stepIndex: 0, finished: false});
-              }}
-            >
-            Click here</a> to reset the example.
-          </p>
-        </div>
-      );
-    }
     return (
       <div style={contentStyle} >
         <div >{this.getStepContent(stepIndex,user)}</div>
         <div style={{display:'block', clear:'both', marginTop: 24, marginBottom: 12, textAlign:'center'}}>
           {
-            (stepIndex === 2)?
-              undefined
+            (stepIndex === 1)?
+              <div style={{display:'inline-block'}}>
+                <FlatButton
+                  label="Back"
+                  disabled={stepIndex === 0}
+                  onTouchTap={this.handlePrev}
+                  style={{marginRight: 12}}
+                />
+                {
+                  (user.foodItemAddedInEntryMode)?
+                  <FlatButton
+                    label="Cancel"
+                    onTouchTap={this.handleCancel}
+                    style={{marginRight: 12}}
+                  />
+                  :
+                  undefined
+                }
+                
+              </div>
               :
-              <FlatButton
-                label="Back"
-                disabled={stepIndex === 0}
-                onTouchTap={this.handlePrev}
-                style={{marginRight: 12}}
-              />
+              undefined
           }
+
           <RaisedButton
             label={stepIndex === 2 ? 'Publish' : 'Next'}
             primary={true}
@@ -174,7 +184,7 @@ const Provider = React.createClass ({
     );
   },
   render() { 
-    const {loading, stepIndex} = this.props.providerEntryState.toJS();
+    const {stepIndex} = this.props.providerEntryState.toJS();
     return (
       <div className="pure-g" className = "pure-override-letter-spacing">
         <div className = "counter-fixed-menu">
@@ -189,9 +199,7 @@ const Provider = React.createClass ({
                 <StepLabel>Preview</StepLabel>
               </Step>
             </Stepper>
-            <ExpandTransition loading={loading} open={true} >
-              {this.renderContent()}
-            </ExpandTransition>
+            {this.renderContent()}
           </div> 
       </div>
     );
@@ -216,6 +224,7 @@ Provider.propTypes= {
     fetchMayBeSecuredData:React.PropTypes.func,
     prefilProviderEntryForm:React.PropTypes.func,
     securedPostCall:React.PropTypes.func,
-    showHideSpinner:React.PropTypes.func
+    showHideSpinner:React.PropTypes.func,
+    dispatch: React.PropTypes.func
   };
 export default Provider;

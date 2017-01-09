@@ -4,7 +4,6 @@ import {Map} from 'immutable'
 import './providerProfile.scss'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import classNames from 'classnames';
-import StaffImg from './img/common/staff-thumb-placeholder-male.jpg';
 import Checkout from 'components/Checkout';
 import Scroll from 'react-scroll';
 import ReviewSubmitModal from 'components/ReviewSubmitModal';
@@ -59,10 +58,6 @@ const ProviderProfile = React.createClass({
       // open the modal for user login
       this.props.openLoginModal(true);
     }
-
-  },
-  checkoutLinkClick(){
-    this.scrollToElement('checkoutsection');
   },
   scrollToElement(elementName){
     let scroller = Scroll.scroller;

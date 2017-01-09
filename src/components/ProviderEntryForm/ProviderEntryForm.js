@@ -64,9 +64,14 @@ const ProviderEntryForm = React.createClass({
             storeKey:stateKeyName,
             payload:input
         })
-       
     },
     toggle(storeKey) {
+        if((storeKey==='doYouDeliverFlag' || storeKey==='pickUpFlag')){
+            this.props.addProviderErrorMsg({
+                        storeKey:"providerTypeErrorMsg",
+                        payload:null
+                    });
+        }
         this.props.addProviderInfo({
             storeKey: storeKey,
             payload:!this.props.providerEntryForm.get(storeKey)
@@ -118,6 +123,13 @@ const ProviderEntryForm = React.createClass({
                 }
             }
         }
+        if(!this.props.providerEntryForm.get("doYouDeliverFlag") && !this.props.providerEntryForm.get("pickUpFlag")){
+            noErrorsInform = false;
+            self.props.addProviderErrorMsg({
+                        storeKey:"providerTypeErrorMsg",
+                        payload:"Please choose service type Pick-up OR Delivery OR both "
+                    })
+        }
         return noErrorsInform;
     },
     onImageChange(blob,imgUrl,fileConfig){
@@ -135,6 +147,7 @@ const ProviderEntryForm = React.createClass({
         let self = this;
         let reqBody = this.props.providerEntryForm.toJS();
         if(this.validateForm()){
+            this.props.showHideSpinner({storeKey:'providerEntrySpinner',payload:true});
             // check whether the image was changed
             if (reqBody.imgChanged) {
                 this.props.addProviderInfo({
@@ -153,13 +166,12 @@ const ProviderEntryForm = React.createClass({
         }
     },
     render() {
-        let { chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg } = this.props.providerEntryForm.toJS();
+        let {chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg,providerTypeErrorMsg } = this.props.providerEntryForm.toJS();
         let showSpinner = false;
         if(this.props.spinner){
             const {providerEntrySpinner} = this.props.spinner.toJS();
             showSpinner = (providerEntrySpinner)? true:false;
         }
-        console.log(showSpinner);
         const styles = {
           block: {
             maxWidth: 250,
@@ -183,22 +195,22 @@ const ProviderEntryForm = React.createClass({
                         onBlur={this.handleChange} 
                         onFocus={this.handleFocus}
                         />
-                        <span className = "error-message">{(titleErrorMsg)?'*'+titleErrorMsg:undefined}</span>
+                        <div className = "error-message">{(titleErrorMsg)?'*'+titleErrorMsg:undefined}</div>
                         <textarea className = "pure-u-1"name="description" placeholder="background" value={description}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus} 
                             onChange={this.changeStoreVal} 
                         >   
                         </textarea>
-                        <span className = "error-message">{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
+                        <div className = "error-message">{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</div>
                         <div>{chars_left}/100</div>
                     
-                        <input type="text" name="email" placeholder="*email" style = {{marginBottom:0.5+'em'}} value={email}
+                        <input type="text" name="email" placeholder="*email" value={email}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus}
                             onChange={this.changeStoreVal}
                             className={"pure-u-1"}/>
-                        <span className = "error-message">{(emailErrorMsg)?'*'+emailErrorMsg:undefined}</span>
+                        <div className = "error-message">{(emailErrorMsg)?'*'+emailErrorMsg:undefined}</div>
                         <legend className="pull-left">
                             <div>
                                 Address:
@@ -231,7 +243,7 @@ const ProviderEntryForm = React.createClass({
                                                                                             })}
                                             onSuggestionSelected = {this.onSuggestionSelected}
                         />
-                        <span className = "error-message">{(searchTextErrorMsg)?'*'+searchTextErrorMsg:undefined}</span>
+                        <div className = "error-message">{(searchTextErrorMsg)?'*'+searchTextErrorMsg:undefined}</div>
                    
                     {(keepAddressPrivateFlag)?
                         <div>
@@ -283,7 +295,8 @@ const ProviderEntryForm = React.createClass({
                         </div>
                         :
                         undefined
-                    }
+                    }   
+                        
                         <legend className="pull-left">
                                 We can deliver 
                             <div style={{maxWidth:100, display:'inline-block'}}>
@@ -294,6 +307,7 @@ const ProviderEntryForm = React.createClass({
                                 />
                             </div> 
                         </legend>
+                        <div className = "error-message">{(providerTypeErrorMsg)?'*'+providerTypeErrorMsg:undefined}</div>
                     {(doYouDeliverFlag)?
                         <div>
                             <div>

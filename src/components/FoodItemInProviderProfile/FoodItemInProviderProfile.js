@@ -82,7 +82,15 @@ const FoodItemInProviderProfile = React.createClass({
                     undefined
                 }
                 
-                {(this.props.mode != 'providerEntry' && !this.props.userViewingOwnProfile )?
+                <RaisedButton
+                    labelPosition="before"
+                    label="Add to the cart" primary={true}
+                    style={{display:"block"}}
+                    onClick={(event)=>this.props.checkOutItem(event,foodItem)}
+                    disableTouchRipple={true}
+                  >
+                  </RaisedButton>
+                {/*(this.props.mode != 'providerEntry' && !this.props.userViewingOwnProfile )?
                   <RaisedButton
                     labelPosition="before"
                     label="Add to the cart" primary={true}
@@ -93,7 +101,7 @@ const FoodItemInProviderProfile = React.createClass({
                   </RaisedButton>
                   :
                   undefined
-                }
+                */}
                 
               </div>
             </div>

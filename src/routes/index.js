@@ -9,7 +9,7 @@ import ProviderProfileEditPage from './ProviderProfileEditPage'
 import FoodItemEditPage from './FoodItemEditPage'
 import FoodItemAddPage from './FoodItemAddPage'
 
-import { onMainPageEnter } from 'utils/auth/onEnterAuth'
+import { onMainPageEnter} from 'utils/auth/onEnterAuth'
 
 
 /*  Note: Instead of using JSX, we recommend using react-router

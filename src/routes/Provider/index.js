@@ -1,7 +1,9 @@
 import { injectReducer } from '../../store/reducers'
+import { onProviderPageEnter} from 'utils/auth/onEnterAuth'
 
 export default (store) => ({
   path: 'provider',
+  onEnter: (nextState, replace) => onProviderPageEnter(nextState, replace, store),
   /*  Async getComponent is only invoked when route matches   */
   getComponent (nextState, cb) {
     /*  Webpack - use 'require.ensure' to create a split point

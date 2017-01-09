@@ -8,8 +8,8 @@ export const CLOSE_MODAL_LOGIN = 'CLOSE_MODAL_LOGIN';
 export const USER_LOGGED_IN = 'USER_LOGGED_IN';
 export const USER_ADDRESS_SEARCH_CHANGE = 'USER_ADDRESS_SEARCH_CHANGE'
 export const USER_ADDRESS_UPDATE_PLACE_ID = 'USER_ADDRESS_UPDATE_PLACE_ID'
-
-
+export const USER_FOOD_ITEM_UPDATE = 'USER_FOOD_ITEM_UPDATE'
+export const PUBLISH_USER = "PUBLISH_USER"
 
 export function addToken(value) {
     return {
@@ -40,6 +40,13 @@ export function userLoggedIn(val) {
         payload: val
     };
 };
+
+export function publishUser() {
+    return {
+        type: PUBLISH_USER
+    }
+}
+
 export function userAddressSearchChange(val) {
     return {
         type: USER_ADDRESS_SEARCH_CHANGE,
@@ -53,6 +60,13 @@ export function userAddressUpdatePlaceId(val) {
     }
 }
 
+export function userFoodItemUpdate(_id) {
+    return {
+        type: USER_FOOD_ITEM_UPDATE,
+        payload:_id
+    }
+}
+
 
 
 const ACTION_HANDLERS = {
@@ -62,6 +76,9 @@ const ACTION_HANDLERS = {
     [ADD_USER]: (state, action) => {
         let newUser = Map(action.payload);
         return state.set('user', newUser)
+    },
+    [PUBLISH_USER]:(state,action)=>{
+        return state.setIn(['user', 'published'],true).setIn(['user', 'userType'],'provider')
     },
     [OPEN_MODAL_LOGIN]: (state, action) => {
         return state.set('loginModalOPen', true)
@@ -77,6 +94,9 @@ const ACTION_HANDLERS = {
     },
     [USER_ADDRESS_UPDATE_PLACE_ID]: (state, action) => {
         return state.setIn(['userAddressSearch', 'place_id'], action.payload);
+    },
+    [USER_FOOD_ITEM_UPDATE]:(state,action)=>{
+        return state.setIn(['user', 'foodItemAddedInEntryMode'],true)
     }
 }
 
@@ -90,7 +110,9 @@ const initialState = Map({
         fbUserID: '',
         gmailUserID: '',
         publishStage: 0,
-        published: false
+        published: false,
+        foodItemAddedInEntryMode:false,
+        userType:'',
     }),
     loginModalOPen: undefined,
     userLoggedIn: false,

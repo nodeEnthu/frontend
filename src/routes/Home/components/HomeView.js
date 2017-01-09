@@ -43,8 +43,10 @@ const HomeView = React.createClass({
         		// user is not logged in ... add it to cookie so that it is saved in the session and we dont make another call
             	this.context.router.push(page);
         	}
-        } else{
-        	this.context.router.push(page);
+        } else {
+            if(!this.props.globalState.core.get('userLoggedIn')){
+                this.props.openLoginModal();
+            }else this.context.router.push(page);
         }
         
     },
@@ -148,6 +150,7 @@ HomeView.propTypes = {
     globalState: React.PropTypes.object.isRequired,
     userAddressSearchChange: React.PropTypes.func.isRequired,
     userAddressUpdatePlaceId: React.PropTypes.func.isRequired,
+    openLoginModal:React.PropTypes.func.isRequired
 }
 
 

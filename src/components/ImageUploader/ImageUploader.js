@@ -4,6 +4,8 @@ import './ImageUploader.scss';
 import pica from 'pica/dist/pica';
 import shortid from 'shortid';
 import {initialImageUrl} from 'utils/constants';
+import 'blueimp-canvas-to-blob/js/canvas-to-blob';
+import EXIF from 'exif-js';
 const styles = {
   button: {
     margin: 12,
@@ -24,7 +26,7 @@ const styles = {
 class ImageUploader extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {file: '',imagePreviewUrl: this.props.initialImgUrl,imgUploaded: false};
+    this.state = {imagePreviewUrl: this.props.initialImgUrl,imgUploaded: false};
   }
   componentWillReceiveProps(nextProps) {
     if(nextProps.initialImgUrl !== this.props.initialImgUrl){
@@ -37,54 +39,75 @@ class ImageUploader extends React.Component {
       imgUploaded:true
     });
     e.preventDefault();
-    let reader = new FileReader();
-    let file = e.target.files[0];
-    let fileName = file.name.substr(0, file.name.lastIndexOf('.'));
-    let fileExtn = file.name.substr(file.name.lastIndexOf('.'), file.name.length);
-    let randomNumber = shortid.generate();
-    let modifiedFileName = fileName+ randomNumber + fileExtn;
-    let srcCanvas = document.getElementById('imgPreview');
-    let ctx = srcCanvas.getContext('2d');
-    let destCanvas = document.getElementById("myCanvas");
+    let reader = new FileReader(),
+      file = e.target.files[0],
+      fileName = file.name.substr(0, file.name.lastIndexOf('.')),
+      fileExtn = file.name.substr(file.name.lastIndexOf('.'), file.name.length),
+      randomNumber = shortid.generate(),
+      modifiedFileName = fileName+ randomNumber + fileExtn,
+      srcCanvas = document.getElementById('imgPreview'),
+      ctx = srcCanvas.getContext('2d'),
+      destCanvas = document.getElementById("myCanvas");
     reader.onload = function(event){
-        var img = new Image();
+        let img = new Image();
         img.onload = function(){
-            srcCanvas.width   = img.width;
-            srcCanvas.height  = img.height;
-            let aspectRatio = img.width/img.height;
-            let maxiWidthLimit = 500;
-            let maxiHeightLimit = 400;
-            if(img.width >maxiWidthLimit ){
-              destCanvas.width = maxiWidthLimit;
-              destCanvas.height = destCanvas.width/aspectRatio
-            }else if (img.height > maxiHeightLimit){
-              destCanvas.height = maxiHeightLimit;
-              destCanvas.width = destCanvas.height * aspectRatio
-            } else{
-              destCanvas.width   = img.width;
-              destCanvas.height  = img.height;
-            }
-            ctx.drawImage(img,0,0);
-            pica.resizeCanvas(srcCanvas,destCanvas,{},function(err){
-              let dataURL = destCanvas.toDataURL("image/png");
-              let binary = atob(dataURL.split(',')[1]);
-              let array = [];
-              for(let i = 0; i < binary.length; i++) {
-                  array.push(binary.charCodeAt(i));
+            EXIF.getData(img,function(){
+              let degree, 
+                cw = img.width, ch = img.height, cx = 0, cy = 0;
+              console.log(EXIF.getTag(this,'Orientation'));
+              switch(EXIF.getTag(this,'Orientation')){  
+                case 6:
+                  degree = 90;
+                  cw = img.height;
+                  ch = img.width;
+                  cy = img.height * (-1);
+                  break;
+                case 2:
+                  degree = -90;
+                  cw = img.height;
+                  ch = img.width;
+                  cx = img.width * (-1);
+                  break;
+                case 3:
+                  degree =180;
+                  cx = img.width * (-1);
+                  cy = img.height * (-1);
+                  break;
               }
-              let s3Data= new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
-              let imageUrl = initialImageUrl + modifiedFileName;
-              // this should happen pretty fast ... hoping the user does not click submit
-              self.props.onImageChange(s3Data,imageUrl,{name:modifiedFileName,type:file.type});
-          });
-        }
-        img.src = event.target.result;
+              srcCanvas.setAttribute('width', cw);
+              srcCanvas.setAttribute('height', ch);
+              ctx.rotate(degree * Math.PI / 180);
+              ctx.drawImage(img, cx, cy);
+              let aspectRatio = srcCanvas.width/srcCanvas.height;
+              let maxiWidthLimit = 500;
+              let maxiHeightLimit = 400;
+              if(img.width >maxiWidthLimit ){
+                destCanvas.width = maxiWidthLimit;
+                destCanvas.height = destCanvas.width/aspectRatio
+              }else if (img.height > maxiHeightLimit){
+                destCanvas.height = maxiHeightLimit;
+                destCanvas.width = destCanvas.height * aspectRatio
+              } else{
+                destCanvas.width   = img.width;
+                destCanvas.height  = img.height;
+              }
+              ctx.drawImage(img,0,0);
+              pica.resizeCanvas(srcCanvas,destCanvas,{},function(err){
+                destCanvas.toBlob(function(blob){
+                  let imageUrl = initialImageUrl + modifiedFileName;
+                  self.props.onImageChange(blob,imageUrl,{name:modifiedFileName,type:file.type});
+                })
+              });
+            }) 
+          }
+      img.src = event.target.result;
     }
     reader.readAsDataURL(file);
   }
 
   render() {
     let {imgUploaded,imagePreviewUrl} = this.state;
+    console.log(imgUploaded,imagePreviewUrl);
     let $imagePreview = (imagePreviewUrl)? (<img style={{width:'100%'}}src={imagePreviewUrl} />) : (<div className="previewText"></div>) ;
     return (
       <div className="previewComponent">
@@ -93,6 +116,7 @@ class ImageUploader extends React.Component {
           <canvas id="imgPreview" style={{display:'none',width:'400px',height:'auto'}}></canvas>
           <canvas id="myCanvas" style={{display:(imgUploaded)?'inline-block':'none',flex: '1 1 0', minWidth:0}}></canvas>
         </div>
+
         <div style = {{margin:"0 auto", textAlign:"center"}}>
           <RaisedButton
           label="Choose an Image"
@@ -100,12 +124,9 @@ class ImageUploader extends React.Component {
           style={styles.button}
           disableTouchRipple={true}
           >
-          <input  type="file" style={styles.exampleImageInput} onChange={(e)=>this._handleImageChange(e)} />
+          <input name="userfile" style={styles.exampleImageInput} onChange={(e)=>this._handleImageChange(e)} type="file" accept="image/*" capture="camera"/>
           </RaisedButton>
         </div>
-        
-
-        
       </div>
     )
   }
