@@ -25,7 +25,7 @@ const OrderSubmitModal = React.createClass({
   },
   render(){
     const {providerProfileCall, itemsCheckedOut,orderSubmitModalOpen} = this.props.providerProfile.toJS();
-    const {user} = this.props.globalState.core.toJS();
+    const {user,userAddressSearch} = this.props.globalState.core.toJS();
     let data = providerProfileCall.data;
     let resolvedItemsCheckedOut= [];
     let grandTotal = 0;
@@ -38,12 +38,18 @@ const OrderSubmitModal = React.createClass({
       }
     };
     // make the checkout object here to be submitted once submit is clicked
+    let customerName , customerAddress;
+    if(user && user.name){    // this means there is some user logged .. which it should be
+      // if userAddressSearch.searchText exists that means user entered a new address at Home (/) or search (/search) page which SHOULD already be registered
+      customerAddress = (userAddressSearch)? userAddressSearch.searchText : user.userSeachLocations[user.deliveryAddressIndex].searchText;
+      customerName =(user && user.name)? user.name : undefined;
+    } 
     this.checkOutOrderDetails={
       itemsCheckedOut:itemsCheckedOut,
       providerName:(data)?data.title : undefined,
-      customerName:(user && user.name)?user.name : undefined,
+      customerName:customerName,
       providerAddress:(data)?data.loc.searchText:undefined,
-      customerAddress: (user && user.name) ? user.userSeachLocations[user.deliveryAddressIndex].searchText:undefined,
+      customerAddress: customerAddress,
       orderId:'tbd',
       tip:'tbd',
       orderType:'Pickup',
@@ -51,7 +57,6 @@ const OrderSubmitModal = React.createClass({
       modeOfPayment:'Cash/CreditCard'
     }
     // ends here
-
     return <Dialog
             open={orderSubmitModalOpen}
             onRequestClose={this.closeModal}

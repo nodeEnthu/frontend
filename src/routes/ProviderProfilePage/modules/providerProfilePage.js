@@ -73,19 +73,21 @@ export function removeAllCheckedOutItems(){
 export function selectItemForReview(foodItem){
     return{
         type:SELECT_ITEM_FOR_REVIEW,
-        foodItem:foodItem
+        payload:foodItem
     }
 }
-export function selectStarRating(rating){
+export function selectStarRating(foodItemId,rating){
     return{
         type:SELECT_STAR_RATING,
+        foodItemId:foodItemId,
         rating:rating
     }
 }
 
-export function submitTypedReview(review){
+export function submitTypedReview(foodItemId,review){
     return{
         type:SUBMIT_TYPED_REVIEW,
+        foodItemId:foodItemId,
         review:review
     }
 }
@@ -93,6 +95,7 @@ export function submitTypedReview(review){
 export function reviewError(obj){
     return{
         type:REVIEW_ERROR,
+        foodItemId:obj.foodItemId,
         storeKey:obj.storeKey,
         errorMsg:obj.errorMsg
     }
@@ -114,28 +117,28 @@ export function flushOutStaleReviewData(){
 const ACTION_HANDLERS = {
     [REQUEST_DATA_PROVIDER]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
     [FAIL_DATA_PROVIDER]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
-    [RECEIVE_DATA_PROVIDER]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
+    [RECEIVE_DATA_PROVIDER]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], Map(action.payload.data.data)),
     
     [REQUEST_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
     [FAIL_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
-    [RECEIVE_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
+    [RECEIVE_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], Map(action.payload.data.data)),
 
     [PROVIDER_FOOD_ITEM_CHECKOUT]: (state, action) => state.setIn(['itemsCheckedOut', action.payload.itemCheckedOut._id],Map(action.payload.itemCheckedOut)),
     [UPDATE_CHECKED_OUT_QTY]:(state,action)=>state.setIn(['itemsCheckedOut', action.payload.foodItemId,'quantity'],action.payload.quantity),
     [DELETE_CHECKED_OUT_ITEM]:(state,action)=> state.deleteIn(['itemsCheckedOut',action.foodItemId]),
     [REMOVE_ALL_CHECKED_OUT_ITEMS]:(state,action)=>state.delete('itemsCheckedOut'),
 
-    [SELECT_ITEM_FOR_REVIEW]:(state,action)=>state.setIn(['review','item'],Map(action.foodItem)),
-    [SELECT_STAR_RATING]:(state,action)=>state.setIn(['review','rating'],action.rating),
-    [SUBMIT_TYPED_REVIEW]:(state,action)=>state.setIn(['review','review'],action.review),
-    [REVIEW_ERROR]:(state,action)=>state.setIn(['review',action.storeKey],action.errorMsg),
+    [SELECT_ITEM_FOR_REVIEW]:(state,action)=>state.setIn(['reviews','item'],Map(action.payload)),
+    [SELECT_STAR_RATING]:(state,action)=>state.setIn(['reviews','reviewMap',action.foodItemId,'rating'],action.rating),
+    [SUBMIT_TYPED_REVIEW]:(state,action)=>state.setIn(['reviews','reviewMap',action.foodItemId,'review'],action.review),
+    [REVIEW_ERROR]:(state,action)=>state.setIn(['reviews','reviewMap',action.foodItemId,action.storeKey],action.errorMsg),
 
     [OPEN_MODAL]:(state,action)=>state.set(action.storeKey,action.openModal),
 
     [REQUEST_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
     [FAIL_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
-    [RECEIVE_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data),
-    [FLUSH_OUT_STALE__REVIEW_DATA]:(state,action)=> state.set('item',Map()).set('review','').set('rating',undefined).set('ratingError',undefined).set('reviewError',undefined)
+    [RECEIVE_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], Map(action.payload.data.data)),
+    [FLUSH_OUT_STALE__REVIEW_DATA]:(state,action)=> state.setIn(['reviews', 'item'], undefined).setIn(['reviews', 'reviewMap'], Map()),
 }
 
 // ------------------------------------
@@ -154,12 +157,9 @@ const initialState = Map({
     }),
     itemsCheckedOut: Map({
     }),
-    review:Map({
-        item:Map(),
-        review:'',
-        rating:undefined,
-        ratingError:'',
-        reviewError:''
+    reviews:Map({
+        item:undefined,
+        reviewMap:Map({}),
     }),
     submitReview:Map({
         isLoading:false,

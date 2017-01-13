@@ -31,7 +31,7 @@ const Search = React.createClass({
             // check whether its an image that was clicked
         if (selectedCuisineOrDiet) {
             this.props.selectCuisineOrDiet(storeKey, selectedCuisineOrDiet);
-            this.activateQueryButton();
+            this.activateQueryButton(true);
         } // else dont do anything
     },
     // defaults for the first time you load the page 
@@ -78,7 +78,10 @@ const Search = React.createClass({
     fetchQueryData() {
     	let combinedQuery = this.createQuery();
     	//console.log("making the call with ",combinedQuery)
-        return this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery);
+    	this.activateQueryButton(false);
+        return this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery)
+        	.then(function(response){
+        	});
     },
     createAndFetchNewQuery(){
     	// flush out old data
@@ -105,16 +108,6 @@ const Search = React.createClass({
         this.filterCuisineOrDietType(uniqueDietAdded[0], 'diet');
     },
     componentDidUpdate(prevProps){
-    	const newState = this.props.globalState;
-    	const oldState =  prevProps.globalState;
-    	const newPlaceId = newState.core.toJS().userAddressSearch.place_id;
-    	const oldPlaceId = oldState.core.toJS().userAddressSearch.place_id;
-    	const newDate = newState.search.toJS().addtnlQuery.date;
-    	const prevDate = oldState.search.toJS().addtnlQuery.date;
-    	// compare whether the place_id OR dates have changed
-    	if(prevDate != newDate || newPlaceId != oldPlaceId){
-    		this.createAndFetchNewQuery();
-    	}
     },
     selectOption(stateKey, option) {
         if (option) {
@@ -122,16 +115,15 @@ const Search = React.createClass({
             	this.props.selectAddtnlQuery(stateKey, option);
             } else {
             	this.props.selectAddtnlQuery(stateKey, option.value);
-            	this.activateQueryButton();
             }
         } else {
             this.props.selectAddtnlQuery(stateKey, undefined);
         }
-
+        this.activateQueryButton(true);
     },
-    activateQueryButton(){
+    activateQueryButton(val){
     	this.setState({
-    		searchActivated:true
+    		searchActivated:val
     	})
     },
     goToProvider(event,foodItem){
@@ -234,18 +226,6 @@ const Search = React.createClass({
 						                </div>
 						            </div>
 						        </fieldset>
-						        <div className="query-btn-center">
-									<RaisedButton 
-										label="Search" 
-										primary={true}
-										disabled={!this.state.searchActivated}
-										style={{
-											width:'40%'
-										}}
-										onClick={this.createAndFetchNewQuery}
-										disableTouchRipple={true} 
-									/>
-								</div>
 						    </form>
 						</div>
 				    </CardText>
@@ -272,6 +252,18 @@ const Search = React.createClass({
 						})}
 					</Carousel>
 				</div>
+				<div className="query-btn-center">
+									<RaisedButton 
+										label="Search" 
+										primary={true}
+										disabled={!this.state.searchActivated}
+										style={{
+											width:'40%'
+										}}
+										onClick={this.createAndFetchNewQuery}
+										disableTouchRipple={true} 
+									/>
+								</div>
 				
 				<div className="providers-wrapper">
 					<div className="pure-g">

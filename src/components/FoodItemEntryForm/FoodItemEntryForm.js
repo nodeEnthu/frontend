@@ -50,6 +50,12 @@ const FoodItemEntryForm= React.createClass({
             storeKey: storeKey,
             payload: date
         })
+        if(storeKey === 'serviceDate'){
+            this.props.addFoodItemInfo({
+                storeKey: 'placeOrderBy',
+                payload: date
+            })
+        }
     },
     daysBeforeOrderDate(referenceDate,days){
         return moment(referenceDate).subtract(days, "days").toDate();
@@ -333,6 +339,7 @@ const FoodItemEntryForm= React.createClass({
                                     <label>Pick-up start time (hh:mm)</label>
                                     <TimeInput
                                         placeholder="pick-up start time"
+                                        type="text"
                                         name="pickUpStartTime"
                                         className="width-max"
                                         onTimeChange={(value)=>this.onTimeChangeHandler('pickUpStartTime',value)}
@@ -344,6 +351,7 @@ const FoodItemEntryForm= React.createClass({
                                     <label>Pick-up end time (hh:mm)</label>
                                     <TimeInput
                                         placeholder="pick-up end time"
+                                        type="text"
                                         name="pickUpEndTime"
                                         className="width-max"
                                         onTimeChange={(value)=>this.onTimeChangeHandler('pickUpEndTime',value)}

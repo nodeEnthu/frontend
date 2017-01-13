@@ -70,26 +70,23 @@ var Login = React.createClass({
                 >
                   <div ref="subtitle"
                     style={{
-                      textAlign:'center',
-                      marginBottom:'10%'
-                    }}
-                  >Please login with your facebook or gmail account</div>
-                  <div style = {{width:'70%', margin:'0 auto'}}>
-                    <FacebookLogin
-                      style = {{textAlign:'center'}}
-                      appId="116207178810953"
-                      autoLoad={true}
-                      fields="id,email,name,link,picture"
-                      callback={this.successfullFbLogin} 
-                    />
+                      textAlign:'center'
+                    }}>
+                    Please login with your facebook or gmail account
                   </div>
-                  <div style = {{width:'70%', margin:'0 auto', marginTop:'20px'}}>
-                    <GoogleLogin
-                      clientId="1038006636920-ilhv28295jr3l244jhvf79u9j115bl9e.apps.googleusercontent.com"
-                      buttonText="Login"
-                      callback={this.successfullGmailLogin} 
-                    />
-                  </div>
+                    <div style={{textAlign:"center"}}>
+                      <FacebookLogin
+                        appId="116207178810953"
+                        autoLoad={true}
+                        fields="id,email,name,link,picture"
+                        callback={this.successfullFbLogin} 
+                      />
+                      <GoogleLogin
+                        clientId="1038006636920-ilhv28295jr3l244jhvf79u9j115bl9e.apps.googleusercontent.com"
+                        buttonText="Login"
+                        callback={this.successfullGmailLogin} 
+                      />
+                    </div>                  
                 </Dialog>
               </div>
         );

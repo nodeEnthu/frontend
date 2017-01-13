@@ -1,15 +1,18 @@
+$fa-font-path: "~font-awesome/fonts";
 :global {
   @import 'base';
   @import '~normalize.css/normalize';
   @import '~purecss/build/pure';
   @import '~purecss/build/grids-core';
   @import '~purecss/build/grids-responsive';
+  @import 'login_buttons';
   @import 'autocomplete';
   @import 'pure-core-overwrites';
   @import 'nuka-carousel-overwrites';
   @import '~react-select/dist/react-select';
 }
 
+@import url(http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700);
 *, *:before, *:after {
   box-sizing: border-box;

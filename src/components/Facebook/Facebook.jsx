@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import styles from './facebook.scss';
 import Link from 'react-router';
-import RaisedButton from 'material-ui/RaisedButton';
 
 class FacebookLogin extends React.Component {
 
@@ -123,16 +122,16 @@ class FacebookLogin extends React.Component {
             return this.renderWithFontAwesome();
         }
         return (
-        
-        <RaisedButton
-          style = {{width:'50%'}}
-          labelPosition="before"
-          label="Login With Facebook" primary={true}
-          style={{display:"block"}}
-          disableTouchRipple={true}
-          onClick={this.click}
+        <button className="pure-button pure-button-primary"
+            style={{
+                 width:"10em",
+                 marginTop:'1em'
+            }}
+            onClick={this.click}
         >
-        </RaisedButton>
+            <i className="fa fa-facebook">
+            </i> &nbsp; facebook login
+        </button>
         );
     }
 }

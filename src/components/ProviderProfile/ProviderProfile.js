@@ -25,7 +25,7 @@ const ProviderProfile = React.createClass({
   getInitialState() {
       return {
           counter:0,
-          itemCheckOutClick:false,
+          itemCheckOutClicked:false,
       };
   },
   componentWillMount() {
@@ -37,9 +37,9 @@ const ProviderProfile = React.createClass({
   },
   componentDidUpdate() {
     //check whether clicking on add to cart made component update
-    if(this.state.counter===1 && this.state.itemCheckOutClick){
-      this.scrollToElement('checkoutsection');
-      this.setState({itemCheckOutClick:false})
+    if(this.state.counter===1 && this.state.itemCheckOutClicked){
+      this.scrollToElement('link1');
+      this.setState({itemCheckOutClicked:false})
     }
   },
   checkOutItem(event,foodItem){
@@ -51,7 +51,7 @@ const ProviderProfile = React.createClass({
       if(this.state.counter === 0){
         this.setState({
           counter:this.state.counter+1,
-          itemCheckOutClick:true
+          itemCheckOutClicked:true
         })
       }
     }else{
@@ -172,15 +172,16 @@ const ProviderProfile = React.createClass({
                     })
                   }
               </div>
+              
               {(this.props.mode != 'PROVIDER_ENTRY')?
                 <div>
-                  <Element name="checkoutsection"/>
                   <Checkout{... this.props}/>
                   <ReviewSubmitModal{... this.props}/>
                 </div>
                 :
                 undefined
               }
+              <Element name="link1"></Element>
             </div> 
           </div>
         </div>

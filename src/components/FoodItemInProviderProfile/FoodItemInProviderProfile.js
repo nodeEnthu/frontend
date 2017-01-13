@@ -8,7 +8,6 @@ const FoodItemInProviderProfile = React.createClass({
   render(){
     let {foodItem}= this.props;
     let editOrReOffer=(this.props.pastItem === true)? 'Offer Again': 'Edit';
-    console.log(foodItem);
     return <section className="post">
             <div>
               <div className="pure-u-md-3-5">
@@ -81,16 +80,7 @@ const FoodItemInProviderProfile = React.createClass({
                     :
                     undefined
                 }
-                
-                <RaisedButton
-                    labelPosition="before"
-                    label="Add to the cart" primary={true}
-                    style={{display:"block"}}
-                    onClick={(event)=>this.props.checkOutItem(event,foodItem)}
-                    disableTouchRipple={true}
-                  >
-                  </RaisedButton>
-                {/*(this.props.mode != 'providerEntry' && !this.props.userViewingOwnProfile )?
+                {(this.props.mode != 'providerEntry' && !this.props.userViewingOwnProfile )?
                   <RaisedButton
                     labelPosition="before"
                     label="Add to the cart" primary={true}
@@ -101,8 +91,7 @@ const FoodItemInProviderProfile = React.createClass({
                   </RaisedButton>
                   :
                   undefined
-                */}
-                
+                } 
               </div>
             </div>
           </section>   
