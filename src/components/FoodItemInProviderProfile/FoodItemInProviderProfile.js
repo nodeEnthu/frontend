@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 const FoodItemInProviderProfile = React.createClass({
   render(){
     let {foodItem}= this.props;
+    console.log(foodItem.enableReview);
     let editOrReOffer=(this.props.pastItem === true)? 'Offer Again': 'Edit';
     return <section className="post">
             <div>
@@ -71,8 +72,9 @@ const FoodItemInProviderProfile = React.createClass({
                 }
                 
                 <img alt={foodItem.name} className = "food-item" src={foodItem.imgUrl}/>
+
                 {
-                  (!this.props.userViewingOwnProfile)?
+                  (foodItem.enableReview)?
                     <div className="move-center review-submit-link"
                       onClick={()=>this.props.writeReviewModal(foodItem)}>
                       Please submit a review

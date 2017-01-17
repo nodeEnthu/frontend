@@ -53,6 +53,7 @@ const Search = React.createClass({
     onSuggestionSelected(event,{suggestion}){
     	this.props.userAddressSearchChange(suggestion.address);
         this.props.userAddressUpdatePlaceId(suggestion.place_id);
+        this.activateQueryButton(true);
         // also register this address in the address book if the user is logged in
         if(this.props.globalState.core.get('userLoggedIn')){
     		//register this at a new location if possible as the user needs to be logged in for this
@@ -138,10 +139,11 @@ const Search = React.createClass({
         	if(data[i].foodItems && data[i].foodItems.length>0){
         		for (let j = 0; j < data[i].foodItems.length; j++) {
                 	data[i].foodItems[j].distance = (data[i].distance / 1600).toFixed(2);
+                	data[i].foodItems[j].doYouDeliverFlag = data[i].doYouDeliverFlag;
+                	data[i].foodItems[j].pickUpFlag = data[i].pickUpFlag;
             	}
             	resolvedData = resolvedData.concat(data[i].foodItems);
         	}
-            
         }
         let self = this;
         let  momentDate =(addtnlQuery.date)? moment(addtnlQuery.date) : moment();
@@ -294,8 +296,7 @@ const Search = React.createClass({
 									                         <div className="miles-away"><span>{foodItem.distance}</span><span>mi</span></div>
 											    		</div>
 											    		{
-											    			
-											    				(foodItem._creator.doYouDeliverFlag)?
+											    				(foodItem.doYouDeliverFlag)?
 											    					<div>
 											    						&#10003; &nbsp; delivery
 											    					</div>
@@ -305,8 +306,7 @@ const Search = React.createClass({
 											    					</div>
 											    		}
 											    		{
-											    			
-											    				(foodItem._creator.pickUpFlag)?
+											    				(foodItem.pickUpFlag)?
 											    					<div>
 											    						&#10003; &nbsp; pickup
 											    					</div>

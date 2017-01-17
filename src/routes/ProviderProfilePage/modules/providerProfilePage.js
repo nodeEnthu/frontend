@@ -108,9 +108,10 @@ export function openModal(obj){
         'openModal':obj.openModal
     }
 }
-export function flushOutStaleReviewData(){
+export function flushOutStaleReviewData(foodItemId){
     return{
-        'type':FLUSH_OUT_STALE__REVIEW_DATA
+        'type':FLUSH_OUT_STALE__REVIEW_DATA,
+        'foodItemId':foodItemId
     }
 }
 
@@ -138,7 +139,7 @@ const ACTION_HANDLERS = {
     [REQUEST_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
     [FAIL_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
     [RECEIVE_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], Map(action.payload.data.data)),
-    [FLUSH_OUT_STALE__REVIEW_DATA]:(state,action)=> state.setIn(['reviews', 'item'], undefined).setIn(['reviews', 'reviewMap'], Map()),
+    [FLUSH_OUT_STALE__REVIEW_DATA]:(state,action)=> state.setIn(['reviews', 'reviewMap',action.foodItemId], Map()),
 }
 
 // ------------------------------------

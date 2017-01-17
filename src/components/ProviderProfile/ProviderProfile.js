@@ -32,8 +32,14 @@ const ProviderProfile = React.createClass({
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
   },
   writeReviewModal(foodItem){
-    this.props.openModal({storeKey:'reviewSubmitModalOpen', openModal:true})
-    this.props.selectItemForReview(foodItem);
+    // check whether user is logged in 
+    if(this.props.globalState.core.get('userLoggedIn')){
+      this.props.openModal({storeKey:'reviewSubmitModalOpen', openModal:true})
+      this.props.selectItemForReview(foodItem);
+    }else{
+      // open the modal for user login
+      this.props.openLoginModal(true);
+    }
   },
   componentDidUpdate() {
     //check whether clicking on add to cart made component update
@@ -66,6 +72,9 @@ const ProviderProfile = React.createClass({
       delay: 100,
       smooth: true,
     })
+  },
+  refreshPage(){
+    this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
   },
   render() {
     const {providerProfileCall,providerEditModalOpen} = this.props.providerProfile.toJS();
@@ -176,7 +185,17 @@ const ProviderProfile = React.createClass({
               {(this.props.mode != 'PROVIDER_ENTRY')?
                 <div>
                   <Checkout{... this.props}/>
-                  <ReviewSubmitModal{... this.props}/>
+                  <ReviewSubmitModal
+                    globalState =  {this.props.globalState}
+                    reviewError = {this.props.reviewError}
+                    refreshPage= {this.refreshPage}
+                    selectStarRating = {this.props.selectStarRating}
+                    submitTypedReview = {this.props.submitTypedReview}
+                    openModal = {this.props.openModal}
+                    postSecuredData = {this.props.postSecuredData}
+                    flushOutStaleReviewData = {this.props.flushOutStaleReviewData}
+                    providerProfile = {this.props.providerProfile}
+                  />
                 </div>
                 :
                 undefined

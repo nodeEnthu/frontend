@@ -24,7 +24,7 @@ const ReviewSubmitModal = React.createClass({
       };
   },
   componentWillUnmount() {
-    this.props.flushOutStaleReviewData();
+    //this.props.flushOutStaleReviewData();
   },
   starRating(nextVal,prevVal,name,foodItemId){
     // reset the error if it exists
@@ -68,6 +68,7 @@ const ReviewSubmitModal = React.createClass({
     this.props.openModal({storeKey:'reviewSubmitModalOpen', openModal:false});
   },
   submitReview(){
+    let self = this;
     // check whether both the star rating and review are entered
     let {reviews} = this.props.providerProfile.toJS();
     let item = reviews.item;
@@ -82,10 +83,16 @@ const ReviewSubmitModal = React.createClass({
         rating:userInput.rating,
         review:userInput.review
       }
-      console.log(combinedQuery);
-      this.props.postSecuredData('/api/foodItem/'+item._id+'/review','submitReview','SUBMIT_REVIEW',combinedQuery);
+      this.props.postSecuredData('/api/foodItem/'+item._id+'/review','submitReview','SUBMIT_REVIEW',combinedQuery)
+        .then(function(){
+          self.props.refreshPage();
+        });
+      // remove data from the store
+      this.props.flushOutStaleReviewData(item._id);
       // close the modal
       this.closeModal();
+      // update the page
+
     }else{
       // check whether start rating or review is empty
       if(!userInput || !userInput.review){
@@ -123,7 +130,7 @@ const ReviewSubmitModal = React.createClass({
                     <div className="review-item-name">
                       {item.name}
                     </div>
-                    <img alt={item.name} className = "food-item" src={item.imgUrl}/>
+                    {/*<img alt={item.name} className = "food-item" src={item.imgUrl}/>*/}
                     <div>
                       <StarRatingComponent
                         name="rating"

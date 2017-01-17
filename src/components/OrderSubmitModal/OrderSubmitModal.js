@@ -50,6 +50,8 @@ const OrderSubmitModal = React.createClass({
       customerName:customerName,
       providerAddress:(data)?data.loc.searchText:undefined,
       customerAddress: customerAddress,
+      customerEmailId:user.email,
+      providerEmailId:data.email,
       orderId:'tbd',
       tip:'tbd',
       orderType:'Pickup',
