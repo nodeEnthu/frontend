@@ -9,6 +9,7 @@ import ProviderProfileEditPage from './ProviderProfileEditPage'
 import FoodItemEditPage from './FoodItemEditPage'
 import FoodItemAddPage from './FoodItemAddPage'
 import OrderAction from './OrderAction'
+import OrderSummary from './OrderSummary'
 
 import { onMainPageEnter} from 'utils/auth/onEnterAuth'
 
@@ -30,7 +31,8 @@ export const createRoutes = (store) => ({
         ProviderProfileEditPage(store),
         FoodItemEditPage(store),
         FoodItemAddPage(store),
-        OrderAction(store)
+        OrderAction(store),
+        OrderSummary(store)
     ]
 
 })

@@ -1,5 +1,5 @@
 import React from 'react';
-import './orderAction.scss';
+import './orderSummary.scss';
 import {postCall} from 'utils/httpUtils/apiCallWrapper';
 
 
@@ -11,12 +11,7 @@ const OrderAction = React.createClass({
     }
   },
   componentDidMount() {
-    let {customerId,orderId} = this.props.params;
-    console.log(customerId,orderId);
-    // send an ajax call for order confirmation to customer
-    postCall('/api/order/'+orderId+'/orderConfirmCustomer',{'orderId':orderId})
-      .then(function(err,response){
-      });
+    
   },
   render(){
     return(
