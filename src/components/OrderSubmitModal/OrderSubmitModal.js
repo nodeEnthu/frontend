@@ -16,7 +16,7 @@ const OrderSubmitModal = React.createClass({
   },
   confirmOrderSubmit(){
     // (url_to_call, state_property_to_change,action_name_to_be_appended)
-    this.props.postSecuredData('/api/emails/order-submit','orderSubmit','ORDER_SUBMIT',this.checkOutOrderDetails);
+    this.props.postSecuredData('/api/order/order-submit','orderSubmit','ORDER_SUBMIT',this.checkOutOrderDetails);
     this.props.openModal({storeKey:'orderSubmitModalOpen', openModal:false});
     this.props.removeAllCheckedOutItems();  
   },
@@ -45,8 +45,10 @@ const OrderSubmitModal = React.createClass({
       customerName =(user && user.name)? user.name : undefined;
     } 
     this.checkOutOrderDetails={
+      _creator:user._id,
       itemsCheckedOut:itemsCheckedOut,
       providerName:(data)?data.title : undefined,
+      _providerId:data._id,
       customerName:customerName,
       providerAddress:(data)?data.loc.searchText:undefined,
       customerAddress: customerAddress,

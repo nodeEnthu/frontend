@@ -41,11 +41,14 @@ const ProviderProfile = React.createClass({
       this.props.openLoginModal(true);
     }
   },
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     //check whether clicking on add to cart made component update
     if(this.state.counter===1 && this.state.itemCheckOutClicked){
       this.scrollToElement('link1');
       this.setState({itemCheckOutClicked:false})
+    }
+    if(prevProps.params.id!= this.props.params.id){
+      this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
     }
   },
   checkOutItem(event,foodItem){
