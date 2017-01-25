@@ -1,42 +1,149 @@
 import React from 'react';
 import './orderSummary.scss';
 import {postCall} from 'utils/httpUtils/apiCallWrapper';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import {
+  Step,
+  Stepper,
+  StepLabel,
+} from 'material-ui/Stepper';
+import ArrowForwardIcon from 'material-ui/svg-icons/navigation/arrow-forward';
 
+const styles = {
+  headline: {
+    fontSize: 24,
+    paddingTop: 16,
+    marginBottom: 12,
+    fontWeight: 400,
+  },
+};
 
 const OrderAction = React.createClass({
   getInitialState() {
     return{
-      customerId:'',
-      orderId:''
+      value: 'a',
+      userId:'',
+      userType:''
     }
   },
   componentDidMount() {
-    
+    const userId = this.props.params.userId;
+    //get to know the user ... customer/provider
+    const {userType} = this.props.globalState.core.get('user').toJS();
+    if(userId){
+      this.setState({
+        userId:this.props.params.userId,
+        userType:userType
+      });
+      this.props.fetchSecuredData('/api/order/'+userId+'/customer/get', 'ordersAsCustomer','ORDERS_AS_CUSTOMER')
+    }
+  },
+  handleChange(value){
+    this.setState({
+      value: value,
+    });
   },
   render(){
+    const ordersAsCustomer = this.props.ordersAsCustomer.get('data');
+    function getResolvedItems(order){
+      let itemRows =[];
+      let index = 0;
+      for(let key in order.itemsCheckedOut){
+          if(order.itemsCheckedOut.hasOwnProperty(key)){
+            index = index+1;
+            itemRows.push(<tr key={key +Math.random()}>
+                    <td>{index}</td>
+                    <td>{order.itemsCheckedOut[key].name}</td>
+                    <td>{order.itemsCheckedOut[key].quantity}</td>
+                    <td>{order.itemsCheckedOut[key].price}</td>
+                  </tr>);
+          }
+        }
+        return itemRows;
+    }
     return(
-      <div>
-        <div className="checkmark">
-          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-           viewBox="0 0 161.2 161.2" enableBackground="new 0 0 161.2 161.2">
-            <path className="path" fill="none" stroke="#7DB0D5" strokeMiterlimit="10" d="M425.9,52.1L425.9,52.1c-2.2-2.6-6-2.6-8.3-0.1l-42.7,46.2l-14.3-16.4
-              c-2.3-2.7-6.2-2.7-8.6-0.1c-1.9,2.1-2,5.6-0.1,7.7l17.6,20.3c0.2,0.3,0.4,0.6,0.6,0.9c1.8,2,4.4,2.5,6.6,1.4c0.7-0.3,1.4-0.8,2-1.5
-              c0.3-0.3,0.5-0.6,0.7-0.9l46.3-50.1C427.7,57.5,427.7,54.2,425.9,52.1z"/>
-            <circle className="path" fill="green" stroke="#7DB0D5" strokeWidth="4"  cx="80.6" cy="80.6" r="62.1"/>
-            <polyline className="path" fill="none" stroke="#7DB0D5" strokeWidth="10" strokeLinecap="round" points="113,52.8 
-              74.1,108.4 48.2,86.4 "/>
-            <circle className="spin" fill="none" stroke="#7DB0D5" strokeWidth="4" strokeMiterlimit="10" strokeDasharray="12.2175,12.2175" cx="80.6" cy="80.6" r="73.9"/>
-          </svg>
-        </div>
-        <p>Thanks! order confirmation email has been sent to the customer !</p>
-      </div>
+         <div className = "order-summary">
+           <div className="content pure-u-1">
+            <Tabs
+              value={this.state.value}
+              onChange={this.handleChange}
+            >
+              <Tab label="Orders submitted" value="a" >
+                <div>
+                  <h2 style={styles.headline}>Controllable Tab A</h2>
+                  <div>
+                      {ordersAsCustomer.map(function(order){
+                        return <div key={order._id}>
+                                <Card
+                                  style={{marginBottom:'1em'}}
+                                >
+                                  <CardHeader
+                                    title={order.orderType + ' order with  ' + order.providerName}
+                                    subtitle={order.providerAddress}
+                                    actAsExpander={true}
+                                    showExpandableButton={true}
+                                  />
+                                  <CardText
+                                    style={{padding:'0px'}}
+                                  >
+                                      <Stepper activeStep={2} connector={<ArrowForwardIcon />}>
+                                        <Step>
+                                          <StepLabel style={{fontSize:'0.7em',top:'10px'}}>Submit order</StepLabel>
+                                        </Step>
+
+                                        <Step>
+                                          <StepLabel style={{fontSize:'0.7em'}}>Receive e-mail</StepLabel>
+                                        </Step>
+
+                                        <Step>
+                                          <StepLabel style={{fontSize:'0.7em'}}>Write Review</StepLabel>
+                                        </Step>
+                                      </Stepper>
+
+                                  </CardText>
+                                  <CardText expandable={true} style={{textAlign:'center'}}>
+                                    <table className="pure-table pure-table-horizontal" style={{margin:'0 auto'}}>
+                                      <thead>
+                                          <tr>
+                                              <th>#</th>
+                                              <th>Item</th>
+                                              <th>Quantity</th>
+                                              <th>Price</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                        {getResolvedItems(order)}
+                                      </tbody>
+                                    </table>
+                                  </CardText>
+                                </Card>
+                               </div>
+                      })}
+                  </div>
+                </div>
+              </Tab>
+              <Tab label="Orders Received" value="b">
+                <div>
+                  <h2 style={styles.headline}>Controllable Tab B</h2>
+                  <p>
+                    This is another example of a controllable tab. Remember, if you
+                    use controllable Tabs, you need to give all of your tabs values or else
+                    you wont be able to select them.
+                  </p>
+                </div>
+              </Tab>
+            </Tabs>
+          </div>
+         </div>
       )
   }
 })
 
 OrderAction.propTypes = {
-  counter     : React.PropTypes.number.isRequired,
-  doubleAsync : React.PropTypes.func.isRequired,
-  increment   : React.PropTypes.func.isRequired
+  globalState:React.PropTypes.object.isRequired,
+  ordersAsCustomer:React.PropTypes.object.isRequired,
+  ordersAsProvider:React.PropTypes.object.isRequired,
+  fetchSecuredData:React.PropTypes.func.isRequired
 }
 export default OrderAction;
