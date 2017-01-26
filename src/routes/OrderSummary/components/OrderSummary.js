@@ -87,17 +87,13 @@ const OrderAction = React.createClass({
                                   <CardText
                                     style={{padding:'0px'}}
                                   >
-                                      <Stepper activeStep={2} connector={<ArrowForwardIcon />}>
+                                      <Stepper activeStep={(order.mailSentToCustomer)?2:1} connector={<ArrowForwardIcon />}>
                                         <Step>
                                           <StepLabel style={{fontSize:'0.7em',top:'10px'}}>Submit order</StepLabel>
                                         </Step>
 
                                         <Step>
-                                          <StepLabel style={{fontSize:'0.7em'}}>Receive e-mail</StepLabel>
-                                        </Step>
-
-                                        <Step>
-                                          <StepLabel style={{fontSize:'0.7em'}}>Write Review</StepLabel>
+                                          <StepLabel style={{fontSize:'0.7em'}}>Received confirmation e-mail</StepLabel>
                                         </Step>
                                       </Stepper>
 
