@@ -69,9 +69,9 @@ const OrderAction = React.createClass({
               value={this.state.value}
               onChange={this.handleChange}
             >
-              <Tab label="Orders submitted" value="a" >
+              <Tab label="Orders" value="a" >
                 <div>
-                  <h2 style={styles.headline}>Controllable Tab A</h2>
+                  <h2 style={styles.headline}>Your orders</h2>
                   <div>
                       {ordersAsCustomer.map(function(order){
                         return <div key={order._id}>
@@ -93,7 +93,7 @@ const OrderAction = React.createClass({
                                         </Step>
 
                                         <Step>
-                                          <StepLabel style={{fontSize:'0.7em'}}>Received confirmation e-mail</StepLabel>
+                                          <StepLabel style={{fontSize:'0.7em'}}>Receive confirmation e-mail</StepLabel>
                                         </Step>
                                       </Stepper>
 
@@ -119,7 +119,7 @@ const OrderAction = React.createClass({
                   </div>
                 </div>
               </Tab>
-              <Tab label="Orders Received" value="b">
+              <Tab label="Received" value="b">
                 <div>
                   <h2 style={styles.headline}>Controllable Tab B</h2>
                   <p>
