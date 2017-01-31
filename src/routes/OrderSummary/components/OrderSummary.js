@@ -1,6 +1,7 @@
 import React from 'react';
 import './orderSummary.scss';
 import {postCall} from 'utils/httpUtils/apiCallWrapper';
+import CheckMark from 'components/CheckMark'
 import {Tabs, Tab} from 'material-ui/Tabs';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import {
@@ -28,6 +29,7 @@ const OrderAction = React.createClass({
     }
   },
   componentDidMount() {
+    console.log(this.props);
     const userId = this.props.params.userId;
     //get to know the user ... customer/provider
     const {userType} = this.props.globalState.core.get('user').toJS();
@@ -62,9 +64,22 @@ const OrderAction = React.createClass({
         }
         return itemRows;
     }
+    let queryObj = this.props.location.query;
     return(
          <div className = "order-summary">
            <div className="content pure-u-1">
+           {
+            (queryObj.neworder && queryObj.orderId)?
+              <div style={{ marginBottom:'1em'}}>
+                <CheckMark style={{display:'inline', width:'40%'}}/>
+                <span>
+                  Your order has been submitted to provider. Please wait for a confirmation email after the order is approved by the provider
+                </span>
+              </div>
+              :
+              undefined
+           }
+            
             <Tabs
               value={this.state.value}
               onChange={this.handleChange}
@@ -76,7 +91,7 @@ const OrderAction = React.createClass({
                       {ordersAsCustomer.map(function(order){
                         return <div key={order._id}>
                                 <Card
-                                  style={{marginBottom:'1em'}}
+                                  style={{marginBottom:'1em',border:(order._id === queryObj.orderId)? '1px solid tomato':'inherit'}}
                                 >
                                   <CardHeader
                                     title={order.orderType + ' order with  ' + order.providerName}
@@ -87,15 +102,27 @@ const OrderAction = React.createClass({
                                   <CardText
                                     style={{padding:'0px'}}
                                   >
-                                      <Stepper activeStep={(order.mailSentToCustomer)?2:1} connector={<ArrowForwardIcon />}>
-                                        <Step>
-                                          <StepLabel style={{fontSize:'0.7em',top:'10px'}}>Submit order</StepLabel>
-                                        </Step>
+                                    <CardText>
+                                    {
+                                      (order.mailSentToCustomer)?
+                                      <div>
+                                        Status: Confirmed, please visit <a href={'/providerProfile/'+order._providerId}> provider page</a> to leave a review
+                                      </div>
+                                      :
+                                      <div>
+                                       Status: Awaiting confirmation from provider
+                                      </div>
+                                    }
+                                    </CardText>
+                                    <Stepper activeStep={(order.mailSentToCustomer)?2:1} connector={<ArrowForwardIcon />}>
+                                      <Step>
+                                        <StepLabel style={{fontSize:'0.7em',top:'10px'}}>Submit order</StepLabel>
+                                      </Step>
 
-                                        <Step>
-                                          <StepLabel style={{fontSize:'0.7em'}}>Receive confirmation e-mail</StepLabel>
-                                        </Step>
-                                      </Stepper>
+                                      <Step>
+                                        <StepLabel style={{fontSize:'0.7em'}}>Receive confirmation e-mail</StepLabel>
+                                      </Step>
+                                    </Stepper>
 
                                   </CardText>
                                   <CardText expandable={true} style={{textAlign:'center'}}>

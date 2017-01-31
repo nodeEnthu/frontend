@@ -11,12 +11,16 @@ import Snackbar from 'material-ui/Snackbar';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import TimeInput from 'react-time-input';
 import { securedPostCall} from 'utils/httpUtils/apiCallWrapper';
-import { CUISINE_TYPES} from './../../routes/Search/constants/searchFilters'
+import { CUISINE_TYPES} from './../../routes/Search/constants/searchFilters';
+import {daysOfTheWeek} from './constants';
 import ImageUploader from 'components/ImageUploader'
 import s3ImageUpload from 'utils/uploader/s3ImageUpload';
-import Spinner from 'react-spinkit'
+import Spinner from 'react-spinkit';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import moment from 'moment';
 import * as actions from 'layouts/CoreLayout/coreReducer';
+import Select from 'react-select';
+import Checkbox from 'material-ui/Checkbox';
 
 const maxCount = 100;
 
@@ -27,8 +31,10 @@ const FoodItemEntryForm= React.createClass({
         // check whether its an edit to an already present provider to prefil the form
         if(this.props.params.id){
             this.props.fetchData('/api/foodItem/'+this.props.params.id , 'foodItemCall','FOOD_ITEM')
-                .then((res)=>{
-                });
+        }
+        let {serviceDate,oneTime} = this.props.foodItemEntryForm.toJS();
+        if(oneTime,serviceDate){
+            this.changeStoreTimeAndDateVals(serviceDate,'serviceDate');
         }
     },
     componentWillUnmount() {
@@ -45,18 +51,43 @@ const FoodItemEntryForm= React.createClass({
     addTimeOffset(orignalDate){
         return new Date(orignalDate.getTime()+orignalDate.getTimezoneOffset()*60000) ;
     },
-    changeStoreTimeAndDateVals(date, storeKey){
+
+    changeStoreTimeAndDateVals(date, storeKey,isInputChecked){
+        let storeVal = date;
+        let {availability,oneTime} = this.props.foodItemEntryForm.toJS();
+        if(storeKey === 'availability' ){
+            availability = availability || [];
+            if(isInputChecked === false){
+                availability.splice(availability.indexOf(storeVal),1);
+            }
+            else{
+                if(availability.indexOf(storeVal) === -1) { availability.push(storeVal);}
+            }
+            storeVal = availability;
+        }
+        console.log(storeVal);
         this.props.addFoodItemInfo({
             storeKey: storeKey,
-            payload: date
-        })
+            payload: storeVal
+        });
+        if(storeKey === 'dateRangeStartDate'){
+            this.props.addFoodItemInfo({
+                storeKey: 'dateRangeStopDate',
+                payload: moment(storeVal).add(7,'days').toDate()
+            })
+        }
         if(storeKey === 'serviceDate'){
             this.props.addFoodItemInfo({
                 storeKey: 'placeOrderBy',
-                payload: date
-            })
+                payload: storeVal
+            });
+            this.props.addFoodItemInfo({
+                storeKey: 'availability',
+                payload: [storeVal]
+            });
         }
     },
+
     daysBeforeOrderDate(referenceDate,days){
         return moment(referenceDate).subtract(days, "days").toDate();
     },
@@ -91,6 +122,21 @@ const FoodItemEntryForm= React.createClass({
         })
     },
     toggleFlags(stateKeyName) {
+        if(stateKeyName ==="oneTime"){
+            let {serviceDate,oneTime} = this.props.foodItemEntryForm.toJS();
+            // that means it is being turned into false
+            if(oneTime === true){
+                this.props.addFoodItemInfo({
+                    storeKey: 'availability',
+                    payload: []
+                })
+            } else{
+                this.props.addFoodItemInfo({
+                    storeKey: 'availability',
+                    payload: [serviceDate]
+                });
+            }
+        }
         this.props.addFoodItemInfo({
             storeKey: stateKeyName,
             payload: !this.props.foodItemEntryForm.get(stateKeyName)
@@ -174,6 +220,12 @@ const FoodItemEntryForm= React.createClass({
         });
         this.setState({imgBlob:blob, fileConfig:fileConfig});
     },
+    selectDaysInRange(selections){
+        this.props.addFoodItemInfo({
+            storeKey:'availability',
+            payload:selections
+        });
+    },
     formSubmit() {
         if (this.validateForm()) {
             let self = this;
@@ -213,7 +265,6 @@ const FoodItemEntryForm= React.createClass({
                 .then(function(response) {
                     // if its a provider entry stage 
                     if(self.props.mode ==="PROVIDER_ENTRY"){
-                        console.log(response.data);
                         self.props.dispatch(actions.userFoodItemUpdate(response.data._id));
                     }
                     // open the snackbar
@@ -230,17 +281,22 @@ const FoodItemEntryForm= React.createClass({
         }
     },
     render() {
-        let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage} = this.props.foodItemEntryForm.toJS();
+        let self = this;
+        let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg,oneTime,availability,dateRangeStartDate,dateRangeStopDate, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage} = this.props.foodItemEntryForm.toJS();
+        console.log(oneTime, availability);
         let showSpinner = false;
         if(this.props.spinner){
             let {foodItemEntrySpinner} = this.props.spinner.toJS();
             showSpinner = (foodItemEntrySpinner)? true:false;
         }
         serviceDate = (serviceDate)? new Date(serviceDate): new Date();
+        // this is done as the material ui date picker saves time in this Sat Jan 28 2017 00:00:00 GMT-0800 (PST) format ..
         serviceDate =  this.addTimeOffset(serviceDate);
         placeOrderBy = (placeOrderBy)? new Date(placeOrderBy): new Date();
+        dateRangeStartDate = (dateRangeStartDate)? new Date(dateRangeStartDate): new Date();
+        dateRangeStopDate = (dateRangeStopDate)? new Date(dateRangeStopDate): new Date();
         return (
-            (serviceDate)?
+            (serviceDate && oneTime!= undefined)?
             <div className="food-item-entry">
                 <div className="is-center">
                     <ImageUploader
@@ -294,9 +350,69 @@ const FoodItemEntryForm= React.createClass({
                                 />
                                 <span className = "error-message">{(priceErrorMsg)?'*'+priceErrorMsg:undefined}</span>
                             </div>
-                            <div>
-                                <div className = "pure-u-1 pure-u-md-1-2">
-                                    <label>*Order ready date</label>
+                            <legend></legend>
+                            <div className="pure-u-1">
+                                <label>This food item is:</label>
+                                <RadioButtonGroup name="foodOptions" 
+                                    valueSelected={(oneTime!= undefined)? oneTime.toString() : "true"}
+                                    onChange={(event)=>this.toggleFlags('oneTime')}
+                                >
+                                  <RadioButton
+                                    value="true"
+                                    label="One time"
+                                  />
+                                  <RadioButton
+                                    value="false"
+                                    label="Recurring"                                    
+                                  />
+                                </RadioButtonGroup>
+                            </div>
+                           
+                            {   (oneTime)?
+                                <div>
+                                    <div className = "pure-u-1 pure-u-md-1-2">
+                                        <label>*Order ready date</label>
+                                            <DatePicker
+                                                container="inline"
+                                                className="width-max"
+                                                name="serviceDate"
+                                                textFieldStyle={{width:'100%'}}
+                                                inputStyle={{marginTop:'0px',height:'2.25em',border: '1px solid #ccc',boxShadow: 'inset 0 1px 3px #ddd',padding: '.5em .6em'}}
+                                                underlineStyle={{display: 'none'}}
+                                                hintText=""
+                                                autoOk={true}
+                                                value={serviceDate}
+                                                onBlur={this.handleChange} 
+                                                onFocus={this.handleFocus}
+                                                onTouchTap={(event)=>event.preventDefault()}
+                                                onChange={(event,date)=>this.changeStoreTimeAndDateVals(date,'serviceDate')}
+                                                formatDate={(date)=> date.toDateString()}
+                                            />
+                                            <span className = "error-message">{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
+                                    </div>
+                                    <div className = "pure-u-1 pure-u-md-1-2" >
+                                        <label>People can order</label>
+                                        <select id="order-by-date" 
+                                            name="placeOrderBy"
+                                            className="width-max"
+                                            onBlur={this.handleChange} 
+                                            onFocus={this.handleFocus}
+                                            onChange={this.changeStoreVal}
+                                            value={placeOrderBy}
+                                        >
+                                            <option value={serviceDate}>Same Day</option>
+                                            <option value={this.daysBeforeOrderDate(serviceDate,1)}>Atleast 1 day before</option>        
+                                            <option value={this.daysBeforeOrderDate(serviceDate,2)}>Atleast 2 days before</option>     
+                                            <option value={this.daysBeforeOrderDate(serviceDate,3)}>Atleast 3 days before</option>
+                                        </select>
+                                        <span className = "error-message">{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
+                                    </div>
+                                </div>
+                                :
+                                <div>
+                                    <legend>Select a range (maximum one week)</legend>
+                                    <div className = "pure-u-1-2">
+                                        <label>*from</label>
                                         <DatePicker
                                             container="inline"
                                             className="width-max"
@@ -306,34 +422,34 @@ const FoodItemEntryForm= React.createClass({
                                             underlineStyle={{display: 'none'}}
                                             hintText=""
                                             autoOk={true}
-                                            value={serviceDate}
+                                            value={dateRangeStartDate}
                                             onBlur={this.handleChange} 
                                             onFocus={this.handleFocus}
                                             onTouchTap={(event)=>event.preventDefault()}
-                                            onChange={(event,date)=>this.changeStoreTimeAndDateVals(date,'serviceDate')}
+                                            onChange={(event,date)=>this.changeStoreTimeAndDateVals(date,'dateRangeStartDate')}
                                             formatDate={(date)=> date.toDateString()}
                                         />
                                         <span className = "error-message">{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
-                                </div>
-                                <div className = "pure-u-1 pure-u-md-1-2" >
-                                    <label>People can order</label>
-                                    <select id="order-by-date" 
-                                        name="placeOrderBy"
-                                        className="width-max"
-                                        onBlur={this.handleChange} 
-                                        onFocus={this.handleFocus}
-                                        onChange={this.changeStoreVal}
-                                        value={placeOrderBy}
-                                    >
-                                        <option value={serviceDate}>Same Day</option>
-                                        <option value={this.daysBeforeOrderDate(serviceDate,1)}>Atleast 1 day before</option>        
-                                        <option value={this.daysBeforeOrderDate(serviceDate,2)}>Atleast 2 days before</option>     
-                                        <option value={this.daysBeforeOrderDate(serviceDate,3)}>Atleast 3 days before</option>
-                                    </select>
-                                    <span className = "error-message">{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
-                                </div>
-                            </div> 
-                       
+                                    </div>
+                                    <div className = "pure-u-1-2">
+                                        <label>*to</label>
+                                        <input type="text"  className="pure-u-1" placeholder="*to" name="name" value={dateRangeStopDate.toDateString()} disabled={true}
+                                        />                                   
+                                    </div>
+                                    <label> Select dates</label>
+                                    {
+                                        daysOfTheWeek(dateRangeStartDate).map(function(dayOfWeek,index){
+                                            return <Checkbox
+                                                key={index}
+                                                value={dayOfWeek.value}
+                                                label={dayOfWeek.label}
+                                                defaultChecked = {availability.indexOf(dayOfWeek.value)>-1}
+                                                onCheck={(event,isInputChecked)=>{self.changeStoreTimeAndDateVals(event.target.value,'availability',isInputChecked)}}
+                                            />
+                                        })
+                                    }
+                                </div>  
+                            }
                             <div>
                                 <div className = "pure-u-1 pure-u-md-1-2">
                                     <label>Pick-up start time (hh:mm)</label>

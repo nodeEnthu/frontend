@@ -253,7 +253,7 @@ const ProviderEntryForm = React.createClass({
                             <p>
                                 Choose from one of the following privacy options
                             </p>
-                            <RadioButtonGroup name="shipSpeed" 
+                            <RadioButtonGroup name="addressOptions" 
                                 defaultSelected={includeAddressInEmail.toString()}
                                 onChange={(event)=>this.toggle('includeAddressInEmail')}
                             >

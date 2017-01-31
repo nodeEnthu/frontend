@@ -1,12 +1,9 @@
-.counter {
-  font-weight: bold;
-}
-
-.counter--green {
-  composes: counter;
-  color: rgb(25,200,25);
-}
-
-.counterContainer {
-  margin: 1em auto;
+.order-submit {
+    .move-center , .circle-wrapper {
+        margin: 0 auto;
+        text-align: center;
+    }
+    .circle-wrapper {
+    	margin:1em auto;
+    }
 }

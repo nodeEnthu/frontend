@@ -3,6 +3,7 @@ import './foodItemInProviderProfile.scss'
 import RaisedButton from 'material-ui/RaisedButton';
 import StarRatingComponent from 'react-star-rating-component';
 import { Link } from 'react-router';
+import moment from 'moment';
 
 const FoodItemInProviderProfile = React.createClass({
   render(){
@@ -39,8 +40,10 @@ const FoodItemInProviderProfile = React.createClass({
                           </tr>
                           <tr>
                               <td className="reduce-padding"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></td>
-                              <td className ="item-details">ready on : </td>
-                              <td className = "item-details">{new Date(foodItem.serviceDate).toDateString()}</td>
+                              <td className ="item-details">ready on:</td>
+                              <td className = "item-details">{foodItem.availability.map(function(date){
+                                return moment(date).format("dd, MMM Do")+', ';
+                              })}</td>
                           </tr>
                           <tr>
                               <td className="reduce-padding">

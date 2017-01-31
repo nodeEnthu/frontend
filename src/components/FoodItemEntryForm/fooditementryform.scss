@@ -21,6 +21,11 @@
     .pure-override-letter-spacing {
         letter-spacing: normal;
     }
+    .Select-input input {
+        border: none;
+        box-shadow: none;
+    }
+
     input:required:focus {
         border: normal;
         outline: none;

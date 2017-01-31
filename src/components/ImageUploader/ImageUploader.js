@@ -54,7 +54,6 @@ class ImageUploader extends React.Component {
             EXIF.getData(img,function(){
               let degree, 
                 cw = img.width, ch = img.height, cx = 0, cy = 0;
-              console.log(EXIF.getTag(this,'Orientation'));
               switch(EXIF.getTag(this,'Orientation')){  
                 case 6:
                   degree = 90;
@@ -107,7 +106,6 @@ class ImageUploader extends React.Component {
 
   render() {
     let {imgUploaded,imagePreviewUrl} = this.state;
-    console.log(imgUploaded,imagePreviewUrl);
     let $imagePreview = (imagePreviewUrl)? (<img style={{width:'100%'}}src={imagePreviewUrl} />) : (<div className="previewText"></div>) ;
     return (
       <div className="previewComponent">

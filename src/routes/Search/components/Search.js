@@ -319,7 +319,11 @@ const Search = React.createClass({
 											    			order by : {new Date(foodItem.placeOrderBy).toDateString()}  
 											    		</div>
 											    		<div>
-											    			order ready : {new Date(foodItem.serviceDate).toDateString()}  
+											    			order ready : {
+											    							foodItem.availability.map(function(date){
+											                                	return moment(date).format("dd, MMM Do")+', ';
+											                              	})
+											    						}  
 											    		</div>
 											    		<div>
 											    			pick-up time: 11AM to 6PM

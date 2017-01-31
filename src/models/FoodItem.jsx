@@ -1,5 +1,5 @@
 import {Map} from 'immutable'
-
+import moment from 'moment'
 export const FoodItem = Map({
             name:'',
             imgUrl:'',
@@ -10,6 +10,10 @@ export const FoodItem = Map({
             price:'',
             priceErrorMsg:'',
             descriptionErrorMsg:'', 
+            oneTime:true,
+            availability:[],
+            dateRangeStartDate:new Date(),
+            dateRangeStopDate:moment(new Date()).add(7,'days').toDate(),
             placeOrderBy:new Date(), 
             placeOrderByErrorMsg:'', 
             serviceDate:new Date(), 
