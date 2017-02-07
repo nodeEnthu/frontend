@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import {providerFoodItemCheckout,updateCheckedOutQty,deleteCheckedOutItem,removeAllCheckedOutItems,selectItemForReview,selectStarRating,submitTypedReview,reviewError,openModal,flushOutStaleReviewData} from './../modules/providerProfilePage'
+import {providerFoodItemCheckout,updateCheckedOutQty,deleteCheckedOutItem,removeAllCheckedOutItems,selectItemForReview,selectStarRating,submitTypedReview,reviewError,openModal,flushOutStaleReviewData,flushProviderData} from './../modules/providerProfilePage'
 import {fetchMayBeSecuredData,postSecuredData} from 'utils/actionUtils/defaultHttpActions';
 import {openLoginModal} from './../../../layouts/CoreLayout/coreReducer';
 
@@ -27,7 +27,8 @@ const mapDispatchtoProps = {
   openLoginModal,
   reviewError,
   openModal,
-  flushOutStaleReviewData
+  flushOutStaleReviewData,
+  flushProviderData
 }
 
 const mapStateToProps = (state) => ({

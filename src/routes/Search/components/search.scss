@@ -51,14 +51,15 @@
         box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
     }
     .provider-img-section {
-        width: 150px;
-        height: 150px;
+        min-width: 120px;
+        min-height: 120px;
         display: inline-block;
     }
+
     .img-avatar {
         margin: 0 auto;
-        width: 150px;
-        height: 150px;
+        min-width: 120px;
+        min-height: 120px;
         position: relative;
         overflow: hidden;
         text-align: center;
@@ -74,10 +75,9 @@
         }
     }
     .provider-info-section {
+        padding:1em;
         display: inline-block;
         vertical-align: top;
-        margin-left: 10px;
-        margin-right: 10px;
         font-size: 14px;
     }
     .provider-star-rating {

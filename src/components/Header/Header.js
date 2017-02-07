@@ -19,17 +19,26 @@ export  class Header extends React.Component {
     }
     render() {
         const { globalState } = this.props;
-        const {img} = globalState.core.get('user').toJS();
+        const {user} = globalState.core.toJS();
         return (
             <div className="header">
             <div className="home-menu pure-menu pure-menu-horizontal">
-              <span className="pure-menu-heading">fillurtummy</span>
+              <span className="pure-menu-heading">fut</span>
               <ul className="pure-menu-list">
                   <li className="pure-menu-item">
                     <IndexLink to='/' className="pure-menu-link">
                       Home
                     </IndexLink>
                   </li>
+                  {(globalState.core.get('token').length>0 && user&& user.name)?
+                    <li className="pure-menu-item">
+                      <Link to='/search' className="pure-menu-link">
+                        Search
+                      </Link>
+                    </li>
+                    :
+                    undefined
+                  }
                   {(globalState.core.get('token').length>0 )?
                     <li className="pure-menu-item">
                         <a className="pure-menu-link"
@@ -42,7 +51,7 @@ export  class Header extends React.Component {
                   <li className="pure-menu-item">
                     {(globalState.core.get('token').length>0 )?
                       <div>
-                        <img  src={img} 
+                        <img  src={user.img} 
                               style = {{
                                 borderRadius:24+'px',
                                 width:'40px',

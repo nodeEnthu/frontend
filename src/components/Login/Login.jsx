@@ -12,7 +12,6 @@ const customStyles = {
 
 };
 
-
 var Login = React.createClass({
     openModal() {
         const { dispatch } = this.props;
@@ -24,21 +23,35 @@ var Login = React.createClass({
     },
     componentDidMount() {
     },
+    contextTypes: {
+      router: React.PropTypes.object.isRequired
+    },
     successfullLogin(response) {
-        const {globalState,dispatch } = this.props;
-        const {userAddressSearch} = (globalState && globalState.core)?globalState.core.toJS():undefined;
-        if(userAddressSearch){
-          response.userAddressSearch = userAddressSearch;
-        }
-        postCall('/api/users/signUp', JSON.stringify(response))
-            .then(function(result) {
-                if (result.data.token) {
-                    dispatch(actions.addToken(result.data.token));
-                    dispatch(actions.addUser(result.data.user));
-                    dispatch(actions.userLoggedIn(true));
-                    sessionStorage.setItem('token', result.data.token);
-                }
-            })
+      let self = this;
+      const {globalState,dispatch } = this.props;
+      const {userAddressSearch} = (globalState && globalState.core)?globalState.core.toJS():undefined;
+      if(userAddressSearch){
+        response.userAddressSearch = userAddressSearch;
+      }
+      postCall('/api/users/signUp', JSON.stringify(response))
+          .then(function(result) {
+              let res = result.data;
+              if (res.token) {
+                  dispatch(actions.addToken(res.token));
+                  dispatch(actions.addUser(res.user));
+                  dispatch(actions.userLoggedIn(true));
+                  sessionStorage.setItem('token', res.token);
+                  if(self.context.router.location.pathname === '/'){
+                  // now based on the userType take an action
+                    if(res.user.userType === 'consumer'){
+                      self.context.router.push('/search');
+                    }else{
+                      self.context.router.push('/providerProfile/'+res.user._id);
+                    }
+                  }
+                  
+              }
+          })
     },
     successfullFbLogin(response){
        response.provider = 'fb';

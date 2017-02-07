@@ -28,7 +28,7 @@ const OrderSubmitModal = React.createClass({
       showOrderSubmitSpinner:true
     });
     // (url_to_call, state_property_to_change,action_name_to_be_appended)
-    this.props.postSecuredData('/api/order/order-submit','orderSubmit','ORDER_SUBMIT',this.checkOutOrderDetails)
+    this.props.postSecuredData('/api/order/order-submit','submitOrder','ORDER_SUBMIT',this.checkOutOrderDetails)
       .then(function(response){
         let orderId = (response.payload.data &&response.payload.data.data && response.payload.data.data.message )?response.payload.data.data.message._id :undefined;
         self.setState({
@@ -93,6 +93,7 @@ const OrderSubmitModal = React.createClass({
                 <div className="order-header">
                   Order summary
                 </div>
+                <hr style={{margin:"1em 0"}}/>
                 <div className="pure-u-1-2">
                   <div className="order-address-heading">Deliver to:</div>
                   <div>{this.checkOutOrderDetails.customerName}</div>
@@ -106,7 +107,7 @@ const OrderSubmitModal = React.createClass({
                   <div className="delivery-box">{this.checkOutOrderDetails.providerAddress}</div>
                 </div>
               </div>
-              <table className="pure-table pure-table-horizontal">
+              <table className="pure-table pure-table-horizontal" style={{margin: "0px auto", marginTop:"1em"}}>
                 <thead>
                     <tr>
                         <th>#</th>

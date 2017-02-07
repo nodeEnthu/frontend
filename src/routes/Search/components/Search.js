@@ -36,9 +36,27 @@ const Search = React.createClass({
     },
     // defaults for the first time you load the page 
     componentDidMount() {
-        this.props.flushOutStaleData();       
+    	const {place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
+    	const user = this.props.globalState.core.get('user').toJS();
+    	// case: a LOGGED IN (guest will always have an address) person has came in without address
+    	if(!place_id && user.name){
+    		// two different cases for type of person
+    		if (user.userType === 'consumer') {
+                if (user.loc ) {
+                    this.props.userAddressSearchChange(user.loc.searchText);
+        			this.props.userAddressUpdatePlaceId(user.loc.place_id);
+                } 
+            } else {
+                // its a provider trying to look for food
+                this.props.userAddressSearchChange(user.userSeachLocations[user.deliveryAddressIndex].searchText);
+        		this.props.userAddressUpdatePlaceId(user.userSeachLocations[user.deliveryAddressIndex].place_id);
+            }
+    	}
         let combinedQuery = this.createQuery();
         this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery);
+    },
+    componentWillUnmount() {
+    	this.props.flushOutStaleData();
     },
     loadMore() {
        	let newPageNum = this.state.pageNum + 1;
@@ -271,15 +289,15 @@ const Search = React.createClass({
 					<div className="pure-g">
 					{	(resolvedData)? 
 								resolvedData.map(function(foodItem,index){
-									return 	<div key={index} className="pure-u-1 pure-u-md-1-3"
-												onClick={(event)=>self.goToProvider(event,foodItem)}	>
-												<div className="provider-profile-wrapper">
-											    	<div className="provider-img-section">
+									return 	<div key={index} className="pure-u-1 pure-u-md-1-3 provider-profile-wrapper"
+												onClick={(event)=>self.goToProvider(event,foodItem)}>
+												<div>
+											    	<div className="pure-u-2-5 provider-img-section">
 											    		<div className="img-avatar">
 											    			<img src={foodItem.imgUrl}/>
 											    		</div>
 											    	</div>
-											    	<div className="provider-info-section">
+											    	<div className="pure-u-3-5 provider-info-section">
 											    		<div>{foodItem.name}</div>
 											    		<div>
 											    			<div className="provider-star-rating">
@@ -320,8 +338,11 @@ const Search = React.createClass({
 											    		</div>
 											    		<div>
 											    			order ready : {
-											    							foodItem.availability.map(function(date){
-											                                	return moment(date).format("dd, MMM Do")+', ';
+											    							foodItem.availability.map(function(date,index){
+											    								if(foodItem.availability.length != index+1){
+											    									return moment(date).format("dd, MMM Do")+' | ';
+											    								} else return moment(date).format("dd, MMM Do");
+											                               	
 											                              	})
 											    						}  
 											    		</div>

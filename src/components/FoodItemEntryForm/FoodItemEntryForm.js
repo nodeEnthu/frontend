@@ -65,7 +65,6 @@ const FoodItemEntryForm= React.createClass({
             }
             storeVal = availability;
         }
-        console.log(storeVal);
         this.props.addFoodItemInfo({
             storeKey: storeKey,
             payload: storeVal

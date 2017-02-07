@@ -13,7 +13,8 @@ const HomeView = React.createClass({
     getInitialState() {
         return {
             fetchingAddresses: false,
-            showBackDrop:false
+            showBackDrop:false,
+            showAddressError:false
         };
     },
     contextTypes: {
@@ -26,23 +27,36 @@ const HomeView = React.createClass({
     	this.props.userAddressSearchChange(suggestion.address);
         this.props.userAddressUpdatePlaceId(suggestion.place_id);
     },
+    checkAddress(){
+        const {place_id,searchText} = this.props.globalState.core.get('userAddressSearch').toJS();
+        let validAddress = (place_id &&searchText)? true:false;
+        return validAddress;
+    },
     goToPage(page) {
     	let self = this;
     	this.state.showBackDrop = true;
         if (page === 'search') {
-        	if(this.props.globalState.core.get('userLoggedIn')){
-        		const {searchText,place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
-        		//register this at a new location if possible as the user needs to be logged in for this
-           		// register the address as most recently used
-           		securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
-            		.then(function(result){
-            			self.state.showBackDrop = false;
-            			self.context.router.push(page);
-            		}); 
-        	} else{
-        		// user is not logged in ... add it to cookie so that it is saved in the session and we dont make another call
-            	this.context.router.push(page);
-        	}
+            let validAddress = this.checkAddress();
+            if(validAddress){
+                if(this.props.globalState.core.get('userLoggedIn')){
+                    const {searchText,place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
+                    //register this at a new location if possible as the user needs to be logged in for this
+                    // register the address as most recently used
+                    securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
+                        .then(function(result){
+                            self.state.showBackDrop = false;
+                            self.context.router.push(page);
+                        }); 
+                } else{
+                    // user is not logged in ... add it to cookie so that it is saved in the session and we dont make another call
+                    this.context.router.push(page);
+                }
+            }else{
+                this.setState({
+                    showAddressError:true
+                })
+            }
+
         } else {
             if(!this.props.globalState.core.get('userLoggedIn')){
                 this.props.openLoginModal();
@@ -63,7 +77,6 @@ const HomeView = React.createClass({
                         .then(function(response) {
                             self.props.userAddressSearchChange(response.data.address);
                             self.props.userAddressUpdatePlaceId(response.data.place_id);
-
                             self.setState({
                                 fetchingAddresses: false
                             })
@@ -79,6 +92,7 @@ const HomeView = React.createClass({
         }
     },
     render() {
+        let {showAddressError} = this.state;
         return (
             <div className="home">
 				<div className="splash-container pure-override-letter-spacing">
@@ -94,7 +108,12 @@ const HomeView = React.createClass({
 							        	userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
 							        	apiUrl = {'/api/locations/addressTypeAssist'}
 							        	getSuggestionValue={(suggestion)=>suggestion.address}
-							        	onChange = {(event, value)=>this.props.userAddressSearchChange(value.newValue)}
+							        	onChange = {(event, value)=>{
+                                                                        this.setState({
+                                                                            showAddressError:false
+                                                                        });
+                                                                        this.props.userAddressSearchChange(value.newValue)}
+                                                                    }
 							        	onSuggestionSelected = {this.onSuggestionSelected}
 							        />
 							        <IconButton
@@ -118,6 +137,12 @@ const HomeView = React.createClass({
                                                                                     }}
                                                                         />*/}
 							        <div className="is-center">
+                                        {
+                                            (showAddressError)?
+                                                <div>Please enter an address</div>
+                                                :
+                                                undefined
+                                        }
 							        	<button className="pure-button pure-button-primary"
 							        		onClick={()=>this.goToPage('search')}>
 							        		Get Started

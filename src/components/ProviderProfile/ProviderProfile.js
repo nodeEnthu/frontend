@@ -31,6 +31,11 @@ const ProviderProfile = React.createClass({
   componentWillMount() {
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
   },
+  componentWillUnmount() {
+    this.props.removeAllCheckedOutItems();
+    this.props.flushOutStaleReviewData();
+    this.props.flushProviderData();
+  },
   writeReviewModal(foodItem){
     // check whether user is logged in 
     if(this.props.globalState.core.get('userLoggedIn')){
@@ -95,9 +100,15 @@ const ProviderProfile = React.createClass({
     let currentItems=[] , pastItems=[], currentDate;
     if(data && data.foodItems){
       data.foodItems.forEach(function(foodItem){
-        if(moment(foodItem.serviceDate).isAfter(moment(), 'day') || moment(foodItem.serviceDate).isSame(moment(), 'day')){
-          currentItems.push(foodItem);
-        } else pastItems.push(foodItem);
+        let availability= foodItem.availability;
+        let foodItemAvailable = false;
+        for(let i=0; i < availability.length ; i++){
+          if(moment(availability[i]).isAfter(moment(), 'day') || moment(availability[i]).isSame(moment(), 'day')){
+            foodItemAvailable=true;
+            break;
+          }else foodItemAvailable=false;
+        }
+        (foodItemAvailable)?currentItems.push(foodItem): pastItems.push(foodItem);
       })
     }
     return (data && data.foodItems && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
@@ -105,7 +116,7 @@ const ProviderProfile = React.createClass({
           <div className="sidebar pure-u-1 pure-u-md-1-4">
             {
               (this.props.params.id === this.props.globalState.core.toJS().user._id)?
-                <div className="move-right">                   
+                <div>                   
                   <Link style={{color:'white'}}to={'/providers/'+data._id+'/edit'}>Edit profile</Link> 
                 </div>
                 :
@@ -157,8 +168,12 @@ const ProviderProfile = React.createClass({
                       return <div key={foodItem._id}>
                                 <FoodItemInProviderProfile
                                   userViewingOwnProfile={userViewingOwnProfile}
+                                  refreshPage= {this.refreshPage}
                                   checkOutItem = {self.checkOutItem}
                                   writeReviewModal = {self.writeReviewModal}
+                                  postSecuredData = {this.props.postSecuredData}
+                                  openModal = {this.props.openModal}
+                                  providerProfile = {this.props.providerProfile}
                                   foodItem={foodItem}
                                 />
                               </div>
@@ -176,8 +191,12 @@ const ProviderProfile = React.createClass({
                                 <FoodItemInProviderProfile
                                   userViewingOwnProfile={userViewingOwnProfile}
                                   checkOutItem = {self.checkOutItem}
+                                  refreshPage= {this.refreshPage}
                                   writeReviewModal = {self.writeReviewModal}
+                                  postSecuredData = {this.props.postSecuredData}
+                                  openModal = {this.props.openModal}
                                   foodItem={foodItem}
+                                  providerProfile = {this.props.providerProfile}
                                   pastItem={true}
                                 />
                               </div>
@@ -230,5 +249,6 @@ ProviderProfile.propTypes = {
   reviewError:React.PropTypes.func,
   actionName:React.PropTypes.string,
   mode:React.PropTypes.string,
-  flushOutStaleReviewData:React.PropTypes.func
+  flushOutStaleReviewData:React.PropTypes.func,
+  flushProviderData:React.PropTypes.func
 }

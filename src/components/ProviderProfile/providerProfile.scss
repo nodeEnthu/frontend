@@ -3,8 +3,8 @@
         text-decoration: none;
         color: rgb(61, 146, 201);
     }
-    .react-autosuggest__input{
-        width:100%;
+    .react-autosuggest__input {
+        width: 100%;
     }
     a:hover,
     a:focus {
@@ -47,6 +47,10 @@
     }
     .food-item {
         max-width: 100%;
+        max-height: 250px;
+    }
+    .past-food-item {
+        opacity: 0.2;
     }
     .checkout-details {
         margin-left: 20px;
@@ -90,13 +94,16 @@
     .post {
         position: relative;
         padding-bottom: 2em;
-        text-align:center;
+        text-align: center;
     }
     .cross-sign {
         display: none;
     }
     .move-right {
-        float: right;
+        position: absolute;
+        z-index: 9999;
+        top: 35%;
+        left: 35%;
     }
     .post:hover {
         .cross-sign {
@@ -146,6 +153,7 @@
         width: 70%;
     }
     .post-avatar {
+        position: relative;
         margin-top: 2em;
         border-radius: 5px;
         display: inline-block;
@@ -195,7 +203,7 @@
 
 @media (min-width: 48em) {
     .provider-profile {
-         display:flex;
+        display: flex;
         .content {
             padding: 2em 3em 0;
         }
@@ -208,6 +216,9 @@
         .profile-img {
             max-height: 100%;
             max-width: 100%;
+        }
+        .post-description {
+            padding-left: 1em;
         }
     }
 }

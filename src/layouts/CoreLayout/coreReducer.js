@@ -112,6 +112,8 @@ const initialState = Map({
         publishStage: 0,
         published: false,
         foodItemAddedInEntryMode:false,
+        loc:undefined,
+        deliveryAddressIndex:undefined,
         userType:'',
     }),
     loginModalOPen: undefined,
