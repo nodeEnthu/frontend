@@ -1,19 +1,39 @@
 import React from 'react'
 import './../ProviderProfile/providerProfile.scss'
+import './checkout.scss'
 import Scroll from 'react-scroll'
 import RaisedButton from 'material-ui/RaisedButton';
 import classNames from 'classnames';
 import OrderSubmitModal from 'components/OrderSubmitModal';
+import moment from 'moment';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import AsyncAutocomplete from 'components/AsyncAutocomplete'
+import {securedGetCall} from 'utils/httpUtils/apiCallWrapper';
+
+
 const Checkout = React.createClass({
   getInitialState() {
       return {
-         submitOrderModalOPen:false   
+         submitOrderModalOPen:false,
+         searchText:'',
+         searchTextError:'',
+         checkoutSubmitError:''   
       };
+  },
+  componentDidMount() {
+    this.setState({
+      pickup:true
+    });
   },
   changeStoreVal(event) {
     let foodItemId = event.target.name;
     let updatedQuantity = event.target.value
     this.props.updateCheckedOutQty(foodItemId,updatedQuantity);
+  },
+  toggleFlags(key){
+    this.setState({
+      pickup:!this.state.pickup
+    })
   },
   deleteCheckedOutItem(event){
     this.props.deleteCheckedOutItem(event.target.name);
@@ -21,8 +41,25 @@ const Checkout = React.createClass({
   checkOutItems(){
     this.props.openModal({storeKey:'orderSubmitModalOpen', openModal:true})
   },
+  onSuggestionSelected(event,{suggestion}){
+    this.props.userAddressSearchChange(suggestion.address);
+    this.props.userAddressUpdatePlaceId(suggestion.place_id);
+    // also register this address in the address book if the user is logged in
+    if(this.props.globalState.core.get('userLoggedIn')){
+      //register this at a new location if possible as the user needs to be logged in for this
+        // register the address as most recently used
+        if(suggestion.place_id){
+          securedGetCall('/api/locations/registerMostRecentSearchLocation',{address:suggestion.address,place_id:suggestion.place_id})
+            .then(function(result){
+              // dont do anything
+            });   
+        }
+    } 
+  },
   render(){
-    const {itemsCheckedOut} = this.props.providerProfile.toJS();
+    const {itemsCheckedOut,providerProfileCall} = this.props.providerProfile.toJS();
+    const {userAddressSearch} = this.props.globalState.core.toJS();
+    const user = providerProfileCall.data;
     let resolvedItemsCheckedOut= [];
     let grandTotal = 0;
     for(var key in itemsCheckedOut){
@@ -34,8 +71,56 @@ const Checkout = React.createClass({
     };
     let self= this;
     return (resolvedItemsCheckedOut && resolvedItemsCheckedOut.length)?
-          <div>
+          <div className="checkout">
             <div className="content-subhead">Your Order</div>
+            <div>
+              {
+                (user.doYouDeliverFlag && !user.pickUpFlag)?
+                <div>Your delivery order</div>:undefined
+              }
+              {
+                (!user.doYouDeliverFlag && user.pickUpFlag)?
+                <div>Your pick-up order</div>:undefined
+              }
+              {
+                (user.doYouDeliverFlag && user.pickUpFlag)?
+                <div>
+                  <label style={{display:'block',margin:"1em 0"}}>Order type :</label>
+                  <RadioButtonGroup name="foodOptions" 
+                      valueSelected={this.state.pickup.toString()}
+                      onChange={(event)=>this.toggleFlags('pickup')}
+                  >
+                    <RadioButton
+                      value="true"
+                      label="pick-up"
+                    />
+                    <RadioButton
+                      value="false"
+                      label="delivery"                                    
+                    />
+                  </RadioButtonGroup>
+                  <div>
+                  {
+                    (userAddressSearch.place_id)?
+                      undefined
+                      :
+                      <div>
+                        <div style= {{margin:"1em 0"}}>Please enter your {(this.state.pickup)? 'pick-up ':'delivery '} address</div>
+                        <AsyncAutocomplete  name={'searchText'}
+                                            userSearchText = {this.state.searchText}
+                                            apiUrl = {'/api/locations/addressTypeAssist'}
+                                            getSuggestionValue={(suggestion)=>suggestion.address}
+                                            onChange = {(event, value)=>this.setState({searchText:value.newValue})}
+                                            onSuggestionSelected = {this.onSuggestionSelected}
+                        />
+                      </div>
+                  }
+                  </div>
+                </div>
+                :
+                undefined
+              }
+            </div>
             {
               resolvedItemsCheckedOut.map(function(itemCheckedOut){
                 return <div key={itemCheckedOut._id}> 
@@ -43,7 +128,8 @@ const Checkout = React.createClass({
                             <form className="pure-form">
                               <div>
                                 <div className="post-avatar pure-u-md-2-5">
-                                  <img alt={itemCheckedOut.name} className = "food-item" src={itemCheckedOut.img}/>
+                                  <h2>{itemCheckedOut.name}</h2>
+                                  <img alt={itemCheckedOut.name} className = "food-item" src={itemCheckedOut.imgUrl}/>
                                 </div>
                                 <div className="pure-u-md-3-5">
                                   <div className="checkout-details">
@@ -52,9 +138,6 @@ const Checkout = React.createClass({
                                     >
                                       <img name={itemCheckedOut._id} src="/general/cancel.png"></img>
                                     </div> 
-                                    <header className="post-header">
-                                      <h2 className="post-title">{itemCheckedOut.name}</h2>
-                                    </header>
                                     <div className="post-description">
                                         <table className="pure-table remove-border">
                                           <tbody>
@@ -78,8 +161,16 @@ const Checkout = React.createClass({
                                               </tr>
                                               <tr>
                                                   <td className="reduce-padding"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></td>
-                                                  <td className = "item-details">ready on</td>
-                                                  <td className ="item-details">{new Date(itemCheckedOut.serviceDate).toDateString()}</td>
+                                                  <td className = "item-details">ready-date</td>
+                                                  <td className ="item-details">
+                                                    <select>
+                                                      {itemCheckedOut.availability.map(function(availableDate,index){
+                                                        return  <option key={index}>
+                                                                  {moment(availableDate).format("dd, MMM Do")}
+                                                                </option>
+                                                      })}
+                                                    </select>
+                                                  </td>
                                               </tr>
                                               <tr>
                                                   <td className="reduce-padding">
@@ -88,13 +179,13 @@ const Checkout = React.createClass({
                                                       <path d="M0 0h24v24H0z" fill="none"/>
                                                     </svg>
                                                   </td>
-                                                  <td className = "item-details">Price : </td>
+                                                  <td className = "item-details">price</td>
                                                   <td className = "item-details">{itemCheckedOut.price +' $'}</td>
                                               </tr>
                                               <tr>
                                                   <td className="reduce-padding"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/></svg></td>
                                                   <td className = "item-details">pick-up</td>
-                                                  <td className = "item-details">3PM - 6PM</td>
+                                                  <td className = "item-details">{itemCheckedOut.pickUpStartTime} - {itemCheckedOut.pickUpEndTime}</td>
                                               </tr>
                                           </tbody>
                                       </table>
@@ -108,15 +199,21 @@ const Checkout = React.createClass({
               })
             }
             <div style={{textAlign:"center"}}>
+            {
+              (!userAddressSearch.place_id)?
+              <div>Please enter address</div>:undefined
+            }
               <RaisedButton
                 primary={true}
-                style={{width:'40%'}}
+                label = {'Checkout - '+grandTotal+ '$'}
                 onClick={this.checkOutItems}
                 disableTouchRipple={true}
-              >{'Checkout (Grand total '+grandTotal+ '$)'}
+                disabled={(!userAddressSearch.place_id)?true:false}
+              >
               </RaisedButton>
             </div>
-            <OrderSubmitModal{... this.props}/>
+            <OrderSubmitModal{... this.props}
+              orderType={(this.state.pickup)?'Pickup':'Delivery'}/>
           </div>
           :
           <div></div>

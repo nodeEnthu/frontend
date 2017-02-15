@@ -29,7 +29,6 @@ const OrderAction = React.createClass({
     }
   },
   componentDidMount() {
-    console.log(this.props);
     const userId = this.props.params.userId;
     //get to know the user ... customer/provider
     const {userType} = this.props.globalState.core.get('user').toJS();
@@ -39,6 +38,7 @@ const OrderAction = React.createClass({
         userType:userType
       });
       this.props.fetchSecuredData('/api/order/'+userId+'/customer/get', 'ordersAsCustomer','ORDERS_AS_CUSTOMER')
+      this.props.fetchSecuredData('/api/order/'+userId+'/provider/get', 'ordersAsProvider','ORDERS_AS_PROVIDER')
     }
   },
   handleChange(value){
@@ -48,6 +48,8 @@ const OrderAction = React.createClass({
   },
   render(){
     const ordersAsCustomer = this.props.ordersAsCustomer.get('data');
+    const ordersAsProvider = this.props.ordersAsProvider.get('data');
+
     function getResolvedItems(order){
       let itemRows =[];
       let index = 0;
@@ -84,9 +86,9 @@ const OrderAction = React.createClass({
               value={this.state.value}
               onChange={this.handleChange}
             >
-              <Tab label="Orders" value="a" >
+              <Tab label="Placed" value="a" >
                 <div>
-                  <h2 style={styles.headline}>Your orders</h2>
+                  <h2 style={styles.headline}>Orders Placed</h2>
                   <div>
                       {ordersAsCustomer.map(function(order){
                         return <div key={order._id}>
@@ -148,12 +150,64 @@ const OrderAction = React.createClass({
               </Tab>
               <Tab label="Received" value="b">
                 <div>
-                  <h2 style={styles.headline}>Controllable Tab B</h2>
-                  <p>
-                    This is another example of a controllable tab. Remember, if you
-                    use controllable Tabs, you need to give all of your tabs values or else
-                    you wont be able to select them.
-                  </p>
+                  <h2 style={styles.headline}>Orders Received</h2>
+                  <div>
+                      {ordersAsProvider.map(function(order){
+                        return <div key={order._id}>
+                                <Card
+                                  style={{marginBottom:'1em',border:(order._id === queryObj.orderId)? '1px solid tomato':'inherit'}}
+                                >
+                                  <CardHeader
+                                    title={order.orderType + ' order with  ' + order.customerName}
+                                    subtitle={order.customerAddress}
+                                    actAsExpander={true}
+                                    showExpandableButton={true}
+                                  />
+                                  <CardText
+                                    style={{padding:'0px'}}
+                                  >
+                                    <CardText>
+                                    {
+                                      (order.mailSentToCustomer)?
+                                      <div>
+                                        Status: Confirmed ! 
+                                      </div>
+                                      :
+                                      <div>
+                                       Status: Please check your email to take action on this order
+                                      </div>
+                                    }
+                                    </CardText>
+                                    <Stepper activeStep={(order.mailSentToCustomer)?2:1} connector={<ArrowForwardIcon />}>
+                                      <Step>
+                                        <StepLabel style={{fontSize:'0.7em',top:'10px'}}>Submit order</StepLabel>
+                                      </Step>
+
+                                      <Step>
+                                        <StepLabel style={{fontSize:'0.7em'}}>Sent confirm/cancel email</StepLabel>
+                                      </Step>
+                                    </Stepper>
+
+                                  </CardText>
+                                  <CardText expandable={true} style={{textAlign:'center'}}>
+                                    <table className="pure-table pure-table-horizontal" style={{margin:'0 auto'}}>
+                                      <thead>
+                                          <tr>
+                                              <th>#</th>
+                                              <th>Item</th>
+                                              <th>Quantity</th>
+                                              <th>Price</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                        {getResolvedItems(order)}
+                                      </tbody>
+                                    </table>
+                                  </CardText>
+                                </Card>
+                               </div>
+                      })}
+                  </div>
                 </div>
               </Tab>
             </Tabs>

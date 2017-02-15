@@ -25,11 +25,15 @@ export  class Header extends React.Component {
             <div className="home-menu pure-menu pure-menu-horizontal">
               <span className="pure-menu-heading">fut</span>
               <ul className="pure-menu-list">
-                  <li className="pure-menu-item">
-                    <IndexLink to='/' className="pure-menu-link">
-                      Home
-                    </IndexLink>
-                  </li>
+                  {(globalState.core.get('token').length>0 && user&& user.name && user.userType==='provider')?
+                    undefined
+                    :
+                    <li className="pure-menu-item">
+                      <IndexLink to='/' className="pure-menu-link">
+                        Home
+                      </IndexLink>
+                    </li>
+                  }
                   {(globalState.core.get('token').length>0 && user&& user.name)?
                     <li className="pure-menu-item">
                       <Link to='/search' className="pure-menu-link">
@@ -40,11 +44,18 @@ export  class Header extends React.Component {
                     undefined
                   }
                   {(globalState.core.get('token').length>0 )?
-                    <li className="pure-menu-item">
-                        <a className="pure-menu-link"
-                          onClick = {this.removeToken}
-                          >Logout</a>
-                    </li>
+                    <div style={{display:'inline-block'}}>
+                      <li className="pure-menu-item">
+                        <Link to={'/user/'+user._id+'/order-summary'} className="pure-menu-link">
+                          Orders
+                        </Link>
+                      </li>
+                      <li className="pure-menu-item">
+                          <a className="pure-menu-link"
+                            onClick = {this.removeToken}
+                            >Logout</a>
+                      </li>
+                    </div>
                     :
                     undefined
                   }

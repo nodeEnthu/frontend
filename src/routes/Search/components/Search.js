@@ -12,18 +12,23 @@ import DatePicker from 'material-ui/DatePicker';
 import AsyncAutocomplete from 'components/AsyncAutocomplete';
 import { getCall,securedGetCall } from 'utils/httpUtils/apiCallWrapper';
 import moment from 'moment';
-
+export const CORRECTION_FACTOR = 1.2;
 
 const Search = React.createClass({
     getInitialState() {
         return {
             pageNum: 1,
             queryBaseUrl: '/api/query/providers',
-            searchActivated:false
+            searchActivated:false,
+            placeIdErrorMsg:''
         };
     },
     contextTypes: {
         router: React.PropTypes.object.isRequired
+    },
+    validatePlaceId(){
+    	let {place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
+    	return (place_id)? true:false;
     },
     filterCuisineOrDietType(valOrevent, cuisineOrDiet) {
         let selectedCuisineOrDiet = (valOrevent && valOrevent.target) ? valOrevent.target.alt : valOrevent;
@@ -96,7 +101,6 @@ const Search = React.createClass({
     },
     fetchQueryData() {
     	let combinedQuery = this.createQuery();
-    	//console.log("making the call with ",combinedQuery)
     	this.activateQueryButton(false);
         return this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery)
         	.then(function(response){
@@ -141,22 +145,26 @@ const Search = React.createClass({
         this.activateQueryButton(true);
     },
     activateQueryButton(val){
-    	this.setState({
-    		searchActivated:val
-    	})
+    	if(this.validatePlaceId()){
+    		this.setState({searchActivated:val});
+    		this.setState({placeIdErrorMsg:null});
+    	}else{
+    		this.setState({searchActivated:false});
+    		this.setState({'placeIdErrorMsg':'Please select from one of the suggested values'})
+    	}
     },
     goToProvider(event,foodItem){
     	this.context.router.push('/providerProfile/'+foodItem._creator);
     },
     render() {
         let { data, addtnlQuery, dietSelectedMap } = this.props.search.toJS();
-        const { pageNum } = this.state;
+        const { pageNum,placeIdErrorMsg} = this.state;
         const {userAddressSearch} = this.props.globalState.core.toJS();
         let resolvedData = [];
         for (let i = 0; i < data.length; i++) {
         	if(data[i].foodItems && data[i].foodItems.length>0){
         		for (let j = 0; j < data[i].foodItems.length; j++) {
-                	data[i].foodItems[j].distance = (data[i].distance / 1600).toFixed(2);
+                	data[i].foodItems[j].distance = (data[i].distance* CORRECTION_FACTOR).toFixed(2);
                 	data[i].foodItems[j].doYouDeliverFlag = data[i].doYouDeliverFlag;
                 	data[i].foodItems[j].pickUpFlag = data[i].pickUpFlag;
             	}
@@ -205,9 +213,15 @@ const Search = React.createClass({
 		                                        userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
 		                                        apiUrl = {'/api/locations/addressTypeAssist'}
 		                                        getSuggestionValue={(suggestion)=>suggestion.address}
-		                                        onChange = {(event, value)=>this.props.userAddressSearchChange(value.newValue)}
+		                                        onBlur={this.activateQueryButton}
+		                                        onChange = {(event, value)=>{
+		                                        		this.props.userAddressUpdatePlaceId(null);
+		                                        		this.props.userAddressSearchChange(value.newValue);
+		                                        	}
+		                                        }
 		                                        onSuggestionSelected = {this.onSuggestionSelected}
 						                    />
+						                    <div>{placeIdErrorMsg}</div>
 						                </div>
 						    
 						                <div className="pure-u-1 pure-u-md-1-3">
@@ -347,10 +361,7 @@ const Search = React.createClass({
 											    						}  
 											    		</div>
 											    		<div>
-											    			pick-up time: 11AM to 6PM
-											    		</div>
-											    		<div>
-											    			delivery time: 12PM to 6PM
+											    			pick-up : {foodItem.pickUpStartTime +" - "+foodItem.pickUpEndTime}
 											    		</div>
 											    	</div>
 											    </div>

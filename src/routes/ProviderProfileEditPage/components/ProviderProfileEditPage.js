@@ -6,7 +6,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const ProviderProfileEditPage = React.createClass({
 	submitForm(){
-		this.props.showHideSpinner({storeKey:'providerEntrySpinner',payload:true});
 		this.refs.providerform.formSubmit();
 	},
 	contextTypes: {

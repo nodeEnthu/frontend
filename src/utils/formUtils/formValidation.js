@@ -8,9 +8,9 @@ export function email(value) {
     } else return null;
 }
 
-export function required(value) {
+export function required(value,message) {
     if (isEmpty(value)) {
-        return 'Required';
+        return message || 'Required';
     }
 }
 

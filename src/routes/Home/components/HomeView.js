@@ -14,7 +14,8 @@ const HomeView = React.createClass({
         return {
             fetchingAddresses: false,
             showBackDrop:false,
-            showAddressError:false
+            showAddressError:false,
+            addressErrorMessage:''
         };
     },
     contextTypes: {
@@ -30,14 +31,18 @@ const HomeView = React.createClass({
     checkAddress(){
         const {place_id,searchText} = this.props.globalState.core.get('userAddressSearch').toJS();
         let validAddress = (place_id &&searchText)? true:false;
-        return validAddress;
+        let addressErrorMessage;
+        if(!validAddress){
+            addressErrorMessage = (!place_id && searchText)? 'Please select one of the suggested options':'Please enter address';
+        }
+        return {validAddress: validAddress,addressErrorMessage:addressErrorMessage };
     },
     goToPage(page) {
     	let self = this;
     	this.state.showBackDrop = true;
         if (page === 'search') {
-            let validAddress = this.checkAddress();
-            if(validAddress){
+            let checkValidAddress = this.checkAddress();
+            if(checkValidAddress.validAddress){
                 if(this.props.globalState.core.get('userLoggedIn')){
                     const {searchText,place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
                     //register this at a new location if possible as the user needs to be logged in for this
@@ -53,7 +58,8 @@ const HomeView = React.createClass({
                 }
             }else{
                 this.setState({
-                    showAddressError:true
+                    showAddressError:true,
+                    addressErrorMessage:checkValidAddress.addressErrorMessage
                 })
             }
 
@@ -92,7 +98,7 @@ const HomeView = React.createClass({
         }
     },
     render() {
-        let {showAddressError} = this.state;
+        let {showAddressError,addressErrorMessage} = this.state;
         return (
             <div className="home">
 				<div className="splash-container pure-override-letter-spacing">
@@ -139,7 +145,7 @@ const HomeView = React.createClass({
 							        <div className="is-center">
                                         {
                                             (showAddressError)?
-                                                <div>Please enter an address</div>
+                                                <div>{addressErrorMessage}</div>
                                                 :
                                                 undefined
                                         }

@@ -62,7 +62,7 @@ const OrderSubmitModal = React.createClass({
     };
     // make the checkout object here to be submitted once submit is clicked
     let customerName , customerAddress;
-    if(user && user.name){    // this means there is some user logged .. which it should be
+    if(user && user.name){    // this means check if there is some user logged .. which it should be
       // if userAddressSearch.searchText exists that means user entered a new address at Home (/) or search (/search) page which SHOULD already be registered
       customerAddress = (userAddressSearch)? userAddressSearch.searchText : user.userSeachLocations[user.deliveryAddressIndex].searchText;
       customerName =(user && user.name)? user.name : undefined;
@@ -95,7 +95,7 @@ const OrderSubmitModal = React.createClass({
                 </div>
                 <hr style={{margin:"1em 0"}}/>
                 <div className="pure-u-1-2">
-                  <div className="order-address-heading">Deliver to:</div>
+                  <div className="order-address-heading">{this.props.orderType+' '} order:</div>
                   <div>{this.checkOutOrderDetails.customerName}</div>
                   <div className="delivery-box">
                     {this.checkOutOrderDetails.customerAddress}

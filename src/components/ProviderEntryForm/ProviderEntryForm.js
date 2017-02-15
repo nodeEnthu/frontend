@@ -36,10 +36,11 @@ const ProviderEntryForm = React.createClass({
         }
     },
     mapFieldsToValidationType : {
-        title: required,
-        email: email,
-        description: maxLength,
-        searchText:required
+        title: {validationType: required,validationMessage:'title is required'},
+        email: {validationType:email,validationMessage:'email is required'},
+        description: {validationType:maxLength,validationMessage:'description is required'},
+        searchText:{validationType:required,validationMessage:'address is required'},
+        place_id:{validationType:required,validationMessage:'Please select from one of the suggested options'}
     },
     handleChange(event) {
         let input = event.target.value;
@@ -48,11 +49,10 @@ const ProviderEntryForm = React.createClass({
             storeKey :stateKeyName,
             payload : input
         }
-        let validation = this.mapFieldsToValidationType[stateKeyName];
+        let validation = this.mapFieldsToValidationType[stateKeyName].validationType;
+        let validationErrorMessage = this.mapFieldsToValidationType[stateKeyName].validationMessage;
         let errorMsg;
-        if (validation) {
-            errorMsg = validation(input);
-        }
+        if (validation) errorMsg = validation(input,validationErrorMessage);
         if (errorMsg) {
             let errorMsgkey = stateKeyName + 'ErrorMsg';
             this.props.addProviderErrorMsg({
@@ -82,6 +82,12 @@ const ProviderEntryForm = React.createClass({
         if (stateKeyName) {
             // clear the error msg if it exists
             let errorMsgkey = stateKeyName + 'ErrorMsg';
+            if(stateKeyName === 'searchText'){
+                this.props.addProviderErrorMsg({
+                    storeKey:'place_idErrorMsg',
+                    payload:null
+                });
+            }
             this.props.addProviderErrorMsg({
                 storeKey:errorMsgkey,
                 payload:null
@@ -112,7 +118,9 @@ const ProviderEntryForm = React.createClass({
         let noErrorsInform = true;
         for (let key in this.mapFieldsToValidationType) {
             if (this.mapFieldsToValidationType.hasOwnProperty(key)) {
-                let errorMsg = this.mapFieldsToValidationType[key](this.props.providerEntryForm.get(key));
+                let validationType = this.mapFieldsToValidationType[key].validationType;
+                let validationErrorMessage = this.mapFieldsToValidationType[key].validationMessage;
+                let errorMsg = validationType(this.props.providerEntryForm.get(key),validationErrorMessage);
                 if (errorMsg) {
                     noErrorsInform = false;
                     let errorStateKey = [key] + 'ErrorMsg';
@@ -127,7 +135,7 @@ const ProviderEntryForm = React.createClass({
             noErrorsInform = false;
             self.props.addProviderErrorMsg({
                         storeKey:"providerTypeErrorMsg",
-                        payload:"Please choose service type Pick-up OR Delivery OR both "
+                        payload:"Please choose service type Pick-up OR Delivery OR both"
                     })
         }
         return noErrorsInform;
@@ -166,11 +174,11 @@ const ProviderEntryForm = React.createClass({
         }
     },
     render() {
-        let {chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg,providerTypeErrorMsg } = this.props.providerEntryForm.toJS();
+        let {chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg } = this.props.providerEntryForm.toJS();
         let showSpinner = false;
         if(this.props.spinner){
             const {providerEntrySpinner} = this.props.spinner.toJS();
-            showSpinner = (providerEntrySpinner)? true:false;
+            showSpinner = (providerEntrySpinner === true)? true:false;
         }
         const styles = {
           block: {
@@ -237,13 +245,20 @@ const ProviderEntryForm = React.createClass({
                                             userSearchText = {this.props.providerEntryForm.get('searchText')}
                                             apiUrl = {'/api/locations/addressTypeAssist'}
                                             getSuggestionValue={(suggestion)=>suggestion.address}
-                                            onChange = {(event, value)=>this.props.addProviderInfo({
-                                                                                                storeKey:'searchText',
-                                                                                                payload:value.newValue
-                                                                                            })}
+                                            onChange = {(event, value)=>{
+                                                                            this.props.addProviderInfo({
+                                                                                                    storeKey:'searchText',
+                                                                                                    payload:value.newValue
+                                                                                                  });
+                                                                            this.props.addProviderInfo({
+                                                                                                    storeKey:'place_id',
+                                                                                                    payload:null
+                                                                                                });
+                                                                        }
+                                                        }
                                             onSuggestionSelected = {this.onSuggestionSelected}
                         />
-                        <div className = "error-message">{(searchTextErrorMsg)?'*'+searchTextErrorMsg:undefined}</div>
+                        <div className = "error-message">{(searchTextErrorMsg||place_idErrorMsg)?'*'+(searchTextErrorMsg || place_idErrorMsg):undefined}</div>
                    
                     {(keepAddressPrivateFlag)?
                         <div>

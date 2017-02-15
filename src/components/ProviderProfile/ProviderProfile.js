@@ -32,9 +32,9 @@ const ProviderProfile = React.createClass({
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
   },
   componentWillUnmount() {
-    this.props.removeAllCheckedOutItems();
-    this.props.flushOutStaleReviewData();
-    this.props.flushProviderData();
+    if (this.props.removeAllCheckedOutItems) this.props.removeAllCheckedOutItems();
+    if (this.props.flushOutStaleReviewData) this.props.flushOutStaleReviewData();
+    if (this.props.flushProviderData) this.props.flushProviderData();
   },
   writeReviewModal(foodItem){
     // check whether user is logged in 
@@ -175,6 +175,8 @@ const ProviderProfile = React.createClass({
                                   openModal = {this.props.openModal}
                                   providerProfile = {this.props.providerProfile}
                                   foodItem={foodItem}
+                                  mode = {this.props.mode}
+                                  
                                 />
                               </div>
                     })
@@ -198,6 +200,8 @@ const ProviderProfile = React.createClass({
                                   foodItem={foodItem}
                                   providerProfile = {this.props.providerProfile}
                                   pastItem={true}
+                                  mode = {this.props.mode}
+
                                 />
                               </div>
                     })
@@ -250,5 +254,7 @@ ProviderProfile.propTypes = {
   actionName:React.PropTypes.string,
   mode:React.PropTypes.string,
   flushOutStaleReviewData:React.PropTypes.func,
-  flushProviderData:React.PropTypes.func
+  flushProviderData:React.PropTypes.func,
+  userAddressSearchChange:React.PropTypes.func,
+  userAddressUpdatePlaceId:React.PropTypes.func
 }

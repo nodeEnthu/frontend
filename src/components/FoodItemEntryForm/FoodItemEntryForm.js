@@ -38,7 +38,6 @@ const FoodItemEntryForm= React.createClass({
         }
     },
     componentWillUnmount() {
-        this.props.removeFoodItemInfo();
         this.props.showHideSpinner({storeKey:'foodItemEntrySpinner',payload:false});
     },
     mapFieldsToValidationType:{
@@ -238,7 +237,11 @@ const FoodItemEntryForm= React.createClass({
                 // upload and assume its gonna pass
                 s3ImageUpload(this.state.fileConfig,this.state.imgBlob,function(){
                     self.submitFoodItem()
-                        .then(()=>self.props.onAllClear());
+                        .then(()=>{
+                                    self.props.onAllClear(); 
+                                    self.props.removeFoodItemInfo();
+                                }
+                            );
                 });
             }else{
                 this.submitFoodItem()
@@ -282,7 +285,6 @@ const FoodItemEntryForm= React.createClass({
     render() {
         let self = this;
         let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg,oneTime,availability,dateRangeStartDate,dateRangeStopDate, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage} = this.props.foodItemEntryForm.toJS();
-        console.log(oneTime, availability);
         let showSpinner = false;
         if(this.props.spinner){
             let {foodItemEntrySpinner} = this.props.spinner.toJS();

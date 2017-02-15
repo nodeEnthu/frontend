@@ -55,7 +55,7 @@ const ACTION_HANDLERS = {
     [RECEIVE_DATA_PROVIDER_PROFILE_EDIT]: (state, action) => {return state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data).set('providerEntryForm', Map(action.payload.data.data))},
     [ADD_PROVIDER_INFO]: (state, action) => state.setIn(['providerEntryForm', action.storeKey], action.payload),
     [ADD_PROVIDER_ERROR_MSG]: (state, action) => state.setIn(['providerEntryForm', action.storeKey], action.payload),
-    [SHOW_HIDE_PROVIDER_EDIT_SPINNER]:(state,action)=> {console.log("m getting invoked",action);return state.setIn(['spinner',action.storeKey],action.payload)}
+    [SHOW_HIDE_PROVIDER_EDIT_SPINNER]:(state,action)=> {return state.setIn(['spinner',action.storeKey],action.payload)}
 }
 
 // ------------------------------------

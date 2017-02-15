@@ -44,10 +44,23 @@ export default (initialState = {},cb) => {
   if(sessionStorage.getItem('token')){
     securedGetCall('/api/users/me')
     .then(function(result) {
+      let user = result.data;
+      if(user && user.name){
+        let customerAddress,customerPlaceId;
+        if (user.userType === 'provider') {
+          customerAddress = user.userSeachLocations[user.deliveryAddressIndex].searchText;
+          customerPlaceId = user.userSeachLocations[user.deliveryAddressIndex].place_id;
+        } else if(user.userType === 'customer'){
+          customerAddress = user.loc.searchText;
+          customerPlaceId = user.loc.place_id;
+        }
         store.dispatch(actions.userLoggedIn(true));
-        store.dispatch(actions.addUser(result.data));
+        store.dispatch(actions.addUser(user));
         store.dispatch(actions.addToken(token));
-        cb(store);
+        store.dispatch(actions.userAddressSearchChange(customerAddress));
+        store.dispatch(actions.userAddressUpdatePlaceId(customerPlaceId));
+      }
+      cb(store);
     })
   } else{
     store.dispatch(actions.userLoggedIn(false));
