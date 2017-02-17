@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import moment from 'moment';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import {timeOfDay,resolvePickUpTime} from 'components/FoodItemEntryForm/constants';
 
 
 const FoodItemInProviderProfile = React.createClass({
@@ -99,7 +100,7 @@ const FoodItemInProviderProfile = React.createClass({
                           <tr>
                               <td className="reduce-padding"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/></svg></td>
                               <td className ="item-details">pick-up</td>
-                              <td className = "item-details">{foodItem.pickUpStartTime} - {foodItem.pickUpEndTime}</td>
+                              <td className = "item-details">{resolvePickUpTime(foodItem.pickUpStartTime)} - {resolvePickUpTime(foodItem.pickUpEndTime)}</td>
                           </tr>
                       </tbody>
                   </table>

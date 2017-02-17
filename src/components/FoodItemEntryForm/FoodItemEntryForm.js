@@ -12,7 +12,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import TimeInput from 'react-time-input';
 import { securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import { CUISINE_TYPES} from './../../routes/Search/constants/searchFilters';
-import {daysOfTheWeek} from './constants';
+import {daysOfTheWeek,timeOfDay} from './constants';
 import ImageUploader from 'components/ImageUploader'
 import s3ImageUpload from 'utils/uploader/s3ImageUpload';
 import Spinner from 'react-spinkit';
@@ -260,7 +260,7 @@ const FoodItemEntryForm= React.createClass({
         }
         // send it to server and clear out some of the item specific info
         if(this.props.mode ==="PROVIDER_ENTRY"){
-            requestBody.publishStage=(addAnother)? 1 : 2;
+            requestBody.publishStage=2;
         }
         if(submitFoodItem){
             return securedPostCall('/api/providers/addOrEditFoodItem', requestBody)
@@ -454,27 +454,39 @@ const FoodItemEntryForm= React.createClass({
                             <div>
                                 <div className = "pure-u-1 pure-u-md-1-2">
                                     <label>Pick-up start time (hh:mm)</label>
-                                    <TimeInput
+                                    <select
                                         placeholder="pick-up start time"
                                         type="text"
                                         name="pickUpStartTime"
                                         className="width-max"
-                                        onTimeChange={(value)=>this.onTimeChangeHandler('pickUpStartTime',value)}
+                                        onBlur={this.handleChange} 
+                                        onFocus={this.handleFocus}
+                                        onChange={this.changeStoreVal}
                                         value={pickUpStartTime}
-                                        initTime={pickUpStartTime}
-                                    /> 
+                                    >
+                                        <option value=''></option>
+                                        {timeOfDay().map(function(time,index){
+                                            return <option key={index} value={time.value}>{time.label}</option>
+                                        })}
+                                    </select>
                                 </div>
                                 <div className = "pure-u-1 pure-u-md-1-2">
                                     <label>Pick-up end time (hh:mm)</label>
-                                    <TimeInput
+                                    <select
                                         placeholder="pick-up end time"
                                         type="text"
                                         name="pickUpEndTime"
                                         className="width-max"
-                                        onTimeChange={(value)=>this.onTimeChangeHandler('pickUpEndTime',value)}
+                                        onBlur={this.handleChange} 
+                                        onFocus={this.handleFocus}
+                                        onChange={this.changeStoreVal}
                                         value={pickUpEndTime}
-                                        initTime={pickUpEndTime}
-                                    />   
+                                    >
+                                        <option value=''></option>
+                                        {timeOfDay().map(function(time,index){
+                                            return <option key={index} value={time.value}>{time.label}</option>
+                                        })}
+                                    </select>  
                                 </div>
                             </div>
                             <legend className="pull-left">

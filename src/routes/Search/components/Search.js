@@ -12,6 +12,8 @@ import DatePicker from 'material-ui/DatePicker';
 import AsyncAutocomplete from 'components/AsyncAutocomplete';
 import { getCall,securedGetCall } from 'utils/httpUtils/apiCallWrapper';
 import moment from 'moment';
+import {timeOfDay,resolvePickUpTime} from 'components/FoodItemEntryForm/constants';
+
 export const CORRECTION_FACTOR = 1.2;
 
 const Search = React.createClass({
@@ -361,7 +363,7 @@ const Search = React.createClass({
 											    						}  
 											    		</div>
 											    		<div>
-											    			pick-up : {foodItem.pickUpStartTime +" - "+foodItem.pickUpEndTime}
+											    			pick-up : {resolvePickUpTime(foodItem.pickUpStartTime) +" - "+resolvePickUpTime(foodItem.pickUpEndTime)}
 											    		</div>
 											    	</div>
 											    </div>

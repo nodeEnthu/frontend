@@ -49,8 +49,11 @@ const ProviderEntryForm = React.createClass({
             storeKey :stateKeyName,
             payload : input
         }
-        let validation = this.mapFieldsToValidationType[stateKeyName].validationType;
-        let validationErrorMessage = this.mapFieldsToValidationType[stateKeyName].validationMessage;
+        let validation , validationErrorMessage;
+        if(this.mapFieldsToValidationType[stateKeyName]){
+            validation = this.mapFieldsToValidationType[stateKeyName].validationType;
+            validationErrorMessage = this.mapFieldsToValidationType[stateKeyName].validationMessage; 
+        }
         let errorMsg;
         if (validation) errorMsg = validation(input,validationErrorMessage);
         if (errorMsg) {
