@@ -7,6 +7,7 @@ import FacebookLogin from 'components/Facebook/Facebook';
 import GoogleLogin from 'components/GoogleLogin';
 import * as actions from '../../layouts/CoreLayout/coreReducer';
 import {getCall,postCall,securedGetCall} from 'utils/httpUtils/apiCallWrapper';
+import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
 
 const customStyles = {
 
@@ -40,6 +41,10 @@ var Login = React.createClass({
                   dispatch(actions.addToken(res.token));
                   dispatch(actions.addUser(res.user));
                   dispatch(actions.userLoggedIn(true));
+                  let userSearchAndPlaceId = getSearchAddressAndPlaceId(res.user);
+                  dispatch(actions.userAddressSearchChange(userSearchAndPlaceId.address));
+                  dispatch(actions.userAddressUpdatePlaceId(userSearchAndPlaceId.placeId));
+                  
                   sessionStorage.setItem('token', res.token);
                   if(self.context.router.location.pathname === '/'){
                   // now based on the userType take an action

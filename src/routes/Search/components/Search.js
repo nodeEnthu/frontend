@@ -19,7 +19,7 @@ export const CORRECTION_FACTOR = 1.2;
 const Search = React.createClass({
     getInitialState() {
         return {
-            pageNum: 1,
+            pageNum: 0,
             queryBaseUrl: '/api/query/providers',
             searchActivated:false,
             placeIdErrorMsg:''
@@ -374,7 +374,7 @@ const Search = React.createClass({
 					}
 					</div>
 					{
-						(data  && data.length >=12*pageNum)?
+						(data  && data.length >= 12*(pageNum+1))?
 						<div className="load-more-center">
 							<RaisedButton 
 								label="Show more results" 

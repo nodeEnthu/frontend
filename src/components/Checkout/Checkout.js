@@ -9,6 +9,7 @@ import moment from 'moment';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import AsyncAutocomplete from 'components/AsyncAutocomplete'
 import {securedGetCall} from 'utils/httpUtils/apiCallWrapper';
+import {timeOfDay,resolvePickUpTime} from 'components/FoodItemEntryForm/constants';
 
 
 const Checkout = React.createClass({
@@ -185,7 +186,7 @@ const Checkout = React.createClass({
                                               <tr>
                                                   <td className="reduce-padding"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/></svg></td>
                                                   <td className = "item-details">pick-up</td>
-                                                  <td className = "item-details">{itemCheckedOut.pickUpStartTime} - {itemCheckedOut.pickUpEndTime}</td>
+                                                  <td className = "item-details">{resolvePickUpTime(itemCheckedOut.pickUpStartTime)} - {resolvePickUpTime(itemCheckedOut.pickUpEndTime)}</td>
                                               </tr>
                                           </tbody>
                                       </table>

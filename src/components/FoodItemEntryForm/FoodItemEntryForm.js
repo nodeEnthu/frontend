@@ -52,6 +52,7 @@ const FoodItemEntryForm= React.createClass({
     },
 
     changeStoreTimeAndDateVals(date, storeKey,isInputChecked){
+        console.log("I am being clicked with ",date,storeKey,isInputChecked)
         let storeVal = date;
         let {availability,oneTime} = this.props.foodItemEntryForm.toJS();
         if(storeKey === 'availability' ){
@@ -64,6 +65,7 @@ const FoodItemEntryForm= React.createClass({
             }
             storeVal = availability;
         }
+        // completely overwrite whats in store
         this.props.addFoodItemInfo({
             storeKey: storeKey,
             payload: storeVal
@@ -73,6 +75,11 @@ const FoodItemEntryForm= React.createClass({
                 storeKey: 'dateRangeStopDate',
                 payload: moment(storeVal).add(7,'days').toDate()
             })
+            // remove all the presets
+            this.props.addFoodItemInfo({
+                storeKey: 'availability',
+                payload: []
+            });
         }
         if(storeKey === 'serviceDate'){
             this.props.addFoodItemInfo({
