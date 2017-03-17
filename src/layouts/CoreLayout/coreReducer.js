@@ -118,8 +118,6 @@ const initialState = Map({
     }),
     loginModalOPen: undefined,
     userLoggedIn: false,
-    address: '',
-    placeId: '',
     userAddressSearch: Map({
         searchText: '',
         place_id: '',

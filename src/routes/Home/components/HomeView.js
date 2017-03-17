@@ -102,76 +102,56 @@ const HomeView = React.createClass({
         return (
             <div className="home">
 				<div className="splash-container pure-override-letter-spacing">
-					<div className="banner-wrapper">
-						<div className="pure-g">
-							<div className = "pure-u-1 pure-u-md-1-2">
-							    <div className="splash">
-							        <h1 className="splash-head">
-							        	Find food
-							        </h1>
-							        <AsyncAutocomplete
-							        	name={"home_view"} 
-							        	userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
-							        	apiUrl = {'/api/locations/addressTypeAssist'}
-							        	getSuggestionValue={(suggestion)=>suggestion.address}
-							        	onChange = {(event, value)=>{
-                                                                        this.setState({
-                                                                            showAddressError:false
-                                                                        });
-                                                                        this.props.userAddressSearchChange(value.newValue)}
-                                                                    }
-							        	onSuggestionSelected = {this.onSuggestionSelected}
-							        />
-							        <IconButton
-							        	style = {{
-							        			padding:'0px',
-							        			height:'0px',
-							        			width:'0px',
-							        			top:'6px',
-							        			display:'inline-block',
-                                                marginLeft:'-1em',
-							        			visibility:(this.state.fetchingAddresses)? 'hidden':'initial'							        		
-							        		}}
-							        	onClick = {this.getLocationCordinates}
-							        >
-							        	<CommunicationLocationOn/>
-							        </IconButton>
-							        {/*<Spinner spinnerName='circle' 
-                                                                            style = {{    display:'inline-block',
-                                                                                        visibility:(this.state.fetchingAddresses)?'initial':'hidden',
-                                                                                        top:'5px'
-                                                                                    }}
-                                                                        />*/}
-							        <div className="is-center">
-                                        {
-                                            (showAddressError)?
-                                                <div>{addressErrorMessage}</div>
-                                                :
-                                                undefined
-                                        }
-							        	<button className="pure-button pure-button-primary"
-							        		onClick={()=>this.goToPage('search')}>
-							        		Get Started
-							        	</button>
-							        </div>
-							    </div>
-						    </div>
-						    <div className = "pure-u-1 pure-u-md-1-2">
-							   <div className="splash">
-							        <div className="splash-head">
-							        	Provide food in 3 easy steps
-							        </div>
-							        <div className="is-center" style={{marginBottom:'1em'}}>
-							        	<button className="pure-button pure-button-primary"
-							        		onClick={()=>this.goToPage('provider')}>
-							        		Get Started
-							        	</button>
-							        </div>
-							    </div>
-						    </div>
-						</div>
-					</div>
-				</div>
+                    <div className="banner-wrapper">
+                        <h1 className="promotion-heading">
+                            Find the best professionals in your neighborhood
+                        </h1>
+                        <div className="pure-g">
+                            <div className = "pure-u-1 pure-u-md-1-3 search-wrapper">
+                                <div className="splash move-right">
+                                    <div className="category-wrapper">
+                                        <span>Im looking for</span>
+                                        <select defaultValue ="food" name="select-category">
+                                            <option value="food">
+                                                Food
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div className = "pure-u-md-2-3 pure-u-1">
+                               <div className="splash move-left">
+                                    <div className="address-wrapper">
+                                        <span style={{marginRight:"10px"}}>in</span>
+                                        <div className="address-sub-wrapper"> 
+                                            <AsyncAutocomplete
+                                                name={"home_view"} 
+                                                userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
+                                                apiUrl = {'/api/locations/addressTypeAssist'}
+                                                getSuggestionValue={(suggestion)=>suggestion.address}
+                                                onChange = {(event, value)=>{
+                                                                                this.setState({
+                                                                                    showAddressError:false
+                                                                                });
+                                                                                this.props.userAddressSearchChange(value.newValue)}
+                                                                            }
+                                                onSuggestionSelected = {this.onSuggestionSelected}
+                                            />
+                                            <div className="icon-locate">
+                                                <img src="iconLocate.png"></img>
+                                            </div>
+                                            <div className="locate-me">Locate me</div>
+                                        </div>
+                                        <div className="search-button">
+                                            <img src="iconSearch.png"></img>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 			</div>
         )
     }

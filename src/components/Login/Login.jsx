@@ -77,8 +77,8 @@ var Login = React.createClass({
     render: function() {
         const { loginModalOPen } = this.props.globalState.core.toJS();
         return (
-              <div className="pure-menu-item">
-                  <a className="pure-menu-link"
+              <div>
+                  <a
                     onClick={this.openModal}
                     >Login
                   </a>

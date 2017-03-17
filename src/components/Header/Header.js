@@ -22,21 +22,23 @@ export  class Header extends React.Component {
         const {user} = globalState.core.toJS();
         return (
             <div className="header">
-            <div className="home-menu pure-menu pure-menu-horizontal">
-              <span className="pure-menu-heading">fut</span>
-              <ul className="pure-menu-list">
+              <div className="frame">
+                <img className = "logo" src="logo.png"></img>
+              </div>
+              <nav id="nav" role="navigation"> <a href="#nav" title="Show navigation">Show navigation</a><a href="#" title="Hide navigation">Hide navigation</a>
+                <ul>
                   {(globalState.core.get('token').length>0 && user&& user.name && user.userType==='provider')?
                     undefined
                     :
-                    <li className="pure-menu-item">
-                      <IndexLink to='/' className="pure-menu-link">
+                    <li>
+                      <IndexLink to='/'>
                         Home
                       </IndexLink>
                     </li>
                   }
                   {(globalState.core.get('token').length>0 && user&& user.name)?
-                    <li className="pure-menu-item">
-                      <Link to='/search' className="pure-menu-link">
+                    <li>
+                      <Link to='/search' >
                         Search
                       </Link>
                     </li>
@@ -45,38 +47,28 @@ export  class Header extends React.Component {
                   }
                   {(globalState.core.get('token').length>0 )?
                     <div style={{display:'inline-block'}}>
-                      <li className="pure-menu-item">
-                        <Link to={'/user/'+user._id+'/order-summary'} className="pure-menu-link">
+                      <li>
+                        <Link to={'/user/'+user._id+'/order-summary'} >
                           Orders
                         </Link>
                       </li>
-                      <li className="pure-menu-item">
-                          <a className="pure-menu-link"
-                            onClick = {this.removeToken}
-                            >Logout</a>
+                      <li >
+                          <a onClick = {this.removeToken}>Logout</a>
                       </li>
                     </div>
                     :
                     undefined
                   }
-                  <li className="pure-menu-item">
-                    {(globalState.core.get('token').length>0 )?
-                      <div>
-                        <img  src={user.img} 
-                              style = {{
-                                borderRadius:24+'px',
-                                width:'40px',
-                                display:'inline-block'
-                              }}
-                              onClick={this.handleTouchTap}
-                        />
-                      </div>
-                      :
-                      <Login{...this.props}/>
-                     } 
+                  <li>
+                    <a href="">LIST YOUR BUSINESS</a>
                   </li>
-              </ul>
-          </div>
+                  <li>
+                    <a href="">
+                      LOGIN
+                    </a>
+                  </li>
+                </ul>
+              </nav>
         </div>
         );
     }

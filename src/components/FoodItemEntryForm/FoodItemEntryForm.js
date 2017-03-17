@@ -52,7 +52,6 @@ const FoodItemEntryForm= React.createClass({
     },
 
     changeStoreTimeAndDateVals(date, storeKey,isInputChecked){
-        console.log("I am being clicked with ",date,storeKey,isInputChecked)
         let storeVal = date;
         let {availability,oneTime} = this.props.foodItemEntryForm.toJS();
         if(storeKey === 'availability' ){
@@ -199,10 +198,6 @@ const FoodItemEntryForm= React.createClass({
                 }
             }
         }
-        this.props.addFoodItemInfo({
-            storeKey: 'allClear',
-            payload: noErrorsInform
-        })
         if (!noErrorsInform) {
             self.props.addFoodItemInfo({
                 storeKey: 'snackBarMessage',
@@ -291,7 +286,7 @@ const FoodItemEntryForm= React.createClass({
     },
     render() {
         let self = this;
-        let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg,oneTime,availability,dateRangeStartDate,dateRangeStopDate, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage} = this.props.foodItemEntryForm.toJS();
+        let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg,oneTime,availability,dateRangeStartDate,dateRangeStopDate, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, snackBarOpen, snackBarMessage} = this.props.foodItemEntryForm.toJS();
         let showSpinner = false;
         if(this.props.spinner){
             let {foodItemEntrySpinner} = this.props.spinner.toJS();
