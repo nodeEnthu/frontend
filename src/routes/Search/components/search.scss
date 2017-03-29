@@ -1,15 +1,44 @@
 .search {
+    color: #f26800;
+    padding: 0.5em 0.25em;
     .react-datepicker__input-container {
         width: 100%;
-        input{
-            width:100%;
+        input {
+            width: 100%;
         }
     }
-    .react-autosuggest__container{
-        width:100%;
+    .show-hide-filter .inline-radio {
+        border: 1px solid #f26800;
+    }
+    .display-table {
+        height: 2.5em;
+        display: table;
+        text-align: center;
+    }
+    .center-inline-image {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+    }
+    .move-center {
+        position: relative;
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .select-date {
+        position: relative;
+        bottom: 15px;
+    }
+    .adjust-delivery {
+        margin: 0 2.5em;
+    }
+    .react-autosuggest__container {
+        width: 90%;
     }
     .react-autosuggest__input {
         width: inherit;
+        border: 1px solid #efefef;
+        height: 1.75em;
     }
     .pure-form input[type] {
         margin-bottom: 0px;
@@ -19,8 +48,32 @@
         border: none;
         box-shadow: none;
     }
+    .show-hide-filter {
+        padding: 0 2.5em;
+        .inline-radio label {
+            background: white;
+            color: #f26800;
+            border: 0.5px solid #f26800;
+        }
+    }
     .cuisine-carousel-wrapper {
-        cursor: pointer;
+        width:80%;
+        margin: auto;
+        .inline-radio input {
+            width: 100%;
+            height:100%;
+            opacity: 0;
+        }
+    }
+    .arrow-decorator{
+        border-radius:50%;
+    }
+    .arrow-decorator:hover{
+        background-color:lightgrey;
+    }
+    .carousel-dimensions {
+        height: 3em;
+        width:3em;
     }
     .carousel-img {
         opacity: 0.9;
@@ -55,7 +108,6 @@
         min-height: 120px;
         display: inline-block;
     }
-
     .img-avatar {
         margin: 0 auto;
         min-width: 120px;
@@ -75,7 +127,7 @@
         }
     }
     .provider-info-section {
-        padding:1em;
+        padding: 1em;
         display: inline-block;
         vertical-align: top;
         font-size: 14px;

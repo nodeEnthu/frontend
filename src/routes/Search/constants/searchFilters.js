@@ -1,37 +1,52 @@
+import moment from 'moment'
+
 export const CUISINE_TYPES = [{
-    type: 'chinese',
-    src: 'cuisines/chinese.jpeg'
+    type: 'Asian',
+    src: 'cuisines/cuisine-asian.svg'
 }, {
-    type: 'american',
-    src: 'cuisines/american.jpeg'
+    type: 'American',
+    src: 'cuisines/cuisine-american.svg'
 }, {
-    type: 'indian',
-    src: 'cuisines/indian.jpeg'
+    type: 'Indian',
+    src: 'cuisines/cuisine-indian.svg'
 }, {
-    type: 'african',
-    src: 'cuisines/african.jpg'
+    type: 'African',
+    src: 'cuisines/cuisine-african.svg'
 }, {
-    type: 'caribbean',
-    src: 'cuisines/caribbean.jpg'
+    type: 'Italian',
+    src: 'cuisines/cuisine-italian.svg'
 }, {
-    type: 'japanese',
-    src: 'cuisines/japanese.jpg'
+    type: 'Mediterrnean',
+    src: 'cuisines/cuisine-mediterranean.svg'
 }, {
-    type: 'italian',
-    src: 'cuisines/italian.jpg'
+    type: 'Mexican',
+    src: 'cuisines/cuisine-mexican.svg'
 }, {
-    type: 'mediterrnean',
-    src: 'cuisines/mediterrnean.jpg'
+    type: 'Bbq',
+    src: 'cuisines/cuisine-bbq.svg'
 }, {
-    type: 'korean',
-    src: 'cuisines/korean.jpeg'
+    type: 'French',
+    src: 'cuisines/cuisine-french.svg'
 }, {
-    type: 'mexican',
-    src: 'cuisines/mexican.jpg'
+    type: 'Greek',
+    src: 'cuisines/cuisine-greek.svg'
 }, {
-    type: 'viatnamese',
-    src: 'cuisines/viatnamese.jpeg'
+    type: 'Dessert',
+    src: 'cuisines/cuisine-dessert.svg'
 }]
+
+export function DATES() {
+    let result = [];
+    // return today and six more days
+    for (var i = 0; i < 7; i++) {
+        let day = moment(new Date()).subtract(i, "days").startOf('day');
+        result.push({
+            value: day.valueOf(),
+            title: day.format("ddd, MMM D")
+        })
+    }
+    return result;
+}
 
 export const DIET_TYPES = [{
     value: 'organic',

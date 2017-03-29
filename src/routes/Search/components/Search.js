@@ -1,5 +1,5 @@
 import React from 'react'
-import { CUISINE_TYPES, DIET_TYPES, RADIUS_OPTIONS, ORDER_TYPE } from './../constants/searchFilters'
+import { CUISINE_TYPES, DIET_TYPES, RADIUS_OPTIONS, ORDER_TYPE, DATES } from './../constants/searchFilters'
 import Carousel from 'nuka-carousel'
 import './search.scss'
 import classNames from 'classnames'
@@ -8,11 +8,14 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Select from 'react-select';
-import DatePicker from 'material-ui/DatePicker';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import AsyncAutocomplete from 'components/AsyncAutocomplete';
 import { getCall,securedGetCall } from 'utils/httpUtils/apiCallWrapper';
 import moment from 'moment';
 import {timeOfDay,resolvePickUpTime} from 'components/FoodItemEntryForm/constants';
+import FlatSelection from 'components/FlatSelection';
+import carouselArrows from './FilterDecorator'
 
 export const CORRECTION_FACTOR = 1.2;
 
@@ -22,8 +25,12 @@ const Search = React.createClass({
             pageNum: 0,
             queryBaseUrl: '/api/query/providers',
             searchActivated:false,
-            placeIdErrorMsg:''
+            placeIdErrorMsg:'',
+            showFilters:false
         };
+    },
+    showFilter(){
+    	this.setState({showFilters:!this.state.showFilters})
     },
     contextTypes: {
         router: React.PropTypes.object.isRequired
@@ -41,6 +48,7 @@ const Search = React.createClass({
             this.activateQueryButton(true);
         } // else dont do anything
     },
+
     // defaults for the first time you load the page 
     componentDidMount() {
     	const {place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
@@ -62,9 +70,11 @@ const Search = React.createClass({
         let combinedQuery = this.createQuery();
         this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery);
     },
+
     componentWillUnmount() {
     	this.props.flushOutStaleData();
     },
+
     loadMore() {
        	let newPageNum = this.state.pageNum + 1;
        	let self = this;
@@ -75,6 +85,7 @@ const Search = React.createClass({
 	                })
 	            })
     },
+
     onSuggestionSelected(event,{suggestion}){
     	this.props.userAddressSearchChange(suggestion.address);
         this.props.userAddressUpdatePlaceId(suggestion.place_id);
@@ -91,6 +102,7 @@ const Search = React.createClass({
        		}
     	} 
     },
+
     createQuery() {
         let combinedQuery = {};
         const {place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
@@ -101,6 +113,7 @@ const Search = React.createClass({
         combinedQuery.filterspageNum = this.state.pageNum;
         return combinedQuery;
     },
+
     fetchQueryData() {
     	let combinedQuery = this.createQuery();
     	this.activateQueryButton(false);
@@ -108,11 +121,13 @@ const Search = React.createClass({
         	.then(function(response){
         	});
     },
+
     createAndFetchNewQuery(){
     	// flush out old data
     	this.props.flushOutStaleData();
     	this.fetchQueryData();
     },
+
     selectDietType(dietTypes) {
         const dietSelectedMap = this.props.search.get('dietSelectedMap').toJS();
         let newDietsSelected = [];
@@ -132,20 +147,19 @@ const Search = React.createClass({
         })
         this.filterCuisineOrDietType(uniqueDietAdded[0], 'diet');
     },
+
     componentDidUpdate(prevProps){
     },
+
     selectOption(stateKey, option) {
         if (option) {
-            if (option instanceof Date) {
-            	this.props.selectAddtnlQuery(stateKey, option);
-            } else {
-            	this.props.selectAddtnlQuery(stateKey, option.value);
-            }
+            this.props.selectAddtnlQuery(stateKey, option.value);
         } else {
             this.props.selectAddtnlQuery(stateKey, undefined);
         }
         this.activateQueryButton(true);
     },
+
     activateQueryButton(val){
     	if(this.validatePlaceId()){
     		this.setState({searchActivated:val});
@@ -155,9 +169,11 @@ const Search = React.createClass({
     		this.setState({'placeIdErrorMsg':'Please select from one of the suggested values'})
     	}
     },
+
     goToProvider(event,foodItem){
     	this.context.router.push('/providerProfile/'+foodItem._creator);
     },
+
     render() {
         let { data, addtnlQuery, dietSelectedMap } = this.props.search.toJS();
         const { pageNum,placeIdErrorMsg} = this.state;
@@ -174,132 +190,112 @@ const Search = React.createClass({
         	}
         }
         let self = this;
-        let  momentDate =(addtnlQuery.date)? moment(addtnlQuery.date) : moment();
-        let displayDate = momentDate.format("MMM Do");
+        addtnlQuery.date = addtnlQuery.date || DATES()[0].value ;
         return (
             <div className="search">
-            	<Card>
-				    <CardHeader
-            			title= {<div style={{fontSize:'14px'}}>Showing results for {displayDate} <span style={{float:'right'}}>Filter</span></div>}
-				      	showExpandableButton={true}
-				      	actAsExpander = {true}
-				      	textStyle={{display:'block', paddingRight:'2em'}}/>
-				    <CardText expandable={true} style={{padding:'0 1em'}}>
-					    <div className="date-title">
-					    	<form className="pure-form pure-form-stacked">
-						        <fieldset>
-						            <div>
-						                <div className="pure-u-1 pure-u-md-1-3">
-						                    <label>date</label>
-						                    <DatePicker
-	                                            container="inline"
-	                                            style={{width:'100%'}}
-	                                            name="serviceDate"
-	                                            textFieldStyle={{width:'100%'}}
-	                                            inputStyle={{marginTop:'0px',height:'2.25em',border: '1px solid #ccc',boxShadow: 'inset 0 1px 3px #ddd',padding: '.5em .6em'}}
-	                                            underlineStyle={{display: 'none'}}
-	                                            hintText=""
-	                                            autoOk={true}
-	                                            value={addtnlQuery.date}
-	                                            onBlur={this.handleChange} 
-	                                            onFocus={this.handleFocus}
-	                                            onTouchTap={(event)=>event.preventDefault()}
-	                                            onChange={(event,date)=>this.selectOption('date',date)}
-	                                            formatDate={(date)=> date.toDateString()}
-	                                        />
-						                </div>
-						    
-						                <div className="pure-u-1 pure-u-md-1-3">
-						                    <label>address</label>
-						                    <AsyncAutocomplete name={'addressSearch'}
-		                                        userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
-		                                        apiUrl = {'/api/locations/addressTypeAssist'}
-		                                        getSuggestionValue={(suggestion)=>suggestion.address}
-		                                        onBlur={this.activateQueryButton}
-		                                        onChange = {(event, value)=>{
-		                                        		this.props.userAddressUpdatePlaceId(null);
-		                                        		this.props.userAddressSearchChange(value.newValue);
-		                                        	}
-		                                        }
-		                                        onSuggestionSelected = {this.onSuggestionSelected}
-						                    />
-						                    <div>{placeIdErrorMsg}</div>
-						                </div>
-						    
-						                <div className="pure-u-1 pure-u-md-1-3">
-						                    <label>diet-types</label>
-						                    <Select
-											    name="diet-types"
-											    placeholder="select by diet type"
-											    options={DIET_TYPES}
-											    value={Object.keys(dietSelectedMap).join(',')}
-											    multi = {true}
-											    autoBlur={true}
-											    onChange={this.selectDietType}
-											/>
-						                </div>
-						    
-						                <div className="pure-u-1 pure-u-md-1-3">
-						                    <label>pick-up delivery</label>
-						                    <Select
-											    name="order-mode"
-											    placeholder="pick-up/delivery"
-											    value={addtnlQuery.orderMode}
-											    options={ORDER_TYPE}
-											    onChange={(selectedMode)=>this.selectOption('orderMode',selectedMode)}
-											/>
-						                </div>
-						    
-						                <div className="pure-u-1 pure-u-md-1-3">
-						                    <label>provider distance</label>
-						                    <Select
-											    name="provider-radius"
-											    placeholder="pick-up radius"
-											    value={addtnlQuery.providerRadius}
-											    options={RADIUS_OPTIONS}
-											    onChange={(selectedRadius)=>this.selectOption('providerRadius',selectedRadius)}
-											/>
-						                </div>
-						            </div>
-						        </fieldset>
-						    </form>
-						</div>
-				    </CardText>
-				</Card>
+            	<div className="pure-g">
+            		<div className="pure-u-1 pure-u-md-2-5 display-table">
+                        <div className="move-center">
+                            <div className="center-inline-image">
+                                <svg version="1.1" width="24" height="24" viewBox="0 0 24 24">
+                                    <path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z" />
+                                </svg>
+                            </div>
+    	                    <AsyncAutocomplete name={'addressSearch'}
+                                userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
+                                apiUrl = {'/api/locations/addressTypeAssist'}
+                                getSuggestionValue={(suggestion)=>suggestion.address}
+                                onBlur={this.activateQueryButton}
+                                onChange = {(event, value)=>{
+                                		this.props.userAddressUpdatePlaceId(null);
+                                		this.props.userAddressSearchChange(value.newValue);
+                                	}
+                                }
+                                onSuggestionSelected = {this.onSuggestionSelected}
+    	                    />
+    	                    {/*<div>{placeIdErrorMsg}</div>*/}
+                        </div>
+	                </div>
+					<div className="pure-u-1-3 pure-u-md-1-5 display-table">
+                        <div className="move-center">
+                            <div className="center-inline-image">
+                                <svg  width="24" height="24" viewBox="0 0 24 24">
+                                    <path d="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z" />
+                                </svg>
+                            </div>
+                            <div className="select-date">
+        	                    <SelectField autoWidth={false} style={{width:'80%',left:'25px',height:'auto',top:'5px'}}
+                                            fullWidth={false}
+                                            labelStyle={{top:'4px',color:'#f26800'}}
+                                            floatingLabelStyle={{textAlign: 'middle'}} 
+                                            menuStyle={{width:'100%',textAlign:'left'}}
+                                            underlineStyle={{width:'80%'}} 
+                                            iconStyle={{top:'19px', right:'15px'}}
+                                            value={addtnlQuery.date} 
+                                            onChange={(event,index,value)=>this.selectOption('date',{value:value})}>
+        	                    	{
+        	                    		DATES().map(function(date,index){
+        	                    			return <MenuItem style={{width:'100%'}} key={index} value={date.value} primaryText={date.title}/>
+        	                    		})
+        	                    	}
+        					   </SelectField>
+                            </div>
+                        </div>
+					</div> 
+					<div className="pure-u-1-3 pure-u-md-1-5 display-table">
+                        <div className="move-center">
+                            <div className="center-inline-image">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path d="M3,13.5L2.25,12H7.5L6.9,10.5H2L1.25,9H9.05L8.45,7.5H1.11L0.25,6H4A2,2 0 0,1 6,4H18V8H21L24,12V17H22A3,3 0 0,1 19,20A3,3 0 0,1 16,17H12A3,3 0 0,1 9,20A3,3 0 0,1 6,17H4V13.5H3M19,18.5A1.5,1.5 0 0,0 20.5,17A1.5,1.5 0 0,0 19,15.5A1.5,1.5 0 0,0 17.5,17A1.5,1.5 0 0,0 19,18.5M20.5,9.5H18V12H22.46L20.5,9.5M9,18.5A1.5,1.5 0 0,0 10.5,17A1.5,1.5 0 0,0 9,15.5A1.5,1.5 0 0,0 7.5,17A1.5,1.5 0 0,0 9,18.5Z" />
+                                </svg>
+                            </div>
+                          <div className="adjust-delivery">  
+						      <FlatSelection selections={[{title:'delivery',value:'delivery'}]}/>
+                          </div>
+                        </div>
+					</div>
+					<div onClick={this.showFilter} className="pure-u-1-3 pure-u-md-1-5 display-table">
+                        <div className="move-center show-hide-filter">
+	                       <FlatSelection selections={[{title:'filter/sort',value:'showFilters'}]}/>
+                        </div>
+					</div> 
+            	</div>
+            	<div style={{display:(this.state.showFilters)?'block':'none'}}>
+            		<div className="pure-u-1-3 pure-u-md-2-5">
+	                    <label>radius</label>
+	                    <SelectField value={3} onChange={(event)=>this.selectOption(event.target.name,event.target.value)}>
+	                    	{
+	                    		RADIUS_OPTIONS.map(function(radius,index){
+	                    			return <MenuItem key={index} value={radius.value} label={radius.label} primaryText={radius.label}/>
+	                    		})
+	                    	}
+					      </SelectField>
+					</div> 
+            	</div>
 				<div className = 'cuisine-carousel-wrapper' onClick={(event)=>this.filterCuisineOrDietType(event,'cuisine')}>
 					<Carousel
-						slidesToShow={5}
-						cellSpacing={10}
+                        slideWidth="100px"
+                        slideHeight="100px"
 						dragging={true}
+                        decorators={carouselArrows}
 					>
 						{CUISINE_TYPES.map((cuisine,index)=>{
-							return <img alt={cuisine.type} 
-										key={index}
-										src={(this.props.search.get('cuisineSelectedMap').get(cuisine.type))? '/selection/dark-green-check-mark-md.svg':'/transparent.png'}
-										name={cuisine.type}
-										style={
-											{
-												background:'url('+cuisine.src+') center no-repeat',
-												backgroundSize:'cover'
-											}
-										}
-										className="carousel-img"
-									/>
+                            return <img alt={cuisine.type} 
+                                        key={index}
+                                        src='/transparent.png'
+                                        name={cuisine.type}
+                                        style={
+                                            {
+                                                background:'url('+cuisine.src+')  center no-repeat',
+                                                backgroundSize:'75%',
+                                                backgroundColor:(this.props.search.get('cuisineSelectedMap').get(cuisine.type)) ? '#f26800' : 'none' 
+                                            }
+                                        }
+                                        className="carousel-img"
+                                    />
 						})}
 					</Carousel>
 				</div>
-				<div className="query-btn-center">
-									<RaisedButton 
-										label="Search" 
-										primary={true}
-										disabled={!this.state.searchActivated}
-										style={{
-											width:'40%'
-										}}
-										onClick={this.createAndFetchNewQuery}
-										disableTouchRipple={true} 
-									/>
-								</div>
 				
 				<div className="providers-wrapper">
 					<div className="pure-g">

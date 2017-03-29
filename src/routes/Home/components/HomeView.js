@@ -152,6 +152,64 @@ const HomeView = React.createClass({
                         </div>
                     </div>
                 </div>
+                <div className="pure-g steps">
+                    <div className="pure-u-1 steps-text">
+                        3 easy steps to find the best professional
+                    </div>
+                    <div className="step pure-u-md-1-3 pure-u-1">
+                        <img src="shared/home/icon-SearchBig.png">
+                        </img>
+                        <div className="step-heading">
+                            Step 1 - <span className="step-summary">Search</span>
+                        </div>
+                        <div className="step-text">
+                            Search for the service and provider
+                        </div>
+                    </div>
+                    <div className="step pure-u-md-1-3 pure-u-1">
+                        <img src="shared/home/icon-QuoteBig.png">
+                        </img>
+                        <div className="step-heading" >
+                            Step 2 - <span className="step-summary">Browse</span>
+                        </div>
+                        <div className="step-text">
+                            Browse different provider profiles
+                        </div>
+                    </div>
+                    <div className="step pure-u-md-1-3 pure-u-1">
+                        <img src="shared/home/icon-HireBig.png">
+                        </img>
+                        <div className="step-heading">
+                            Step-3 - <span className="step-summary">Order</span>
+                        </div>
+                        <div className="step-text">
+                            Order and receive a confirmation email from provider
+                        </div>
+                    </div>
+                </div>
+                <div className="pure-g list-business">
+                    <div className="pure-u-md-1-2 pure-u-1">
+                        <img src="shared/home/cookPhoto.jpg"></img>
+                    </div>
+                    <div className="pure-u-md-1-2 pure-u-1 your-business">
+                        <div className="business-heading">
+                            List your business with us
+                        </div>
+                        <div className="business-promotion">
+                            <p>
+                                Start showcasing your profile and accepting orders quickly with our
+                                easy form based page builder
+                            </p>
+                            <p>
+                                We are starting off with food with a vision of expanding this service to 
+                                other categories like electricians, plumbers etc as well
+                            </p>
+                            <p className="business-signup">
+                                Sign up now
+                            </p>
+                        </div>
+                    </div>
+                </div>
 			</div>
         )
     }
