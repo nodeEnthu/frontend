@@ -6,27 +6,36 @@ const FlatSelection = React.createClass({
     return  {
       selections:this.props.selections,
       style:this.props.style,
-      checked:this.props.defaultChecked
+      checked:this.props.defaultChecked ,
+      classname:this.props.classname
     }
   },
   selectionChanged(e){
+    // what is currently checked
+    let currentlyCheckedItem= this.state.checked;
+    let newlyCheckedItem = e.currentTarget.value;
+    console.log(currentlyCheckedItem,newlyCheckedItem);
+    if(currentlyCheckedItem ===newlyCheckedItem){
+      newlyCheckedItem=undefined
+    }
     this.setState({
-      checked: e.currentTarget.value
-      });
+      checked: newlyCheckedItem
+    });
   },
   render(){
-    const {selections,style,checked} = this.state;
+    const {selections,style,checked,classname} = this.state;
     let self=this;
     return(
-      <div style={style}>
+      <div style={style} className={classname}>
         <group className="inline-radio">
           {
             selections.map(function(selection,index){
               return <div key={index}>
                         <input  type="radio" 
+                                
                                 name={selection.title}
                                 value={selection.value}
-                                checked={selection.title === checked}
+                                checked={selection.value === checked}
                                 onChange={self.selectionChanged}
                         />
                           <label>{selection.title}</label>

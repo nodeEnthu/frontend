@@ -1,37 +1,37 @@
 import moment from 'moment'
 
 export const CUISINE_TYPES = [{
-    type: 'Asian',
+    value: 'Asian',
     src: 'cuisines/cuisine-asian.svg'
 }, {
-    type: 'American',
+    value: 'American',
     src: 'cuisines/cuisine-american.svg'
 }, {
-    type: 'Indian',
+    value: 'Indian',
     src: 'cuisines/cuisine-indian.svg'
 }, {
-    type: 'African',
+    value: 'African',
     src: 'cuisines/cuisine-african.svg'
 }, {
-    type: 'Italian',
+    value: 'Italian',
     src: 'cuisines/cuisine-italian.svg'
 }, {
-    type: 'Mediterrnean',
+    value: 'Mediterrnean',
     src: 'cuisines/cuisine-mediterranean.svg'
 }, {
-    type: 'Mexican',
+    value: 'Mexican',
     src: 'cuisines/cuisine-mexican.svg'
 }, {
-    type: 'Bbq',
+    value: 'Bbq',
     src: 'cuisines/cuisine-bbq.svg'
 }, {
-    type: 'French',
+    value: 'French',
     src: 'cuisines/cuisine-french.svg'
 }, {
-    type: 'Greek',
+    value: 'Greek',
     src: 'cuisines/cuisine-greek.svg'
 }, {
-    type: 'Dessert',
+    value: 'Dessert',
     src: 'cuisines/cuisine-dessert.svg'
 }]
 
@@ -50,25 +50,25 @@ export function DATES() {
 
 export const DIET_TYPES = [{
     value: 'organic',
-    label: 'organic'
+    src: 'diets/organic.svg'
 }, {
     value: 'vegetarian',
-    label: 'vegetarian'
+    src: 'diets/vegetarian.svg'
 }, {
     value: 'nutfree',
-    label: 'nutfree'
+    src: 'diets/organic.svg'
 }, {
     value: 'glutenfree',
-    label: 'glutenfree'
+    src: 'diets/gluten-free.svg'
 }, {
     value: 'oilfree',
-    label: 'oilfree'
+    src: 'diets/oil-free.svg'
 }, {
     value: 'nondairy',
-    label: 'nondairy'
+    src: 'diets/dairy-free.svg'
 }, {
     value: 'indianfasting',
-    label: 'indianfasting'
+    src: 'diets/indian-fasting.svg'
 }]
 
 export const RADIUS_OPTIONS = [

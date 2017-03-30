@@ -10,7 +10,7 @@ const Decorators = [{
 		    render() {
 				return (<div className="arrow-decorator">
 							<IconButton
-								onClick={this.props.nextSlide}
+								onClick={this.props.previousSlide}
 								disableTouchRipple={true}
 							>
 								<NavigationArrowBack/>
@@ -25,7 +25,7 @@ const Decorators = [{
 		    render() {
 		    	return (<div className="arrow-decorator">
 			    			<IconButton
-								onClick={this.props.previousSlide}
+								onClick={this.props.nextSlide}
 								disableTouchRipple={true}
 							>
 								<NavigationArrowForward/>
