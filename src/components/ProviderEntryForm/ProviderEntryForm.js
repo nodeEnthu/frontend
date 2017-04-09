@@ -4,15 +4,20 @@ import { email, maxLength, required } from './../../utils/formUtils/formValidati
 import Toggle from 'material-ui/Toggle';
 import classNames from 'classnames';
 import Dialog from 'material-ui/Dialog';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import FlatSelection from 'components/FlatSelection'
 import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
-import AsyncAutocomplete from 'components/AsyncAutocomplete'
-import ImageUploader from 'components/ImageUploader'
-import s3ImageUpload from 'utils/uploader/s3ImageUpload'
-import Spinner from 'react-spinkit'
-
+import AsyncAutocomplete from 'components/AsyncAutocomplete';
+import ImageUploader from 'components/ImageUploader';
+import s3ImageUpload from 'utils/uploader/s3ImageUpload';
+import RaisedButton from 'material-ui/RaisedButton';
+import Stepper from 'components/Stepper';
 const maxCount = 100;
 const ProviderEntryForm = React.createClass({
+    getInitialState() {
+      return{
+        showSpinner:false
+      }  
+    },
     componentWillMount() {
         // check whether its an edit to an already present provider
         if(this.props.params.id){
@@ -34,6 +39,9 @@ const ProviderEntryForm = React.createClass({
 
             })
         }
+    },
+    contextTypes: {
+        router: React.PropTypes.object.isRequired
     },
     mapFieldsToValidationType : {
         title: {validationType: required,validationMessage:'title is required'},
@@ -58,63 +66,37 @@ const ProviderEntryForm = React.createClass({
         if (validation) errorMsg = validation(input,validationErrorMessage);
         if (errorMsg) {
             let errorMsgkey = stateKeyName + 'ErrorMsg';
-            this.props.addProviderErrorMsg({
-                storeKey:errorMsgkey,
-                payload:errorMsg
-            });
+            this.props.addProviderErrorMsg({storeKey: errorMsgkey,payload: errorMsg});
         }
-        this.props.addProviderInfo({
-            storeKey:stateKeyName,
-            payload:input
-        })
     },
     toggle(storeKey) {
-        if((storeKey==='doYouDeliverFlag' || storeKey==='pickUpFlag')){
-            this.props.addProviderErrorMsg({
-                        storeKey:"providerTypeErrorMsg",
-                        payload:null
-                    });
-        }
-        this.props.addProviderInfo({
-            storeKey: storeKey,
-            payload:!this.props.providerEntryForm.get(storeKey)
-        })
+        this.props.addProviderInfo({storeKey: storeKey,payload: !this.props.providerEntryForm.get(storeKey)})
     },
+   
     handleFocus(event) {
         let stateKeyName = event.target.name;
         if (stateKeyName) {
             // clear the error msg if it exists
             let errorMsgkey = stateKeyName + 'ErrorMsg';
-            if(stateKeyName === 'searchText'){
-                this.props.addProviderErrorMsg({
-                    storeKey:'place_idErrorMsg',
-                    payload:null
-                });
-            }
-            this.props.addProviderErrorMsg({
-                storeKey:errorMsgkey,
-                payload:null
-            });
+            if(stateKeyName === 'searchText') this.props.addProviderErrorMsg({storeKey :'place_idErrorMsg',payload: null});
+            this.props.addProviderErrorMsg({storeKey: errorMsgkey,payload: null});
         }
     },
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
-        this.props.addProviderInfo({
-            storeKey:stateKeyName,
-            payload:input
-        }); 
-       
+        this.props.addProviderInfo({storeKey:stateKeyName,payload:input}); 
     },
     onSuggestionSelected(event,{suggestion}){
-        this.props.addProviderInfo({
-            storeKey:'searchText',
-            payload:suggestion.address
-        });
+        this.props.addProviderInfo({storeKey:'searchText', payload:suggestion.address });
         this.props.addProviderInfo({
             storeKey:'place_id',
             payload:suggestion.place_id
         });
+    },
+    onAllClear(){
+        this.setState({showSpinner:false});
+        this.context.router.push(this.props.linkToRedirectOnAllClear);
     },
     validateForm(){
         let self = this;
@@ -134,13 +116,6 @@ const ProviderEntryForm = React.createClass({
                 }
             }
         }
-        if(!this.props.providerEntryForm.get("doYouDeliverFlag") && !this.props.providerEntryForm.get("pickUpFlag")){
-            noErrorsInform = false;
-            self.props.addProviderErrorMsg({
-                        storeKey:"providerTypeErrorMsg",
-                        payload:"Please choose service type Pick-up OR Delivery OR both"
-                    })
-        }
         return noErrorsInform;
     },
     onImageChange(blob,imgUrl,fileConfig){
@@ -158,41 +133,34 @@ const ProviderEntryForm = React.createClass({
         let self = this;
         let reqBody = this.props.providerEntryForm.toJS();
         if(this.validateForm()){
-            this.props.showHideSpinner({storeKey:'providerEntrySpinner',payload:true});
+            this.setState({showSpinner:true});
+            if(this.props.mode==='PROVIDER_ENTRY') reqBody.publishStage =1;
             // check whether the image was changed
             if (reqBody.imgChanged) {
+                s3ImageUpload(this.state.fileConfig,this.state.imgBlob,function(){
+                    securedPostCall('/api/providers/registration' , reqBody)
+                        .then(()=>self.onAllClear())
+                });
+                // reset it back to not changed
                 this.props.addProviderInfo({
                     storeKey:'imgChanged',
                     payload:false
                 });
-                s3ImageUpload(this.state.fileConfig,this.state.imgBlob,function(){
-                    securedPostCall('/api/providers/registration' , reqBody)
-                        .then(()=>self.props.onAllClear())
-                });
             }else{
                 securedPostCall('/api/providers/registration' , reqBody)
-                    .then(()=>self.props.onAllClear())
+                    .then(()=>self.onAllClear())
             }
-            
         }
     },
     render() {
-        let {chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,pickUpFlag,pickUpAddtnlComments, includeAddressInEmail, deliveryAddtnlComments,deliveryMinOrder,deliveryRadius,allClear,providerAddressJustificationModalOpen,doYouDeliverFlag,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg } = this.props.providerEntryForm.toJS();
-        let showSpinner = false;
-        if(this.props.spinner){
-            const {providerEntrySpinner} = this.props.spinner.toJS();
-            showSpinner = (providerEntrySpinner === true)? true:false;
-        }
-        const styles = {
-          block: {
-            maxWidth: 250,
-          },
-          radioButton: {
-            marginBottom: 12,
-          },
-        };
+        let {chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,serviceOffered,addtnlComments, includeAddressInEmail,deliveryMinOrder,deliveryRadius,providerAddressJustificationModalOpen,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg } = this.props.providerEntryForm.toJS();
+        serviceOffered = serviceOffered || 'pickup';
         return (
             <div className="provider-entry-form">
+                <Stepper
+                    numberofSteps={3}
+                    activeStep={1}
+                />
                 <div className="is-center">
                     <ImageUploader
                         onImageChange = {this.onImageChange}
@@ -201,13 +169,13 @@ const ProviderEntryForm = React.createClass({
                 </div>
                 <form className="pure-form pure-form-stacked">
                     <fieldset>
-                        <input type="text"  className="pure-u-1" placeholder="*title" name="title" value={title}
-                        onChange={this.changeStoreVal}
-                        onBlur={this.handleChange} 
-                        onFocus={this.handleFocus}
+                        <input value={title} type="text" className="pure-u-1" placeholder="*title" name="title" 
+                            onChange={this.changeStoreVal}
+                            onBlur={this.handleChange} 
+                            onFocus={this.handleFocus}
                         />
                         <div className = "error-message">{(titleErrorMsg)?'*'+titleErrorMsg:undefined}</div>
-                        <textarea className = "pure-u-1"name="description" placeholder="background" value={description}
+                        <textarea className = "pure-u-1" name="description" placeholder="background" value={description}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus} 
                             onChange={this.changeStoreVal} 
@@ -216,21 +184,23 @@ const ProviderEntryForm = React.createClass({
                         <div className = "error-message">{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</div>
                         <div>{chars_left}/100</div>
                     
-                        <input type="text" name="email" placeholder="*email" value={email}
+                        <input type="text" className={"pure-u-1"} name="email" placeholder="*email" value={email}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus}
                             onChange={this.changeStoreVal}
-                            className={"pure-u-1"}/>
+                        />
                         <div className = "error-message">{(emailErrorMsg)?'*'+emailErrorMsg:undefined}</div>
                         <legend className="pull-left">
                             <div>
                                 Address:
                             </div>
                             <div>
-                                <span style={{fontSize:'0.75em'}}>Display this on my public profile page</span>
+                                <span style={{fontSize:'0.75em'}}>Display on profile page</span>
                                 <div style={{maxWidth:100, display:'inline-block'}}>
                                     <Toggle
                                         style={{top:'8px'}}
+                                        thumbSwitchedStyle={{backgroundColor:'#f26800'}}
+                                        trackSwitchedStyle={{backgroundColor:'#fdd4b5'}}
                                         defaultToggled={!keepAddressPrivateFlag}
                                         onToggle={()=>{this.toggle('keepAddressPrivateFlag')}}
                                     />
@@ -261,77 +231,30 @@ const ProviderEntryForm = React.createClass({
                                                         }
                                             onSuggestionSelected = {this.onSuggestionSelected}
                         />
-                        <div className = "error-message">{(searchTextErrorMsg||place_idErrorMsg)?'*'+(searchTextErrorMsg || place_idErrorMsg):undefined}</div>
-                   
-                    {(keepAddressPrivateFlag)?
-                        <div>
-                            <p>
-                                Please note that the address entered above will be used as a pick-up address
-                            </p>
-                            <p>
-                                Choose from one of the following privacy options
-                            </p>
-                            <RadioButtonGroup name="addressOptions" 
-                                defaultSelected={includeAddressInEmail.toString()}
-                                onChange={(event)=>this.toggle('includeAddressInEmail')}
-                            >
-                              <RadioButton
-                                value="true"
-                                label="don't display the address but include it in the email sent to customer after order submission"
-                                style={styles.radioButton}
-                              />
-                              <RadioButton
-                                value="false"
-                                label="i will cordinate with customer regarding the pick-up location"
-                                style={styles.radioButton}
-                                
-                              />
-                            </RadioButtonGroup>
-                        </div>
-                        : 
-                        undefined
-                    }
-                        We are pick-up service
-                        <div style={{maxWidth:100, display:'inline-block'}}>
-                            <Toggle
-                                style={{top:'8px'}}
-                                defaultToggled={pickUpFlag}
-                                onToggle={()=>{this.toggle('pickUpFlag')}}
-                            />
-                        </div>
-                    {(pickUpFlag)?
-                        <div>
-                            <fieldset className = "pure-group">
-                                <textarea className = "pure-u-1" name="pickUpAddtnlComments" 
-                                    placeholder="additional comments about pick-up" value={pickUpAddtnlComments}
-                                    onBlur={this.handleChange} 
-                                    onFocus={this.handleFocus} 
-                                    onChange={this.changeStoreVal} 
-                                >
-                                </textarea>
-                            </fieldset>
-                        </div>
-                        :
-                        undefined
-                    }   
                         
-                        <legend className="pull-left">
-                                We can deliver 
-                            <div style={{maxWidth:100, display:'inline-block'}}>
-                                <Toggle
-                                     style={{top:'8px'}}
-                                    defaultToggled={doYouDeliverFlag}
-                                    onToggle={()=>{this.toggle('doYouDeliverFlag')}} 
-                                />
-                            </div> 
-                        </legend>
-                        <div className = "error-message">{(providerTypeErrorMsg)?'*'+providerTypeErrorMsg:undefined}</div>
-                    {(doYouDeliverFlag)?
+                        <div className = "error-message">{(searchTextErrorMsg||place_idErrorMsg)?'*'+(searchTextErrorMsg || place_idErrorMsg):undefined}</div>
+                        <div className="mdl" style={{marginTop:"0.5em"}}>
+                            Services offered:
+                            <label className="pure-radio">
+                                <input type="radio" name="serviceOffered" value="pickup" checked={serviceOffered === "pickup"} onChange={this.changeStoreVal}/>
+                                    <span className="label-margin">pickup</span>
+                            </label>
+
+                            <label  className="pure-radio">
+                                <input type="radio" name="serviceOffered" value="delivery" checked={serviceOffered === "delivery"} onChange={this.changeStoreVal}/>
+                                    <span className="label-margin">delivery</span>
+                            </label>
+                            <label  className="pure-radio">
+                                <input type="radio" name="serviceOffered" value="both" checked={serviceOffered === "both"} onChange={this.changeStoreVal}/>
+                                    <span className="label-margin">both</span>
+                            </label>
+                        </div>
+                    {(serviceOffered==='delivery' || serviceOffered==='both')?
                         <div>
                             <div>
                                 <div className="pure-u-1 pure-u-md-1-2">
                                     <label>
-                                        Delivery within
+                                        Delivery within (miles)
                                     </label>
                                     <div>
                                         <select id="delivery"  className="pure-u-3-4"
@@ -352,8 +275,8 @@ const ProviderEntryForm = React.createClass({
                                         </select>
                                     </div>
                                 </div>
-                                <div className="pure-u-1">
-                                    <label>Minimum Order</label>
+                                <div className="pure-u-1 pure-u-md-1-2">
+                                    <label>Minimum Order for delivery ($)</label>
                                     <input id="min-order" placeholder="Example: 25" type="text"
                                         name="deliveryMinOrder"
                                         onBlur={this.handleChange} 
@@ -362,35 +285,37 @@ const ProviderEntryForm = React.createClass({
                                         value={deliveryMinOrder}
                                         style={{width:'100%'}}
                                     />
-                                    <textarea className = "pure-u-1"
-                                        name="deliveryAddtnlComments" 
-                                        placeholder="Please add comments like delivery charges. 
-                                        Example:
-                                        Delivery Fee $6 
-                                        Free above $100"
-                                        value={deliveryAddtnlComments}
-                                        onBlur={this.handleChange} 
-                                        onFocus={this.handleFocus} 
-                                        onChange={this.changeStoreVal} 
-                                    >
-                                    </textarea>
                                 </div>
                             </div>   
                         </div> 
                         :
                         undefined
-                }                            
+                    }   
+                         <div>
+                            <fieldset className = "pure-group">
+                                <textarea className = "pure-u-1" name="addtnlComments" 
+                                    placeholder="additional comments about pick-up and/or delivery" value={addtnlComments}
+                                    onBlur={this.handleChange} 
+                                    onFocus={this.handleFocus} 
+                                    onChange={this.changeStoreVal} 
+                                >
+                                </textarea>
+                            </fieldset>
+                        </div>                         
                     </fieldset>
                 </form>
-                <div style={{margin:'0 auto', textAlign:'center'}}>
-                    <Spinner spinnerName='circle' 
-                        style = {{  display:'inline-block',
-                                    display:(showSpinner)?'block':'none',
-                                    marginBottom:'1em'
-                                }}
-                    />
+                <div className="is-center">
+                    <div style={{display:(this.state.showSpinner)?'block':'none'}}>
+                        <img src= "/general/loading.svg"/>
+                    </div>
+                    <RaisedButton
+                        label={this.props.nextLabel}
+                        backgroundColor="#f26800"
+                        labelStyle={{color:'white'}}
+                        onTouchTap={this.formSubmit}
+                        disableTouchRipple={true}
+                      />
                 </div>
-                
                 <Dialog
                   open={providerAddressJustificationModalOpen || false}
                   onRequestClose={()=>{this.toggle('providerAddressJustificationModalOpen')}}
@@ -425,10 +350,12 @@ const ProviderEntryForm = React.createClass({
 });
 ProviderEntryForm.propTypes = {
     addProviderInfo:React.PropTypes.func.isRequired,
+    addProviderErrorMsg:React.PropTypes.func.isRequired,
     providerEntryForm: React.PropTypes.object.isRequired,
-    fetchSecuredData:React.PropTypes.func.isRequired,
     params:React.PropTypes.object,
-    prefilProviderEntryForm:React.PropTypes.func,
-    showHideSpinner:React.PropTypes.func
+    fetchSecuredData:React.PropTypes.func.isRequired,
+    mode:React.PropTypes.string.isRequired,
+    nextLabel:React.PropTypes.string.isRequired,
+    linkToRedirectOnAllClear:React.PropTypes.string.isRequired
 };
 export default ProviderEntryForm;

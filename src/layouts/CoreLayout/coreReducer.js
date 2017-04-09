@@ -10,6 +10,7 @@ export const USER_ADDRESS_SEARCH_CHANGE = 'USER_ADDRESS_SEARCH_CHANGE'
 export const USER_ADDRESS_UPDATE_PLACE_ID = 'USER_ADDRESS_UPDATE_PLACE_ID'
 export const USER_FOOD_ITEM_UPDATE = 'USER_FOOD_ITEM_UPDATE'
 export const PUBLISH_USER = "PUBLISH_USER"
+export const POST_LOGIN_URL_REDIRECT = "POST_LOGIN_URL_REDIRECT"
 
 export function addToken(value) {
     return {
@@ -66,6 +67,12 @@ export function userFoodItemUpdate(_id) {
         payload:_id
     }
 }
+export function postLoginUrlRedirect(url) {
+    return {
+        type: POST_LOGIN_URL_REDIRECT,
+        payload:url
+    }
+}
 
 
 
@@ -97,6 +104,9 @@ const ACTION_HANDLERS = {
     },
     [USER_FOOD_ITEM_UPDATE]:(state,action)=>{
         return state.setIn(['user', 'foodItemAddedInEntryMode'],true)
+    },
+    [POST_LOGIN_URL_REDIRECT]: (state, action) => {
+        return state.set('postLoginUrlRedirect', action.payload)
     }
 }
 
@@ -118,10 +128,12 @@ const initialState = Map({
     }),
     loginModalOPen: undefined,
     userLoggedIn: false,
-    userAddressSearch: Map({
+    userAddressSearch: Map({    // the main reason this is outside user MAP is because we need to register for users address
         searchText: '',
         place_id: '',
-    })
+    }),
+    postLoginUrlRedirect:''
+
 })
 
 export function coreReducer(state = initialState, action) {

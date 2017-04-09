@@ -44,17 +44,26 @@ var Login = React.createClass({
                   let userSearchAndPlaceId = getSearchAddressAndPlaceId(res.user);
                   dispatch(actions.userAddressSearchChange(userSearchAndPlaceId.address));
                   dispatch(actions.userAddressUpdatePlaceId(userSearchAndPlaceId.placeId));
-                  
                   sessionStorage.setItem('token', res.token);
                   if(self.context.router.location.pathname === '/'){
-                  // now based on the userType take an action
-                    if(res.user.userType === 'consumer'){
+                  // get the path to redirect to
+                  let redirectPath = globalState.core.get('postLoginUrlRedirect');
+
+                  if(redirectPath){
+                    // special treatment for first time provider entry here as we dont know the objectID
+                    redirectPath = (redirectPath ==='provider')? '/provider/'+res.user._id+'/providerProfileEntry':redirectPath;
+                    self.context.router.push(redirectPath);
+                    // reset it back to ''
+                    dispatch(actions.postLoginUrlRedirect(''));
+                  } else{
+                    // now based on the userType take an action
+                    if (res.user.userType === 'consumer'){
                       self.context.router.push('/search');
-                    }else{
+                    }else {
                       self.context.router.push('/providerProfile/'+res.user._id);
                     }
                   }
-                  
+                }
               }
           })
     },
@@ -80,7 +89,7 @@ var Login = React.createClass({
               <div>
                   <a
                     onClick={this.openModal}
-                    >Login
+                    >LOGIN
                   </a>
                 <Dialog
                   open={loginModalOPen || false}

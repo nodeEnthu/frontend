@@ -9,6 +9,7 @@ import CommunicationLocationOn from 'material-ui/svg-icons/communication/locatio
 import Spinner from 'react-spinkit'
 import './HomeView.scss'
 import { getCall,securedGetCall } from 'utils/httpUtils/apiCallWrapper';
+import Stepper from 'components/Stepper';
 const HomeView = React.createClass({
     getInitialState() {
         return {
@@ -53,7 +54,7 @@ const HomeView = React.createClass({
                             self.context.router.push(page);
                         }); 
                 } else{
-                    // user is not logged in ... add it to cookie so that it is saved in the session and we dont make another call
+                    // user is not logged in ...
                     this.context.router.push(page);
                 }
             }else{
@@ -65,6 +66,8 @@ const HomeView = React.createClass({
 
         } else {
             if(!this.props.globalState.core.get('userLoggedIn')){
+                // set the page to go to after login
+                this.props.postLoginUrlRedirect('provider');
                 this.props.openLoginModal();
             }else this.context.router.push(page);
         }
@@ -204,7 +207,7 @@ const HomeView = React.createClass({
                                 We are starting off with food with a vision of expanding this service to 
                                 other categories like electricians, plumbers etc as well
                             </p>
-                            <p className="business-signup">
+                            <p className="business-signup" onClick={()=>this.goToPage('providerEntry')}>
                                 Sign up now
                             </p>
                         </div>
@@ -219,7 +222,8 @@ HomeView.propTypes = {
     globalState: React.PropTypes.object.isRequired,
     userAddressSearchChange: React.PropTypes.func.isRequired,
     userAddressUpdatePlaceId: React.PropTypes.func.isRequired,
-    openLoginModal:React.PropTypes.func.isRequired
+    openLoginModal:React.PropTypes.func.isRequired,
+    postLoginUrlRedirect:React.PropTypes.func.isRequired
 }
 
 

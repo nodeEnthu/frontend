@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import {selectCuisineOrDiet,flushOutStaleData,selectAddtnlQuery } from '../modules/search'
+import {selectCuisineOrDiet,flushOutStaleData,selectAddtnlQuery,setDirty} from '../modules/search'
 import { userAddressSearchChange,userAddressUpdatePlaceId } from 'layouts/CoreLayout/coreReducer'
 import {fetchMayBeSecuredData} from 'utils/actionUtils/defaultHttpActions';
  
@@ -20,12 +20,13 @@ const mapDispatchToProps = {
   selectCuisineOrDiet,
   selectAddtnlQuery,
   userAddressSearchChange,
-  userAddressUpdatePlaceId
+  userAddressUpdatePlaceId,
+  setDirty
 }
 
 const mapStateToProps = (state) => ({
   globalState:state,
-  search: state.search,
+  search: state.search
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search)

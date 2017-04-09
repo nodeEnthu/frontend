@@ -109,10 +109,10 @@ class ImageUploader extends React.Component {
     let $imagePreview = (imagePreviewUrl)? (<img style={{width:'100%'}}src={imagePreviewUrl} />) : (<div className="previewText"></div>) ;
     return (
       <div className="previewComponent">
-        <div style={{display:'flex', maxWidth:'400px',height:'auto', margin:'0 auto'}}>
+        <div>
           {(!imgUploaded && imagePreviewUrl)? $imagePreview: undefined}
-          <canvas id="imgPreview" style={{display:'none',width:'400px',height:'auto'}}></canvas>
-          <canvas id="myCanvas" style={{display:(imgUploaded)?'inline-block':'none',flex: '1 1 0', minWidth:0}}></canvas>
+          <canvas id="imgPreview" style={{display:'none'}}></canvas>
+          <canvas id="myCanvas" style={{display:(imgUploaded)?'inline-block':'none',maxHeight:"200px",textAlign:"center"}}></canvas>
         </div>
 
         <div style = {{margin:"0 auto", textAlign:"center"}}>

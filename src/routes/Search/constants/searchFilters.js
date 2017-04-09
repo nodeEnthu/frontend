@@ -1,37 +1,37 @@
 import moment from 'moment'
 
 export const CUISINE_TYPES = [{
-    value: 'Asian',
+    value: 'asian',
     src: 'cuisines/cuisine-asian.svg'
 }, {
-    value: 'American',
+    value: 'american',
     src: 'cuisines/cuisine-american.svg'
 }, {
-    value: 'Indian',
+    value: 'indian',
     src: 'cuisines/cuisine-indian.svg'
 }, {
-    value: 'African',
+    value: 'african',
     src: 'cuisines/cuisine-african.svg'
 }, {
-    value: 'Italian',
+    value: 'italian',
     src: 'cuisines/cuisine-italian.svg'
 }, {
-    value: 'Mediterrnean',
+    value: 'mediterrnean',
     src: 'cuisines/cuisine-mediterranean.svg'
 }, {
-    value: 'Mexican',
+    value: 'mexican',
     src: 'cuisines/cuisine-mexican.svg'
 }, {
-    value: 'Bbq',
+    value: 'bbq',
     src: 'cuisines/cuisine-bbq.svg'
 }, {
-    value: 'French',
+    value: 'french',
     src: 'cuisines/cuisine-french.svg'
 }, {
-    value: 'Greek',
+    value: 'greek',
     src: 'cuisines/cuisine-greek.svg'
 }, {
-    value: 'Dessert',
+    value: 'dessert',
     src: 'cuisines/cuisine-dessert.svg'
 }]
 

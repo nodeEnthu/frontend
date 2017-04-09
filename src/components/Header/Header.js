@@ -23,7 +23,7 @@ export  class Header extends React.Component {
         return (
             <div className="header">
               <div className="frame">
-                <img className = "logo" src="logo.png"></img>
+                <img className = "logo" src="/general/logo.png"></img>
               </div>
               <nav id="nav" role="navigation"> <a href="#nav" title="Show navigation">Show navigation</a><a href="#" title="Hide navigation">Hide navigation</a>
                 <ul>
@@ -39,23 +39,26 @@ export  class Header extends React.Component {
                   {(globalState.core.get('token').length>0 && user&& user.name)?
                     <li>
                       <Link to='/search' >
-                        Search
+                        SEARCH
                       </Link>
                     </li>
                     :
                     undefined
                   }
                   {(globalState.core.get('token').length>0 )?
-                    <div style={{display:'inline-block'}}>
-                      <li>
-                        <Link to={'/user/'+user._id+'/order-summary'} >
-                          Orders
-                        </Link>
-                      </li>
-                      <li >
-                          <a onClick = {this.removeToken}>Logout</a>
-                      </li>
-                    </div>
+                    <li>
+                      <Link to={'/user/'+user._id+'/order-summary'} >
+                        ORDERS
+                      </Link>
+                    </li>
+                    
+                    :
+                    undefined
+                  }
+                  {(globalState.core.get('token').length>0 )?
+                    <li>
+                        <a onClick = {this.removeToken}>LOGOUT</a>
+                    </li>
                     :
                     undefined
                   }
@@ -63,12 +66,23 @@ export  class Header extends React.Component {
                     <a href="">LIST YOUR BUSINESS</a>
                   </li>
                   <li>
-                    <a href="">
-                      LOGIN
-                    </a>
+                    {(globalState.core.get('token').length>0 )?
+                      undefined
+                      :
+                      <Login{...this.props}/>
+                     } 
                   </li>
                 </ul>
               </nav>
+              <div className="profile-pic">
+                <img src={user.img} 
+                      style = {{
+                        borderRadius:24+'px',
+                        width:'40px',
+                        display:'inline-block'
+                      }}
+                />
+              </div>
         </div>
         );
     }
