@@ -7,38 +7,24 @@ import IconButton from 'material-ui/IconButton'
 import classNames from 'classnames';
 import DatePicker from 'material-ui/DatePicker';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
-import Snackbar from 'material-ui/Snackbar';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import TimeInput from 'react-time-input';
 import { securedPostCall} from 'utils/httpUtils/apiCallWrapper';
-import { CUISINE_TYPES} from './../../routes/Search/constants/searchFilters';
+import { CUISINE_TYPES} from 'routes/Search/constants/searchFilters';
 import {daysOfTheWeek,timeOfDay} from './constants';
 import ImageUploader from 'components/ImageUploader'
 import s3ImageUpload from 'utils/uploader/s3ImageUpload';
-import Spinner from 'react-spinkit';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import moment from 'moment';
 import * as actions from 'layouts/CoreLayout/coreReducer';
-import Select from 'react-select';
 import Checkbox from 'material-ui/Checkbox';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+
 
 const maxCount = 100;
 
 const FoodItemEntryForm= React.createClass({
     componentDidMount() {
-        //scroll to the top
-        window.scrollTo(0, 23);
-        // check whether its an edit to an already present provider to prefil the form
-        if(this.props.params.id){
-            this.props.fetchData('/api/foodItem/'+this.props.params.id , 'foodItemCall','FOOD_ITEM')
+        if(this.props.params.foodId){
+            this.props.fetchData('/api/foodItem/'+this.props.params.foodId , 'foodItemCall','FOOD_ITEM')
         }
-        let {serviceDate,oneTime} = this.props.foodItemEntryForm.toJS();
-        if(oneTime,serviceDate){
-            this.changeStoreTimeAndDateVals(serviceDate,'serviceDate');
-        }
-    },
-    componentWillUnmount() {
-        this.props.showHideSpinner({storeKey:'foodItemEntrySpinner',payload:false});
     },
     mapFieldsToValidationType:{
         name: required,
@@ -198,15 +184,6 @@ const FoodItemEntryForm= React.createClass({
                 }
             }
         }
-        if (!noErrorsInform) {
-            self.props.addFoodItemInfo({
-                storeKey: 'snackBarMessage',
-                payload: 'Please fill the required fields'
-            });
-            this.toggleFlags('snackBarOpen');
-            //scroll to the top
-            window.scrollTo(0, 23);
-        }
         return noErrorsInform;
     },
     onImageChange(blob,imgUrl,fileConfig){
@@ -271,12 +248,6 @@ const FoodItemEntryForm= React.createClass({
                     if(self.props.mode ==="PROVIDER_ENTRY"){
                         self.props.dispatch(actions.userFoodItemUpdate(response.data._id));
                     }
-                    // open the snackbar
-                    self.toggleFlags('snackBarOpen');
-                    self.props.addFoodItemInfo({
-                        storeKey: 'snackBarMessage',
-                        payload: 'Item successfully added to your menu'
-                    });
                     // delete all the prior information
                     self.props.removeFoodItemInfo();
                     //scroll to the top
@@ -286,12 +257,7 @@ const FoodItemEntryForm= React.createClass({
     },
     render() {
         let self = this;
-        let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg,oneTime,availability,dateRangeStartDate,dateRangeStopDate, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, snackBarOpen, snackBarMessage} = this.props.foodItemEntryForm.toJS();
-        let showSpinner = false;
-        if(this.props.spinner){
-            let {foodItemEntrySpinner} = this.props.spinner.toJS();
-            showSpinner = (foodItemEntrySpinner)? true:false;
-        }
+        let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg,oneTime,availability,dateRangeStartDate,dateRangeStopDate, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting} = this.props.foodItemEntryForm.toJS();
         serviceDate = (serviceDate)? new Date(serviceDate): new Date();
         // this is done as the material ui date picker saves time in this Sat Jan 28 2017 00:00:00 GMT-0800 (PST) format ..
         serviceDate =  this.addTimeOffset(serviceDate);
@@ -299,7 +265,6 @@ const FoodItemEntryForm= React.createClass({
         dateRangeStartDate = (dateRangeStartDate)? new Date(dateRangeStartDate): new Date();
         dateRangeStopDate = (dateRangeStopDate)? new Date(dateRangeStopDate): new Date();
         return (
-            (serviceDate && oneTime!= undefined)?
             <div className="food-item-entry">
                 <div className="is-center">
                     <ImageUploader
@@ -337,7 +302,7 @@ const FoodItemEntryForm= React.createClass({
                                 >
                                     <option value=''></option>
                                     {CUISINE_TYPES.map((cuisine)=>{
-                                        return <option key={cuisine.type}>{cuisine.type}</option>
+                                        return <option key={cuisine.value}>{cuisine.value}</option>
                                     })}
 
                                 </select>
@@ -542,32 +507,18 @@ const FoodItemEntryForm= React.createClass({
                         <div style={{display:'inline-block'}}>
                             Add another item
                         </div>
-                        <Snackbar
-                          open={snackBarOpen || false}
-                          message={snackBarMessage || ''}
-                          autoHideDuration={5000}
-                          onRequestClose={()=>{this.toggleFlags('snackBarOpen')}} 
-                        />
                     </div>
                     :
                     undefined
                 }
                 <div style={{margin:'0 auto', textAlign:'center'}}>
-                    <Spinner spinnerName='circle' 
-                        style = {{  display:'inline-block',
-                                    display:(showSpinner)?'block':'none',
-                                    marginBottom:'1em'
-                                }}
-                    />
+                    
                 </div>  
             </div>
-            :
-            <div></div>
         )
     }
 })
 FoodItemEntryForm.propTypes = {
-    onAllClear : React.PropTypes.func.isRequired, 
     foodItemEntryForm : React.PropTypes.object.isRequired,
     addFoodItemInfo : React.PropTypes.func.isRequired, 
     fetchData : React.PropTypes.func.isRequired,

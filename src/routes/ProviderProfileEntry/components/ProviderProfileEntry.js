@@ -7,9 +7,6 @@ const ProviderProfileEntry = React.createClass ({
   componentDidMount() {
     
   },
-  contextTypes: {
-    router: React.PropTypes.object.isRequired
-  },
   handleNext(){
     this.refs.providerform.formSubmit();
   },

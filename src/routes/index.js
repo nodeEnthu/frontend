@@ -12,6 +12,8 @@ import OrderAction from './OrderAction'
 import OrderSummary from './OrderSummary'
 import Chat from './Chat'
 import ProviderProfileEntry from './ProviderProfileEntry'
+import ProviderFoodEntry from './ProviderFoodEntry'
+
 import { onMainPageEnter} from 'utils/auth/onEnterAuth'
 
 
@@ -25,8 +27,8 @@ export const createRoutes = (store) => ({
             indexRoute: Home,
             onEnter: (nextState, replace) => onMainPageEnter(nextState, replace, store)
         },
-        ProviderRoute(store),
         ProviderProfileEntry(store),
+        ProviderFoodEntry(store),
         ProviderProfilePage(store),
         Search(store),
         FoodItemReviews(store),
