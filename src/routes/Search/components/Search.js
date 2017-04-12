@@ -144,7 +144,7 @@ const Search = React.createClass({
         	}
         }
         let self = this;
-        addtnlQuery.date = addtnlQuery.date || DATES()[0].value ;
+        addtnlQuery.date = addtnlQuery.date || DATES(7)[0].value ;
         return (
             <div className="search">
                 <div className="panel pure-g" id="showfilters">
@@ -259,7 +259,7 @@ const Search = React.createClass({
                             <div className="select-date">
         	                    <SelectField autoWidth={false} style={{width:'80%',left:'25px',height:'auto',top:'5px'}}
                                             fullWidth={false}
-                                            labelStyle={{top:'4px',color:'#f26800'}}
+                                            labelStyle={{top:'4px',color:'#FF6F00'}}
                                             floatingLabelStyle={{textAlign: 'middle'}} 
                                             menuStyle={{width:'100%',textAlign:'left'}}
                                             underlineStyle={{width:'80%'}} 
@@ -267,7 +267,7 @@ const Search = React.createClass({
                                             value={addtnlQuery.date} 
                                             onChange={(event,index,value)=>this.selectOption(value,'date')}>
         	                    	{
-        	                    		DATES().map(function(date,index){
+        	                    		DATES(7).map(function(date,index){
         	                    			return <MenuItem style={{width:'100%'}} key={index} value={date.value} primaryText={date.title}/>
         	                    		})
         	                    	}
@@ -328,12 +328,12 @@ const Search = React.createClass({
 										                            name={foodItem._id} 
 										                            editing={false}
 										                            starCount={5}
-                                                                    starColor={'#f26800'}
+                                                                    starColor={'#FF6F00'}
 										                            value={3}
 										                         />
 									                         </div>
 									                         <div className="num-of-reviews">
-									                         	<span style={{color:"#f26800"}}>(</span>{(foodItem.numOfReviews)? foodItem.numOfReviews: 0}<span style={{color:"#f26800"}}>)</span>
+									                         	<span style={{color:"#FF6F00"}}>(</span>{(foodItem.numOfReviews)? foodItem.numOfReviews: 0}<span style={{color:"#FF6F00"}}>)</span>
 									                         </div>
 									                         <div className="miles-away"><span>{foodItem.distance}</span><span>mi</span></div>
 											    		</div>
@@ -344,7 +344,7 @@ const Search = React.createClass({
 											    			<div className="food-price">{'$'+ foodItem.price}</div>
                                                             <div className="add">
                                                                <FlatButton
-                                                                    backgroundColor="#f26800"
+                                                                    backgroundColor="#FF6F00"
                                                                    label="+add"
                                                                    labelStyle={{color:'white'}}
                                                                    style={{height:'24px',lineHeight:'24px',minWidth:'80px'}}

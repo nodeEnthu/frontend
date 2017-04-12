@@ -25,7 +25,23 @@
         border: none;
         box-shadow: none;
     }
-
+    .parent-box{
+        width:90%;
+        max-width:100px;
+        margin:0 auto;
+        border:1px solid lightgrey;
+    }
+    .child-box-1{
+        height:30px;
+        line-height:30px;
+        text-align: center;
+    }
+    .child-box-2{
+        height:30px;
+        padding: 2% 38%;
+        vertical-align: middle;
+        border-top:1px solid lightgrey;
+    }
     input:required:focus {
         border: normal;
         outline: none;

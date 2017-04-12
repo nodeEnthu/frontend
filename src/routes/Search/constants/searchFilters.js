@@ -35,14 +35,18 @@ export const CUISINE_TYPES = [{
     src: 'cuisines/cuisine-dessert.svg'
 }]
 
-export function DATES() {
+export function DATES(n, format, action) {
     let result = [];
+    format = format || "ddd, MMM D";
+    let day;
     // return today and six more days
-    for (var i = 0; i < 7; i++) {
-        let day = moment(new Date()).subtract(i, "days").startOf('day');
+    for (var i = 0; i < n; i++) {
+        if (action === 'add') {
+            day = moment(new Date()).add(i, "days").startOf('day');
+        } else day = moment(new Date()).subtract(i, "days").startOf('day');
         result.push({
             value: day.valueOf(),
-            title: day.format("ddd, MMM D")
+            title: day.format(format)
         })
     }
     return result;

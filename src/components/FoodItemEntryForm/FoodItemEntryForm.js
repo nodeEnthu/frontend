@@ -1,14 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import './fooditementryform.scss';
-import { email, maxLength, required, regexTime, regexDate } from './../../utils/formUtils/formValidation';
-import Toggle from 'material-ui/Toggle';
+import { email, maxLength, required, regexTime, regexDate } from 'utils/formUtils/formValidation';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton'
 import classNames from 'classnames';
-import DatePicker from 'material-ui/DatePicker';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import { securedPostCall} from 'utils/httpUtils/apiCallWrapper';
-import { CUISINE_TYPES} from 'routes/Search/constants/searchFilters';
+import { DATES, CUISINE_TYPES,DIET_TYPES} from 'routes/Search/constants/searchFilters';
 import {daysOfTheWeek,timeOfDay} from './constants';
 import ImageUploader from 'components/ImageUploader'
 import s3ImageUpload from 'utils/uploader/s3ImageUpload';
@@ -16,6 +14,7 @@ import moment from 'moment';
 import * as actions from 'layouts/CoreLayout/coreReducer';
 import Checkbox from 'material-ui/Checkbox';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+
 
 
 const maxCount = 100;
@@ -29,7 +28,6 @@ const FoodItemEntryForm= React.createClass({
     mapFieldsToValidationType:{
         name: required,
         placeOrderBy: required,
-        serviceDate: required,
         cuisineType: required,
         price:required
     },
@@ -38,44 +36,16 @@ const FoodItemEntryForm= React.createClass({
     },
 
     changeStoreTimeAndDateVals(date, storeKey,isInputChecked){
-        let storeVal = date;
         let {availability,oneTime} = this.props.foodItemEntryForm.toJS();
-        if(storeKey === 'availability' ){
-            availability = availability || [];
-            if(isInputChecked === false){
-                availability.splice(availability.indexOf(storeVal),1);
-            }
-            else{
-                if(availability.indexOf(storeVal) === -1) { availability.push(storeVal);}
-            }
-            storeVal = availability;
+        availability = availability || [];
+        if(!isInputChecked){
+            availability.splice(availability.indexOf(date),1);
+        }
+        else{
+            if(availability.indexOf(date) === -1) { availability.push(date);}
         }
         // completely overwrite whats in store
-        this.props.addFoodItemInfo({
-            storeKey: storeKey,
-            payload: storeVal
-        });
-        if(storeKey === 'dateRangeStartDate'){
-            this.props.addFoodItemInfo({
-                storeKey: 'dateRangeStopDate',
-                payload: moment(storeVal).add(7,'days').toDate()
-            })
-            // remove all the presets
-            this.props.addFoodItemInfo({
-                storeKey: 'availability',
-                payload: []
-            });
-        }
-        if(storeKey === 'serviceDate'){
-            this.props.addFoodItemInfo({
-                storeKey: 'placeOrderBy',
-                payload: storeVal
-            });
-            this.props.addFoodItemInfo({
-                storeKey: 'availability',
-                payload: [storeVal]
-            });
-        }
+        this.props.addFoodItemInfo({storeKey: storeKey,payload: availability});
     },
 
     daysBeforeOrderDate(referenceDate,days){
@@ -103,33 +73,10 @@ const FoodItemEntryForm= React.createClass({
             })
         }
     },
-    toggle(event) {
-        let input = event.target.value;
-        let stateKeyName = event.target.name;
+    toggle(stateKeyName,val) {
         this.props.addFoodItemInfo({
             storeKey: stateKeyName,
-            payload: !this.props.foodItemEntryForm.get(stateKeyName)
-        })
-    },
-    toggleFlags(stateKeyName) {
-        if(stateKeyName ==="oneTime"){
-            let {serviceDate,oneTime} = this.props.foodItemEntryForm.toJS();
-            // that means it is being turned into false
-            if(oneTime === true){
-                this.props.addFoodItemInfo({
-                    storeKey: 'availability',
-                    payload: []
-                })
-            } else{
-                this.props.addFoodItemInfo({
-                    storeKey: 'availability',
-                    payload: [serviceDate]
-                });
-            }
-        }
-        this.props.addFoodItemInfo({
-            storeKey: stateKeyName,
-            payload: !this.props.foodItemEntryForm.get(stateKeyName)
+            payload: val
         })
     },
     handleFocus(event) {
@@ -161,12 +108,6 @@ const FoodItemEntryForm= React.createClass({
             payload: input
         });
     },
-    onTimeChangeHandler(stateKeyName,value){
-        this.props.addFoodItemInfo({
-            storeKey: stateKeyName,
-            payload: value
-        });
-    },
     validateForm() {
         let self = this;
         let noErrorsInform = true;
@@ -196,12 +137,6 @@ const FoodItemEntryForm= React.createClass({
             payload:imgUrl
         });
         this.setState({imgBlob:blob, fileConfig:fileConfig});
-    },
-    selectDaysInRange(selections){
-        this.props.addFoodItemInfo({
-            storeKey:'availability',
-            payload:selections
-        });
     },
     formSubmit() {
         if (this.validateForm()) {
@@ -257,13 +192,9 @@ const FoodItemEntryForm= React.createClass({
     },
     render() {
         let self = this;
-        let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg,oneTime,availability,dateRangeStartDate,dateRangeStopDate, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting} = this.props.foodItemEntryForm.toJS();
-        serviceDate = (serviceDate)? new Date(serviceDate): new Date();
-        // this is done as the material ui date picker saves time in this Sat Jan 28 2017 00:00:00 GMT-0800 (PST) format ..
-        serviceDate =  this.addTimeOffset(serviceDate);
+        let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg,availability, placeOrderBy, placeOrderByErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting} = this.props.foodItemEntryForm.toJS();
         placeOrderBy = (placeOrderBy)? new Date(placeOrderBy): new Date();
-        dateRangeStartDate = (dateRangeStartDate)? new Date(dateRangeStartDate): new Date();
-        dateRangeStopDate = (dateRangeStopDate)? new Date(dateRangeStopDate): new Date();
+        console.log(availability);
         return (
             <div className="food-item-entry">
                 <div className="is-center">
@@ -320,176 +251,81 @@ const FoodItemEntryForm= React.createClass({
                             </div>
                             <legend></legend>
                             <div className="pure-u-1">
-                                <label>This food item is:</label>
-                                <RadioButtonGroup name="foodOptions" 
-                                    valueSelected={(oneTime!= undefined)? oneTime.toString() : "true"}
-                                    onChange={(event)=>this.toggleFlags('oneTime')}
-                                >
-                                  <RadioButton
-                                    value="true"
-                                    label="One time"
-                                  />
-                                  <RadioButton
-                                    value="false"
-                                    label="Recurring"                                    
-                                  />
-                                </RadioButtonGroup>
+                                <label>Select date(s)</label>
+                                {DATES(8,"dd, MMM D",'add').map(function(date,index){
+                                                return <div key={index} className="pure-u-1-3 pure-u-md-1-6" style={{paddingBottom : '0.25em'}}>
+                                                        <div className="parent-box">
+                                                                <div className="child-box-1">
+                                                                    {date.title}
+                                                                </div>
+                                                                <div className="child-box-2">
+                                                                    <Checkbox
+                                                                        onCheck={(event,isInputChecked)=>self.changeStoreTimeAndDateVals(date.value, 'availability',isInputChecked)}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                            })}
+                                
                             </div>
                            
-                            {   (oneTime)?
-                                <div>
-                                    <div className = "pure-u-1 pure-u-md-1-2">
-                                        <label>*Order ready date</label>
-                                            <DatePicker
-                                                container="inline"
-                                                className="width-max"
-                                                name="serviceDate"
-                                                textFieldStyle={{width:'100%'}}
-                                                inputStyle={{marginTop:'0px',height:'2.25em',border: '1px solid #ccc',boxShadow: 'inset 0 1px 3px #ddd',padding: '.5em .6em'}}
-                                                underlineStyle={{display: 'none'}}
-                                                hintText=""
-                                                autoOk={true}
-                                                value={serviceDate}
-                                                onBlur={this.handleChange} 
-                                                onFocus={this.handleFocus}
-                                                onTouchTap={(event)=>event.preventDefault()}
-                                                onChange={(event,date)=>this.changeStoreTimeAndDateVals(date,'serviceDate')}
-                                                formatDate={(date)=> date.toDateString()}
-                                            />
-                                            <span className = "error-message">{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
-                                    </div>
-                                    <div className = "pure-u-1 pure-u-md-1-2" >
-                                        <label>People can order</label>
-                                        <select id="order-by-date" 
-                                            name="placeOrderBy"
-                                            className="width-max"
-                                            onBlur={this.handleChange} 
-                                            onFocus={this.handleFocus}
-                                            onChange={this.changeStoreVal}
-                                            value={placeOrderBy}
-                                        >
-                                            <option value={serviceDate}>Same Day</option>
-                                            <option value={this.daysBeforeOrderDate(serviceDate,1)}>Atleast 1 day before</option>        
-                                            <option value={this.daysBeforeOrderDate(serviceDate,2)}>Atleast 2 days before</option>     
-                                            <option value={this.daysBeforeOrderDate(serviceDate,3)}>Atleast 3 days before</option>
-                                        </select>
-                                        <span className = "error-message">{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
-                                    </div>
-                                </div>
-                                :
-                                <div>
-                                    <legend>Select a range (maximum one week)</legend>
-                                    <div className = "pure-u-1-2">
-                                        <label>*from</label>
-                                        <DatePicker
-                                            container="inline"
-                                            className="width-max"
-                                            name="serviceDate"
-                                            textFieldStyle={{width:'100%'}}
-                                            inputStyle={{marginTop:'0px',height:'2.25em',border: '1px solid #ccc',boxShadow: 'inset 0 1px 3px #ddd',padding: '.5em .6em'}}
-                                            underlineStyle={{display: 'none'}}
-                                            hintText=""
-                                            autoOk={true}
-                                            value={dateRangeStartDate}
-                                            onBlur={this.handleChange} 
-                                            onFocus={this.handleFocus}
-                                            onTouchTap={(event)=>event.preventDefault()}
-                                            onChange={(event,date)=>this.changeStoreTimeAndDateVals(date,'dateRangeStartDate')}
-                                            formatDate={(date)=> date.toDateString()}
-                                        />
-                                        <span className = "error-message">{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
-                                    </div>
-                                    <div className = "pure-u-1-2">
-                                        <label>*to</label>
-                                        <input type="text"  className="pure-u-1" placeholder="*to" name="name" value={dateRangeStopDate.toDateString()} disabled={true}
-                                        />                                   
-                                    </div>
-                                    <label> Select dates</label>
-                                    {
-                                        daysOfTheWeek(dateRangeStartDate).map(function(dayOfWeek,index){
-                                            return <Checkbox
-                                                key={index}
-                                                value={dayOfWeek.value}
-                                                label={dayOfWeek.label}
-                                                defaultChecked = {availability.indexOf(dayOfWeek.value)>-1}
-                                                onCheck={(event,isInputChecked)=>{self.changeStoreTimeAndDateVals(event.target.value,'availability',isInputChecked)}}
-                                            />
-                                        })
-                                    }
-                                </div>  
-                            }
-                            <div>
-                                <div className = "pure-u-1 pure-u-md-1-2">
-                                    <label>Pick-up start time (hh:mm)</label>
-                                    <select
-                                        placeholder="pick-up start time"
-                                        type="text"
-                                        name="pickUpStartTime"
-                                        className="width-max"
-                                        onBlur={this.handleChange} 
-                                        onFocus={this.handleFocus}
-                                        onChange={this.changeStoreVal}
-                                        value={pickUpStartTime}
-                                    >
-                                        <option value=''></option>
-                                        {timeOfDay().map(function(time,index){
-                                            return <option key={index} value={time.value}>{time.label}</option>
-                                        })}
-                                    </select>
-                                </div>
-                                <div className = "pure-u-1 pure-u-md-1-2">
-                                    <label>Pick-up end time (hh:mm)</label>
-                                    <select
-                                        placeholder="pick-up end time"
-                                        type="text"
-                                        name="pickUpEndTime"
-                                        className="width-max"
-                                        onBlur={this.handleChange} 
-                                        onFocus={this.handleFocus}
-                                        onChange={this.changeStoreVal}
-                                        value={pickUpEndTime}
-                                    >
-                                        <option value=''></option>
-                                        {timeOfDay().map(function(time,index){
-                                            return <option key={index} value={time.value}>{time.label}</option>
-                                        })}
-                                    </select>  
-                                </div>
+                          
+                            <div className = "pure-u-1 pure-u-md-1-2">
+                                <label>Pick-up start time (hh:mm)</label>
+                                <select
+                                    placeholder="pick-up start time"
+                                    type="text"
+                                    name="pickUpStartTime"
+                                    className="width-max"
+                                    onBlur={this.handleChange} 
+                                    onFocus={this.handleFocus}
+                                    onChange={this.changeStoreVal}
+                                    value={pickUpStartTime}
+                                >
+                                    <option value=''></option>
+                                    {timeOfDay().map(function(time,index){
+                                        return <option key={index} value={time.value}>{time.label}</option>
+                                    })}
+                                </select>
                             </div>
-                            <legend className="pull-left">
-                                Tag your food:
-                            </legend>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="organic" 
-                                    checked={organic} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#organic</span>
+                            <div className = "pure-u-1 pure-u-md-1-2">
+                                <label>Pick-up end time (hh:mm)</label>
+                                <select
+                                    placeholder="pick-up end time"
+                                    type="text"
+                                    name="pickUpEndTime"
+                                    className="width-max"
+                                    onBlur={this.handleChange} 
+                                    onFocus={this.handleFocus}
+                                    onChange={this.changeStoreVal}
+                                    value={pickUpEndTime}
+                                >
+                                    <option value=''></option>
+                                    {timeOfDay().map(function(time,index){
+                                        return <option key={index} value={time.value}>{time.label}</option>
+                                    })}
+                                </select>  
                             </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="glutenfree" 
-                                    checked={glutenfree} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#gluten-free</span>
-                            </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="nutfree"
-                                    checked={nutfree} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#nut-free</span>
-                            </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="vegetarian"
-                                    checked={vegetarian} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#vegetarian</span>
-                            </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="nondairy"
-                                    checked={nondairy} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#non-dairy</span>
-                            </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="indianFasting"
-                                    checked={indianFasting} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#indian-fasting</span>
-                            </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="lowcarb"
-                                    checked={lowcarb} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#low-carb</span>
-                            </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="oilfree"
-                                    checked={oilfree} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#oil-free</span>
+
+                            <div className="pure-u-1">
+                                <legend className="pull-left">
+                                    Tag your food:
+                                </legend>
+                                {DIET_TYPES.map(function(diet,index){
+                                                return <div key={index} className="pure-u-1-3 pure-u-md-1-6" style={{paddingBottom : '0.25em'}}>
+                                                        <div className="parent-box">
+                                                                <div className="child-box-1">
+                                                                    {diet.value}
+                                                                </div>
+                                                                <div className="child-box-2">
+                                                                    <Checkbox
+                                                                        onCheck={(event,isInputChecked)=>self.toggle(diet.value ,isInputChecked)}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                            })}
+                                
                             </div>
                         </div>
                     </fieldset>

@@ -11,6 +11,8 @@ import ImageUploader from 'components/ImageUploader';
 import s3ImageUpload from 'utils/uploader/s3ImageUpload';
 import RaisedButton from 'material-ui/RaisedButton';
 import Stepper from 'components/Stepper';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+
 const maxCount = 100;
 const ProviderEntryForm = React.createClass({
     getInitialState() {
@@ -83,6 +85,7 @@ const ProviderEntryForm = React.createClass({
         }
     },
     changeStoreVal(event) {
+        console.log(event.target.value,event.target.name);
         let input = event.target.value;
         let stateKeyName = event.target.name;
         this.props.addProviderInfo({storeKey:stateKeyName,payload:input}); 
@@ -199,7 +202,7 @@ const ProviderEntryForm = React.createClass({
                                 <div style={{maxWidth:100, display:'inline-block'}}>
                                     <Toggle
                                         style={{top:'8px'}}
-                                        thumbSwitchedStyle={{backgroundColor:'#f26800'}}
+                                        thumbSwitchedStyle={{backgroundColor:'#FF6F00'}}
                                         trackSwitchedStyle={{backgroundColor:'#fdd4b5'}}
                                         defaultToggled={!keepAddressPrivateFlag}
                                         onToggle={()=>{this.toggle('keepAddressPrivateFlag')}}
@@ -233,21 +236,30 @@ const ProviderEntryForm = React.createClass({
                         />
                         
                         <div className = "error-message">{(searchTextErrorMsg||place_idErrorMsg)?'*'+(searchTextErrorMsg || place_idErrorMsg):undefined}</div>
-                        <div className="mdl" style={{marginTop:"0.5em"}}>
+                        <div style={{marginTop:"0.5em"}}>
                             Services offered:
-                            <label className="pure-radio">
-                                <input type="radio" name="serviceOffered" value="pickup" checked={serviceOffered === "pickup"} onChange={this.changeStoreVal}/>
-                                    <span className="label-margin">pickup</span>
-                            </label>
-
-                            <label  className="pure-radio">
-                                <input type="radio" name="serviceOffered" value="delivery" checked={serviceOffered === "delivery"} onChange={this.changeStoreVal}/>
-                                    <span className="label-margin">delivery</span>
-                            </label>
-                            <label  className="pure-radio">
-                                <input type="radio" name="serviceOffered" value="both" checked={serviceOffered === "both"} onChange={this.changeStoreVal}/>
-                                    <span className="label-margin">both</span>
-                            </label>
+                            <RadioButtonGroup name="serviceOffered" defaultSelected={serviceOffered} onChange={this.changeStoreVal}>
+                              <RadioButton
+                                name="serviceOffered"
+                                value="pickup"
+                                label="pickup"
+                                labelPosition="right"
+                                
+                              />
+                              <RadioButton
+                                name="serviceOffered"
+                                value="delivery"
+                                label="delivery"
+                                labelPosition="right"
+                                
+                              />
+                              <RadioButton
+                                name="serviceOffered"
+                                value="both"
+                                label="both"
+                                labelPosition="right"
+                              />
+                            </RadioButtonGroup>
                         </div>
                     {(serviceOffered==='delivery' || serviceOffered==='both')?
                         <div>
@@ -310,7 +322,7 @@ const ProviderEntryForm = React.createClass({
                     </div>
                     <RaisedButton
                         label={this.props.nextLabel}
-                        backgroundColor="#f26800"
+                        backgroundColor="#FF6F00"
                         labelStyle={{color:'white'}}
                         onTouchTap={this.formSubmit}
                         disableTouchRipple={true}

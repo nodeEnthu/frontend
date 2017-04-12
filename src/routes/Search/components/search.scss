@@ -7,7 +7,7 @@
         }
     }
     .show-hide-filter .inline-radio {
-        border: 1px solid #f26800;
+        border: 1px solid #FF6F00;
     }
     .display-table {
         height: 2.5em;
@@ -51,14 +51,14 @@
         text-align: right;
         a {
             padding: 0.25em 0.75em;
-            color: #f26800;
-            border: 1px solid #f26800;
+            color: #FF6F00;
+            border: 1px solid #FF6F00;
             border-radius: 3px;
         }
         .inline-radio label {
             background: white;
-            color: #f26800;
-            border: 0.5px solid #f26800;
+            color: #FF6F00;
+            border: 0.5px solid #FF6F00;
         }
     }
     .inline-radio input {
@@ -82,7 +82,7 @@
             background: none;
         }
         .inline-radio input:checked + label {
-            background: #f26800;
+            background: #FF6F00;
             font-weight: 500;
             color: white;
             opacity: 0.7;
@@ -93,7 +93,7 @@
         background-color: lightgrey;
     }
     .arrow-decorator:hover {
-        background-color: #f26800;
+        background-color: #FF6F00;
     }
     .panel {
         height: 70%;
