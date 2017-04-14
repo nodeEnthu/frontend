@@ -23,7 +23,7 @@ const Provider = Map({
             imgChanged:false,
             providerAddressJustificationModalOpen: false,
             snackBarOpen:false, 
-            snackBarMessage:''
+            snackBarMessage:'Please fill the required fields'
         });
 
 export default Provider;

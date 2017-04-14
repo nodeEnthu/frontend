@@ -18,8 +18,8 @@ const maxCount = 100;
 const ProviderEntryForm = React.createClass({
     getInitialState() {
       return{
-        showSpinner:false
-      }  
+        showSpinner:false      
+        }  
     },
     componentWillMount() {
         // check whether its an edit to an already present provider
@@ -30,16 +30,9 @@ const ProviderEntryForm = React.createClass({
             // note to Gautam: see this is what we have to do when state does not match the things we save in db
             .then((res)=>{
                 if(res && res.payload &&res.payload.data && res.payload.data.data && res.payload.data.data.loc){
-                    this.props.addProviderInfo({
-                        storeKey:'searchText',
-                        payload:res.payload.data.data.loc.searchText
-                    });
-                    this.props.addProviderInfo({
-                        storeKey:'place_id',
-                        payload:res.payload.data.data.loc.place_id
-                    })
+                    this.props.addProviderInfo({storeKey:'searchText',payload:res.payload.data.data.loc.searchText});
+                    this.props.addProviderInfo({storeKey:'place_id',payload:res.payload.data.data.loc.place_id})
                 }
-
             })
         }
     },
@@ -145,19 +138,13 @@ const ProviderEntryForm = React.createClass({
                         .then(()=>self.onAllClear())
                 });
                 // reset it back to not changed
-                this.props.addProviderInfo({
-                    storeKey:'imgChanged',
-                    payload:false
-                });
+                this.props.addProviderInfo({storeKey:'imgChanged',payload:false});
             }else{
                 securedPostCall('/api/providers/registration' , reqBody)
                     .then(()=>self.onAllClear())
             }
         }else{
-            //scroll to the top
-            window.scrollTo(0, 23);
             // show snackbar
-            this.props.addProviderInfo({storeKey:'snackBarMessage',payload:'Please fill the required fields'});
             this.props.addProviderInfo({storeKey:'snackBarOpen',payload:true});
         }
     },
@@ -166,10 +153,7 @@ const ProviderEntryForm = React.createClass({
         serviceOffered = serviceOffered || 'pickup';
         return (
             <div className="provider-entry-form">
-                <Stepper
-                    numberofSteps={3}
-                    activeStep={1}
-                />
+                
                 <div className="is-center">
                     <ImageUploader
                         onImageChange = {this.onImageChange}
@@ -334,9 +318,9 @@ const ProviderEntryForm = React.createClass({
                         disableTouchRipple={true}
                       />
                 </div>
-                 <Snackbar
-                  open={snackBarOpen}
-                  message={snackBarMessage}
+                <Snackbar
+                  open = {snackBarOpen || false}
+                  message={'Please fill the required fields'}
                   autoHideDuration={4000}
                   onRequestClose={()=>this.toggle('snackBarOpen',false)}
                 />
