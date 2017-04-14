@@ -16,15 +16,12 @@ const ProviderProfileEditPage = React.createClass({
 		this.context.router.goBack();
 	},
 	render(){
-		const {providerEntrySpinner} = this.props.spinner.toJS();
 		return(
 			<div className="pageSettings">
-				<ProviderEntryForm 	ref="providerform"
-									{... this.props} 
+				<ProviderEntryForm 	{... this.props} 
 									onAllClear = {this.onAllClear}
 									mode = {"PROVIDER_PROFILE_EDIT"}
 									showHideSpinner={this.props.showHideSpinner}
-									spinner={this.props.spinner}
 				/>
 				<div style={{textAlign:'center'}}>
 					<RaisedButton
@@ -42,7 +39,6 @@ const ProviderProfileEditPage = React.createClass({
 	}
 })
 ProviderProfileEditPage.propTypes={
-	showHideSpinner:React.PropTypes.func,
-	spinner:React.PropTypes.object
+	
 }
 export default ProviderProfileEditPage;

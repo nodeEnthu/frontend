@@ -85,3 +85,9 @@ export const ORDER_TYPE = [
     { value: 'pickUpFlag', label: 'pick-up' },
     { value: 'doYouDeliverFlag', label: 'delivery' }
 ];
+export const PLACE_ORDER_BY =[
+    { value: 0, label: 'Same day' },
+    { value: 1, label: 'Atleast 1 day before' },
+    { value: 2, label: 'Atleast 2 days before' },
+    { value: 3, label: 'Atleast 3 days before' }
+];

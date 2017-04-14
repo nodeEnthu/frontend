@@ -159,7 +159,7 @@ const HomeView = React.createClass({
                     <div className="pure-u-1 steps-text">
                         3 easy steps to find the best professional
                     </div>
-                    <div className="step pure-u-md-1-3 pure-u-1">
+                    <div className="business-step pure-u-md-1-3 pure-u-1">
                         <img src="shared/home/icon-SearchBig.png">
                         </img>
                         <div className="step-heading">
@@ -169,7 +169,7 @@ const HomeView = React.createClass({
                             Search for the service and provider
                         </div>
                     </div>
-                    <div className="step pure-u-md-1-3 pure-u-1">
+                    <div className="business-step pure-u-md-1-3 pure-u-1">
                         <img src="shared/home/icon-QuoteBig.png">
                         </img>
                         <div className="step-heading" >
@@ -179,7 +179,7 @@ const HomeView = React.createClass({
                             Browse different provider profiles
                         </div>
                     </div>
-                    <div className="step pure-u-md-1-3 pure-u-1">
+                    <div className="business-step pure-u-md-1-3 pure-u-1">
                         <img src="shared/home/icon-HireBig.png">
                         </img>
                         <div className="step-heading">

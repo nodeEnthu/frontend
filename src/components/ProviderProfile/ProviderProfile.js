@@ -9,8 +9,9 @@ import Scroll from 'react-scroll';
 import ReviewSubmitModal from 'components/ReviewSubmitModal';
 import StarRatingComponent from 'react-star-rating-component';
 import CommunicationEmail from 'material-ui/svg-icons/communication/email';
-import CommunicationCall from 'material-ui/svg-icons/communication/call';
 import CommunicationChat from 'material-ui/svg-icons/communication/chat';
+import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
+import CommunicationLocationOn from 'material-ui/svg-icons/communication/location-on';
 import ContentCreate from 'material-ui/svg-icons/content/create';
 import ProviderEntryForm from 'components/ProviderEntryForm/ProviderEntryForm'
 import ActionPermContactCalendar from 'material-ui/svg-icons/action/perm-contact-calendar';
@@ -20,6 +21,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FoodItemInProviderProfile from 'components/FoodItemInProviderProfile';
 import { Link } from 'react-router';
 import moment from 'moment';
+import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
+import FlatButton from 'material-ui/FlatButton';
 
 const ProviderProfile = React.createClass({
   getInitialState() {
@@ -85,8 +88,9 @@ const ProviderProfile = React.createClass({
     this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
   },
   render() {
-    const {providerProfileCall,providerEditModalOpen} = this.props.providerProfile.toJS();
-    let data = providerProfileCall.data;
+    const {providerProfileCall} = this.props.providerProfile.toJS();
+    let provider = providerProfileCall.data;
+    let userSearchAndPlaceId;
     let self = this;
     const {user} = this.props.globalState.core.toJS();
     let Element = Scroll.Element;
@@ -98,8 +102,9 @@ const ProviderProfile = React.createClass({
     }
     // seperate between current and past items
     let currentItems=[] , pastItems=[], currentDate;
-    if(data && data.foodItems){
-      data.foodItems.forEach(function(foodItem){
+    if(provider && provider.foodItems){
+      userSearchAndPlaceId= getSearchAddressAndPlaceId(provider);
+      provider.foodItems.forEach(function(foodItem){
         let availability= foodItem.availability;
         let foodItemAvailable = false;
         for(let i=0; i < availability.length ; i++){
@@ -111,36 +116,45 @@ const ProviderProfile = React.createClass({
         (foodItemAvailable)?currentItems.push(foodItem): pastItems.push(foodItem);
       })
     }
-    return (data && data.foodItems && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
+    return (provider && provider.userType && user && user.name || (provider && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="provider-profile">
-          <div className="sidebar pure-u-1 pure-u-md-1-4">
-            {
-              (this.props.params.id === this.props.globalState.core.toJS().user._id)?
-                <div>                   
-                  <Link style={{color:'white'}}to={'/providers/'+data._id+'/edit'}>Edit profile</Link> 
+          <div className="pure-u-1 profile-wrapper">
+              <div className="pure-u-1 pure-u-md-1-4 is-center">
+                <div>
+                  <img className = "pure-img-responsive" src={provider.imgUrl}/>
                 </div>
-                :
-                undefined
-            }
-            
-            <div className="header">
-                <h1 className="brand-title">{data.title}</h1>
-                <div className="pure-u-1">
-                  <img className = "profile-img" src={data.imgUrl}/>
+              </div>
+              <div className="pure-u-1 pure-u-md-3-4 provider-desc-wrapper">
+                <div className="brand-title">{provider.title}</div>
+                <div>{/*provider.description*/}Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</div>
+                <div className="addtnl-info">
+                  <span>Services Offered:</span>
+                  {
+                    (provider.pickUpFlag)?
+                      <span className="service-offered">{'Pickup'}</span>
+                      :''
+                  }
                 </div>
-                <IconButton><CommunicationEmail/></IconButton>
-                <IconButton><CommunicationCall/></IconButton>
-                <IconButton><CommunicationChat/></IconButton>
-                <nav className="nav">
-                    <ul className="nav-list">
-                        <li className="nav-item">
-                            {data.description}
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+                <div className="provider-details">
+                  <CommunicationLocationOn/>
+                  <span className="provider-detail">{userSearchAndPlaceId.address}</span>
+                </div>
+                <div>
+                 <CommunicationEmail/>
+                  <span className="provider-detail">{provider.email}</span>
+                </div>
+              </div>
+              <div className="pure-u-1">
+                 <FlatButton
+                    label="Edit Profile"
+                    backgroundColor="lightgrey"
+                    icon={<EditorModeEdit/>}
+                    style={{width:'99%'}}
+                    hoverColor="#8AA62F"
+                  />
+              </div>
           </div>
-          <div className = "content pure-u-1 pure-u-md-3-4">
+          <div className = "content pure-u-1">
             <div>
               <div className="posts">
                   {(userViewingOwnProfile && (this.props.mode != 'PROVIDER_ENTRY'))?
@@ -165,20 +179,18 @@ const ProviderProfile = React.createClass({
                   }
                   { 
                     currentItems.map((foodItem)=>{
-                      return <div key={foodItem._id}>
-                                <FoodItemInProviderProfile
-                                  userViewingOwnProfile={userViewingOwnProfile}
-                                  refreshPage= {this.refreshPage}
-                                  checkOutItem = {self.checkOutItem}
-                                  writeReviewModal = {self.writeReviewModal}
-                                  postSecuredData = {this.props.postSecuredData}
-                                  openModal = {this.props.openModal}
-                                  providerProfile = {this.props.providerProfile}
-                                  foodItem={foodItem}
-                                  mode = {this.props.mode}
-                                  
-                                />
-                              </div>
+                      return <FoodItemInProviderProfile
+                                key={foodItem._id}
+                                userViewingOwnProfile={userViewingOwnProfile}
+                                refreshPage= {this.refreshPage}
+                                checkOutItem = {self.checkOutItem}
+                                writeReviewModal = {self.writeReviewModal}
+                                postSecuredData = {this.props.postSecuredData}
+                                openModal = {this.props.openModal}
+                                providerProfile = {this.props.providerProfile}
+                                foodItem={foodItem}
+                                mode = {this.props.mode}
+                              />
                     })
                   }
                   {
@@ -189,21 +201,20 @@ const ProviderProfile = React.createClass({
                   }
                   { 
                     pastItems.map((foodItem)=>{
-                      return <div key={foodItem._id}>
-                                <FoodItemInProviderProfile
-                                  userViewingOwnProfile={userViewingOwnProfile}
-                                  checkOutItem = {self.checkOutItem}
-                                  refreshPage= {this.refreshPage}
-                                  writeReviewModal = {self.writeReviewModal}
-                                  postSecuredData = {this.props.postSecuredData}
-                                  openModal = {this.props.openModal}
-                                  foodItem={foodItem}
-                                  providerProfile = {this.props.providerProfile}
-                                  pastItem={true}
-                                  mode = {this.props.mode}
-
-                                />
-                              </div>
+                      return <FoodItemInProviderProfile
+                                key={foodItem._id}
+                                userViewingOwnProfile={userViewingOwnProfile}
+                                checkOutItem = {self.checkOutItem}
+                                refreshPage= {this.refreshPage}
+                                writeReviewModal = {self.writeReviewModal}
+                                postSecuredData = {this.props.postSecuredData}
+                                openModal = {this.props.openModal}
+                                foodItem={foodItem}
+                                providerProfile = {this.props.providerProfile}
+                                pastItem={true}
+                                mode = {this.props.mode}
+                              />
+                            
                     })
                   }
               </div>

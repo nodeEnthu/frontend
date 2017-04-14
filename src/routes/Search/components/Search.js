@@ -342,14 +342,6 @@ const Search = React.createClass({
                                                         </div>
 											    		<div className="add-to-cart">
 											    			<div className="food-price">{'$'+ foodItem.price}</div>
-                                                            <div className="add">
-                                                               <FlatButton
-                                                                    backgroundColor="#FF6F00"
-                                                                   label="+add"
-                                                                   labelStyle={{color:'white'}}
-                                                                   style={{height:'24px',lineHeight:'24px',minWidth:'80px'}}
-                                                                />  
-                                                            </div>
 											    		</div>
 											    		
 											    	</div>

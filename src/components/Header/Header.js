@@ -63,7 +63,7 @@ export  class Header extends React.Component {
                     undefined
                   }
                   <li>
-                    <a href="">LIST YOUR BUSINESS</a>
+                    <a href="">LIST YOURSELF</a>
                   </li>
                   <li>
                     {(globalState.core.get('token').length>0 )?

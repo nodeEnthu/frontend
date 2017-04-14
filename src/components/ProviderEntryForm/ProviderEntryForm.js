@@ -12,6 +12,7 @@ import s3ImageUpload from 'utils/uploader/s3ImageUpload';
 import RaisedButton from 'material-ui/RaisedButton';
 import Stepper from 'components/Stepper';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import Snackbar from 'material-ui/Snackbar';
 
 const maxCount = 100;
 const ProviderEntryForm = React.createClass({
@@ -85,7 +86,6 @@ const ProviderEntryForm = React.createClass({
         }
     },
     changeStoreVal(event) {
-        console.log(event.target.value,event.target.name);
         let input = event.target.value;
         let stateKeyName = event.target.name;
         this.props.addProviderInfo({storeKey:stateKeyName,payload:input}); 
@@ -153,10 +153,16 @@ const ProviderEntryForm = React.createClass({
                 securedPostCall('/api/providers/registration' , reqBody)
                     .then(()=>self.onAllClear())
             }
+        }else{
+            //scroll to the top
+            window.scrollTo(0, 23);
+            // show snackbar
+            this.props.addProviderInfo({storeKey:'snackBarMessage',payload:'Please fill the required fields'});
+            this.props.addProviderInfo({storeKey:'snackBarOpen',payload:true});
         }
     },
     render() {
-        let {chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,serviceOffered,addtnlComments, includeAddressInEmail,deliveryMinOrder,deliveryRadius,providerAddressJustificationModalOpen,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg } = this.props.providerEntryForm.toJS();
+        let {chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,serviceOffered,addtnlComments, includeAddressInEmail,deliveryMinOrder,deliveryRadius,providerAddressJustificationModalOpen,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg,snackBarOpen,snackBarMessage } = this.props.providerEntryForm.toJS();
         serviceOffered = serviceOffered || 'pickup';
         return (
             <div className="provider-entry-form">
@@ -328,6 +334,12 @@ const ProviderEntryForm = React.createClass({
                         disableTouchRipple={true}
                       />
                 </div>
+                 <Snackbar
+                  open={snackBarOpen}
+                  message={snackBarMessage}
+                  autoHideDuration={4000}
+                  onRequestClose={()=>this.toggle('snackBarOpen',false)}
+                />
                 <Dialog
                   open={providerAddressJustificationModalOpen || false}
                   onRequestClose={()=>{this.toggle('providerAddressJustificationModalOpen')}}

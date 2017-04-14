@@ -61,6 +61,7 @@
         display: inline-block;
         width: 85%;
         background: white;
+        height: 2.3em;
     }
     .react-autosuggest__container {
         display: inline-block;
@@ -71,6 +72,7 @@
         border: none;
         width: 100%;
         border-radius: 0;
+        padding: 9px;
     }
     .icon-locate {
         display: inline-block;
@@ -143,9 +145,15 @@
         font-size: 0.75em;
         padding: 0.5em;
     }
+    .business-step{
+        text-align:center;
+    }
 }
 
 @media (max-width: 48em) {
+    .content{
+        padding:0;
+    }
     .home {
         .home-menu {
             text-align: left;

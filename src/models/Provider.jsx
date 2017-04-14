@@ -21,7 +21,9 @@ const Provider = Map({
             emailErrorMsg: '',
             descriptionErrorMsg: '',
             imgChanged:false,
-            providerAddressJustificationModalOpen: false
+            providerAddressJustificationModalOpen: false,
+            snackBarOpen:false, 
+            snackBarMessage:''
         });
 
 export default Provider;

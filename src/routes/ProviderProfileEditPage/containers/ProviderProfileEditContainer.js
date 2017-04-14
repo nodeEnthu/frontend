@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import {fetchSecuredData} from 'utils/actionUtils/defaultHttpActions'
-import {addProviderInfo,addProviderErrorMsg,showHideSpinner} from './../modules/providerProfileEditPage'
+import {addProviderInfo,addProviderErrorMsg} from './../modules/providerProfileEditPage'
 import { fromJS } from 'immutable'
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -18,15 +18,12 @@ const mapActionCreators = {
     fetchSecuredData,
     addProviderInfo,
     addProviderErrorMsg,
-    showHideSpinner
 }
 
 const mapStateToProps = (state) => {
     return {
         globalState:state,
-        providerEntryForm:state.providerProfileEdit.get('providerEntryForm'),
-        spinner:state.providerProfileEdit.get('spinner')
-    }
+        providerEntryForm:state.providerProfileEdit.get('providerEntryForm')    }
 }
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

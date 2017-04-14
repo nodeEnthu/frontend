@@ -7,18 +7,22 @@ const ProviderFoodEntry = React.createClass ({
   
  
   render() { 
+    const {user} = this.props.globalState.core.toJS();
     return (
         <div>
             <p>
               Enter the food item you wish to provide
             </p>
-            <FoodItemEntryForm  foodItemEntryForm = {this.props.foodItemEntryForm}
+            <FoodItemEntryForm  globalState ={this.props.globalState}
+                                foodItemEntryForm = {this.props.foodItemEntryForm}
                                 addFoodItemInfo = {this.props.addFoodItemInfo}
                                 fetchData = {this.props.fetchData}
                                 removeFoodItemInfo = {this.props.removeFoodItemInfo}
                                 mode = {"PROVIDER_ENTRY"} 
                                 dispatch={this.props.dispatch}
                                 params={this.props.params}
+                                nextLabel={"NEXT: PUBLISH"}
+                                linkToRedirectOnAllClear={"/provider/"+user._id+"/publish"}
             />
           </div>
     );
@@ -26,6 +30,7 @@ const ProviderFoodEntry = React.createClass ({
 })
 
 ProviderFoodEntry.propTypes= {
+    globalState:React.PropTypes.object,
     foodItemEntryForm: React.PropTypes.object,
     addFoodItemInfo:React.PropTypes.func,
     removeFoodItemInfo:React.PropTypes.func,

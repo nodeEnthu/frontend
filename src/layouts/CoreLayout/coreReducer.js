@@ -122,6 +122,7 @@ const initialState = Map({
         publishStage: 0,
         published: false,
         foodItemAddedInEntryMode:false,
+        foodItems:undefined,
         loc:undefined,
         deliveryAddressIndex:undefined,
         userType:'',
