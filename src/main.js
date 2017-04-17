@@ -5,6 +5,7 @@ import AppContainer from './containers/AppContainer'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import {amber900} from 'material-ui/styles/colors';
 
 // ========================================================
 // Store Instantiation
@@ -18,9 +19,13 @@ createStore(initialState,function(store){
   injectTapEventPlugin();
   let render = () => {
     const routes = require('./routes/index').default(store)
-
+    const muiTheme = getMuiTheme({
+      palette: {
+        primary1Color: amber900,
+      }
+    });
     ReactDOM.render(
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
+      <MuiThemeProvider muiTheme={muiTheme}>
         <AppContainer
           store={store}
           routes={routes}

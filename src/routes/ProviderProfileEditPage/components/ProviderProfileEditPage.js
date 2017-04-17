@@ -12,21 +12,23 @@ const ProviderProfileEditPage = React.createClass({
         router: React.PropTypes.object.isRequired
     },
 	onAllClear(){
+		this.props.showHideSpinner({storeKey:'providerEntrySpinner',payload:false});
 		this.context.router.goBack();
 	},
 	render(){
 		return(
 			<div className="pageSettings">
-				<ProviderEntryForm 	ref="providerform"
-									{... this.props} 
+				<ProviderEntryForm 	{... this.props} 
 									onAllClear = {this.onAllClear}
 									mode = {"PROVIDER_PROFILE_EDIT"}
+									showHideSpinner={this.props.showHideSpinner}
 				/>
 				<div style={{textAlign:'center'}}>
 					<RaisedButton
 						style={{width:'30%',color:'white'}}
 						primary={true}
 						onClick={this.submitForm}
+						disabled={providerEntrySpinner}
 						disableTouchRipple={true} 
 					>
 						Done
@@ -37,6 +39,6 @@ const ProviderProfileEditPage = React.createClass({
 	}
 })
 ProviderProfileEditPage.propTypes={
-
+	
 }
 export default ProviderProfileEditPage;

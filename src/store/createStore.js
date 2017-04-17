@@ -3,18 +3,19 @@ import thunk from 'redux-thunk'
 import { browserHistory } from 'react-router'
 import makeRootReducer from './reducers'
 import 'react-fastclick';
-import {getCall,postCall,securedGetCall} from 'utils/httpUtils/apiCallWrapper';
+import { getCall, postCall, securedGetCall } from 'utils/httpUtils/apiCallWrapper';
 import { updateLocation } from './location'
-
+import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
 // Actions
 import * as actions from 'layouts/CoreLayout/coreReducer'
-export default (initialState = {},cb) => {
+export default (initialState = {}, cb) => {
 
-  // ======================================================
-  // Middleware Configuration
-  // ======================================================
-  const middleware = [thunk]
+    // ======================================================
+    // Middleware Configuration
+    // ======================================================
+    const middleware = [thunk]
 
+<<<<<<< HEAD
   // ======================================================
   // Store Enhancers
   // ======================================================
@@ -26,9 +27,20 @@ export default (initialState = {},cb) => {
     const composeWithDevToolsExtension = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     if (typeof composeWithDevToolsExtension === 'function') {
       composeEnhancers = composeWithDevToolsExtension
+=======
+    // ======================================================
+    // Store Enhancers
+    // ======================================================
+    const enhancers = []
+    if (__DEV__) {
+        const devToolsExtension = window.devToolsExtension
+        if (typeof devToolsExtension === 'function') {
+            enhancers.push(devToolsExtension())
+        }
+>>>>>>> with-react-toolbox
     }
-  }
 
+<<<<<<< HEAD
   // ======================================================
   // Store Instantiation and HMR Setup
   // ======================================================
@@ -38,34 +50,51 @@ export default (initialState = {},cb) => {
     composeEnhancers(
       applyMiddleware(...middleware),
       ...enhancers
+=======
+    // ======================================================
+    // Store Instantiation and HMR Setup
+    // ======================================================
+    const store = createStore(
+        makeRootReducer(),
+        initialState,
+        compose(
+            applyMiddleware(...middleware),
+            ...enhancers
+        )
+>>>>>>> with-react-toolbox
     )
-  )
-  store.asyncReducers = {};
+    store.asyncReducers = {};
 
-  // initializing code goes here .. bit of a hack .. should be improved
-  let token = sessionStorage.getItem('token');
-  if(sessionStorage.getItem('token')){
-    securedGetCall('/api/users/me')
-    .then(function(result) {
-        store.dispatch(actions.userLoggedIn(true));
-        store.dispatch(actions.addUser(result.data));
-        store.dispatch(actions.addToken(token));
+    // initializing code goes here .. bit of a hack .. should be improved
+    let token = sessionStorage.getItem('token');
+    if (sessionStorage.getItem('token')) {
+        securedGetCall('/api/users/me')
+            .then(function(result) {
+                let user = result.data;
+                if (user && user.name) {
+                    let userSearchAndPlaceId = getSearchAddressAndPlaceId(user);
+                    store.dispatch(actions.userLoggedIn(true));
+                    store.dispatch(actions.addUser(user));
+                    store.dispatch(actions.addToken(token));
+                    store.dispatch(actions.userAddressSearchChange(userSearchAndPlaceId.address));
+                    store.dispatch(actions.userAddressUpdatePlaceId(userSearchAndPlaceId.placeId));
+                }
+                cb(store);
+            })
+    } else {
+        store.dispatch(actions.userLoggedIn(false));
         cb(store);
-    })
-  } else{
-    store.dispatch(actions.userLoggedIn(false));
-    cb(store);
-  }
-  // initialization code ends here
+    }
+    // initialization code ends here
 
 
-  // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
-  store.unsubscribeHistory = browserHistory.listen(updateLocation(store))
+    // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
+    store.unsubscribeHistory = browserHistory.listen(updateLocation(store))
 
-  if (module.hot) {
-    module.hot.accept('./reducers', () => {
-      const reducers = require('./reducers').default
-      store.replaceReducer(reducers(store.asyncReducers))
-    })
-  }
+    if (module.hot) {
+        module.hot.accept('./reducers', () => {
+            const reducers = require('./reducers').default
+            store.replaceReducer(reducers(store.asyncReducers))
+        })
+    }
 }

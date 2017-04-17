@@ -1,59 +1,78 @@
+import moment from 'moment'
+
 export const CUISINE_TYPES = [{
-    type: 'chinese',
-    src: 'cuisines/chinese.jpeg'
+    value: 'asian',
+    src: 'cuisines/cuisine-asian.svg'
 }, {
-    type: 'american',
-    src: 'cuisines/american.jpeg'
+    value: 'american',
+    src: 'cuisines/cuisine-american.svg'
 }, {
-    type: 'indian',
-    src: 'cuisines/indian.jpeg'
+    value: 'indian',
+    src: 'cuisines/cuisine-indian.svg'
 }, {
-    type: 'african',
-    src: 'cuisines/african.jpg'
+    value: 'african',
+    src: 'cuisines/cuisine-african.svg'
 }, {
-    type: 'caribbean',
-    src: 'cuisines/caribbean.jpg'
+    value: 'italian',
+    src: 'cuisines/cuisine-italian.svg'
 }, {
-    type: 'japanese',
-    src: 'cuisines/japanese.jpg'
+    value: 'mediterrnean',
+    src: 'cuisines/cuisine-mediterranean.svg'
 }, {
-    type: 'italian',
-    src: 'cuisines/italian.jpg'
+    value: 'mexican',
+    src: 'cuisines/cuisine-mexican.svg'
 }, {
-    type: 'mediterrnean',
-    src: 'cuisines/mediterrnean.jpg'
+    value: 'bbq',
+    src: 'cuisines/cuisine-bbq.svg'
 }, {
-    type: 'korean',
-    src: 'cuisines/korean.jpeg'
+    value: 'french',
+    src: 'cuisines/cuisine-french.svg'
 }, {
-    type: 'mexican',
-    src: 'cuisines/mexican.jpg'
+    value: 'greek',
+    src: 'cuisines/cuisine-greek.svg'
 }, {
-    type: 'viatnamese',
-    src: 'cuisines/viatnamese.jpeg'
+    value: 'dessert',
+    src: 'cuisines/cuisine-dessert.svg'
 }]
+
+export function DATES(n, format, action) {
+    let result = [];
+    format = format || "ddd, MMM D";
+    let day;
+    // return today and six more days
+    for (var i = 0; i < n; i++) {
+        if (action === 'add') {
+            day = moment(new Date()).add(i, "days").startOf('day');
+        } else day = moment(new Date()).subtract(i, "days").startOf('day');
+        result.push({
+            value: day.valueOf(),
+            title: day.format(format)
+        })
+    }
+    return result;
+}
 
 export const DIET_TYPES = [{
     value: 'organic',
-    label: 'organic'
+    src: 'diets/organic.svg'
 }, {
     value: 'vegetarian',
-    label: 'vegetarian'
+    src: 'diets/vegetarian.svg'
 }, {
     value: 'nutfree',
-    label: 'nutfree'
+    src: 'diets/organic.svg'
 }, {
     value: 'glutenfree',
-    label: 'glutenfree'
+    src: 'diets/gluten-free.svg'
 }, {
     value: 'oilfree',
-    label: 'oilfree'
+    src: 'diets/oil-free.svg'
 }, {
     value: 'nondairy',
-    label: 'nondairy'
+    src: 'diets/dairy-free.svg'
 }, {
     value: 'indianfasting',
-    label: 'indianfasting'
+    src: 'diets/indian-fasting.svg'
 }]
 
 export const RADIUS_OPTIONS = [
@@ -65,4 +84,10 @@ export const RADIUS_OPTIONS = [
 export const ORDER_TYPE = [
     { value: 'pickUpFlag', label: 'pick-up' },
     { value: 'doYouDeliverFlag', label: 'delivery' }
+];
+export const PLACE_ORDER_BY =[
+    { value: 0, label: 'Same day' },
+    { value: 1, label: 'Atleast 1 day before' },
+    { value: 2, label: 'Atleast 2 days before' },
+    { value: 3, label: 'Atleast 3 days before' }
 ];

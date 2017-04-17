@@ -1,25 +1,34 @@
 import {Map} from 'immutable'
-
+import moment from 'moment'
 export const FoodItem = Map({
-            title: '',
-            description: '',
-            searchText: '',
-            place_id: '',
-            keepAddressPrivateFlag: false,
-            userType: 'provider',
-            includeAddressInEmail: true,
-            email: '',
-            pickUpFlag: true,
-            pickUpAddtnlComments: '',
-            doYouDeliverFlag: false,
-            deliveryRadius: '',
-            deliveryMinOrder: '',
-            deliveryAddtnlComments: '',
-            allClear: false,
-            titleErrorMsg: '',
-            emailErrorMsg: '',
-            descriptionErrorMsg: '',
-            providerAddressJustificationModalOpen: false
-        });
+            name:'',
+            imgUrl:'',
+            nameErrorMsg:'', 
+            description:'', 
+            cuisineType:'',
+            cuisineTypeErrorMsg:'', 
+            price:'',
+            priceErrorMsg:'',
+            descriptionErrorMsg:'', 
+            availability:[],
+            availabilityErrorMsg:'',
+            placeOrderBy:0, 
+            placeOrderByErrorMsg:'', 
+            pickUpStartTime:'', 
+            pickUpEndTime:'',
+            enableReview:false, 
+            organic:false, 
+            vegetarian:false, 
+            glutenfree:false, 
+            lowcarb:false, 
+            vegan:false, 
+            nutfree:false, 
+            oilfree:false, 
+            nondairy:false, 
+            indianFasting:false, 
+            allClear:false, 
+            snackBarOpen:false, 
+            snackBarMessage:''        
+      });
 
 export default FoodItem;

@@ -1,0 +1,17 @@
+    .panel {
+        height: 70%;
+        width: 60%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin-left: -150%;
+        position: absolute;
+        z-index: 2;
+        -webkit-transition: all .3s ease-in-out;
+        -moz-transition: all .3s ease-in-out;
+        -o-transition: all .3s ease-in-out;
+        transition: all .3s ease-in-out;
+    }
+    .panel:target {
+        margin: 0 20%;
+        background-color: #f3f3f3;
+    }

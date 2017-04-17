@@ -15,9 +15,8 @@ export const Remove_Food_Item_Info = 'Remove_Food_Item_Info'
 export const REQUEST_DATA_PROVIDER_ENTRY = "REQUEST_DATA_PROVIDER_ENTRY";
 export const FAIL_DATA_PROVIDER_ENTRY = "FAIL_DATA_PROVIDER_ENTRY";
 export const RECEIVE_DATA_PROVIDER_ENTRY = "RECEIVE_DATA_PROVIDER_ENTRY";
-
 export const PREFIL_PROVIDER_ENTRY_FORM = "PREFIL_PROVIDER_ENTRY_FORM";
-
+export const SHOW_HIDE_SPINNER = "SHOW_HIDE_SPINNER";
 
 export const MAX_COUNT_PROVIDER_DESC = 100;
 
@@ -86,6 +85,14 @@ export function addProviderEntryState(obj) {
     }
 }
 
+export function showHideSpinner(obj){
+    return{
+        type:SHOW_HIDE_SPINNER,
+        storeKey:obj.storeKey,
+        payload:obj.payload
+    }
+}
+
 
 // ------------------------------------
 // Action Handlers
@@ -100,6 +107,7 @@ const ACTION_HANDLERS = {
     [REQUEST_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
     [FAIL_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
     [RECEIVE_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data).set('providerEntryForm', Map(action.payload.data.data)),
+    [SHOW_HIDE_SPINNER]:(state,action)=> state.setIn(['spinner',action.storeKey],action.payload)
 }
 
 // ------------------------------------
@@ -109,8 +117,6 @@ const initialState =
     Map({
         val: 0,
         providerEntryState: Map({
-            loading: false,
-            finished: false,
             stepIndex: 0
         }),
         providerEntryForm: Provider,
@@ -120,6 +126,10 @@ const initialState =
             error: false,
             data: Map()
         }),
+        spinner:Map({
+            providerEntrySpinner:false,
+            foodItemEntrySpinner:false
+        })
     })
 export default function providerReducer(state = initialState, action) {
     const handler = ACTION_HANDLERS[action.type]

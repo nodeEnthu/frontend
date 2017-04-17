@@ -4,12 +4,21 @@
   @import '~purecss/build/pure';
   @import '~purecss/build/grids-core';
   @import '~purecss/build/grids-responsive';
+  @import 'login_buttons';
   @import 'autocomplete';
+  @import 'panel';
   @import 'pure-core-overwrites';
   @import 'nuka-carousel-overwrites';
+<<<<<<< HEAD
   @import '~react-select/dist/react-select';
+=======
+>>>>>>> with-react-toolbox
 }
 
+$call-jack-ie: #FF6F00;
+
+
+@import url(http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700);
 *, *:before, *:after {
   box-sizing: border-box;

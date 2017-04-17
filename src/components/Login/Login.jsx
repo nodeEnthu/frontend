@@ -7,11 +7,11 @@ import FacebookLogin from 'components/Facebook/Facebook';
 import GoogleLogin from 'components/GoogleLogin';
 import * as actions from '../../layouts/CoreLayout/coreReducer';
 import {getCall,postCall,securedGetCall} from 'utils/httpUtils/apiCallWrapper';
+import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
 
 const customStyles = {
 
 };
-
 
 var Login = React.createClass({
     openModal() {
@@ -24,25 +24,51 @@ var Login = React.createClass({
     },
     componentDidMount() {
     },
+    contextTypes: {
+      router: React.PropTypes.object.isRequired
+    },
     successfullLogin(response) {
-        const {globalState,dispatch } = this.props;
-        const {userAddressSearch} = (globalState && globalState.core)?globalState.core.toJS():undefined;
-        if(userAddressSearch){
-          response.userAddressSearch = userAddressSearch;
-        }
-        postCall('/api/users/signUp', JSON.stringify(response))
-            .then(function(result) {
-                if (result.data.token) {
-                    dispatch(actions.addToken(result.data.token));
-                    dispatch(actions.addUser(result.data.user));
-                    dispatch(actions.userLoggedIn(true));
-                    sessionStorage.setItem('token', result.data.token);
+      let self = this;
+      const {globalState,dispatch } = this.props;
+      const {userAddressSearch} = (globalState && globalState.core)?globalState.core.toJS():undefined;
+      if(userAddressSearch){
+        response.userAddressSearch = userAddressSearch;
+      }
+      postCall('/api/users/signUp', JSON.stringify(response))
+          .then(function(result) {
+              let res = result.data;
+              if (res.token) {
+                  dispatch(actions.addToken(res.token));
+                  dispatch(actions.addUser(res.user));
+                  dispatch(actions.userLoggedIn(true));
+                  let userSearchAndPlaceId = getSearchAddressAndPlaceId(res.user);
+                  dispatch(actions.userAddressSearchChange(userSearchAndPlaceId.address));
+                  dispatch(actions.userAddressUpdatePlaceId(userSearchAndPlaceId.placeId));
+                  sessionStorage.setItem('token', res.token);
+                  if(self.context.router.location.pathname === '/'){
+                  // get the path to redirect to
+                  let redirectPath = globalState.core.get('postLoginUrlRedirect');
+
+                  if(redirectPath){
+                    // special treatment for first time provider entry here as we dont know the objectID
+                    redirectPath = (redirectPath ==='provider')? '/provider/'+res.user._id+'/providerProfileEntry':redirectPath;
+                    self.context.router.push(redirectPath);
+                    // reset it back to ''
+                    dispatch(actions.postLoginUrlRedirect(''));
+                  } else{
+                    // now based on the userType take an action
+                    if (res.user.userType === 'consumer'){
+                      self.context.router.push('/search');
+                    }else {
+                      self.context.router.push('/providerProfile/'+res.user._id);
+                    }
+                  }
                 }
-            })
+              }
+          })
     },
     successfullFbLogin(response){
        response.provider = 'fb';
-       console.log("response from fb", response);
        this.successfullLogin(response);
     },
     successfullGmailLogin(response){
@@ -60,10 +86,10 @@ var Login = React.createClass({
     render: function() {
         const { loginModalOPen } = this.props.globalState.core.toJS();
         return (
-              <div className="pure-menu-item">
-                  <a className="pure-menu-link"
+              <div>
+                  <a
                     onClick={this.openModal}
-                    >Login
+                    >LOGIN
                   </a>
                 <Dialog
                   open={loginModalOPen || false}
@@ -71,26 +97,23 @@ var Login = React.createClass({
                 >
                   <div ref="subtitle"
                     style={{
-                      textAlign:'center',
-                      marginBottom:'10%'
-                    }}
-                  >Please login with your facebook or gmail account</div>
-                  <div style = {{width:'70%', margin:'0 auto'}}>
-                    <FacebookLogin
-                      style = {{textAlign:'center'}}
-                      appId="116207178810953"
-                      autoLoad={true}
-                      fields="id,email,name,link,picture"
-                      callback={this.successfullFbLogin} 
-                    />
+                      textAlign:'center'
+                    }}>
+                    Please login with your facebook or gmail account
                   </div>
-                  <div style = {{width:'70%', margin:'0 auto', marginTop:'20px'}}>
-                    <GoogleLogin
-                      clientId="1038006636920-ilhv28295jr3l244jhvf79u9j115bl9e.apps.googleusercontent.com"
-                      buttonText="Login"
-                      callback={this.successfullGmailLogin} 
-                    />
-                  </div>
+                    <div style={{textAlign:"center"}}>
+                      <FacebookLogin
+                        appId="116207178810953"
+                        autoLoad={true}
+                        fields="id,email,name,link,picture"
+                        callback={this.successfullFbLogin} 
+                      />
+                      <GoogleLogin
+                        clientId="1038006636920-ilhv28295jr3l244jhvf79u9j115bl9e.apps.googleusercontent.com"
+                        buttonText="Login"
+                        callback={this.successfullGmailLogin} 
+                      />
+                    </div>                  
                 </Dialog>
               </div>
         );

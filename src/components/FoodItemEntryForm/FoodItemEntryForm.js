@@ -1,67 +1,75 @@
 import React, { Component, PropTypes } from 'react';
 import './fooditementryform.scss';
-import { email, maxLength, required, regexTime, regexDate } from './../../utils/formUtils/formValidation';
-import Toggle from 'material-ui/Toggle';
+import { email, maxLength, required, regexTime, regexDate, requiredArray } from 'utils/formUtils/formValidation';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton'
 import classNames from 'classnames';
-import DatePicker from 'material-ui/DatePicker';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
-import Snackbar from 'material-ui/Snackbar';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import Chip from 'material-ui/Chip';
-import TimeInput from 'react-time-input';
 import { securedPostCall} from 'utils/httpUtils/apiCallWrapper';
-import { CUISINE_TYPES} from './../../routes/Search/constants/searchFilters'
+import { DATES, CUISINE_TYPES,DIET_TYPES,PLACE_ORDER_BY} from 'routes/Search/constants/searchFilters';
+import {daysOfTheWeek,timeOfDay} from './constants';
+import ImageUploader from 'components/ImageUploader'
+import s3ImageUpload from 'utils/uploader/s3ImageUpload';
 import moment from 'moment';
+import * as actions from 'layouts/CoreLayout/coreReducer';
+import Checkbox from 'material-ui/Checkbox';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import Snackbar from 'material-ui/Snackbar';
+
 const maxCount = 100;
 
 const FoodItemEntryForm= React.createClass({
-    componentDidMount() {
-        //scroll to the top
-        window.scrollTo(0, 23);
-        // check whether its an edit to an already present provider
-        if(this.props.params.id){
-            this.props.fetchData('/api/foodItem/'+this.props.params.id , 'foodItemCall','FOOD_ITEM')
-                .then((res)=>{
-                    this.props.addFoodItemInfo({
-                        storeKey:'firstItem',
-                        payload:true
-                    }) 
-                });
+    getInitialState() {
+        return{
+            showSpinner:false        
         }
     },
-    componentWillUnmount() {
-        this.props.removeFoodItemInfo();
+    contextTypes: {
+        router: React.PropTypes.object.isRequired
     },
-    getInitialState() {
-        return {
-            chipDeleted: false
-        };
+    componentDidMount() {
+        // get the providers data
+
+        if(this.props.params.foodId){
+            this.props.fetchData('/api/foodItem/'+this.props.params.foodId , 'foodItemCall','FOOD_ITEM')
+        }
+    },
+    onAllClear(){
+        this.setState({showSpinner:false});
+        this.context.router.push(this.props.linkToRedirectOnAllClear);
     },
     mapFieldsToValidationType:{
         name: required,
+        description:required,
         placeOrderBy: required,
-        serviceDate: required,
         cuisineType: required,
-        price:required
+        price:required,
+        availability: requiredArray
     },
     addTimeOffset(orignalDate){
         return new Date(orignalDate.getTime()+orignalDate.getTimezoneOffset()*60000) ;
     },
-    changeStoreTimeAndDateVals(date, storeKey){
-        this.props.addFoodItemInfo({
-            storeKey: storeKey,
-            payload: date
-        })
+
+    changeStoreTimeAndDateVals(date, storeKey,isInputChecked){
+        let {availability,oneTime} = this.props.foodItemEntryForm.toJS();
+        availability = availability || [];
+        if(!isInputChecked){
+            availability.splice(availability.indexOf(date),1);
+        }
+        else{
+            if(availability.indexOf(date) === -1) { availability.push(date);}
+        }
+        // completely overwrite whats in store
+        this.props.addFoodItemInfo({storeKey: storeKey,payload: availability});
+        let errorMsgkey = storeKey + 'ErrorMsg';
+        let errorMsg = (availability.length === 0)? 'Required':null
+        this.props.addFoodItemInfo({storeKey: errorMsgkey,payload:errorMsg});
     },
+
     daysBeforeOrderDate(referenceDate,days){
         return moment(referenceDate).subtract(days, "days").toDate();
-    },
-    handleDeleteChip() {
-        this.setState({
-            chipDeleted: true
-        })
     },
     handleChange(event) {
         let input = event.target.value;
@@ -74,40 +82,20 @@ const FoodItemEntryForm= React.createClass({
         }
         if (errorMsg) {
             let errorMsgkey = stateKeyName + 'ErrorMsg';
-            this.props.addFoodItemInfo({
-                storeKey: errorMsgkey,
-                payload: errorMsg
-            });
+            this.props.addFoodItemInfo({storeKey: errorMsgkey,payload: errorMsg});
         } else {
-            this.props.addFoodItemInfo({
-                storeKey: stateKeyName,
-                payload: input
-            })
+            this.props.addFoodItemInfo({storeKey: stateKeyName,payload: input})
         }
     },
-    toggle(event) {
-        let input = event.target.value;
-        let stateKeyName = event.target.name;
-        this.props.addFoodItemInfo({
-            storeKey: stateKeyName,
-            payload: !this.props.foodItemEntryForm.get(stateKeyName)
-        })
-    },
-    toggleFlags(stateKeyName) {
-        this.props.addFoodItemInfo({
-            storeKey: stateKeyName,
-            payload: !this.props.foodItemEntryForm.get(stateKeyName)
-        })
+    toggle(stateKeyName,val) {
+        this.props.addFoodItemInfo({storeKey: stateKeyName,payload: val})
     },
     handleFocus(event) {
         let stateKeyName = event.target.name;
         if (stateKeyName) {
             // clear the error msg if it exists
             let errorMsgkey = stateKeyName + 'ErrorMsg';
-            this.props.addFoodItemInfo({
-                storeKey: errorMsgkey,
-                payload: null
-            });
+            this.props.addFoodItemInfo({storeKey: errorMsgkey, payload: null});
         }
     },
     setCount(event) {
@@ -123,16 +111,7 @@ const FoodItemEntryForm= React.createClass({
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
-        this.props.addFoodItemInfo({
-            storeKey: stateKeyName,
-            payload: input
-        });
-    },
-    onTimeChangeHandler(stateKeyName,value){
-        this.props.addFoodItemInfo({
-            storeKey: stateKeyName,
-            payload: value
-        });
+        this.props.addFoodItemInfo({storeKey: stateKeyName,payload: input});
     },
     validateForm() {
         let self = this;
@@ -151,148 +130,162 @@ const FoodItemEntryForm= React.createClass({
                 }
             }
         }
-        this.props.addFoodItemInfo({
-            storeKey: 'allClear',
-            payload: noErrorsInform
-        })
-        if (!noErrorsInform) {
-            self.props.addFoodItemInfo({
-                storeKey: 'snackBarMessage',
-                payload: 'Please fill the required fields'
-            });
-            this.toggleFlags('snackBarOpen');
-            //scroll to the top
-            window.scrollTo(0, 23);
-        }
         return noErrorsInform;
     },
-    formSubmit() {
+    onImageChange(blob,imgUrl,fileConfig){
+        this.props.addFoodItemInfo({
+            storeKey:'imgChanged',
+            payload:true
+        });
+        this.props.addFoodItemInfo({
+            storeKey:'imgUrl',
+            payload:imgUrl
+        });
+        this.setState({imgBlob:blob, fileConfig:fileConfig});
+    },
+    formSubmit(addAnother) {
         if (this.validateForm()) {
             let self = this;
-            this.submitFoodItem()
-                .then(()=>self.props.onAllClear());
+            this.setState({showSpinner:true});
+            let reqBody =this.props.foodItemEntryForm.toJS();
+            if (reqBody.imgChanged) {
+                // reset it to false
+                this.props.addFoodItemInfo({storeKey:'imgChanged',payload:false});
+                // upload and assume its gonna pass
+                s3ImageUpload(this.state.fileConfig,this.state.imgBlob,function(){
+                    self.submitFoodItem(addAnother)
+                        .then(()=>self.props.removeFoodItemInfo());
+                });
+            }else this.submitFoodItem(addAnother) 
+        } else{
+            //scroll to the top
+            window.scrollTo(0, 23);
+            // show snackbar
+            this.props.addFoodItemInfo({storeKey:'snackBarMessage',payload:'Please fill the required fields'});
+            this.props.addFoodItemInfo({storeKey:'snackBarOpen',payload:true});
         }
     },
     submitFoodItem(addAnother) {
-        let result = false;
         let self = this;
         let requestBody=this.props.foodItemEntryForm.toJS();
         // send it to server and clear out some of the item specific info
         if(this.props.mode ==="PROVIDER_ENTRY"){
-            requestBody.publishStage=(addAnother)? 1 : 2;
+            requestBody.publishStage=2;
         }
         return securedPostCall('/api/providers/addOrEditFoodItem', requestBody)
-                .then(function(response) {
-                    // show the chip for last food item entered
-                    self.setState({
-                            chipDeleted: false,
-                            lastItemAdded: response.data.name
-                        })
-                        // open the snackbar
-                    self.props.addFoodItemInfo({
-                        storeKey: 'snackBarMessage',
-                        payload: 'Item successfully added to your menu'
-                    });
-                    self.toggleFlags('snackBarOpen');
-                    //scroll to the top
-                    window.scrollTo(0, 23);
-                })
-       
+            .then(function(response) {
+                self.props.dispatch(actions.userFoodItemUpdate(response.data._id));
+                // delete all the prior information
+                self.props.removeFoodItemInfo();
+                if(addAnother){
+                    // show the snackbar, turn the spinner off and dont go to the next page
+                    self.setState({showSpinner:false});
+                    self.props.addFoodItemInfo({storeKey:'snackBarMessage',payload:'Item added to menu'});
+                    self.props.addFoodItemInfo({storeKey:'snackBarOpen',payload:true});
+                } else self.onAllClear();
+            })
     },
     render() {
-        let { name, nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg, placeOrderBy, placeOrderByErrorMsg, serviceDate, serviceDateErrorMsg, pickUpStartTime, pickUpEndTime, deliveryFlag, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting, allClear, snackBarOpen, snackBarMessage, firstItem } = this.props.foodItemEntryForm.toJS();  
-        serviceDate = (serviceDate)? new Date(serviceDate): new Date();
-        serviceDate =  this.addTimeOffset(serviceDate);
-        placeOrderBy = (placeOrderBy)? new Date(placeOrderBy): new Date();
+        let {user} = this.props.globalState.core.toJS();
+        let self = this;
+        let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg,availability,availabilityErrorMsg,placeOrderBy, placeOrderByErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting,snackBarOpen,snackBarMessage} = this.props.foodItemEntryForm.toJS();
         return (
-            (serviceDate)?
             <div className="food-item-entry">
-                {
-                    (!firstItem && !this.state.chipDeleted && this.props.mode ==="PROVIDER_ENTRY")?
-                        <div style={{display: 'flex',flexWrap: 'wrap'}}>
-                            <span style={{position:'relative',top:'10px'}}>Last Item Entered</span>
-                            <Chip
-                              onRequestDelete={this.handleDeleteChip}
-                              style={{margin: 4,appearance:'initial'}}
-                            >
-                              {this.state.lastItemAdded}
-                            </Chip>
-                        </div>
-                    :
-                    undefined
-
-                }
-                <form className="pure-form pure-form-stacked">
-                    <fieldset>
-                        <div>
-                            <input type="text"  className="pure-u-1" placeholder="*title" name="name" value={name}
-                                onChange={this.changeStoreVal}
-                                onBlur={this.handleChange} 
-                                onFocus={this.handleFocus}
-                            />
-                            <span className = "error-message">{(nameErrorMsg)?'*'+nameErrorMsg:undefined}</span>
-                            <textarea className = "pure-u-1" name="description" placeholder="description" value={description}
-                                onBlur={this.handleChange} 
-                                onFocus={this.handleFocus} 
-                                onChange={this.changeStoreVal}
-                            >   
-                            </textarea>
-                            <span className = "error-message">{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
-                            <div  className="pure-u-1 pure-u-md-1-2">
-                                <label>*Cuisine-type</label>
-                                <select id="cuisine-type" 
-                                    placeholder="Cuisine type"
-                                    name="cuisineType"
-                                    className="width-max"
-                                    onBlur={this.handleChange} 
-                                    onFocus={this.handleFocus}
-                                    onChange={this.changeStoreVal}
-                                    value={cuisineType}
-                                >
-                                    <option value=''></option>
-                                    {CUISINE_TYPES.map((cuisine)=>{
-                                        return <option key={cuisine.type}>{cuisine.type}</option>
-                                    })}
-
-                                </select>
-                                <span className = "error-message">{(cuisineTypeErrorMsg)?'*'+cuisineTypeErrorMsg:undefined}</span>
-                            </div>
-                            <div className="pure-u-1 pure-u-md-1-2">
-                                <label>*Price</label>
-                                <input type="text"  placeholder="*price" name="price" value={price}
-                                    className="width-max"
+                <div className="food-item-container">
+                    <div className="is-center">
+                        <ImageUploader
+                            onImageChange = {this.onImageChange}
+                            initialImgUrl={imgUrl}
+                            onImageUploadStart = {this.onImageUploadStart}
+                        />
+                    </div>
+                    <form className="pure-form pure-form-stacked ">
+                        <fieldset>
+                            <div>
+                                <input type="text"  className="pure-u-1" placeholder="*title" name="name" value={name}
                                     onChange={this.changeStoreVal}
                                     onBlur={this.handleChange} 
                                     onFocus={this.handleFocus}
                                 />
-                                <span className = "error-message">{(priceErrorMsg)?'*'+priceErrorMsg:undefined}</span>
-
-                            </div>
-
-                        
-                            <div>
-                                <div className = "pure-u-1 pure-u-md-1-2">
-                                    <label>*Order ready date</label>
-                                        <DatePicker
-                                            container="inline"
-                                            className="width-max"
-                                            name="serviceDate"
-                                            textFieldStyle={{width:'100%'}}
-                                            inputStyle={{marginTop:'0px',height:'2.25em',border: '1px solid #ccc',boxShadow: 'inset 0 1px 3px #ddd',padding: '.5em .6em'}}
-                                            underlineStyle={{display: 'none'}}
-                                            hintText=""
-                                            autoOk={true}
-                                            value={serviceDate}
-                                            onBlur={this.handleChange} 
-                                            onFocus={this.handleFocus}
-                                            onTouchTap={(event)=>event.preventDefault()}
-                                            onChange={(event,date)=>this.changeStoreTimeAndDateVals(date,'serviceDate')}
-                                            formatDate={(date)=> date.toDateString()}
-                                        />
+                                <span className = "error-message">{(nameErrorMsg)?'*'+nameErrorMsg:undefined}</span>
+                                <textarea className = "pure-u-1" name="description" placeholder="*description" value={description}
+                                    onBlur={this.handleChange} 
+                                    onFocus={this.handleFocus} 
+                                    onChange={this.changeStoreVal}
+                                >   
+                                </textarea>
+                                <span className = "error-message">{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</span>
+                                <div className="pure-u-1">
+                                    <input type="text"  placeholder="*price" name="price" value={price}
+                                        className="width-max"
+                                        onChange={this.changeStoreVal}
+                                        onBlur={this.handleChange} 
+                                        onFocus={this.handleFocus}
+                                    />
+                                    <span className = "error-message">{(priceErrorMsg)?'*'+priceErrorMsg:undefined}</span>
                                 </div>
-                                <span className = "error-message">{(serviceDateErrorMsg)?'*'+serviceDateErrorMsg:undefined}</span>
-                                <div className = "pure-u-1 pure-u-md-1-2" >
-                                    <label>People can order</label>
+                                <div  className="pure-u-1 pure-u-md-1-2">
+                                    <label>*Cuisine-type</label>
+                                    <select id="cuisine-type" 
+                                        placeholder="Cuisine type"
+                                        name="cuisineType"
+                                        className="width-max"
+                                        onBlur={this.handleChange} 
+                                        onFocus={this.handleFocus}
+                                        onChange={this.changeStoreVal}
+                                        value={cuisineType}
+                                    >
+                                        <option value=''></option>
+                                        {CUISINE_TYPES.map((cuisine)=>{
+                                            return <option key={cuisine.value}>{cuisine.value}</option>
+                                        })}
+
+                                    </select>
+                                    <span className = "error-message">{(cuisineTypeErrorMsg)?'*'+cuisineTypeErrorMsg:undefined}</span>
+                                </div>
+                                <div className="pure-u-1">
+                                    <legend className="pull-left">
+                                        Diet type(s):
+                                    </legend>
+                                    {DIET_TYPES.map(function(diet,index){
+                                                    return <div key={index} className="pure-u-1-3 pure-u-md-1-6" style={{paddingBottom : '0.25em'}}>
+                                                            <div className="parent-box">
+                                                                    <div className="child-box-1">
+                                                                        {diet.value}
+                                                                    </div>
+                                                                    <div className="child-box-2">
+                                                                        <Checkbox
+                                                                            onCheck={(event,isInputChecked)=>self.toggle(diet.value ,isInputChecked)}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                })}
+                                    
+                                </div>
+                                
+                                <div className="pure-u-1">
+                                    <label>Select date(s): </label>
+                                    <div className = "error-message">{(availabilityErrorMsg)?'*'+availabilityErrorMsg:undefined}</div>
+                                    <legend></legend>
+                                    {DATES(8,"dd, MMM D",'add').map(function(date,index){
+                                                    return <div key={index} className="pure-u-1-3 pure-u-md-1-6" style={{paddingBottom : '0.25em'}}>
+                                                            <div className="parent-box">
+                                                                    <div className="child-box-1">
+                                                                        {date.title}
+                                                                    </div>
+                                                                    <div className="child-box-2">
+                                                                        <Checkbox
+                                                                            onCheck={(event,isInputChecked)=>self.changeStoreTimeAndDateVals(date.value, 'availability',isInputChecked)}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                })}
+                                    
+                                </div>
+                                <div className = "pure-u-1" >
+                                    <label>Place order by</label>
                                     <select id="order-by-date" 
                                         name="placeOrderBy"
                                         className="width-max"
@@ -301,123 +294,109 @@ const FoodItemEntryForm= React.createClass({
                                         onChange={this.changeStoreVal}
                                         value={placeOrderBy}
                                     >
-                                        <option value={serviceDate}>Same Day</option>
-                                        <option value={this.daysBeforeOrderDate(serviceDate,1)}>Atleast 1 day before</option>        
-                                        <option value={this.daysBeforeOrderDate(serviceDate,2)}>Atleast 2 days before</option>     
-                                        <option value={this.daysBeforeOrderDate(serviceDate,3)}>Atleast 3 days before</option>
+                                        {
+                                            PLACE_ORDER_BY.map(function(placeBy,index){
+                                                return  <option key={index} value={placeBy.value}>{placeBy.label}</option>
+                                            })
+                                        }
                                     </select>
                                     <span className = "error-message">{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
                                 </div>
-                            </div> 
-                       
-                            <div>
                                 <div className = "pure-u-1 pure-u-md-1-2">
                                     <label>Pick-up start time (hh:mm)</label>
-                                    <TimeInput
+                                    <select
                                         placeholder="pick-up start time"
+                                        type="text"
                                         name="pickUpStartTime"
                                         className="width-max"
-                                        onTimeChange={(value)=>this.onTimeChangeHandler('pickUpStartTime',value)}
+                                        onBlur={this.handleChange} 
+                                        onFocus={this.handleFocus}
+                                        onChange={this.changeStoreVal}
                                         value={pickUpStartTime}
-                                        initTime={pickUpStartTime}
-                                    /> 
+                                    >
+                                        <option value=''></option>
+                                        {timeOfDay().map(function(time,index){
+                                            return <option key={index} value={time.value}>{time.label}</option>
+                                        })}
+                                    </select>
                                 </div>
                                 <div className = "pure-u-1 pure-u-md-1-2">
                                     <label>Pick-up end time (hh:mm)</label>
-                                    <TimeInput
+                                    <select
                                         placeholder="pick-up end time"
+                                        type="text"
                                         name="pickUpEndTime"
                                         className="width-max"
-                                        onTimeChange={(value)=>this.onTimeChangeHandler('pickUpEndTime',value)}
+                                        onBlur={this.handleChange} 
+                                        onFocus={this.handleFocus}
+                                        onChange={this.changeStoreVal}
                                         value={pickUpEndTime}
-                                        initTime={pickUpEndTime}
-                                    />   
+                                    >
+                                        <option value=''></option>
+                                        {timeOfDay().map(function(time,index){
+                                            return <option key={index} value={time.value}>{time.label}</option>
+                                        })}
+                                    </select>  
                                 </div>
                             </div>
-                            <div>
-                                <span>Enable delivery for this item</span>
-                                <div style={{maxWidth:100, display:'inline-block'}}>
-                                    <Toggle
-                                        defaultToggled={deliveryFlag}
-                                        onToggle={()=>{this.toggleFlags('deliveryFlag')}} 
-                                        style={{top:'3px', display:'inline-block'}}
-                                    />
-                                </div>
-                            </div> 
-                            <legend className="pull-left">
-                                Tag your food:
-                            </legend>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="organic" 
-                                    checked={organic} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#organic</span>
+                        </fieldset>
+                        {
+                            (this.props.mode != 'editMode')?
+                            <div className="is-center section-padding">
+                                <RaisedButton
+                                  label="+ Add another item"
+                                  style={{top:'6px'}}
+                                  onClick = {()=>this.formSubmit('addAnother')}
+                                  disableTouchRipple={true}
+                                />
                             </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="glutenfree" 
-                                    checked={glutenfree} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#gluten-free</span>
-                            </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="nutfree"
-                                    checked={nutfree} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#nut-free</span>
-                            </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="vegetarian"
-                                    checked={vegetarian} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#vegetarian</span>
-                            </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="nondairy"
-                                    checked={nondairy} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#non-dairy</span>
-                            </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="indianFasting"
-                                    checked={indianFasting} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#indian-fasting</span>
-                            </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="lowcarb"
-                                    checked={lowcarb} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#low-carb</span>
-                            </div>
-                            <div style={{display:'inline-block'}}>
-                                <input style = {{display:'inline', width:'20px'}}type ="checkBox" name="oilfree"
-                                    checked={oilfree} onChange={this.toggle}/><span style={{marginRight:'20px'}}>#oil-free</span>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-                {
-                    (this.props.mode != 'editMode')?
-                    <div>
-                        <IconButton
-                        onClick = {()=>this.submitFoodItem('addAnother')}
-                        style={{top:'6px'}}
-                        >
-                            <ContentAddBox/>
-                        </IconButton>
-                        <div style={{display:'inline-block'}}>
-                            Add another item
-                        </div>
-                        <Snackbar
-                          open={snackBarOpen || false}
-                          message={snackBarMessage || ''}
-                          autoHideDuration={5000}
-                          onRequestClose={()=>{this.toggleFlags('snackBarOpen')}} 
-                        />
+                            :
+                            undefined
+                        }
+                    </form>
+                </div>
+                <div className="is-center section-padding">
+                    <div style={{display:(this.state.showSpinner)?'block':'none'}}>
+                        <img src= "/general/loading.svg"/>
                     </div>
-                    :
-                    undefined
-                }
-                
+                    {(user.foodItems.length >0 || user.foodItemAddedInEntryMode)?
+                        <RaisedButton
+                            label="Cancel"
+                            backgroundColor="white"
+                            onTouchTap={this.onAllClear}
+                            disableTouchRipple={true}
+                            style={{marginRight:'1em'}}
+                        />
+                        :
+                        undefined
+                    }
+                    
+                    <RaisedButton
+                        label={this.props.nextLabel}
+                        backgroundColor="#FF6F00"
+                        labelStyle={{color:'white'}}
+                        onTouchTap={this.formSubmit}
+                        disableTouchRipple={true}
+                    />
+                    <Snackbar
+                      open={snackBarOpen}
+                      message={snackBarMessage}
+                      autoHideDuration={4000}
+                      onRequestClose={()=>this.toggle('snackBarOpen',false)}
+                    />
+                </div>  
             </div>
-            :
-            <div></div>
         )
     }
 })
 FoodItemEntryForm.propTypes = {
-    onAllClear : React.PropTypes.func.isRequired, 
+    globalState:React.PropTypes.object,
     foodItemEntryForm : React.PropTypes.object.isRequired,
     addFoodItemInfo : React.PropTypes.func.isRequired, 
     fetchData : React.PropTypes.func.isRequired,
     removeFoodItemInfo: React.PropTypes.func.isRequired,
     params:React.PropTypes.object,
+    dispatch:React.PropTypes.func,
     mode:React.PropTypes.string
 };
 export default FoodItemEntryForm;

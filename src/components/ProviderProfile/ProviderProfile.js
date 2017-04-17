@@ -4,43 +4,57 @@ import {Map} from 'immutable'
 import './providerProfile.scss'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import classNames from 'classnames';
-import StaffImg from './img/common/staff-thumb-placeholder-male.jpg';
 import Checkout from 'components/Checkout';
 import Scroll from 'react-scroll';
 import ReviewSubmitModal from 'components/ReviewSubmitModal';
 import StarRatingComponent from 'react-star-rating-component';
 import CommunicationEmail from 'material-ui/svg-icons/communication/email';
-import CommunicationCall from 'material-ui/svg-icons/communication/call';
-import CommunicationChat from 'material-ui/svg-icons/communication/chat';
+import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
+import CommunicationLocationOn from 'material-ui/svg-icons/communication/location-on';
 import ContentCreate from 'material-ui/svg-icons/content/create';
 import ProviderEntryForm from 'components/ProviderEntryForm/ProviderEntryForm'
-import ActionPermContactCalendar from 'material-ui/svg-icons/action/perm-contact-calendar';
 import IconButton from 'material-ui/IconButton';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import RaisedButton from 'material-ui/RaisedButton';
 import FoodItemInProviderProfile from 'components/FoodItemInProviderProfile';
 import { Link } from 'react-router';
 import moment from 'moment';
+import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
+import FlatButton from 'material-ui/FlatButton';
 
 const ProviderProfile = React.createClass({
   getInitialState() {
       return {
           counter:0,
-          itemCheckOutClick:false,
+          itemCheckOutClicked:false,
       };
   },
   componentWillMount() {
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
   },
-  writeReviewModal(foodItem){
-    this.props.openModal({storeKey:'reviewSubmitModalOpen', openModal:true})
-    this.props.selectItemForReview(foodItem);
+  componentWillUnmount() {
+    if (this.props.removeAllCheckedOutItems) this.props.removeAllCheckedOutItems();
+    if (this.props.flushOutStaleReviewData) this.props.flushOutStaleReviewData();
+    if (this.props.flushProviderData) this.props.flushProviderData();
   },
-  componentDidUpdate() {
+  writeReviewModal(foodItem){
+    // check whether user is logged in 
+    if(this.props.globalState.core.get('userLoggedIn')){
+      this.props.openModal({storeKey:'reviewSubmitModalOpen', openModal:true})
+      this.props.selectItemForReview(foodItem);
+    }else{
+      // open the modal for user login
+      this.props.openLoginModal(true);
+    }
+  },
+  componentDidUpdate(prevProps) {
     //check whether clicking on add to cart made component update
-    if(this.state.counter===1 && this.state.itemCheckOutClick){
-      this.scrollToElement('checkoutsection');
-      this.setState({itemCheckOutClick:false})
+    if(this.state.counter===1 && this.state.itemCheckOutClicked){
+      this.scrollToElement('link1');
+      this.setState({itemCheckOutClicked:false})
+    }
+    if(prevProps.params.id!= this.props.params.id){
+      this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
     }
   },
   checkOutItem(event,foodItem){
@@ -52,17 +66,13 @@ const ProviderProfile = React.createClass({
       if(this.state.counter === 0){
         this.setState({
           counter:this.state.counter+1,
-          itemCheckOutClick:true
+          itemCheckOutClicked:true
         })
       }
     }else{
       // open the modal for user login
       this.props.openLoginModal(true);
     }
-
-  },
-  checkoutLinkClick(){
-    this.scrollToElement('checkoutsection');
   },
   scrollToElement(elementName){
     let scroller = Scroll.scroller;
@@ -72,9 +82,13 @@ const ProviderProfile = React.createClass({
       smooth: true,
     })
   },
+  refreshPage(){
+    this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
+  },
   render() {
-    const {providerProfileCall,providerEditModalOpen} = this.props.providerProfile.toJS();
-    let data = providerProfileCall.data;
+    const {providerProfileCall} = this.props.providerProfile.toJS();
+    let provider = providerProfileCall.data;
+    let userSearchAndPlaceId;
     let self = this;
     const {user} = this.props.globalState.core.toJS();
     let Element = Scroll.Element;
@@ -86,43 +100,59 @@ const ProviderProfile = React.createClass({
     }
     // seperate between current and past items
     let currentItems=[] , pastItems=[], currentDate;
-    if(data && data.foodItems){
-      data.foodItems.forEach(function(foodItem){
-        if(moment(foodItem.serviceDate).isAfter(moment(), 'day') || moment(foodItem.serviceDate).isSame(moment(), 'day')){
-          currentItems.push(foodItem);
-        } else pastItems.push(foodItem);
+    if(provider && provider.foodItems){
+      userSearchAndPlaceId= getSearchAddressAndPlaceId(provider);
+      provider.foodItems.forEach(function(foodItem){
+        let availability= foodItem.availability;
+        let foodItemAvailable = false;
+        for(let i=0; i < availability.length ; i++){
+          if(moment(availability[i]).isAfter(moment(), 'day') || moment(availability[i]).isSame(moment(), 'day')){
+            foodItemAvailable=true;
+            break;
+          }else foodItemAvailable=false;
+        }
+        (foodItemAvailable)?currentItems.push(foodItem): pastItems.push(foodItem);
       })
     }
-    return (data && data.foodItems && user && user.name || (data && !this.props.globalState.core.get('userLoggedIn')))?
+    return (provider && provider.userType && user && user.name || (provider && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="provider-profile">
-          <div className="sidebar pure-u-1 pure-u-md-1-4">
-            {
-              (this.props.params.id === this.props.globalState.core.toJS().user._id)?
-                <div className="move-right">                   
-                  <Link style={{color:'white'}}to={'/providers/'+data._id+'/edit'}>Edit profile</Link> 
+          <div className="pure-u-1 profile-wrapper">
+              <div className="pure-u-1 pure-u-md-1-4 is-center">
+                <div>
+                  <img className = "pure-img-responsive" src={provider.imgUrl}/>
                 </div>
-                :
-                undefined
-            }
-            
-            <div className="header">
-                <h1 className="brand-title">{data.title}</h1>
-                <div className="pure-u-1">
-                  <img className = "profile-img" src={StaffImg}/>
+              </div>
+              <div className="pure-u-1 pure-u-md-3-4 provider-desc-wrapper">
+                <div className="brand-title">{provider.title}</div>
+                <div>{/*provider.description*/}Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</div>
+                <div className="addtnl-info">
+                  <span>Services Offered:</span>
+                  {
+                    (provider.pickUpFlag)?
+                      <span className="service-offered">{'Pickup'}</span>
+                      :''
+                  }
                 </div>
-                <IconButton><CommunicationEmail/></IconButton>
-                <IconButton><CommunicationCall/></IconButton>
-                <IconButton><CommunicationChat/></IconButton>
-                <nav className="nav">
-                    <ul className="nav-list">
-                        <li className="nav-item">
-                            {data.description}
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+                <div className="provider-details">
+                  <CommunicationLocationOn/>
+                  <span className="provider-detail">{userSearchAndPlaceId.address}</span>
+                </div>
+                <div>
+                 <CommunicationEmail/>
+                  <span className="provider-detail">{provider.email}</span>
+                </div>
+              </div>
+              <div className="pure-u-1">
+                 <FlatButton
+                    label="Edit Profile"
+                    backgroundColor="lightgrey"
+                    icon={<EditorModeEdit/>}
+                    style={{width:'99%'}}
+                    hoverColor="#8AA62F"
+                  />
+              </div>
           </div>
-          <div className = "content pure-u-1 pure-u-md-3-4">
+          <div className = "content pure-u-1">
             <div>
               <div className="posts">
                   {(userViewingOwnProfile && (this.props.mode != 'PROVIDER_ENTRY'))?
@@ -147,14 +177,18 @@ const ProviderProfile = React.createClass({
                   }
                   { 
                     currentItems.map((foodItem)=>{
-                      return <div key={foodItem._id}>
-                                <FoodItemInProviderProfile
-                                  userViewingOwnProfile={userViewingOwnProfile}
-                                  checkOutItem = {self.checkOutItem}
-                                  writeReviewModal = {self.writeReviewModal}
-                                  foodItem={foodItem}
-                                />
-                              </div>
+                      return <FoodItemInProviderProfile
+                                key={foodItem._id}
+                                userViewingOwnProfile={userViewingOwnProfile}
+                                refreshPage= {this.refreshPage}
+                                checkOutItem = {self.checkOutItem}
+                                writeReviewModal = {self.writeReviewModal}
+                                postSecuredData = {this.props.postSecuredData}
+                                openModal = {this.props.openModal}
+                                providerProfile = {this.props.providerProfile}
+                                foodItem={foodItem}
+                                mode = {this.props.mode}
+                              />
                     })
                   }
                   {
@@ -165,27 +199,43 @@ const ProviderProfile = React.createClass({
                   }
                   { 
                     pastItems.map((foodItem)=>{
-                      return <div key={foodItem._id}>
-                                <FoodItemInProviderProfile
-                                  userViewingOwnProfile={userViewingOwnProfile}
-                                  checkOutItem = {self.checkOutItem}
-                                  writeReviewModal = {self.writeReviewModal}
-                                  foodItem={foodItem}
-                                  pastItem={true}
-                                />
-                              </div>
+                      return <FoodItemInProviderProfile
+                                key={foodItem._id}
+                                userViewingOwnProfile={userViewingOwnProfile}
+                                checkOutItem = {self.checkOutItem}
+                                refreshPage= {this.refreshPage}
+                                writeReviewModal = {self.writeReviewModal}
+                                postSecuredData = {this.props.postSecuredData}
+                                openModal = {this.props.openModal}
+                                foodItem={foodItem}
+                                providerProfile = {this.props.providerProfile}
+                                pastItem={true}
+                                mode = {this.props.mode}
+                              />
+                            
                     })
                   }
               </div>
+              
               {(this.props.mode != 'PROVIDER_ENTRY')?
                 <div>
-                  <Element name="checkoutsection"/>
                   <Checkout{... this.props}/>
-                  <ReviewSubmitModal{... this.props}/>
+                  <ReviewSubmitModal
+                    globalState =  {this.props.globalState}
+                    reviewError = {this.props.reviewError}
+                    refreshPage= {this.refreshPage}
+                    selectStarRating = {this.props.selectStarRating}
+                    submitTypedReview = {this.props.submitTypedReview}
+                    openModal = {this.props.openModal}
+                    postSecuredData = {this.props.postSecuredData}
+                    flushOutStaleReviewData = {this.props.flushOutStaleReviewData}
+                    providerProfile = {this.props.providerProfile}
+                  />
                 </div>
                 :
                 undefined
               }
+              <Element name="link1"></Element>
             </div> 
           </div>
         </div>
@@ -212,5 +262,8 @@ ProviderProfile.propTypes = {
   reviewError:React.PropTypes.func,
   actionName:React.PropTypes.string,
   mode:React.PropTypes.string,
-  flushOutStaleReviewData:React.PropTypes.func
+  flushOutStaleReviewData:React.PropTypes.func,
+  flushProviderData:React.PropTypes.func,
+  userAddressSearchChange:React.PropTypes.func,
+  userAddressUpdatePlaceId:React.PropTypes.func
 }

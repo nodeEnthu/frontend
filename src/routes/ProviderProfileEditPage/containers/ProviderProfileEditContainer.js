@@ -17,14 +17,13 @@ import ProviderProfileEditPage from '../components/ProviderProfileEditPage'
 const mapActionCreators = {
     fetchSecuredData,
     addProviderInfo,
-    addProviderErrorMsg
+    addProviderErrorMsg,
 }
 
 const mapStateToProps = (state) => {
     return {
         globalState:state,
-        providerEntryForm:state.providerProfileEdit.get('providerEntryForm')
-    }
+        providerEntryForm:state.providerProfileEdit.get('providerEntryForm')    }
 }
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

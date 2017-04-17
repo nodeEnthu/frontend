@@ -1,8 +1,20 @@
 .pure-form .pure-u-1-2.remove-box-shadow input[type=text] {
-    box-shadow:none ;
-    width:60%;
+    box-shadow: none;
+    width: 60%;
 }
-.pure-menu-heading{
-	text-transform:inherit;
-	color:white;
+
+.pure-menu-heading {
+    text-transform: inherit;
+    color: white;
+}
+/* contant class is applied in teh core laout component*/
+.content {
+    .pure-form {
+        input[type=text], select, textarea {
+            box-shadow: none;
+        }
+        input[type=text]:focus, select:focus, textarea:focus {
+            border: 1px solid #FF6F00;
+        }
+    }
 }

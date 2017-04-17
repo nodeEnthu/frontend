@@ -71,7 +71,6 @@ const ACTION_HANDLERS={
   },
   [types.STOP_TYPING]:(state,action)=>{
     return state.get('typing').filter(function(user) {
-      console.log("stopped typing");
       return user !== action.username;
     });
   },

@@ -1,204 +1,241 @@
 .home {
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    label {
-        color: #34495e;
-    }
-    .pure-img-responsive {
-        max-width: 100%;
-        height: auto;
-    }
-    /*
- * -- LAYOUT STYLES --
- * These are some useful classes which I will need
- */
-    .l-box {
-        padding: 1em;
-    }
-    .l-box-lrg {
-        padding: 2em;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    }
-    .is-center {
-        margin:0.5em 0;
-        text-align: center;
-    }
-    /*
- * -- PURE FORM STYLES --
- * Style the form inputs and labels
- */
-    .pure-form label {
-        margin: 1em 0 0;
-        font-weight: bold;
-        font-size: 100%;
-    }
-    .pure-form input[type] {
-        border: 2px solid #ddd;
-        box-shadow: none;
-        font-size: 100%;
-        width: 100%;
-        margin-bottom: 1em;
-    }
-    /*
- * -- PURE BUTTON STYLES --
- * I want my pure-button elements to look a little different
- */
-    .pure-button {
-        background-color: #1f8dd6;
-        color: white;
-        padding: 0.5em 2em;
-        border-radius: 5px;
-    }
-    a.pure-button-primary {
-        background: white;
-        color: #1f8dd6;
-        border-radius: 5px;
-        font-size: 120%;
-    }
-    /*
-     * -- SPLASH STYLES --
-     * This is the blue top section that appears on the page.
-     */
     .splash-container {
-        padding: 2em;
-        background: url("../assets/FotorCreated_final-min-compressor.jpg") no-repeat fixed center;
+        background: url("../assets/mainImage.jpg") no-repeat center center fixed;
         /*z-index: 1;*/
         overflow: hidden;
         /* The following styles are required for the "scroll-over" effect */
         width: 100%;
-        height: 90%;
+        height: 500px;
         top: 0;
         left: 0;
-    }
-    .react-autosuggest__container{
-        width:90%;
-    }
-    .react-autosuggest__input{
-        width:inherit;
+        color: white;
     }
     .banner-wrapper {
-        top: 50%;
-        left: 50%;
+        position: relative;
+        top: 24%;
+        width: 80%;
+        height: 45%;
         margin: 0 auto;
-        background: #FFF;
-        opacity: 0.95;
-        filter: alpha(opacity=95);
-        border-radius: 10px;
+        background: rgba(0, 0, 0, .7);
         text-align: center;
+        clear: both;
+    }
+    .promotion-heading {
+        padding-top: 20px;
+        font-family: cursive;
     }
     .splash {
-        /* absolute center .splash within .splash-container */
-        width: 100%;
-        position:relative;
-        float: left;
         margin: auto;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
+        width: 95%;
+        height: 60px;
+        background: #FF6F00;
+        padding: 6px;
+        select {
+            margin-left: 10px;
+            color: #000;
+            height: 38px;
+            -webkit-appearance: none;
+            border: none;
+            border-radius: 0;
+            padding: 9px;
+            width: 35%;
+        }
     }
-    /* This is the main heading that appears on the blue section */
-    .splash-head {
-        margin: 0 auto;
-        width: 80%;
-        height: 60%;
-        font-size: 20px;
-        font-weight: bold;
-        color: black;
-        border: 3px solid white;
-        padding: 0.5em 0.5em;
-        font-weight: 100;
-        border-radius: 5px;
-        line-height: 1em;
-    }
-    /* This is the subheading that appears on the blue section */
-    .splash-subhead {
-        color: white;
-        letter-spacing: 0.05em;
-        opacity: 0.8;
-    }
-    /*
- * -- CONTENT STYLES --
- * This represents the content area (everything below the blue section)
- */
-    .content-wrapper {
-        /* These styles are required for the "scroll-over" effect */
-        width: 100%;
-        min-height: 12%;
-        /*z-index: 2;*/
-        background: white;
-    }
-    /* This is the class used for the main content headers (<h2>) */
-    .content-head {
-        font-weight: 400;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        margin: 2em 0 1em;
-    }
-    /* This is a modifier class used when the content-head is inside a ribbon */
-    .content-head-ribbon {
-        color: white;
-    }
-    /* This is the class used for the content sub-headers (<h3>) */
-    .content-subhead {
-        color: #1f8dd6;
-    }
-    .content-subhead i {
-        margin-right: 7px;
-    }
-    /* This is the class used for the dark-background areas. */
-    .ribbon {
-        background: #2d3e50;
-        color: #aaa;
-    }
-    /* This is the class used for the footer */
-    
-}
-.footer {
-        background: #111;
-}
-
-@media (min-width: 48em) {
-    /* We want to give the content area some more padding */
-   .content {
-        padding: 1em;
-    }
-    /* We can align the menu header to the left, but float the
-    menu items to the right. */
-    .home .home-menu {
-        text-align: left;
-    }
-    .home .home-menu ul {
+    .move-right {
+        text-align: right;
         float: right;
     }
-    /* We increase the height of the splash-container */
-    .home .splash-container {
-        height: 90%;
+    .move-left {
+        float: left;
+        text-align: left;
     }
-    /* We decrease the width of the .splash, since we have more width
-    to work with */
-    .home .splash {
+    .category-wrapper {
+        padding-top: 5px;
+    }
+    .address-wrapper {
+        display: inline-block;
         width: 100%;
+        padding-top: 5px;
     }
-    .home .splash-head {
-        font-size: 150%;
+    .address-sub-wrapper {
+        display: inline-block;
+        width: 85%;
+        background: white;
+        height: 2.3em;
     }
-    /* We remove the border-separator assigned to .l-box-lrg */
-    .home .l-box-lrg {
+    .react-autosuggest__container {
+        display: inline-block;
+        width: 70%;
+        color: black;
+    }
+    .react-autosuggest__input {
         border: none;
+        width: 100%;
+        border-radius: 0;
+        padding: 9px;
+    }
+    .icon-locate {
+        display: inline-block;
+        position: relative;
+        width: 30px;
+        height: 20px;
+        font-size: 0.5em;
+        img {
+            position: absolute;
+            width: 100%;
+            height: auto;
+        }
+    }
+    .search-button {
+        display: inline-block;
+        position: relative;
+        width: 30px;
+        height: 20px;
+        margin-left: 2%;
+        img {
+            position: absolute;
+            width: 100%;
+            height: auto;
+            bottom: -6px;
+        }
+    }
+    .locate-me {
+        display: inline-block;
+        margin: 0 2%;
+        color: black;
+        font-size: 0.75em;
+    }
+    .steps-text {
+        padding: 50px 190px 40px;
+        font-family: 'Architects Daughter';
+        text-align: center;
+        font-size: 40px;
+    }
+    .step {
+        text-align: center;
+    }
+    .step-heading {
+        padding: 0.75em;
+    }
+    .step-text {
+        padding: 0 5em;
+    }
+    .step-summary {
+        color: #FF6F00;
+    }
+    .list-business {
+        margin-top: 67px;
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+    .your-business {
+        background: #16987e;
+        padding: 1em;
+        color: white;
+    }
+    .business-heading {
+        font-size: 1.5em;
+    }
+    .business-promotion {}
+    .business-signup {
+        display: inline-block;
+        border: 1px solid white;
+        font-size: 0.75em;
+        padding: 0.5em;
+    }
+    .business-step{
+        text-align:center;
+    }
+}
+
+@media (max-width: 48em) {
+    .content{
+        padding:0;
+    }
+    .home {
+        .home-menu {
+            text-align: left;
+        }
+        .splash-container {
+            background: url("../assets/mainImageMobile.jpg") no-repeat center center fixed;
+            background-size: cover;
+            /* The following styles are required for the "scroll-over" effect */
+            width: 100%;
+            top: 0;
+            left: 0;
+            color: white;
+        }
+        .banner-wrapper {
+            position: absolute;
+            top: 20%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            background: none;
+            text-align: center;
+            clear: both;
+        }
+        .splash {
+            select {
+                width: 60%;
+            }
+        }
+        .move-right {
+            text-align: left;
+            float: none;
+        }
+        .move-left {
+            float: none;
+            text-align: left;
+        }
+        /* We increase the height of the splash-container */
+        .splash-container {
+            height: 500px;
+        }
+        .splash-head {
+            font-size: 150%;
+        }
+        .category-wrapper {
+            text-align: left;
+        }
+        .react-autosuggest__container {
+            width: 85%;
+        }
+        .icon-locate {
+            width: 30px;
+            height: 20px;
+        }
+        .locate-me {
+            display: none;
+        }
+        .search-button {
+            width: 20px;
+            height: 20px;
+            img {
+                bottom: -3px;
+                left: 1px;
+            }
+        }
+        .steps-text {
+            padding: 24px 0;
+            font-family: 'Architects Daughter';
+            text-align: center;
+            font-size: 2em;
+        }
+        .your-business {}
+        .step {
+            margin-bottom: 24px;
+        }
     }
 }
 
 
 /*
- * -- DESKTOP (AND UP) MEDIA QUERIES --
- * On desktops and other large devices, we want to over-ride some
- * of the mobile and tablet styles.
- */
+     * -- DESKTOP (AND UP) MEDIA QUERIES -- * On desktops and other large devices,
+ we want to over-ride some * of the mobile and tablet styles. */
 
 @media (min-width: 78em) {
     /* We increase the header font size even more */

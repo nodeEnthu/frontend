@@ -23,12 +23,24 @@ export function postCall(endPoint, bodyParams) {
         data: bodyParams
     })
 }
+<<<<<<< HEAD
 export function putImgCall(endPoint, data) {
     return axios.put(endPoint, data, {
         headers: {
             'Content-Type': 'image/png'
         }
     });
+=======
+export function putImgCall(endPoint,data,fileConfig) {
+    return axios({
+        method: 'put',
+        headers: {
+            "Content-Type": fileConfig["file-type"]
+        },
+        url: endPoint,
+        data: data
+    })
+>>>>>>> with-react-toolbox
 }
 export function securedGetCall(endPoint, params) {
     let token = sessionStorage.getItem('token');

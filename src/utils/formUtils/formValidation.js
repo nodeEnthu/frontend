@@ -1,4 +1,5 @@
-const isEmpty = value => value === undefined || value === 'undefined' || value === null || value === 'null' || value === '';
+const isEmpty = value => value === undefined || value === 'undefined' || value === null || value === 'null' || value === '' ;
+const isEmptyArray = value => value.length === 0
 
 export function email(value) {
     if (isEmpty(value)) {
@@ -8,9 +9,9 @@ export function email(value) {
     } else return null;
 }
 
-export function required(value) {
+export function required(value,message) {
     if (isEmpty(value)) {
-        return 'Required';
+        return message || 'Required';
     }
 }
 
@@ -58,5 +59,9 @@ export function regexDate(value) {
     } else if(!/^^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/i.test(value)){
         return "valid date formats are HH:MM AM/PM"
     }
-
+}
+export function requiredArray(value,message){
+    if (isEmptyArray(value)) {
+        return message || 'Required';
+    }
 }

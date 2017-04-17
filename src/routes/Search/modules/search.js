@@ -8,7 +8,7 @@ export const RECEIVE_DATA = "RECEIVE_DATA";
 export const SELECT_CUISINE_OR_DIET_TYPE = "SELECT_CUISINE_OR_DIET_TYPE";
 export const FLUSH_OUT_STALE_DATA = "FLUSH_OUT_STALE_DATA";
 export const SELECT_ADDTNL_QUERY = "SELECT_ADDTNL_QUERY";
-
+export const DIRTY = "DIRTY";
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -33,7 +33,12 @@ export function flushOutStaleData() {
         type: FLUSH_OUT_STALE_DATA
     };
 }
-
+export function setDirty(bool) {
+    return {
+        type: DIRTY,
+        payload: bool
+    };
+}
 
 
 // ------------------------------------
@@ -44,12 +49,14 @@ const ACTION_HANDLERS = {
     [FAIL_DATA]: (state, action) => state.set('isLoading', false).set('error', action.data).set('data', List()),
     [FLUSH_OUT_STALE_DATA]: (state, action) => state.set('isLoading', false).set('error', undefined).set('data', List()),
     [RECEIVE_DATA]: (state, action) => state.set('isLoading', false).set('error', undefined).set('data', state.get('data').concat(action.payload.data.data)),
-    [SELECT_ADDTNL_QUERY]: (state, action) => {return state.setIn(['addtnlQuery', action.storeKey], action.payload);},
+    [SELECT_ADDTNL_QUERY]: (state, action) => {
+        return state.setIn(['addtnlQuery', action.storeKey], action.payload); },
     [SELECT_CUISINE_OR_DIET_TYPE]: (state, action) => {
         if (state.getIn([action.key, action.payload])) {
             return state.deleteIn([action.key, action.payload])
         } else return state.updateIn([action.key, action.payload], false, selected => !selected)
     },
+    [DIRTY]: (state, action) => state.set('dirty', action.payload)
 
 }
 
@@ -65,8 +72,10 @@ const initialState = Map({
     addtnlQuery: Map({
         orderMode: undefined,
         providerRadius: undefined,
-        date: new Date()
-    })
+        date: undefined,
+        sortBy:'ratings'
+    }),
+    dirty: false
 });
 
 export default function fetchedDataReducer(state = initialState, action) {

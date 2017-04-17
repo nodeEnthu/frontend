@@ -1,10 +1,13 @@
 .provider-profile {
+    .content {
+        padding: 1em;
+    }
     a {
         text-decoration: none;
         color: rgb(61, 146, 201);
     }
-    .react-autosuggest__input{
-        width:100%;
+    .react-autosuggest__input {
+        width: 100%;
     }
     a:hover,
     a:focus {
@@ -13,103 +16,57 @@
     h3 {
         font-weight: 100;
     }
+    .is-center {
+        text-align: center;
+        vertical-align: middle;
+    }
     /* LAYOUT CSS */
     .pure-img-responsive {
         max-width: 100%;
         height: auto;
     }
-    #layout {
-        padding: 0;
+    .profile-wrapper {
+        padding: 1em;
+        box-shadow: 1px 1px 1px 1px lightgrey;
+        background-color: white;
     }
-    .header {
-        text-align: center;
-        top: auto;
-    }
-    .sidebar {
-        background: #1f8dd6;
-        color: #fff;
-    }
-    .brand-title,
-    .brand-tagline {
-        margin: 0;
-        color: white;
+    .provider-desc-wrapper {
+        padding: 1em;
     }
     .brand-title {
         text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 0.5em;
     }
-    .brand-tagline {
-        font-weight: 300;
-        color: rgb(176, 202, 219);
+    .addtnl-info {
+        margin-top: 0.5em;
+        span {
+            font-weight: 600;
+        }
     }
-    .profile-img {
-        max-height: 100%;
-        max-width: 100%;
+    .service-offered {
+        margin-left: 0.5em;
     }
-    .food-item {
-        max-width: 100%;
+    .provider-details {
+        position: relative;
+        margin-top: 0.5em;
+    }
+    .provider-detail {
+        position: absolute;
+        font-size: 1em;
+        line-height: 1.5em;
+        margin-left: 1em;
     }
     .checkout-details {
         margin-left: 20px;
     }
-    .nav-list {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-    .nav-item {
-        display: inline-block;
-        *display: inline;
-        zoom: 1;
-    }
-    .nav-item a {
-        background: transparent;
-        border: 2px solid rgb(176, 202, 219);
-        color: #fff;
-        margin-top: 1em;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        font-size: 85%;
-    }
-    .nav-item a:hover,
-    .nav-item a:focus {
-        border: 2px solid rgb(61, 146, 201);
-        text-decoration: none;
-    }
     .content-subhead {
         text-transform: uppercase;
-        color: #aaa;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid black;
         padding: 0.4em 0;
-        font-size: 80%;
-        font-weight: 500;
+        font-size: 120%;
+        font-weight: 800;
         letter-spacing: 0.1em;
-    }
-    .content {
-        padding: 2em 1em 0;
-    }
-    .post {
-        position: relative;
-        padding-bottom: 2em;
-        text-align:center;
-    }
-    .cross-sign {
-        display: none;
-    }
-    .move-right {
-        float: right;
-    }
-    .post:hover {
-        .cross-sign {
-            display: block;
-            width: 20px;
-            height: 20px;
-            float: right;
-        }
-    }
-    .post-title {
-        font-size: 2em;
-        color: #222;
-        margin-bottom: 0.2em;
     }
     .order-title {
         border-bottom: 1px solid #eee;
@@ -127,60 +84,11 @@
     .order-address-heading {
         margin-bottom: 0.5em;
     }
-    .review-item-name {
-        text-transform: capitalize;
-        padding: 0.5em;
-    }
-    .review-submit-link {
-        font-size: 0.7em;
-        padding: .2em;
-    }
-    .review-submit-link:hover {
-        text-decoration: underline;
-        color: blue;
-    }
-    .review-submit-button {
-        margin-top: 1.5em;
-    }
     .delivery-box {
         width: 70%;
     }
-    .post-avatar {
-        margin-top: 2em;
-        border-radius: 5px;
-        display: inline-block;
-    }
-    .post-description {
-        text-align: left;
-        color: #444;
-    }
     .order-submit > table {
         margin: 0 auto;
-    }
-    .move-center {
-        text-align: center;
-    }
-    .footer {
-        text-align: center;
-        padding: 1em 0;
-    }
-    .footer a {
-        color: #ccc;
-        font-size: 80%;
-    }
-    .footer .pure-menu a:hover,
-    .footer .pure-menu a:focus {
-        background: none;
-    }
-    td.reduce-padding {
-        padding: 0px;
-    }
-    table.remove-border,
-    table.remove-border td {
-        border: none;
-    }
-    table td.item-details {
-        padding-bottom: 8px;
     }
     .error-message {
         color: red;
@@ -190,23 +98,12 @@
         style: none;
         color: white;
     }
-    .provider-address {}
 }
 
 @media (min-width: 48em) {
     .provider-profile {
-        .content {
-            padding: 2em 3em 0;
-        }
-        .sidebar {
-            /*position: absolute;*/
-            height: auto;
-            top: 0;
-            bottom: 0;
-        }
-        .profile-img {
-            max-height: 100%;
-            max-width: 100%;
+        .post-description {
+            padding-left: 1em;
         }
     }
 }

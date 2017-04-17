@@ -19,44 +19,70 @@ export  class Header extends React.Component {
     }
     render() {
         const { globalState } = this.props;
-        const {img} = globalState.core.get('user').toJS();
+        const {user} = globalState.core.toJS();
         return (
             <div className="header">
-            <div className="home-menu pure-menu pure-menu-horizontal">
-              <span className="pure-menu-heading">fillurtummy</span>
-              <ul className="pure-menu-list">
-                  <li className="pure-menu-item">
-                    <IndexLink to='/' className="pure-menu-link">
-                      Home
-                    </IndexLink>
-                  </li>
-                  {(globalState.core.get('token').length>0 )?
-                    <li className="pure-menu-item">
-                        <a className="pure-menu-link"
-                          onClick = {this.removeToken}
-                          >Logout</a>
+              <div className="frame">
+                <img className = "logo" src="/general/logo.png"></img>
+              </div>
+              <nav id="nav" role="navigation"> <a href="#nav" title="Show navigation">Show navigation</a><a href="#" title="Hide navigation">Hide navigation</a>
+                <ul>
+                  {(globalState.core.get('token').length>0 && user&& user.name && user.userType==='provider')?
+                    undefined
+                    :
+                    <li>
+                      <IndexLink to='/'>
+                        Home
+                      </IndexLink>
+                    </li>
+                  }
+                  {(globalState.core.get('token').length>0 && user&& user.name)?
+                    <li>
+                      <Link to='/search' >
+                        SEARCH
+                      </Link>
                     </li>
                     :
                     undefined
                   }
-                  <li className="pure-menu-item">
+                  {(globalState.core.get('token').length>0 )?
+                    <li>
+                      <Link to={'/user/'+user._id+'/order-summary'} >
+                        ORDERS
+                      </Link>
+                    </li>
+                    
+                    :
+                    undefined
+                  }
+                  {(globalState.core.get('token').length>0 )?
+                    <li>
+                        <a onClick = {this.removeToken}>LOGOUT</a>
+                    </li>
+                    :
+                    undefined
+                  }
+                  <li>
+                    <a href="">LIST YOURSELF</a>
+                  </li>
+                  <li>
                     {(globalState.core.get('token').length>0 )?
-                      <div>
-                        <img  src={img} 
-                              style = {{
-                                borderRadius:24+'px',
-                                width:'40px',
-                                display:'inline-block'
-                              }}
-                              onClick={this.handleTouchTap}
-                        />
-                      </div>
+                      undefined
                       :
                       <Login{...this.props}/>
                      } 
                   </li>
-              </ul>
-          </div>
+                </ul>
+              </nav>
+              <div className="profile-pic">
+                <img src={user.img} 
+                      style = {{
+                        borderRadius:24+'px',
+                        width:'40px',
+                        display:'inline-block'
+                      }}
+                />
+              </div>
         </div>
         );
     }

@@ -73,29 +73,19 @@ class GoogleLogin extends Component {
   }
 
   render() {
-    const style = {
-      display: 'inline-block',
-      background: '#d14836',
-      color: '#fff',
-      width: 190,
-      paddingTop: 10,
-      paddingBottom: 10,
-      borderRadius: 2,
-      border: '1px solid transparent',
-      fontSize: 16
-    };
     const { cssClass, buttonText, children } = this.props;
     return (
-      <RaisedButton
-        secondary={true}
-        style = {{width:'50%'}}
-        labelPosition="before"
-        label="Login With Gmail" 
-        style={{display:"block"}}
-        disableTouchRipple={true}
-        onClick={ this.onBtnClick }
-      >
-      </RaisedButton>
+      <button className="pure-button"
+            style={{background:"#dd4b39", 
+              color:"white",
+              width:"10em",
+              marginTop:'1em'
+            }}
+            onClick={this.onBtnClick}
+        >
+            <i className="fa fa-google">
+            </i> &nbsp; Google login
+        </button>
     );
   }
 }

@@ -1,6 +1,7 @@
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import {charsLeft, addProviderInfo, addProviderErrorMsg, prefilProviderEntryForm, addFoodItemInfo, removeFoodItemInfo, addProviderEntryState} from '../modules/provider'
-import {fetchData,fetchSecuredData,fetchMayBeSecuredData} from 'utils/actionUtils/defaultHttpActions'
+import { charsLeft, addProviderInfo, addProviderErrorMsg, prefilProviderEntryForm, addFoodItemInfo, removeFoodItemInfo, addProviderEntryState, showHideSpinner } from '../modules/provider'
+import { fetchData, fetchSecuredData, fetchMayBeSecuredData } from 'utils/actionUtils/defaultHttpActions'
 
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -14,25 +15,31 @@ import Provider from '../components/Provider'
     Keys will be passed as props to presentational components. Here we are
     implementing our wrapper around increment; the component doesn't care   */
 
-const mapActionCreators = {
-    charsLeft,
-    addProviderInfo,
-    addProviderErrorMsg,
-    addFoodItemInfo,
-    removeFoodItemInfo,
-    addProviderEntryState,
-    prefilProviderEntryForm,
-    fetchData,
-    fetchSecuredData,
-    fetchMayBeSecuredData
+const mapActionCreators = (dispatch) => {
+    return bindActionCreators({
+        charsLeft,
+        dispatch,
+        addProviderInfo,
+        addProviderErrorMsg,
+        addFoodItemInfo,
+        removeFoodItemInfo,
+        addProviderEntryState,
+        prefilProviderEntryForm,
+        fetchData,
+        fetchSecuredData,
+        fetchMayBeSecuredData,
+        showHideSpinner
+    }, dispatch)
+
 }
 
 const mapStateToProps = (state) => ({
-    globalState:state,
+    globalState: state,
     providerEntryForm: state.provider.get('providerEntryForm'),
     providerEntryState: state.provider.get('providerEntryState'),
     foodItemEntryForm: state.provider.get('foodItemEntryForm'),
-    provider:state.provider
+    spinner: state.provider.get('spinner'),
+    provider: state.provider
 })
 
 

@@ -8,8 +8,13 @@ import FoodItemReviews from './FoodItemReviews'
 import ProviderProfileEditPage from './ProviderProfileEditPage'
 import FoodItemEditPage from './FoodItemEditPage'
 import FoodItemAddPage from './FoodItemAddPage'
-
-import { onMainPageEnter } from 'utils/auth/onEnterAuth'
+import OrderAction from './OrderAction'
+import OrderSummary from './OrderSummary'
+import Chat from './Chat'
+import ProviderProfileEntry from './ProviderProfileEntry'
+import ProviderFoodEntry from './ProviderFoodEntry'
+import ProviderPublish from './ProviderPublish'
+import { onMainPageEnter} from 'utils/auth/onEnterAuth'
 
 
 /*  Note: Instead of using JSX, we recommend using react-router
@@ -22,13 +27,18 @@ export const createRoutes = (store) => ({
             indexRoute: Home,
             onEnter: (nextState, replace) => onMainPageEnter(nextState, replace, store)
         },
-        ProviderRoute(store),
+        ProviderProfileEntry(store),
+        ProviderFoodEntry(store),
         ProviderProfilePage(store),
+        ProviderPublish(store),
         Search(store),
         FoodItemReviews(store),
         ProviderProfileEditPage(store),
         FoodItemEditPage(store),
-        FoodItemAddPage(store)
+        FoodItemAddPage(store),
+        OrderAction(store),
+        OrderSummary(store),
+        Chat(store)
     ]
 
 })
