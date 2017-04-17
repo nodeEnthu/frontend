@@ -74,13 +74,14 @@ const FoodItemInProviderProfile = React.createClass({
                   <div className="add-to-cart">
                     <div className="food-price">{'$'+ foodItem.price}</div>
                     {
-                      (!this.props.userViewingOwnProfile)?
+                      (this.props.mode != 'providerEntry' && !this.props.userViewingOwnProfile && this.props.pastItem )?
                         <div className="add">
                           <FlatButton
                             backgroundColor="#FF6F00"
                             label="+add"
                             labelStyle={{color:'white'}}
                             style={{height:'24px',lineHeight:'24px',minWidth:'80px'}}
+                            onClick={(event)=> this.props.checkOutItem(event,foodItem)}
                           />
                         </div>
                         :
@@ -88,19 +89,6 @@ const FoodItemInProviderProfile = React.createClass({
                     }  
                   </div>
                 </div>
-                {
-                  (this.props.mode != 'providerEntry' && !this.props.userViewingOwnProfile && !this.props.pastItem )?
-                    <RaisedButton
-                      labelPosition="before"
-                      label="Add to the cart" primary={true}
-                      style={{display:"block"}}
-                      onClick={(event)=>this.props.checkOutItem(event,foodItem)}
-                      disableTouchRipple={true}
-                    >
-                    </RaisedButton>
-                    :
-                    undefined
-                } 
                 {
                   (mode != 'PROVIDER_ENTRY')?
                     <Dialog

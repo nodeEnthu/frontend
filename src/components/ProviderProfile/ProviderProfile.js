@@ -9,12 +9,10 @@ import Scroll from 'react-scroll';
 import ReviewSubmitModal from 'components/ReviewSubmitModal';
 import StarRatingComponent from 'react-star-rating-component';
 import CommunicationEmail from 'material-ui/svg-icons/communication/email';
-import CommunicationChat from 'material-ui/svg-icons/communication/chat';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import CommunicationLocationOn from 'material-ui/svg-icons/communication/location-on';
 import ContentCreate from 'material-ui/svg-icons/content/create';
 import ProviderEntryForm from 'components/ProviderEntryForm/ProviderEntryForm'
-import ActionPermContactCalendar from 'material-ui/svg-icons/action/perm-contact-calendar';
 import IconButton from 'material-ui/IconButton';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import RaisedButton from 'material-ui/RaisedButton';
