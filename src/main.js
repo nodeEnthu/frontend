@@ -29,22 +29,13 @@ createStore(initialState,function(store){
     );
   }
 
-  // ========================================================
-  // Developer Tools Setup
-  // ========================================================
-  if (__DEV__) {
-    if (window.devToolsExtension) {
-      window.devToolsExtension.open()
-    }
-  }
-
-  // This code is excluded from production bundle
-  if (__DEV__) {
-    if (module.hot) {
-      // Development render functions
-      const renderApp = render
-      const renderError = (error) => {
-        const RedBox = require('redbox-react').default
+// This code is excluded from production bundle
+if (__DEV__) {
+  if (module.hot) {
+    // Development render functions
+    const renderApp = render
+    const renderError = (error) => {
+      const RedBox = require('redbox-react').default
 
         ReactDOM.render(<RedBox error={error} />, MOUNT_NODE)
       }

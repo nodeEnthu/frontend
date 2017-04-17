@@ -13,7 +13,7 @@ export function securedPostCall(endPoint, bodyParams) {
     });
 }
 
-export function postCall(endPoint,bodyParams) {
+export function postCall(endPoint, bodyParams) {
     return axios({
         method: 'post',
         headers: {
@@ -23,15 +23,12 @@ export function postCall(endPoint,bodyParams) {
         data: bodyParams
     })
 }
-export function putImgCall(endPoint,data) {
-    return axios({
-        method: 'put',
+export function putImgCall(endPoint, data) {
+    return axios.put(endPoint, data, {
         headers: {
-            "Content-Type": "image/png"
-        },
-        url: endPoint,
-        data: data
-    })
+            'Content-Type': 'image/png'
+        }
+    });
 }
 export function securedGetCall(endPoint, params) {
     let token = sessionStorage.getItem('token');
@@ -48,12 +45,12 @@ export function securedGetCall(endPoint, params) {
 // check securedGetCall adds in header depending up whether user is logged in or not
 export function checkSecuredGetCall(endPoint, params) {
     let token = sessionStorage.getItem('token');
-    let headers = (token)? {
-            'Content-Type': 'application/json',
-            'Authorization': (token)?'Bearer ' + token: undefined
-        }:{
-            'Content-Type': 'application/json'
-        };
+    let headers = (token) ? {
+        'Content-Type': 'application/json',
+        'Authorization': (token) ? 'Bearer ' + token : undefined
+    } : {
+        'Content-Type': 'application/json'
+    };
     return axios({
         method: 'get',
         headers: headers,
@@ -62,7 +59,7 @@ export function checkSecuredGetCall(endPoint, params) {
     })
 }
 
-export function getCall(endPoint,params) {
+export function getCall(endPoint, params) {
     return axios({
         method: 'get',
         headers: {
@@ -72,4 +69,3 @@ export function getCall(endPoint,params) {
         params: params
     })
 }
-
