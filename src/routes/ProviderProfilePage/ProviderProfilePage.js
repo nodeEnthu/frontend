@@ -20,7 +20,7 @@ const ProviderProfilePage = React.createClass({
 ProviderProfile.propTypes = {
   fetchMayBeSecuredData:React.PropTypes.func,
   providerProfile:React.PropTypes.object,
-  updateCheckedOutQty:React.PropTypes.func,
+  updateCheckedOutItem:React.PropTypes.func,
   deleteCheckedOutItem:React.PropTypes.func,
   globalState:React.PropTypes.object,
   postSecuredData:React.PropTypes.func,

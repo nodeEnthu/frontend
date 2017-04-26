@@ -2,7 +2,7 @@ import React from 'react'
 import './providerProfileEntry.scss'
 import ProviderEntryForm from 'components/ProviderEntryForm/ProviderEntryForm'
 import * as actions from 'layouts/CoreLayout/coreReducer';
-
+import Stepper from 'components/Stepper'
 const ProviderProfileEntry = React.createClass ({
   componentDidMount() {
     
@@ -14,7 +14,12 @@ const ProviderProfileEntry = React.createClass ({
   render() {
     const {user} = this.props.globalState.core.toJS();
     return (
-          <div>
+          <div className="provider-profile-entry">
+            <Stepper
+              steps={[{label:'Profile'},{label:'Food'},{label:'Publish'}]}
+              activeStep={1}
+            >
+            </Stepper>
             <p>
               Please give a brief history about your cooking skills along with a picture showcasing you/your business
             </p>

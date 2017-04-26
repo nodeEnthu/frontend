@@ -14,6 +14,8 @@ import {timeOfDay,resolvePickUpTime} from 'components/FoodItemEntryForm/constant
 import FlatSelection from 'components/FlatSelection';
 import carouselArrows from './FilterDecorator'
 import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId';
+import Truncate from 'react-truncate';
+import FoodItemModal from 'components/FoodItemModal';
 
 const Search = React.createClass({
     getInitialState() {
@@ -22,12 +24,13 @@ const Search = React.createClass({
             queryBaseUrl: '/api/query/providers',
             searchActivated:false,
             placeIdErrorMsg:'',
-            showFilters:false
+            showFilters:false,
+            foodItemModalOpen:false,
+            foodIdSelected:undefined
         };
     },
     showFilter(e){
         this.setState({showFilters:!this.state.showFilters})
-
     },
     contextTypes: {
         router: React.PropTypes.object.isRequired
@@ -124,8 +127,13 @@ const Search = React.createClass({
         this.props.selectAddtnlQuery(storeKey,value);
         this.props.setDirty(true);
     },
-    goToProvider(event,foodItem){
-    	this.context.router.push('/providerProfile/'+foodItem._creator);
+    foodItemClicked(event,foodItem){
+        const classClicked = event.target.className
+        if(classClicked==='read-more'){
+            this.props.foodIdSelected(foodItem._id);
+            this.props.openModal({storeKey:'foodItemModalOpen', openModal:true})
+        }
+    	else this.context.router.push('/providerProfile/'+foodItem._creator);
     },
 
     render() {
@@ -311,11 +319,11 @@ const Search = React.createClass({
 					{	(resolvedData)? 
 								resolvedData.map(function(foodItem,index){
 									return 	<div key={index} className="pure-u-1 pure-u-md-1-3 provider-profile-wrapper"
-												onClick={(event)=>self.goToProvider(event,foodItem)}>
+												onClick={(event)=>self.foodItemClicked(event,foodItem)}>
 												<div>
 											    	<div className="pure-u-1 provider-img-section">
 											    		<div className="img-avatar">
-											    			<img src={foodItem.imgUrl}/>
+											    			<img className="gallery-img portrait"src={foodItem.imgUrl}/>
 											    		</div>
 											    	</div>
 											    	<div className="pure-u-1 provider-info-section">
@@ -338,7 +346,9 @@ const Search = React.createClass({
 									                         <div className="miles-away"><span>{foodItem.distance}</span><span>mi</span></div>
 											    		</div>
                                                         <div className="food-desc">
-                                                            {foodItem.description}
+                                                            <Truncate lines={2} ellipsis={<span>... <a className="read-more"href="javascript:void(0)" >Read more</a></span>}>
+                                                                  {foodItem.description}
+                                                            </Truncate>
                                                         </div>
 											    		<div className="add-to-cart">
 											    			<div className="food-price">{'$'+ foodItem.price}</div>
@@ -366,6 +376,10 @@ const Search = React.createClass({
 						:
 						undefined
 					}
+                    <FoodItemModal foodId={this.props.foodIdSelected}
+                                  openModal={this.props.openModal}
+                                  stateProps={this.props.search}
+                  />
 				</div>
 			</div>
         );
@@ -380,7 +394,9 @@ Search.propTypes = {
     search: React.PropTypes.object.isRequired,
     userAddressSearchChange: React.PropTypes.func.isRequired,
     userAddressUpdatePlaceId: React.PropTypes.func.isRequired,
-    setDirty:React.PropTypes.func.isRequired
+    setDirty:React.PropTypes.func.isRequired,
+    openModal:React.PropTypes.func.isRequired,
+    foodIdSelected:React.PropTypes.func.isRequired
 };
 
 export default Search;

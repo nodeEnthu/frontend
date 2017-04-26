@@ -65,19 +65,18 @@ const HomeView = React.createClass({
             }
 
         } else {
+            const {user} = this.props.globalState.core.toJS();
             if(!this.props.globalState.core.get('userLoggedIn')){
                 // set the page to go to after login
                 this.props.postLoginUrlRedirect('provider');
                 this.props.openLoginModal();
-            }else this.context.router.push(page);
+            }else this.context.router.push('/provider/'+user._id+'/providerProfileEntry');
         }
         
     },
     getLocationCordinates() {
         let self = this;
-        this.setState({
-            fetchingAddresses: true
-        })
+        this.setState({fetchingAddresses: true})
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 function(pos) {
@@ -101,7 +100,8 @@ const HomeView = React.createClass({
         }
     },
     render() {
-        let {showAddressError,addressErrorMessage} = this.state;
+        let {showAddressError,addressErrorMessage,fetchingAddresses} = this.state;
+        
         return (
             <div className="home">
 				<div className="splash-container pure-override-letter-spacing">
@@ -109,7 +109,7 @@ const HomeView = React.createClass({
                         <h1 className="promotion-heading">
                             Find the best professionals in your neighborhood
                         </h1>
-                        <div className="pure-g">
+                        <div className="pure-g search-sec-wrapper">
                             <div className = "pure-u-1 pure-u-md-1-3 search-wrapper">
                                 <div className="splash move-right">
                                     <div className="category-wrapper">
@@ -119,14 +119,13 @@ const HomeView = React.createClass({
                                                 Food
                                             </option>
                                         </select>
+                                        <span className="display-none-small" style={{margin:"0 10px"}}>in</span>
                                     </div>
-
                                 </div>
                             </div>
                             <div className = "pure-u-md-2-3 pure-u-1">
                                <div className="splash move-left">
                                     <div className="address-wrapper">
-                                        <span style={{marginRight:"10px"}}>in</span>
                                         <div className="address-sub-wrapper"> 
                                             <AsyncAutocomplete
                                                 name={"home_view"} 
@@ -141,12 +140,12 @@ const HomeView = React.createClass({
                                                                             }
                                                 onSuggestionSelected = {this.onSuggestionSelected}
                                             />
-                                            <div className="icon-locate">
-                                                <img src="iconLocate.png"></img>
+                                            <div className="icon-locate" onClick={this.getLocationCordinates}>
+                                                <img src={(fetchingAddresses)?"general/loading.svg": "iconLocate.png"}></img>
                                             </div>
-                                            <div className="locate-me">Locate me</div>
+                                            <div className="locate-me display-none-small">Locate me</div>
                                         </div>
-                                        <div className="search-button">
+                                        <div className="search-button" onClick={()=>this.goToPage("search")}>
                                             <img src="iconSearch.png"></img>
                                         </div>
                                     </div>
@@ -191,8 +190,8 @@ const HomeView = React.createClass({
                     </div>
                 </div>
                 <div className="pure-g list-business">
-                    <div className="pure-u-md-1-2 pure-u-1">
-                        <img src="shared/home/cookPhoto.jpg"></img>
+                    <div className="pure-u-md-1-2 pure-u-1 cook-photo">
+                         <img className="gallery-img portrait" src="shared/home/cookPhoto.jpg"/>
                     </div>
                     <div className="pure-u-md-1-2 pure-u-1 your-business">
                         <div className="business-heading">

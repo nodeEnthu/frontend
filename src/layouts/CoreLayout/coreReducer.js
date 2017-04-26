@@ -113,6 +113,7 @@ const ACTION_HANDLERS = {
 const initialState = Map({
     token: '',
     user: Map({
+        _id:undefined,
         name: '',
         email: '',
         provider: '',

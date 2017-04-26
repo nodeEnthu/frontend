@@ -17,7 +17,7 @@ export const RECEIVE_DATA_ORDER_SUBMIT = "RECEIVE_DATA_ORDER_SUBMIT";
 
 export const PROVIDER_FOOD_ITEM_CHECKOUT = "PROVIDER_FOOD_ITEM_CHECKOUT";
 export const DELETE_CHECKED_OUT_ITEM = "DELETE_CHECKED_OUT_ITEM";
-export const UPDATE_CHECKED_OUT_QTY = "UPDATE_CHECKED_OUT_QTY";
+export const UPDATE_CHECKED_OUT_ITEM = "UPDATE_CHECKED_OUT_ITEM";
 export const REMOVE_ALL_CHECKED_OUT_ITEMS = "REMOVE_ALL_CHECKED_OUT_ITEMS";
 export const FLUSH_PROVIDER_DATA = "FLUSH_PROVIDER_DATA";
 
@@ -26,14 +26,14 @@ export const SELECT_STAR_RATING = "SELECT_STAR_RATING";
 export const SUBMIT_TYPED_REVIEW = "SUBMIT_TYPED_REVIEW";
 export const REVIEW_WORDS = "REVIEW_WORDS";
 export const REVIEW_ERROR = "REVIEW_ERROR";
-export const OPEN_MODAL = "OPEN_MODAL";
 
 export const REQUEST_DATA_SUBMIT_REVIEW = "REQUEST_DATA_ORDER_SUBMIT";
 export const FAIL_DATA_SUBMIT_REVIEW = "FAIL_DATA_SUBMIT_REVIEW";
 export const RECEIVE_DATA_SUBMIT_REVIEW = "RECEIVE_DATA_SUBMIT_REVIEW";
 export const FLUSH_OUT_STALE__REVIEW_DATA = "FLUSH_OUT_STALE__REVIEW_DATA";
 
-
+export const FOOD_ID_SELECTED = "FOOD_ID_SELECTED"
+export const OPEN_MODAL = "OPEN_MODAL";
 
 // ------------------------------------
 // Actions
@@ -53,12 +53,13 @@ export function providerFoodItemCheckout(itemCheckedOut) {
     }
 }
 
-export function updateCheckedOutQty(foodItemId, quantity) {
+export function updateCheckedOutItem(foodItemId, storeKey , val) {
     return {
-        type: UPDATE_CHECKED_OUT_QTY,
+        type: UPDATE_CHECKED_OUT_ITEM,
         payload: {
             foodItemId: foodItemId,
-            quantity: quantity
+            storeKey: storeKey,
+            value:val
         }
     }
 }
@@ -124,6 +125,12 @@ export function flushProviderData() {
         type: FLUSH_PROVIDER_DATA
     }
 }
+export function foodIdSelected(foodItemId){
+    return {
+        'type': FOOD_ID_SELECTED,
+        'foodItemId': foodItemId
+    }
+}
 
 const ACTION_HANDLERS = {
     [REQUEST_DATA_PROVIDER]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
@@ -140,7 +147,7 @@ const ACTION_HANDLERS = {
     [RECEIVE_DATA_ORDER_SUBMIT]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], Map(action.payload.data.data)),
 
     [PROVIDER_FOOD_ITEM_CHECKOUT]: (state, action) => state.setIn(['itemsCheckedOut', action.payload.itemCheckedOut._id], Map(action.payload.itemCheckedOut)),
-    [UPDATE_CHECKED_OUT_QTY]: (state, action) => state.setIn(['itemsCheckedOut', action.payload.foodItemId, 'quantity'], action.payload.quantity),
+    [UPDATE_CHECKED_OUT_ITEM]: (state, action) => state.setIn(['itemsCheckedOut', action.payload.foodItemId, action.payload.storeKey], action.payload.value),
     [DELETE_CHECKED_OUT_ITEM]: (state, action) => state.deleteIn(['itemsCheckedOut', action.foodItemId]),
     [REMOVE_ALL_CHECKED_OUT_ITEMS]: (state, action) => state.delete('itemsCheckedOut'),
 
@@ -155,6 +162,8 @@ const ACTION_HANDLERS = {
     [FAIL_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
     [RECEIVE_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], Map(action.payload.data.data)),
     [FLUSH_OUT_STALE__REVIEW_DATA]: (state, action) => state.setIn(['reviews', 'reviewMap', action.foodItemId], Map()),
+
+    [FOOD_ID_SELECTED]:(state,action)=>state.set('foodIdSelected', action.foodItemId)
 }
 
 // ------------------------------------
@@ -191,9 +200,11 @@ const initialState = Map({
         error: false,
         data: undefined
     },
+    foodIdSelected:undefined,
     reviewSubmitModalOpen: false,
     orderSubmitModalOpen: false,
-    deleteItemModalOpen:false
+    deleteItemModalOpen:false,
+    foodItemModalOpen:false
 })
 export default function counterReducer(state = initialState, action) {
     const handler = ACTION_HANDLERS[action.type]

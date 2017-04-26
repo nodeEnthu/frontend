@@ -9,7 +9,7 @@ export const CoreLayout = ({ children }) => (
     <div className='content'>
       {children}
     </div>
-    {/*<div className="pure-g footer">
+    <div className="pure-g footer">
         	<div className="pure-u-md-4-5 pure-u-1">
     			<div className="pure-menu pure-menu-horizontal">
     			  <ul>
@@ -21,7 +21,7 @@ export const CoreLayout = ({ children }) => (
     			  </ul>
     			</div>
     		</div>
-    	</div>*/}
+    	</div>
   </div>
 )
 

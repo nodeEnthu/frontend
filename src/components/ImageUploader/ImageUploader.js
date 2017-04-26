@@ -106,7 +106,7 @@ class ImageUploader extends React.Component {
 
   render() {
     let {imgUploaded,imagePreviewUrl} = this.state;
-    let $imagePreview = (imagePreviewUrl)? (<img style={{width:'100%'}}src={imagePreviewUrl} />) : (<div className="previewText"></div>) ;
+    let $imagePreview = (imagePreviewUrl)? (<img style={{width:'100%', maxWidth:'250px'}}src={imagePreviewUrl} />) : (<div className="previewText"></div>) ;
     return (
       <div className="previewComponent">
         <div>

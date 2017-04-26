@@ -1,24 +1,23 @@
 import { connect } from 'react-redux'
-import {fetchData} from 'utils/actionUtils/defaultHttpActions'
-import {addFoodItemInfo,removeFoodItemInfo,showHideSpinner} from './../modules/foodItemEditPage'
+import { bindActionCreators } from 'redux';
+import { fetchData } from 'utils/actionUtils/defaultHttpActions'
+import { addFoodItemInfo, removeFoodItemInfo } from './../modules/foodItemEditPage'
 import { fromJS } from 'immutable'
 
 import FoodItemEditPage from '../components/FoodItemEditPage'
 
-
-
-const mapActionCreators = {
-    fetchData,
-    addFoodItemInfo,
-    removeFoodItemInfo,
-    showHideSpinner
+const mapActionCreators = (dispatch) => {
+    return bindActionCreators({
+        dispatch,
+        fetchData,
+        addFoodItemInfo,
+        removeFoodItemInfo
+    }, dispatch)
 }
-
 const mapStateToProps = (state) => {
     return {
-        globalState:state,
-        foodItemEntryForm:state.foodItemEdit.get('foodItemEntryForm'),
-        spinner:state.foodItemEdit.get('spinner')
+        globalState: state,
+        foodItemEntryForm: state.foodItemEdit.get('foodItemEntryForm')
     }
 }
 

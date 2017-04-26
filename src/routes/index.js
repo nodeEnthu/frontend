@@ -1,7 +1,6 @@
 // We only need to import the modules necessary for initial render
 import CoreLayout from '../layouts/CoreLayout/CoreLayout'
 import Home from './Home'
-import ProviderRoute from './Provider'
 import ProviderProfilePage from './ProviderProfilePage'
 import Search from './Search'
 import FoodItemReviews from './FoodItemReviews'

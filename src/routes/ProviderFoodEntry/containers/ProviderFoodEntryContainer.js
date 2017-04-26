@@ -22,7 +22,6 @@ const mapActionCreators = (dispatch) => {
         removeFoodItemInfo,
         fetchData
     }, dispatch)
-
 }
 
 const mapStateToProps = (state) => ({

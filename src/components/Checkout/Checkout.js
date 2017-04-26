@@ -1,7 +1,6 @@
 import React from 'react'
 import './../ProviderProfile/providerProfile.scss'
 import './checkout.scss'
-import Scroll from 'react-scroll'
 import RaisedButton from 'material-ui/RaisedButton';
 import classNames from 'classnames';
 import OrderSubmitModal from 'components/OrderSubmitModal';
@@ -10,7 +9,13 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import AsyncAutocomplete from 'components/AsyncAutocomplete'
 import {securedGetCall} from 'utils/httpUtils/apiCallWrapper';
 import {timeOfDay,resolvePickUpTime} from 'components/FoodItemEntryForm/constants';
-
+import IconButton from 'material-ui/IconButton';
+import ContentAddCircle from 'material-ui/svg-icons/content/add-circle'
+import ContentRemoveCircle from 'material-ui/svg-icons/content/remove-circle'
+import ActionHighlightOff from 'material-ui/svg-icons/action/highlight-off'
+import {amber900} from 'material-ui/styles/colors';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 const Checkout = React.createClass({
   getInitialState() {
@@ -18,7 +23,9 @@ const Checkout = React.createClass({
          submitOrderModalOPen:false,
          searchText:'',
          searchTextError:'',
-         checkoutSubmitError:''   
+         checkoutSubmitError:'',
+         addtnlAddressInfo:'',
+         pickup:true   
       };
   },
   componentDidMount() {
@@ -26,18 +33,19 @@ const Checkout = React.createClass({
       pickup:true
     });
   },
-  changeStoreVal(event) {
-    let foodItemId = event.target.name;
-    let updatedQuantity = event.target.value
-    this.props.updateCheckedOutQty(foodItemId,updatedQuantity);
+  changeStoreVal(foodItemId,storeKey,val) {
+    this.props.updateCheckedOutItem(foodItemId,storeKey,val);
   },
   toggleFlags(key){
     this.setState({
       pickup:!this.state.pickup
     })
   },
-  deleteCheckedOutItem(event){
-    this.props.deleteCheckedOutItem(event.target.name);
+  deleteCheckedOutItem(foodId){
+    this.props.deleteCheckedOutItem(foodId);
+  },
+  onChange(event){
+    this.setState({[event.target.name]:event.target.value});
   },
   checkOutItems(){
     this.props.openModal({storeKey:'orderSubmitModalOpen', openModal:true})
@@ -59,22 +67,24 @@ const Checkout = React.createClass({
   },
   render(){
     const {itemsCheckedOut,providerProfileCall} = this.props.providerProfile.toJS();
+    const{addtnlAddressInfo} = this.state;
     const {userAddressSearch} = this.props.globalState.core.toJS();
     const user = providerProfileCall.data;
     let resolvedItemsCheckedOut= [];
-    let grandTotal = 0;
+    let addtnlItemOrderInfo, grandTotal = 0;
     for(var key in itemsCheckedOut){
       if(itemsCheckedOut.hasOwnProperty(key)){
         resolvedItemsCheckedOut.push(itemsCheckedOut[key]);
-        let quantity = itemsCheckedOut[key].quantity || 1;
-        grandTotal = grandTotal + parseInt(itemsCheckedOut[key].price * parseInt(quantity));
+        let addtnlItemOrderInfo = itemsCheckedOut[key].addtnlItemOrderInfo || '';
+        itemsCheckedOut[key].orderDate = itemsCheckedOut[key].orderDate || itemsCheckedOut[key].availability[0];
+        grandTotal = grandTotal + parseInt(itemsCheckedOut[key].price * parseInt(itemsCheckedOut[key].quantity));
       }
     };
     let self= this;
     return (resolvedItemsCheckedOut && resolvedItemsCheckedOut.length)?
           <div className="checkout">
-            <div className="content-subhead">Your Order</div>
-            <div>
+            <div className="content-subhead">Checkout</div>
+            <div className="checkout-section-wrapper">
               {
                 (user.doYouDeliverFlag && !user.pickUpFlag)?
                 <div>Your delivery order</div>:undefined
@@ -86,7 +96,7 @@ const Checkout = React.createClass({
               {
                 (user.doYouDeliverFlag && user.pickUpFlag)?
                 <div>
-                  <label style={{display:'block',margin:"1em 0"}}>Order type :</label>
+                  <label className="checkout-label" style={{display:'block',margin:"0.5em 0"}}>Order type</label>
                   <RadioButtonGroup name="foodOptions" 
                       valueSelected={this.state.pickup.toString()}
                       onChange={(event)=>this.toggleFlags('pickup')}
@@ -99,114 +109,109 @@ const Checkout = React.createClass({
                       value="false"
                       label="delivery"                                    
                     />
-                  </RadioButtonGroup>
-                  <div>
-                  {
-                    (userAddressSearch.place_id)?
-                      undefined
-                      :
-                      <div>
-                        <div style= {{margin:"1em 0"}}>Please enter your {(this.state.pickup)? 'pick-up ':'delivery '} address</div>
-                        <AsyncAutocomplete  name={'searchText'}
-                                            userSearchText = {this.state.searchText}
-                                            apiUrl = {'/api/locations/addressTypeAssist'}
-                                            getSuggestionValue={(suggestion)=>suggestion.address}
-                                            onChange = {(event, value)=>this.setState({searchText:value.newValue})}
-                                            onSuggestionSelected = {this.onSuggestionSelected}
-                        />
-                      </div>
-                  }
-                  </div>
+                  </RadioButtonGroup>  
                 </div>
                 :
                 undefined
               }
             </div>
-            {
-              resolvedItemsCheckedOut.map(function(itemCheckedOut){
-                return <div key={itemCheckedOut._id}> 
-                          <section className="post">
-                            <form className="pure-form">
-                              <div>
-                                <div className="post-avatar pure-u-md-2-5">
-                                  <h2>{itemCheckedOut.name}</h2>
-                                  <img alt={itemCheckedOut.name} className = "food-item" src={itemCheckedOut.imgUrl}/>
+            <div className="checkout-section-wrapper">
+              <div className="pure-u-md-1-5 pure-u-1 checkout-label">Your Address</div>
+              <div className="pure-u-md-4-5">
+                <AsyncAutocomplete  name={'searchText'}
+                                    userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
+                                    apiUrl = {'/api/locations/addressTypeAssist'}
+                                    getSuggestionValue={(suggestion)=>suggestion.address}
+                                    onChange = {(event, value)=>this.setState({searchText:value.newValue})}
+                                    onSuggestionSelected = {this.onSuggestionSelected}
+                />
+               
+                {
+                  (!userAddressSearch.place_id)?
+                  <div>Please enter address</div>:undefined
+                }
+              </div>
+              <div className="pure-u-md-1-5 pure-u-1 checkout-label display-none-small"></div>
+              <div className="pure-u-md-3-5 is-center">
+                <form className="pure-form pure-form-stacked">
+                  <textarea className = "pure-u-1" name="addtnlAddressInfo" placeholder="Landmarks / apartment number etc." value={addtnlAddressInfo} onChange={this.onChange}/>
+                </form>
+              </div>
+            </div>
+            <div className="checkout-section-wrapper">
+              <div className="pure-u-md-1-5 pure-u-1 checkout-label">Your Order</div>
+              <div className="pure-u-md-4-5">
+                <div className= "grand-total">Total &nbsp; {'$ '+grandTotal}</div>
+              </div>
+              {
+                resolvedItemsCheckedOut.map(function(itemCheckedOut){
+                  return <div key={itemCheckedOut._id} className="checked-out-item-wrapper">
+                          <div className="pure-u-1 checkout-sec-1">
+                            <div className="pure-u-4-5">
+                              <div className="pure-u-1 pure-u-md-1-3 item-wo-desc">
+                                <IconButton onTouchTap={()=>self.deleteCheckedOutItem(itemCheckedOut._id)}
+                                            style={{float:"left"}}>
+                                  <ActionHighlightOff/>
+                                </IconButton>
+                                <span>{itemCheckedOut.name}</span>
+                              </div>
+                              <div className="pure-u-1 pure-u-md-1-3">
+                                <div className="pure-u-1 item-property display-none-small">
+                                  Quantity
                                 </div>
-                                <div className="pure-u-md-3-5">
-                                  <div className="checkout-details">
-                                    <div className="cross-sign"
-                                      onClick={self.deleteCheckedOutItem}
-                                    >
-                                      <img name={itemCheckedOut._id} src="/general/cancel.png"></img>
-                                    </div> 
-                                    <div className="post-description">
-                                        <table className="pure-table remove-border">
-                                          <tbody>
-                                              <tr>
-                                                  <td className="reduce-padding">Choose</td>
-                                                  <td>quantity</td>
-                                                  <td>
-                                                    <select
-                                                      name={itemCheckedOut._id}
-                                                      onChange={self.changeStoreVal}
-                                                      value={itemCheckedOut.quantity}
-                                                    >
-                                                      <option value="1">1</option>
-                                                      <option value="2">2</option>
-                                                      <option value="3">3</option>
-                                                      <option value="4">4</option>
-                                                      <option value="5">5</option>
-                                                      <option value="6">6</option>
-                                                    </select>
-                                                  </td>                           
-                                              </tr>
-                                              <tr>
-                                                  <td className="reduce-padding"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></td>
-                                                  <td className = "item-details">ready-date</td>
-                                                  <td className ="item-details">
-                                                    <select>
-                                                      {itemCheckedOut.availability.map(function(availableDate,index){
-                                                        return  <option key={index}>
-                                                                  {moment(availableDate).format("dd, MMM Do")}
-                                                                </option>
-                                                      })}
-                                                    </select>
-                                                  </td>
-                                              </tr>
-                                              <tr>
-                                                  <td className="reduce-padding">
-                                                    <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
-                                                      <path d="M0 0h24v24H0z" fill="none"/>
-                                                    </svg>
-                                                  </td>
-                                                  <td className = "item-details">price</td>
-                                                  <td className = "item-details">{itemCheckedOut.price +' $'}</td>
-                                              </tr>
-                                              <tr>
-                                                  <td className="reduce-padding"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/></svg></td>
-                                                  <td className = "item-details">pick-up</td>
-                                                  <td className = "item-details">{resolvePickUpTime(itemCheckedOut.pickUpStartTime)} - {resolvePickUpTime(itemCheckedOut.pickUpEndTime)}</td>
-                                              </tr>
-                                          </tbody>
-                                      </table>
-                                    </div>
-                                  </div>
+                                <div className="pure-u-1 item-wi-desc">
+                                  <IconButton onTouchTap={()=>self.changeStoreVal(itemCheckedOut._id,'quantity',(itemCheckedOut.quantity===0)? 0 : --itemCheckedOut.quantity)}
+                                              style={{width:'60px'}}>
+                                    <ContentRemoveCircle color={amber900}/>
+                                  </IconButton>
+                                  <span className="quantity">{itemCheckedOut.quantity}</span>
+                                  <IconButton onTouchTap={()=>self.changeStoreVal(itemCheckedOut._id,'quantity',++itemCheckedOut.quantity)}
+                                              style={{width:'60px'}}>
+                                    <ContentAddCircle color={amber900}/>
+                                  </IconButton>
                                 </div>
                               </div>
-                            </form>
-                          </section>  
+                            </div>
+                            <div className="pure-u-1-5 item-wo-desc">
+                               <span>{'$ '+itemCheckedOut.price}</span>
+                            </div>
+                          </div>
+                          <div className="pure-u-1 checkout-sec-2">
+                            <div className="pure-u-md-1-3">
+                              <div className="pure-u-1 item-property">
+                                Date & Time
+                              </div>
+                              <DropDownMenu value={itemCheckedOut.orderDate} onChange={(event, index, value)=>self.changeStoreVal(itemCheckedOut._id,'orderDate',value)}
+                                            iconStyle={{fill:"rgb(0, 0, 0)"}}
+                                            underlineStyle={{borderTop:"1px solid black"}}
+                              >
+                                {itemCheckedOut.availability.map(function(availableDate,index){
+                                    return <MenuItem key={index} value={availableDate} primaryText={moment(availableDate).format("dd, MMM Do")} />
+                                  })}
+                              </DropDownMenu>
+                                
+                                {/*resolvePickUpTime(itemCheckedOut.pickUpStartTime)} - {resolvePickUpTime(itemCheckedOut.pickUpEndTime)*/}
+                            </div>
+                            <div className="pure-u-md-1-3 display-none-small">
+                              <div className="pure-u-1 item-property">
+                                Order Type
+                              </div>
+                              <div className="item-wi-desc">{(self.state.pickup)? 'Pickup ':'Delivery '}</div>
+                            </div>
+                            <div className="pure-u-md-1-3">
+                              <form className="pure-form pure-form-stacked">
+                                <textarea className = "pure-u-1" name="addtnlItemOrderInfo" placeholder="Add more information how you yant your meal to be cooked" value={addtnlItemOrderInfo} onChange={(event)=>self.changeStoreVal(itemCheckedOut._id,event.target.name,event.target.value)}/>
+                              </form>
+                            </div>
+                          </div>   
                         </div>
-              })
-            }
-            <div style={{textAlign:"center"}}>
-            {
-              (!userAddressSearch.place_id)?
-              <div>Please enter address</div>:undefined
-            }
+                })
+              }
+            </div>
+            <div className="is-center">
               <RaisedButton
                 primary={true}
-                label = {'Checkout - '+grandTotal+ '$'}
+                label = "Place Order"
                 onClick={this.checkOutItems}
                 disableTouchRipple={true}
                 disabled={(!userAddressSearch.place_id)?true:false}

@@ -153,7 +153,6 @@ const ProviderEntryForm = React.createClass({
         serviceOffered = serviceOffered || 'pickup';
         return (
             <div className="provider-entry-form">
-                
                 <div className="is-center">
                     <ImageUploader
                         onImageChange = {this.onImageChange}
@@ -357,13 +356,13 @@ const ProviderEntryForm = React.createClass({
     }
 });
 ProviderEntryForm.propTypes = {
-    addProviderInfo:React.PropTypes.func.isRequired,
-    addProviderErrorMsg:React.PropTypes.func.isRequired,
-    providerEntryForm: React.PropTypes.object.isRequired,
+    addProviderInfo:React.PropTypes.func,
+    addProviderErrorMsg:React.PropTypes.func,
+    providerEntryForm: React.PropTypes.object,
     params:React.PropTypes.object,
-    fetchSecuredData:React.PropTypes.func.isRequired,
-    mode:React.PropTypes.string.isRequired,
-    nextLabel:React.PropTypes.string.isRequired,
-    linkToRedirectOnAllClear:React.PropTypes.string.isRequired
+    fetchSecuredData:React.PropTypes.func,
+    mode:React.PropTypes.string,
+    nextLabel:React.PropTypes.string,
+    linkToRedirectOnAllClear:React.PropTypes.string
 };
 export default ProviderEntryForm;

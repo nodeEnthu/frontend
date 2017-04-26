@@ -21,6 +21,7 @@ import { Link } from 'react-router';
 import moment from 'moment';
 import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
 import FlatButton from 'material-ui/FlatButton';
+import FoodItemModal from 'components/FoodItemModal';
 
 const ProviderProfile = React.createClass({
   getInitialState() {
@@ -28,6 +29,9 @@ const ProviderProfile = React.createClass({
           counter:0,
           itemCheckOutClicked:false,
       };
+  },
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
   },
   componentWillMount() {
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
@@ -142,15 +146,17 @@ const ProviderProfile = React.createClass({
                   <span className="provider-detail">{provider.email}</span>
                 </div>
               </div>
-              <div className="pure-u-1">
-                 <FlatButton
-                    label="Edit Profile"
-                    backgroundColor="lightgrey"
-                    icon={<EditorModeEdit/>}
-                    style={{width:'99%'}}
-                    hoverColor="#8AA62F"
-                  />
-              </div>
+              
+          </div>
+          <div className="pure-u-1">
+             <FlatButton
+                label="Edit Profile"
+                backgroundColor="lightgrey"
+                icon={<EditorModeEdit/>}
+                style={{width:'100%',height:'auto',lineHeight:'auto'}}
+                hoverColor="#8AA62F"
+                onClick={(event)=>self.context.router.push('/providers/'+provider._id+'/edit')}
+              />
           </div>
           <div className = "content pure-u-1">
             <div>
@@ -178,6 +184,7 @@ const ProviderProfile = React.createClass({
                   { 
                     currentItems.map((foodItem)=>{
                       return <FoodItemInProviderProfile
+                                provider={provider}
                                 key={foodItem._id}
                                 userViewingOwnProfile={userViewingOwnProfile}
                                 refreshPage= {this.refreshPage}
@@ -188,6 +195,7 @@ const ProviderProfile = React.createClass({
                                 providerProfile = {this.props.providerProfile}
                                 foodItem={foodItem}
                                 mode = {this.props.mode}
+                                foodIdSelected={this.props.foodIdSelected}
                               />
                     })
                   }
@@ -201,6 +209,7 @@ const ProviderProfile = React.createClass({
                     pastItems.map((foodItem)=>{
                       return <FoodItemInProviderProfile
                                 key={foodItem._id}
+                                provider={provider}
                                 userViewingOwnProfile={userViewingOwnProfile}
                                 checkOutItem = {self.checkOutItem}
                                 refreshPage= {this.refreshPage}
@@ -211,6 +220,7 @@ const ProviderProfile = React.createClass({
                                 providerProfile = {this.props.providerProfile}
                                 pastItem={true}
                                 mode = {this.props.mode}
+                                foodIdSelected={this.props.foodIdSelected}
                               />
                             
                     })
@@ -231,6 +241,10 @@ const ProviderProfile = React.createClass({
                     flushOutStaleReviewData = {this.props.flushOutStaleReviewData}
                     providerProfile = {this.props.providerProfile}
                   />
+                  <FoodItemModal  foodId={this.props.foodIdSelected}
+                                  openModal={this.props.openModal}
+                                  stateProps={this.props.providerProfile}
+                  />
                 </div>
                 :
                 undefined
@@ -250,7 +264,7 @@ ProviderProfile.propTypes = {
   providerProfile:React.PropTypes.object,
   providerFoodItemCheckout:React.PropTypes.func,
   fetchMayBeSecuredData:React.PropTypes.func,
-  updateCheckedOutQty:React.PropTypes.func,
+  updateCheckedOutItem:React.PropTypes.func,
   deleteCheckedOutItem:React.PropTypes.func,
   removeAllCheckedOutItems:React.PropTypes.func,
   globalState:React.PropTypes.object,
@@ -265,5 +279,6 @@ ProviderProfile.propTypes = {
   flushOutStaleReviewData:React.PropTypes.func,
   flushProviderData:React.PropTypes.func,
   userAddressSearchChange:React.PropTypes.func,
-  userAddressUpdatePlaceId:React.PropTypes.func
+  userAddressUpdatePlaceId:React.PropTypes.func,
+  foodIdSelected:React.PropTypes.func
 }

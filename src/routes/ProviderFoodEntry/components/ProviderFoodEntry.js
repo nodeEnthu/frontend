@@ -2,6 +2,7 @@ import React from 'react'
 import './providerFoodEntry.scss'
 import FoodItemEntryForm from 'components/FoodItemEntryForm/FoodItemEntryForm'
 import * as actions from 'layouts/CoreLayout/coreReducer';
+import Stepper from 'components/Stepper'
 
 const ProviderFoodEntry = React.createClass ({
   
@@ -9,7 +10,12 @@ const ProviderFoodEntry = React.createClass ({
   render() { 
     const {user} = this.props.globalState.core.toJS();
     return (
-        <div>
+        <div className="provider-food-entry">
+            <Stepper
+              steps={[{label:'Profile'},{label:'Food'},{label:'Publish'}]}
+              activeStep={2}
+            >
+            </Stepper>
             <p>
               Enter the food item you wish to provide
             </p>

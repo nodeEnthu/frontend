@@ -1,6 +1,6 @@
 .home {
     .splash-container {
-        background: url("../assets/mainImage.jpg") no-repeat center center fixed;
+        background: url("../assets/mainImage.jpg") no-repeat center center;
         /*z-index: 1;*/
         overflow: hidden;
         /* The following styles are required for the "scroll-over" effect */
@@ -13,7 +13,7 @@
     .banner-wrapper {
         position: relative;
         top: 24%;
-        width: 80%;
+        width: 95%;
         height: 45%;
         margin: 0 auto;
         background: rgba(0, 0, 0, .7);
@@ -24,21 +24,25 @@
         padding-top: 20px;
         font-family: cursive;
     }
+    .search-sec-wrapper {
+        background: #ff6f00;
+        font-size: 1em;
+        line-height: 2.5em;
+        width: 90%;
+        margin: 0 auto;
+        padding: 0.5em;
+    }
     .splash {
         margin: auto;
         width: 95%;
-        height: 60px;
-        background: #FF6F00;
-        padding: 6px;
         select {
             margin-left: 10px;
             color: #000;
-            height: 38px;
             -webkit-appearance: none;
             border: none;
             border-radius: 0;
-            padding: 9px;
             width: 35%;
+            padding: 0px 10px;
         }
     }
     .move-right {
@@ -49,19 +53,15 @@
         float: left;
         text-align: left;
     }
-    .category-wrapper {
-        padding-top: 5px;
-    }
+    .category-wrapper {}
     .address-wrapper {
         display: inline-block;
         width: 100%;
-        padding-top: 5px;
     }
     .address-sub-wrapper {
         display: inline-block;
         width: 85%;
         background: white;
-        height: 2.3em;
     }
     .react-autosuggest__container {
         display: inline-block;
@@ -72,7 +72,6 @@
         border: none;
         width: 100%;
         border-radius: 0;
-        padding: 9px;
     }
     .icon-locate {
         display: inline-block;
@@ -91,7 +90,8 @@
         position: relative;
         width: 30px;
         height: 20px;
-        margin-left: 2%;
+        margin-left: 0.75em;
+        top: 2px;
         img {
             position: absolute;
             width: 100%;
@@ -127,7 +127,7 @@
         margin-top: 67px;
         img {
             width: 100%;
-            height: auto;
+            height: 100%;
         }
     }
     .your-business {
@@ -136,24 +136,28 @@
         color: white;
     }
     .business-heading {
-        font-size: 1.5em;
+        font-size: 2em;
+        font-weight:500;
     }
-    .business-promotion {}
+    .business-promotion {
+        text-align:left;
+    }
     .business-signup {
         display: inline-block;
-        border: 1px solid white;
-        font-size: 0.75em;
-        padding: 0.5em;
+        border: 1px solid #fff;
+        font-size: 120%;
+        padding: .75em;
     }
-    .business-step{
-        text-align:center;
+    .business-step {
+        text-align: center;
+    }
+    .cook-photo {
+        position: relative;
+        min-height: 250px;
     }
 }
 
 @media (max-width: 48em) {
-    .content{
-        padding:0;
-    }
     .home {
         .home-menu {
             text-align: left;
@@ -180,7 +184,7 @@
         }
         .splash {
             select {
-                width: 60%;
+                width: 50%;
             }
         }
         .move-right {
@@ -212,8 +216,10 @@
             display: none;
         }
         .search-button {
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
+            margin-left: 5px;
+            top: 5px;
             img {
                 bottom: -3px;
                 left: 1px;
@@ -229,6 +235,9 @@
         .step {
             margin-bottom: 24px;
         }
+        .display-none-small {
+            display: none;
+        }
     }
 }
 
@@ -241,5 +250,8 @@
     /* We increase the header font size even more */
     .home .splash-head {
         font-size: 300%;
+    }
+    .display-none-small {
+        display: none;
     }
 }

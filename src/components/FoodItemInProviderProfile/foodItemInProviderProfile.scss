@@ -1,21 +1,4 @@
   .food-item-profile {
-      .primary-color {
-          color: #FF6F00;
-      }
-      .provider-profile-wrapper {
-          background: #fff;
-          border-radius: 2px;
-          display: inline-block;
-          padding: 5px;
-          position: relative;
-          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.24);
-          transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-          cursor: pointer;
-          margin: 0.25em;
-      }
-      .provider-profile-wrapper:hover {
-          box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-      }
       .provider-img-section {
           min-width: 120px;
           min-height: 120px;
@@ -28,16 +11,6 @@
           position: relative;
           overflow: hidden;
           text-align: center;
-          img {
-              position: absolute;
-              top: 0;
-              bottom: 0;
-              left: 10px;
-              right: 0px;
-              margin: auto;
-              max-height: 100%;
-              max-width: 100%;
-          }
       }
       .provider-info-section {
           padding: 0.5em;
@@ -57,11 +30,11 @@
       .provider-star-rating {
           display: inline-block;
       }
-      .add{
-        display: inline-block;
+      .add {
+          display: inline-block;
       }
-      .add-to-cart{
-        margin-top:0.5em;
+      .add-to-cart {
+          margin-top: 0.5em;
       }
       .food-desc {
           margin-bottom: 0.5em;
@@ -91,8 +64,8 @@
       td.reduce-padding {
           padding: 0px;
       }
-      td.add-padding-left{
-        padding-left:0.5em;
+      td.add-padding-left {
+          padding-left: 0.5em;
       }
       table.remove-border,
       table.remove-border td {
@@ -113,4 +86,18 @@
       .review-submit-button {
           margin-top: 1.5em;
       }
+  }
+  
+  .provider-profile-wrapper {
+      background: #fff;
+      border-radius: 2px;
+      display: inline-block;
+      position: relative;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.24);
+      transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+      cursor: pointer;
+  }
+  
+  .provider-profile-wrapper:hover {
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   }

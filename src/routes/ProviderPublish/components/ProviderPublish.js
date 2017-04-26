@@ -2,17 +2,59 @@ import React from 'react'
 import './providerPublish.scss'
 import ProviderProfile from 'components/ProviderProfile'
 import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
-
+import Stepper from 'components/Stepper'
+import RaisedButton from 'material-ui/RaisedButton';
+import * as actions from 'layouts/CoreLayout/coreReducer';
 const Provider = React.createClass ({
+  getInitialState() {
+    return {
+      showSpinner:false
+    }
+  },
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+  publishProvider(){
+    let self = this;
+      this.setState({showSpinner:true})
+      securedPostCall('/api/providers/publish')
+        .then(function(res){
+          if(res && res.data && res.data._id){
+            self.props.dispatch(actions.publishUser());
+            self.context.router.push('/providerProfile/'+res.data._id);
+          }
+        })
+  },
   render() {
     const {user} = this.props.globalState.core.toJS();
-    return <ProviderProfile   params = {{id:user._id}}
+    return <div className="provider-publish">
+              <Stepper
+                steps={[{label:'Profile'},{label:'Food'},{label:'Publish'}]}
+                activeStep={3}
+              >
+              </Stepper>
+              <div className="is-center">
+                <div style={{display:(this.state.showSpinner)?'block':'none'}}>
+                    <img src= "/general/loading.svg"/>
+                </div>
+                <RaisedButton
+                  label={"Publish"}
+                  style={{width:'25%',marginBottom:"1em"}}
+                  backgroundColor="#FF6F00"
+                  labelStyle={{color:'white'}}
+                  onTouchTap={this.publishProvider}
+                  disableTouchRipple={true}
+                />
+              </div>
+              <ProviderProfile   params = {{id:user._id}}
                               providerProfile = {this.props.providerPublish}
                               globalState = {this.props.globalState}
                               fetchMayBeSecuredData = {this.props.fetchMayBeSecuredData}
                               actionName = {"PROVIDER_ENTRY"}
                               mode = {"PROVIDER_ENTRY"} 
-            />
+              />
+
+          </div>
   }
 })
 
@@ -21,6 +63,7 @@ Provider.propTypes= {
     fetchData:React.PropTypes.func,
     fetchSecuredData:React.PropTypes.func,
     providerPublish:React.PropTypes.object,
-    fetchMayBeSecuredData:React.PropTypes.func
+    fetchMayBeSecuredData:React.PropTypes.func,
+    dispatch:React.PropTypes.func
   };
 export default Provider;

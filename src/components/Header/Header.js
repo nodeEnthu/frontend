@@ -32,7 +32,7 @@ export  class Header extends React.Component {
                     :
                     <li>
                       <IndexLink to='/'>
-                        Home
+                        HOME
                       </IndexLink>
                     </li>
                   }

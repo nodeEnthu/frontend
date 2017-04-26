@@ -30,8 +30,6 @@ const FoodItemEntryForm= React.createClass({
         router: React.PropTypes.object.isRequired
     },
     componentDidMount() {
-        // get the providers data
-
         if(this.props.params.foodId){
             this.props.fetchData('/api/foodItem/'+this.props.params.foodId , 'foodItemCall','FOOD_ITEM')
         }
@@ -188,6 +186,7 @@ const FoodItemEntryForm= React.createClass({
     render() {
         let {user} = this.props.globalState.core.toJS();
         let self = this;
+        console.log(availability);
         let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg,availability,availabilityErrorMsg,placeOrderBy, placeOrderByErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting,snackBarOpen,snackBarMessage} = this.props.foodItemEntryForm.toJS();
         return (
             <div className="food-item-entry">
@@ -375,12 +374,12 @@ const FoodItemEntryForm= React.createClass({
                         label={this.props.nextLabel}
                         backgroundColor="#FF6F00"
                         labelStyle={{color:'white'}}
-                        onTouchTap={this.formSubmit}
+                        onTouchTap={()=>this.formSubmit()}
                         disableTouchRipple={true}
                     />
                     <Snackbar
-                      open={snackBarOpen}
-                      message={snackBarMessage}
+                      open={snackBarOpen || false}
+                      message={snackBarMessage || ''}
                       autoHideDuration={4000}
                       onRequestClose={()=>this.toggle('snackBarOpen',false)}
                     />

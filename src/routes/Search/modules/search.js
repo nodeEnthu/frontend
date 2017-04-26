@@ -9,6 +9,10 @@ export const SELECT_CUISINE_OR_DIET_TYPE = "SELECT_CUISINE_OR_DIET_TYPE";
 export const FLUSH_OUT_STALE_DATA = "FLUSH_OUT_STALE_DATA";
 export const SELECT_ADDTNL_QUERY = "SELECT_ADDTNL_QUERY";
 export const DIRTY = "DIRTY";
+
+export const SEARCH_OPEN_MODAL = "SEARCH_OPEN_MODAL";
+export const SEARCH_FOOD_ID_SELECTED = "SEARCH_FOOD_ID_SELECTED"
+
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -39,6 +43,19 @@ export function setDirty(bool) {
         payload: bool
     };
 }
+export function foodIdSelected(foodItemId){
+    return {
+        'type': SEARCH_FOOD_ID_SELECTED,
+        'foodItemId': foodItemId
+    }
+}
+export function openModal(obj) {
+    return {
+        'type': SEARCH_OPEN_MODAL,
+        'storeKey': obj.storeKey,
+        'openModal': obj.openModal
+    }
+}
 
 
 // ------------------------------------
@@ -50,14 +67,16 @@ const ACTION_HANDLERS = {
     [FLUSH_OUT_STALE_DATA]: (state, action) => state.set('isLoading', false).set('error', undefined).set('data', List()),
     [RECEIVE_DATA]: (state, action) => state.set('isLoading', false).set('error', undefined).set('data', state.get('data').concat(action.payload.data.data)),
     [SELECT_ADDTNL_QUERY]: (state, action) => {
-        return state.setIn(['addtnlQuery', action.storeKey], action.payload); },
+        return state.setIn(['addtnlQuery', action.storeKey], action.payload);
+    },
     [SELECT_CUISINE_OR_DIET_TYPE]: (state, action) => {
         if (state.getIn([action.key, action.payload])) {
             return state.deleteIn([action.key, action.payload])
         } else return state.updateIn([action.key, action.payload], false, selected => !selected)
     },
-    [DIRTY]: (state, action) => state.set('dirty', action.payload)
-
+    [DIRTY]: (state, action) => state.set('dirty', action.payload),
+    [SEARCH_FOOD_ID_SELECTED]: (state, action) => state.set('foodIdSelected', action.foodItemId),
+    [SEARCH_OPEN_MODAL]: (state, action) => state.set(action.storeKey, action.openModal)
 }
 
 // ------------------------------------
@@ -73,9 +92,11 @@ const initialState = Map({
         orderMode: undefined,
         providerRadius: undefined,
         date: undefined,
-        sortBy:'ratings'
+        sortBy: 'ratings'
     }),
-    dirty: false
+    dirty: false,
+    foodItemModalOpen: false,
+    foodIdSelected: undefined
 });
 
 export default function fetchedDataReducer(state = initialState, action) {

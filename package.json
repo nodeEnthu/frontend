@@ -127,11 +127,8 @@
     "react-router-redux": "^4.0.0",
     "react-s3-uploader": "^3.3.0",
     "react-scroll": "^1.4.2",
-    "react-select": "latest",
-    "react-spinkit": "^1.1.8",
     "react-star-rating-component": "^1.0.0",
     "react-tap-event-plugin": "^2.0.0",
-    "react-time-input": "0.0.13",
     "redbox-react": "^1.2.10",
     "redux": "^3.6.0",
     "redux-thunk": "^2.0.0",
@@ -142,7 +139,8 @@
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.14",
-    "yargs": "^6.3.0"
+    "yargs": "^6.3.0",
+    "react-truncate":"^2.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.0",

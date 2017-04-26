@@ -1,6 +1,5 @@
 .header {
     background: #FF6F00;
-    height: 3.5em;
     clear: both;
     overflow: hidden;
 }
@@ -58,8 +57,9 @@ a:hover {
 
 .frame {
     height: 100%;
-    width: 8em;
+    width: 7em;
     display: inline-flex;
+    margin-left:1em;
 }
 
 .logo {
@@ -89,7 +89,7 @@ a:hover {
 }
 
 #nav > ul > li  a {
-    padding: 0 1em;
+    padding: 0 0.45em;
     height: 100%;
     font-size: 1em;
     /* 24 */
@@ -140,10 +140,9 @@ a:hover {
 .profile-pic {
     position: absolute;
     display: inline-block;
-    top: 0.5em;
+    top: 0.75em;
     right: 0;
-    width: 4em;
-    height: 4em;
+    width: 3em;
 }
 
 @media only screen and ( max-width: 62.5em)

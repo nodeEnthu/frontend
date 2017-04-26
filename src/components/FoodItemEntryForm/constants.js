@@ -15,11 +15,14 @@ export function daysOfTheWeek(date) {
 export function timeOfDay() {
     let result = [];
     for (var i = 0; i < 48; i++) {
-        let label = (i > 24) ? (Math.floor(i / 2) - 12) + ":" + ((i % 2 === 0) ? '00' : '30') + ' pm' : Math.floor(i / 2) + ":" + ((i % 2 === 0) ? '00' : '30') + ' am';
-        result.push({
-            label: label,
-            value: i * 30 * 60 * 1000
-        })
+        if (i > 13 && i < 42) {
+            let label = (i > 24) ? (Math.floor(i / 2) - 12) + ":" + ((i % 2 === 0) ? '00' : '30') + ' pm' : Math.floor(i / 2) + ":" + ((i % 2 === 0) ? '00' : '30') + ' am';
+            result.push({
+                label: label,
+                value: i * 30 * 60 * 1000
+            })
+        }
+
     }
     return result;
 }

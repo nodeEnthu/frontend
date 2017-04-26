@@ -12,7 +12,6 @@ export const RECEIVE_DATA_FOOD_ITEM = "RECEIVE_DATA_FOOD_ITEM";
 
 export const ADD_FOOD_ITEM_INFO = 'ADD_FOOD_ITEM_INFO';
 export const REMOVE_FOOD_ITEM_INFO = 'REMOVE_FOOD_ITEM_INFO';
-export const SHOW_HIDE_FOODITEM_EDIT_SPINNER = "SHOW_HIDE_FOODITEM_EDIT_SPINNER";
 
 // ------------------------------------
 // Actions
@@ -30,13 +29,7 @@ export function removeFoodItemInfo() {
         type: REMOVE_FOOD_ITEM_INFO
     }
 }
-export function showHideSpinner(obj){
-    return{
-        type:SHOW_HIDE_FOODITEM_EDIT_SPINNER,
-        storeKey:obj.storeKey,
-        payload:obj.payload
-    }
-}
+
 
 
 // ------------------------------------
@@ -47,9 +40,7 @@ const ACTION_HANDLERS = {
     [FAIL_DATA_FOOD_ITEM]: (state, action) => {return state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).set('foodItemEntryForm', Map())},
     [RECEIVE_DATA_FOOD_ITEM]: (state, action) => {return state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).set('foodItemEntryForm', Map(action.payload.data.data))},
     [REMOVE_FOOD_ITEM_INFO]: (state, action) => {return state.set('foodItemEntryForm', FoodItem)},
-    [ADD_FOOD_ITEM_INFO]: (state, action) => state.setIn(['foodItemEntryForm', action.storeKey], action.payload),
-    [SHOW_HIDE_FOODITEM_EDIT_SPINNER]:(state,action)=> {return state.setIn(['spinner',action.storeKey],action.payload)}
-
+    [ADD_FOOD_ITEM_INFO]: (state, action) => state.setIn(['foodItemEntryForm', action.storeKey], action.payload)
 }
 
 // ------------------------------------
@@ -61,10 +52,7 @@ const initialState = Map({
 		isLoading:false,
 		error:false
 	}),
-    foodItemEntryForm: FoodItem,
-    spinner:Map({
-            foodItemEntrySpinner:false,
-        })
+    foodItemEntryForm: FoodItem
 })
 
 
