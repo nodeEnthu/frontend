@@ -14,7 +14,6 @@ const FoodItemEditPage = React.createClass({
             mode = { "editMode" }
             nextLabel = { "SAVE CHANGES" }
             dispatch = { this.props.dispatch }
-            linkToRedirectOnAllClear = { "/providerProfile/" + this.props.params.id }
             />
         )
     }

@@ -36,7 +36,10 @@ const FoodItemEntryForm= React.createClass({
     },
     onAllClear(){
         this.setState({showSpinner:false});
-        this.context.router.push(this.props.linkToRedirectOnAllClear);
+        if(this.props.linkToRedirectOnAllClear){
+           this.context.router.push(this.props.linkToRedirectOnAllClear); 
+       }else this.context.router.goBack();
+        
     },
     mapFieldsToValidationType:{
         name: required,
@@ -292,8 +295,7 @@ const FoodItemEntryForm= React.createClass({
                                                                     <div className="child-box-2">
                                                                         <Checkbox
                                                                             label=""
-                                                                            value={date.value}
-                                                                            checked={(availability && availability.indexOf(date.value) > -1)} 
+                                                                            defaultChecked={(availability && availability.indexOf(date.value) > -1)} 
                                                                             onCheck={(event,isInputChecked)=>self.changeStoreTimeAndDateVals(date.value, 'availability',isInputChecked)}
                                                                         />
                                                                     </div>
