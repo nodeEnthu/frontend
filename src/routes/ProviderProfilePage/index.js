@@ -1,8 +1,10 @@
 import { injectReducer } from '../../store/reducers'
+import { onProviderNotPublish} from 'utils/auth/onEnterAuth'
 
 export default (store) => ({
     path: 'providerProfile/:id',
     /*  Async getComponent is only invoked when route matches   */
+    onEnter: (nextState, replace) => onProviderNotPublish(nextState, replace, store),
     getComponent(nextState, cb) {
         /*  Webpack - use 'require.ensure' to create a split point
             and embed an async module loader (jsonp) when bundling   */

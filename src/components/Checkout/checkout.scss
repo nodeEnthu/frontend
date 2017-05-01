@@ -78,15 +78,21 @@
         .display-none-small {
             display: none;
         }
-        .react-autosuggest__input{
-            width:100%;
+        .react-autosuggest__input {
+            width: 100%;
         }
-        .item-wo-desc{
+        .item-wo-desc {
             height: 2.5em;
             line-height: 3em;
         }
         .checkout-sec-1 {
-            height: auto;
+            height: 5em;
+        }
+        .item-quantity {
+            line-height: 3em;
+            position: absolute;
+            top: 30px;
+            left: -10px;
         }
     }
 }

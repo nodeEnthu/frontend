@@ -61,7 +61,7 @@ export function regexDate(value) {
     }
 }
 export function requiredArray(value,message){
-    if (isEmptyArray(value)) {
+    if (!value ||!(value instanceof Array) || isEmptyArray(value)) {
         return message || 'Required';
     }
 }

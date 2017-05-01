@@ -159,7 +159,7 @@ const Checkout = React.createClass({
                                 <div className="pure-u-1 item-property display-none-small">
                                   Quantity
                                 </div>
-                                <div className="pure-u-1 item-wi-desc">
+                                <div className="pure-u-1 item-wi-desc item-quantity">
                                   <IconButton onTouchTap={()=>self.changeStoreVal(itemCheckedOut._id,'quantity',(itemCheckedOut.quantity===0)? 0 : --itemCheckedOut.quantity)}
                                               style={{width:'60px'}}>
                                     <ContentRemoveCircle color={amber900}/>

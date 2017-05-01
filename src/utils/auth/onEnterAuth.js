@@ -16,3 +16,12 @@ export function onProviderPageEnter(nextState,replace,store) {
        replace('/providerProfile/'+user._id);
     } 
 }
+
+export function onProviderNotPublish(nextState,replace,store) {
+    let globalState = store.getState();
+    const { user,userLoggedIn } = globalState.core.toJS();
+    if (userLoggedIn && !user.published && user._id === nextState.params.id) {
+        // this means user clicked on edit profile
+       replace('provider/'+ user._id +'/publish');
+    } 
+}

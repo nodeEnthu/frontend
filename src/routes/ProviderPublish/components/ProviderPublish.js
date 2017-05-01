@@ -20,8 +20,11 @@ const Provider = React.createClass ({
       securedPostCall('/api/providers/publish')
         .then(function(res){
           if(res && res.data && res.data._id){
-            self.props.dispatch(actions.publishUser());
-            self.context.router.push('/providerProfile/'+res.data._id);
+            self.setState({showSpinner:false});
+            // refresh the page and the on Enter hook should automatically default it to the profile page
+            // ... no.. I dont think thats a hack
+            // this will make a call to get providers profile and store will be updated with most updated information
+            window.location.reload();
           }
         })
   },

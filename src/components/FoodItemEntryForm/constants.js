@@ -5,7 +5,7 @@ export function daysOfTheWeek(date) {
     for (let i = 0; i < 7; i++) {
         let newDate = moment(date).add(i, 'days');
         result.push({
-            value: newDate.startOf('day').toISOString(),
+            value: moment().startOf('day').utc().format(),
             label: newDate.format("dddd, MMM Do")
         });
     }

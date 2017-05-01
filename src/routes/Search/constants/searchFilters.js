@@ -45,7 +45,7 @@ export function DATES(n, format, action) {
             day = moment(new Date()).add(i, "days").startOf('day');
         } else day = moment(new Date()).subtract(i, "days").startOf('day');
         result.push({
-            value: day.valueOf(),
+            value: day.utc().toISOString(),
             title: day.format(format)
         })
     }

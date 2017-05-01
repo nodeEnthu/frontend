@@ -59,7 +59,7 @@ a:hover {
     height: 100%;
     width: 7em;
     display: inline-flex;
-    margin-left:1em;
+    margin-left: 1em;
 }
 
 .logo {
@@ -79,7 +79,11 @@ a:hover {
 /* first level */
 
 #nav > ul {
-    background: rgba(0, 0, 0, .7);
+    background: rgba(0, 0, 0, .8);
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
 }
 
 #nav > ul > li {
@@ -88,7 +92,7 @@ a:hover {
     display: table;
 }
 
-#nav > ul > li  a {
+#nav > ul > li a {
     padding: 0 0.45em;
     height: 100%;
     font-size: 1em;
@@ -99,8 +103,8 @@ a:hover {
     display: table-cell;
 }
 
-#nav > ul > li:hover  a,
-#nav > ul:not(:hover) > li.active  a {
+#nav > ul > li:hover a,
+#nav > ul:not(:hover) > li.active a {
     background-color: #cc470d;
 }
 
@@ -166,7 +170,7 @@ a:hover {
     }
     #nav > a {
         width: 3.125em;
-        height: 2.5em;
+        height: 3em;
         text-align: left;
         text-indent: -9999px;
         position: relative;
@@ -199,11 +203,13 @@ a:hover {
     }
     #nav:target > ul {
         display: block;
+        width: 50%;
         z-index: 999;
     }
     #nav > ul > li {
         width: 100%;
         float: none;
+        min-height: 90px;
     }
     #nav > ul > li > a {
         height: auto;

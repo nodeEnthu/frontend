@@ -1,4 +1,4 @@
-import {Map} from 'immutable'
+import {Map,List} from 'immutable'
 import moment from 'moment'
 export const FoodItem = Map({
             name:'',
@@ -10,7 +10,7 @@ export const FoodItem = Map({
             price:'',
             priceErrorMsg:'',
             descriptionErrorMsg:'', 
-            availability:[],
+            availability:List(),
             availabilityErrorMsg:'',
             placeOrderBy:0, 
             placeOrderByErrorMsg:'', 

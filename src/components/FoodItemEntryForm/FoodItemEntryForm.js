@@ -53,17 +53,29 @@ const FoodItemEntryForm= React.createClass({
     changeStoreTimeAndDateVals(date, storeKey,isInputChecked){
         let {availability,oneTime} = this.props.foodItemEntryForm.toJS();
         availability = availability || [];
-        if(!isInputChecked){
+        if(availability.indexOf(date) > -1){
             availability.splice(availability.indexOf(date),1);
         }
         else{
             if(availability.indexOf(date) === -1) { availability.push(date);}
         }
+        // now delete the earlier dates
+        availability.forEach(function(date,index){
+            if(moment().startOf('day').utc() > moment(date) ){
+                availability.splice(availability.indexOf(date),1);
+            }
+        })
+        // sort the dates
+        availability.sort(function(a,b){
+          return new Date(a) - new Date(b);
+        });
         // completely overwrite whats in store
         this.props.addFoodItemInfo({storeKey: storeKey,payload: availability});
         let errorMsgkey = storeKey + 'ErrorMsg';
         let errorMsg = (availability.length === 0)? 'Required':null
         this.props.addFoodItemInfo({storeKey: errorMsgkey,payload:errorMsg});
+        window.setTimeout(
+            function() {this.setState({foo: "bar"});}.bind(this),0);
     },
 
     daysBeforeOrderDate(referenceDate,days){
@@ -186,8 +198,9 @@ const FoodItemEntryForm= React.createClass({
     render() {
         let {user} = this.props.globalState.core.toJS();
         let self = this;
-        console.log(availability);
         let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg,availability,availabilityErrorMsg,placeOrderBy, placeOrderByErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting,snackBarOpen,snackBarMessage} = this.props.foodItemEntryForm.toJS();
+        //console.log(availability,organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting);
+
         return (
             <div className="food-item-entry">
                 <div className="food-item-container">
@@ -268,6 +281,9 @@ const FoodItemEntryForm= React.createClass({
                                     <div className = "error-message">{(availabilityErrorMsg)?'*'+availabilityErrorMsg:undefined}</div>
                                     <legend></legend>
                                     {DATES(8,"dd, MMM D",'add').map(function(date,index){
+                                                    if(availability){
+                                                        //console.log(availability,date.value,availability.indexOf(date.value));                                      
+                                                    }
                                                     return <div key={index} className="pure-u-1-3 pure-u-md-1-6" style={{paddingBottom : '0.25em'}}>
                                                             <div className="parent-box">
                                                                     <div className="child-box-1">
@@ -275,12 +291,16 @@ const FoodItemEntryForm= React.createClass({
                                                                     </div>
                                                                     <div className="child-box-2">
                                                                         <Checkbox
+                                                                            label=""
+                                                                            value={date.value}
+                                                                            checked={(availability && availability.indexOf(date.value) > -1)} 
                                                                             onCheck={(event,isInputChecked)=>self.changeStoreTimeAndDateVals(date.value, 'availability',isInputChecked)}
                                                                         />
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                })}
+                                                }
+                                            )}
                                     
                                 </div>
                                 <div className = "pure-u-1" >

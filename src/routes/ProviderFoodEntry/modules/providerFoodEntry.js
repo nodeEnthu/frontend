@@ -26,6 +26,7 @@ export function addFoodItemInfo(obj) {
     }
 }
 export function removeFoodItemInfo() {
+    console.log("removing food item onfo");
     return {
         type: REMOVE_FOOD_ITEM_INFO
     }
@@ -38,7 +39,7 @@ export function removeFoodItemInfo() {
 // ------------------------------------
 const ACTION_HANDLERS = {
     [ADD_FOOD_ITEM_INFO]: (state, action) => state.setIn(['foodItemEntryForm', action.storeKey], action.payload),
-    [REMOVE_FOOD_ITEM_INFO]: (state, action) => state.set('foodItemEntryForm', FoodItem),
+    [REMOVE_FOOD_ITEM_INFO]: (state, action) => {console.log("geting here");console.log(FoodItem.toJS());return state.set('foodItemEntryForm', FoodItem)},
 }
 
 // ------------------------------------

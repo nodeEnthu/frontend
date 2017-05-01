@@ -26,6 +26,7 @@ const ProviderProfileEntry = React.createClass ({
             <ProviderEntryForm  providerEntryForm = {this.props.providerEntryForm}
                                 addProviderInfo = {this.props.addProviderInfo}
                                 addProviderErrorMsg = {this.props.addProviderErrorMsg}
+                                dispatch={this.props.dispatch}
                                 params = {{id:this.props.params.id}}
                                 mode = {"PROVIDER_ENTRY"}
                                 fetchSecuredData={this.props.fetchSecuredData}
