@@ -15,7 +15,7 @@ const FoodItemInProviderProfile = React.createClass({
   contextTypes: {
         router: React.PropTypes.object.isRequired
   },
-  openFoodItemModal(foodItem){
+  openFoodItemModal(event,foodItem){
     this.props.foodIdSelected(foodItem._id);
     this.props.openModal({storeKey:'foodItemModalOpen', openModal:true})
   },
@@ -34,10 +34,21 @@ const FoodItemInProviderProfile = React.createClass({
     const availabilityLength = foodItem.availability.length;
     let editOrReOffer=(this.props.pastItem === true)? 'OFFER': 'EDIT';
     return <div className="pure-u-1 pure-u-md-1-3 food-item-profile provider-profile-wrapper">
-              <div className="pure-u-1 provider-img-section">
+              <div className="pure-u-1 provider-img-section" onClick={(event)=>this.openFoodItemModal(event,foodItem)}>
                 <div className="img-avatar">
                   <img className="gallery-img portrait"src={foodItem.imgUrl}/>
                 </div>
+                {
+                  (foodItem.enableReview)?
+                    <div className="write-review" onClick={()=>this.props.writeReviewModal(foodItem)}>
+                      <div className="review-content">
+                        Please write a review
+                      </div>
+                    </div>
+                    :
+                    undefined
+                }
+               
               </div>
               <div className="pure-u-1 provider-info-section">
                 <div className="foodItem-name">
@@ -57,10 +68,16 @@ const FoodItemInProviderProfile = React.createClass({
                     <span className="primary-color">(</span>{(foodItem.numOfReviews)? foodItem.numOfReviews: 0}<span className="primary-color" >)</span>
                   </div>
                 </div>
-                <div className="food-desc">
-                    <Truncate lines={2} ellipsis={<span>... <a href="javascript:void(0)" onClick={(event)=>this.openFoodItemModal(foodItem)}>Read more</a></span>}>
+                <div className="food-desc" onClick={(event)=>this.openFoodItemModal(event,foodItem)}>
+                    {
+                      (foodItem.description)?
+                        <Truncate lines={2} ellipsis={<span>... <a href="javascript:void(0)">Read more</a></span>}>
                           {foodItem.description}
-                    </Truncate>
+                        </Truncate>
+                        :
+                        <span>... <a href="javascript:void(0)">Read more</a></span>
+                    }
+                    
                 </div>
                 <table className="pure-table remove-border">
                   <tbody>
@@ -82,7 +99,7 @@ const FoodItemInProviderProfile = React.createClass({
                 <div className="add-to-cart">
                   <div className="food-price">{'$'+ foodItem.price}</div>
                   {
-                    (this.props.mode != 'providerEntry' && !this.props.userViewingOwnProfile && this.props.pastItem )?
+                    (this.props.mode != 'providerEntry' && !this.props.userViewingOwnProfile && !this.props.pastItem )?
                       <div className="add">
                         <FlatButton
                           backgroundColor="#FF6F00"

@@ -62,9 +62,16 @@ export  class Header extends React.Component {
                     :
                     undefined
                   }
-                  <li>
-                    <a href="">LIST YOURSELF</a>
-                  </li>
+                  {(user && user.userType === 'customer')?
+                    <li>
+                      <Link to={'/provider/'+user._id+'/providerProfileEntry'} >
+                        LIST YOURSELF
+                      </Link>
+                    </li>
+                    :
+                    undefined
+                  }
+                  
                   <li>
                     {(globalState.core.get('token').length>0 )?
                       undefined

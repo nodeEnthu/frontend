@@ -96,7 +96,7 @@ const FoodItem = React.createClass({
                 <Tabs
                   value={this.state.tabSelected}
                   onChange={this.tabChange}
-                  inkBarStyle={{borderBottom:"1px solid #FF6F00"}}
+                  inkBarStyle={{borderBottom:"5px solid #FF6F00"}}
                 >
                   <Tab label="Description" value="description" style={{backgroundColor:"white",color:"black"}}>
                     <div className="tab-section-wrapper">

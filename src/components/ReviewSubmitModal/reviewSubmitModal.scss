@@ -1,3 +1,12 @@
-.food-item {
-	max-width:100%;
+.review-modal {
+    .error-message {
+        color: red;
+    }
+    .food-item {
+        max-width: 100%;
+    }
+    .is-center-submit {
+        margin-top: 1em;
+        text-align: center;
+    }
 }

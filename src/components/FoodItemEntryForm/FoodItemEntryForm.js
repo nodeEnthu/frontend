@@ -38,8 +38,7 @@ const FoodItemEntryForm= React.createClass({
         this.setState({showSpinner:false});
         if(this.props.linkToRedirectOnAllClear){
            this.context.router.push(this.props.linkToRedirectOnAllClear); 
-       }else this.context.router.goBack();
-        
+       }else this.context.router.goBack();  
     },
     mapFieldsToValidationType:{
         name: required,
@@ -187,14 +186,16 @@ const FoodItemEntryForm= React.createClass({
         }
         return securedPostCall('/api/providers/addOrEditFoodItem', requestBody)
             .then(function(response) {
+                // update it in the main store
                 self.props.dispatch(actions.userFoodItemUpdate(response.data._id));
                 // delete all the prior information
                 self.props.removeFoodItemInfo();
+                console.log(addAnother);
                 if(addAnother){
                     // show the snackbar, turn the spinner off and dont go to the next page
                     self.setState({showSpinner:false});
-                    self.props.addFoodItemInfo({storeKey:'snackBarMessage',payload:'Item added to menu'});
                     self.props.addFoodItemInfo({storeKey:'snackBarOpen',payload:true});
+                    self.props.addFoodItemInfo({storeKey:'snackBarMessage',payload:'Item added to menu'});
                 } else self.onAllClear();
             })
     },

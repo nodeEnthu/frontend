@@ -71,6 +71,20 @@
       table.remove-border td {
           border: none;
       }
+      .write-review {
+          position: absolute;
+          height: 40px;
+          width: 100%;
+          background-color:  #FF6F00;
+          opacity:0.7;
+          top: 0;
+          color: white;
+          text-align:center;
+          .review-content {
+              margin-left: 10px;
+              line-height: 40px;
+          }
+      }
       .review-item-name {
           text-transform: capitalize;
           padding: 0.5em;

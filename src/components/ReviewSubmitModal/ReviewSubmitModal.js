@@ -4,6 +4,7 @@ import './reviewSubmitModal.scss'
 import Dialog from 'material-ui/Dialog';
 import classNames from 'classnames';
 import StarRatingComponent from 'react-star-rating-component';
+import FlatButton from 'material-ui/FlatButton';
 
 const customStyles = {
     content: {
@@ -20,7 +21,8 @@ const customStyles = {
 const ReviewSubmitModal = React.createClass({
   getInitialState() {
       return {
-          reviewFoodItemModalOpen:false
+          reviewFoodItemModalOpen:false,
+          showSpinner:false 
       };
   },
   componentWillUnmount() {
@@ -74,6 +76,7 @@ const ReviewSubmitModal = React.createClass({
     let item = reviews.item;
     let userInput = reviews.reviewMap[item._id];
     if(item && userInput && userInput.review){
+      this.setState({showSpinner:true});
       const {user} = this.props.globalState.core.toJS();
       let combinedQuery={
         foodItemId:item._id,
@@ -85,6 +88,7 @@ const ReviewSubmitModal = React.createClass({
       }
       this.props.postSecuredData('/api/foodItem/'+item._id+'/review','submitReview','SUBMIT_REVIEW',combinedQuery)
         .then(function(){
+          self.setState({showSpinner:false});
           self.props.refreshPage();
         });
       // remove data from the store
@@ -124,7 +128,7 @@ const ReviewSubmitModal = React.createClass({
               onRequestClose={this.closeModal}
             >{
               (reviews && item)?
-              <div>
+              <div className="review-modal">
                 <div className="pure-form move-center">
                   <div className="pure-group">
                     <div className="review-item-name">
@@ -149,9 +153,17 @@ const ReviewSubmitModal = React.createClass({
                     ></textarea>
                     <span className = "error-message">{(reviews.reviewMap[item._id].reviewError)?'*'+reviews.reviewMap[item._id].reviewError:undefined}</span>
                   </div>
-                  <button className="pure-button pure-input-1-2 pure-button-primary review-submit-button"
-                    onClick={this.submitReview}
-                  >Submit</button>
+                  <div className="is-center-submit">
+                    <div style={{display:(this.state.showSpinner)?'block':'none'}}>
+                        <img src= "/general/loading.svg"/>
+                    </div>
+                    <FlatButton
+                      backgroundColor="#FF6F00"
+                      label="Submit"
+                      labelStyle={{color:'white'}}
+                      onClick={this.submitReview}
+                    />
+                  </div>
                 </div>
               </div>
               :
