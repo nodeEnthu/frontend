@@ -139,7 +139,7 @@ const ProviderProfile = React.createClass({
                 </div>
                 <div className="provider-details">
                   <CommunicationLocationOn/>
-                  <span className="provider-detail">{userSearchAndPlaceId.address}</span>
+                  <span className="provider-detail">{provider.loc.searchText}</span>
                 </div>
                 <div>
                  <CommunicationEmail/>
@@ -148,16 +148,22 @@ const ProviderProfile = React.createClass({
               </div>
               
           </div>
-          <div className="pure-u-1">
-             <FlatButton
-                label="Edit Profile"
-                backgroundColor="lightgrey"
-                icon={<EditorModeEdit/>}
-                style={{width:'100%',height:'auto',lineHeight:'auto'}}
-                hoverColor="#8AA62F"
-                onClick={(event)=>self.context.router.push('/providers/'+provider._id+'/edit')}
-              />
-          </div>
+          {
+            (userViewingOwnProfile)?
+            <div className="pure-u-1">
+               <FlatButton
+                  label="Edit Profile"
+                  backgroundColor="lightgrey"
+                  icon={<EditorModeEdit/>}
+                  style={{width:'100%',height:'auto',lineHeight:'auto'}}
+                  hoverColor="#8AA62F"
+                  onClick={(event)=>self.context.router.push('/providers/'+provider._id+'/edit')}
+                />
+            </div>
+            :
+            undefined
+          }
+          
           <div className = "content pure-u-1">
             <div>
               <div className="posts">

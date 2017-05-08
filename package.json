@@ -140,7 +140,8 @@
     "url-loader": "^0.5.6",
     "webpack": "^1.12.14",
     "yargs": "^6.3.0",
-    "react-truncate":"^2.1.0"
+    "react-truncate":"^2.1.0",
+    "react-sidebar":"^2.3.2"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.0",

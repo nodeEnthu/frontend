@@ -19,7 +19,11 @@ const Decorators = [{
 				)
 		    }
 		  }),
-		  position: 'CenterLeft'
+		  position: 'CenterLeft',
+		  style: {
+		    right:'100%',
+		    left: 'auto'
+		  }
 		},{
 		  component: React.createClass({
 		    render() {
@@ -34,7 +38,11 @@ const Decorators = [{
 				)
 		    }
 		  }),
-		  position: 'CenterRight'
+		  position: 'CenterRight',
+		  style: {
+		    left:'100%',
+		    right: 'auto'
+		  }
 		}
 		];
 

@@ -59,7 +59,7 @@
         height: 1.5em;
     }
     .cuisine-carousel-wrapper {
-        width: 80%;
+        width: 50%;
         margin: auto;
         .inline {
             border: none;
@@ -100,7 +100,7 @@
         }
     }
     .providers-wrapper {
-        margin-top: 50px;
+        margin-top: 1em;
     }
     .provider-profile-wrapper {
         background: #fff;
@@ -174,10 +174,16 @@
     .add {
         float: right;
     }
+    .close-panel{
+        padding:1em 0 0 1em;
+    }
 }
 
 @media (max-width: 48em) {
     .search {
+        .cuisine-carousel-wrapper {
+            width:70%;
+        }
         .panel {
             height: auto;
             width: 95%;

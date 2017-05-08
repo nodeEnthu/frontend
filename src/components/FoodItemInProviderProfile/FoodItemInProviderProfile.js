@@ -16,8 +16,12 @@ const FoodItemInProviderProfile = React.createClass({
         router: React.PropTypes.object.isRequired
   },
   openFoodItemModal(event,foodItem){
-    this.props.foodIdSelected(foodItem._id);
-    this.props.openModal({storeKey:'foodItemModalOpen', openModal:true})
+    let className= event.target.className;
+    console.log(className);
+    if(className != "review-content"){
+      this.props.foodIdSelected(foodItem._id);
+      this.props.openModal({storeKey:'foodItemModalOpen', openModal:true})
+    }
   },
   deleteFoodItem(id){
     let self = this;
@@ -107,6 +111,7 @@ const FoodItemInProviderProfile = React.createClass({
                           labelStyle={{color:'white'}}
                           style={{height:'24px',lineHeight:'24px',minWidth:'80px'}}
                           onClick={(event)=> this.props.checkOutItem(event,foodItem)}
+                          disableTouchRipple={true}
                         />
                       </div>
                       :
@@ -153,6 +158,7 @@ const FoodItemInProviderProfile = React.createClass({
                         style={{width:'99.5%',height:'auto',lineHeight:'auto'}}
                         hoverColor="#8AA62F"
                         onClick={(event)=>self.context.router.push('/provider/'+provider._id+'/foodItems/'+foodItem._id+'/edit')}
+                        disableTouchRipple={true}
                       />
                     </div>
                     <div className="pure-u-1-2 move-center">
@@ -162,6 +168,7 @@ const FoodItemInProviderProfile = React.createClass({
                         icon= {<ActionDelete/>}
                         style={{width:'99.5%',height:'auto',lineHeight:'auto'}}
                         hoverColor="red"
+                        disableTouchRipple={true}
                       />
                     </div>
                   </div>

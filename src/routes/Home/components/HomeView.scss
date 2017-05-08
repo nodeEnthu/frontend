@@ -22,7 +22,6 @@
     }
     .promotion-heading {
         padding-top: 20px;
-        font-family: cursive;
     }
     .search-sec-wrapper {
         background: #ff6f00;
@@ -43,6 +42,7 @@
             border-radius: 0;
             width: 35%;
             padding: 0px 10px;
+            background-color: white;
         }
     }
     .move-right {
@@ -107,7 +107,6 @@
     }
     .steps-text {
         padding: 50px 190px 40px;
-        font-family: 'Architects Daughter';
         text-align: center;
         font-size: 40px;
     }
@@ -115,7 +114,7 @@
         text-align: center;
     }
     .step-heading {
-        padding: 0.75em;
+        padding: 0.75em 0 0.5em 0;
     }
     .step-text {
         padding: 0 5em;
@@ -137,10 +136,10 @@
     }
     .business-heading {
         font-size: 2em;
-        font-weight:500;
+        font-weight: 500;
     }
     .business-promotion {
-        text-align:left;
+        text-align: left;
     }
     .business-signup {
         display: inline-block;
@@ -150,6 +149,7 @@
     }
     .business-step {
         text-align: center;
+        margin-bottom: 0.5em;
     }
     .cook-photo {
         position: relative;
@@ -227,7 +227,6 @@
         }
         .steps-text {
             padding: 24px 0;
-            font-family: 'Architects Daughter';
             text-align: center;
             font-size: 2em;
         }

@@ -16,7 +16,8 @@ import carouselArrows from './FilterDecorator'
 import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId';
 import Truncate from 'react-truncate';
 import FoodItemModal from 'components/FoodItemModal';
-
+import ContentClear from 'material-ui/svg-icons/content/clear';
+import RaisedButton from 'material-ui/RaisedButton';
 const Search = React.createClass({
     getInitialState() {
         return {
@@ -94,6 +95,7 @@ const Search = React.createClass({
     createQuery() {
         let combinedQuery = {};
         const {place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
+        console.log(place_id);
         combinedQuery.guestLocation = {'place_id':place_id};
         combinedQuery.cuisineSelectedMap = this.props.search.get('cuisineSelectedMap').toJS();
         combinedQuery.dietSelectedMap = this.props.search.get('dietSelectedMap').toJS();
@@ -105,9 +107,7 @@ const Search = React.createClass({
 
     fetchQueryData() {
     	let combinedQuery = this.createQuery();
-        return this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery)
-        	.then(function(response){
-        	});
+        return this.props.fetchMayBeSecuredData(this.state.queryBaseUrl, 'data',undefined,combinedQuery);
     },
 
     createAndFetchNewQuery(){
@@ -145,8 +145,6 @@ const Search = React.createClass({
         	if(data[i].foodItems && data[i].foodItems.length>0){
         		for (let j = 0; j < data[i].foodItems.length; j++) {
                 	data[i].foodItems[j].distance = (data[i].distance).toFixed(2);
-                	data[i].foodItems[j].doYouDeliverFlag = data[i].doYouDeliverFlag;
-                	data[i].foodItems[j].pickUpFlag = data[i].pickUpFlag;
             	}
             	resolvedData = resolvedData.concat(data[i].foodItems);
         	}
@@ -156,6 +154,11 @@ const Search = React.createClass({
         return (
             <div className="search">
                 <div className="panel pure-g" id="showfilters">
+                    <div className="close-panel">
+                        <a href="#">
+                            <ContentClear/>
+                        </a>
+                    </div>
                     <div className="pure-u-1 display-table">
                         <div className="move-center filter-top-margin">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8.1 13.34l2.83-2.83L3.91 3.5c-1.56 1.56-1.56 4.09 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"/></svg>
@@ -271,11 +274,11 @@ const Search = React.createClass({
                                             floatingLabelStyle={{textAlign: 'middle'}} 
                                             menuStyle={{width:'100%',textAlign:'left'}}
                                             underlineStyle={{width:'80%'}} 
-                                            iconStyle={{top:'19px', right:'15px'}}
+                                            iconStyle={{top:'5px', right:'15px',}}
                                             value={addtnlQuery.date} 
                                             onChange={(event,index,value)=>this.selectOption(value,'date')}>
         	                    	{
-        	                    		DATES(7).map(function(date,index){
+        	                    		DATES(7,"ddd, MMM D","add").map(function(date,index){
         	                    			return <MenuItem style={{width:'100%'}} key={index} value={date.value} primaryText={date.title}/>
         	                    		})
         	                    	}
@@ -285,7 +288,7 @@ const Search = React.createClass({
 					</div> 
 					<div className="pure-u-1-3 pure-u-md-2-5 display-table">
                         <div className="move-center show-hide-filter">
-                            <a href={(this.state.showFilters)?"#showfilters":"#"} onClick={this.showFilter}>
+                            <a href="#showfilters" onClick={this.showFilter}>
     	                       filter/sort
                             </a>
                         </div>
@@ -296,6 +299,8 @@ const Search = React.createClass({
 					<Carousel
                         slideWidth="80px"
 						dragging={true}
+                        cellSpacing={10}
+                        edgeEasing="easeOutCirc"
                         decorators={carouselArrows}
 					>
 						{CUISINE_TYPES.map((cuisine,index)=>{
@@ -368,7 +373,7 @@ const Search = React.createClass({
 							<RaisedButton 
 								label="Show more results" 
 								primary={true} 
-								style={{width:'50%'}}
+								style={{width:'50%',margin:"1em"}}
 								onClick={this.loadMore}
 								disableTouchRipple={true}
 						/>

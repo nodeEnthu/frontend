@@ -21,7 +21,7 @@ const Checkout = React.createClass({
   getInitialState() {
       return {
          submitOrderModalOPen:false,
-         searchText:'',
+         searchText:this.props.globalState.core.get('userAddressSearch').get('searchText'),
          searchTextError:'',
          checkoutSubmitError:'',
          addtnlAddressInfo:'',
@@ -69,7 +69,7 @@ const Checkout = React.createClass({
     const {itemsCheckedOut,providerProfileCall} = this.props.providerProfile.toJS();
     const{addtnlAddressInfo} = this.state;
     const {userAddressSearch} = this.props.globalState.core.toJS();
-    const user = providerProfileCall.data;
+    const provider = providerProfileCall.data;
     let resolvedItemsCheckedOut= [];
     let addtnlItemOrderInfo, grandTotal = 0;
     for(var key in itemsCheckedOut){
@@ -86,15 +86,15 @@ const Checkout = React.createClass({
             <div className="content-subhead">Checkout</div>
             <div className="checkout-section-wrapper">
               {
-                (user.doYouDeliverFlag && !user.pickUpFlag)?
+                (provider.doYouDeliverFlag && !provider.pickUpFlag)?
                 <div>Your delivery order</div>:undefined
               }
               {
-                (!user.doYouDeliverFlag && user.pickUpFlag)?
+                (!provider.doYouDeliverFlag && provider.pickUpFlag)?
                 <div>Your pick-up order</div>:undefined
               }
               {
-                (user.doYouDeliverFlag && user.pickUpFlag)?
+                (provider.doYouDeliverFlag && provider.pickUpFlag)?
                 <div>
                   <label className="checkout-label" style={{display:'block',margin:"0.5em 0"}}>Order type</label>
                   <RadioButtonGroup name="foodOptions" 
@@ -119,7 +119,7 @@ const Checkout = React.createClass({
               <div className="pure-u-md-1-5 pure-u-1 checkout-label">Your Address</div>
               <div className="pure-u-md-4-5">
                 <AsyncAutocomplete  name={'searchText'}
-                                    userSearchText = {this.props.globalState.core.get('userAddressSearch').get('searchText')}
+                                    userSearchText = {this.state.searchText}
                                     apiUrl = {'/api/locations/addressTypeAssist'}
                                     getSuggestionValue={(suggestion)=>suggestion.address}
                                     onChange = {(event, value)=>this.setState({searchText:value.newValue})}
