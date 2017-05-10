@@ -62,7 +62,7 @@ export  class Header extends React.Component {
                     :
                     undefined
                   }
-                  {(user && user.userType === 'customer')?
+                  {((user && user.userType === 'consumer') || !globalState.core.get('token').length)?
                     <li>
                       <Link to={'/provider/'+user._id+'/providerProfileEntry'} >
                         LIST YOURSELF
@@ -72,6 +72,11 @@ export  class Header extends React.Component {
                     undefined
                   }
                   
+                  
+                </ul>
+              </nav>
+              <nav id="sub-nav" role="navigation">
+                <ul>
                   <li>
                     {(globalState.core.get('token').length>0 )?
                       undefined
@@ -79,17 +84,21 @@ export  class Header extends React.Component {
                       <Login{...this.props}/>
                      } 
                   </li>
-                </ul>
-              </nav>
-              <div className="profile-pic">
-                <img src={user.img} 
+                  <li className="profile-pic">
+                  {(user.img)?
+                    <img src={user.img} 
                       style = {{
                         borderRadius:24+'px',
                         width:'40px',
                         display:'inline-block'
                       }}
-                />
-              </div>
+                    />
+                    :
+                    undefined
+                  } 
+                  </li>
+                </ul>
+              </nav>
         </div>
         );
     }

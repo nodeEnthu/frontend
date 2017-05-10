@@ -14,6 +14,8 @@ export function onProviderPageEnter(nextState,replace,store) {
     const { user,userLoggedIn } = globalState.core.toJS();
     if (userLoggedIn && user.published && user.userType === 'provider') {
        replace('/providerProfile/'+user._id);
+    } else if(!userLoggedIn){
+        replace('/');
     } 
 }
 

@@ -133,6 +133,8 @@
         background: #16987e;
         padding: 1em;
         color: white;
+         text-align: left;
+        text-align: -webkit-left;
     }
     .business-heading {
         font-size: 2em;
@@ -140,6 +142,7 @@
     }
     .business-promotion {
         text-align: left;
+        text-align: -webkit-left;
     }
     .business-signup {
         display: inline-block;
@@ -157,7 +160,7 @@
     }
 }
 
-@media (max-width: 48em) {
+@media (max-width: 63em) {
     .home {
         .home-menu {
             text-align: left;

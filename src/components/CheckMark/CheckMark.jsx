@@ -16,8 +16,8 @@ const CheckMark = React.createClass({
               74.1,108.4 48.2,86.4 "/>
             <circle className="spin" fill="none" stroke="#7DB0D5" strokeWidth="4" strokeMiterlimit="10" strokeDasharray="12.2175,12.2175" cx="80.6" cy="80.6" r="73.9"/>
           </svg>
+          <p>{this.props.content}</p>
         </div>
-        <p>{this.props.content}</p>
       </div>
       )
   }
