@@ -17,7 +17,6 @@ const FoodItemInProviderProfile = React.createClass({
   },
   openFoodItemModal(event,foodItem){
     let className= event.target.className;
-    console.log(className);
     if(className != "review-content"){
       this.props.foodIdSelected(foodItem._id);
       this.props.openModal({storeKey:'foodItemModalOpen', openModal:true})
@@ -65,7 +64,7 @@ const FoodItemInProviderProfile = React.createClass({
                         editing={false}
                         starCount={5}
                         starColor={'#FF6F00'}
-                        value={3}
+                        value={foodItem.rating || 0 }
                      />
                   </div>
                   <div className="num-of-reviews">

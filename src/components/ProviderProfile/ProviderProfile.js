@@ -5,7 +5,7 @@ import './providerProfile.scss'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import classNames from 'classnames';
 import Checkout from 'components/Checkout';
-import Scroll from 'react-scroll';
+import scrollToElement from 'scroll-to-element';
 import ReviewSubmitModal from 'components/ReviewSubmitModal';
 import StarRatingComponent from 'react-star-rating-component';
 import CommunicationEmail from 'material-ui/svg-icons/communication/email';
@@ -15,14 +15,13 @@ import ContentCreate from 'material-ui/svg-icons/content/create';
 import ProviderEntryForm from 'components/ProviderEntryForm/ProviderEntryForm'
 import IconButton from 'material-ui/IconButton';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
-import RaisedButton from 'material-ui/RaisedButton';
 import FoodItemInProviderProfile from 'components/FoodItemInProviderProfile';
 import { Link } from 'react-router';
 import moment from 'moment';
 import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
 import FlatButton from 'material-ui/FlatButton';
 import FoodItemModal from 'components/FoodItemModal';
-
+import {isEmptyObj} from 'utils/formUtils/formValidation';
 const ProviderProfile = React.createClass({
   getInitialState() {
       return {
@@ -54,7 +53,7 @@ const ProviderProfile = React.createClass({
   componentDidUpdate(prevProps) {
     //check whether clicking on add to cart made component update
     if(this.state.counter===1 && this.state.itemCheckOutClicked){
-      this.scrollToElement('link1');
+      this.scrollToElement('checkout-section');
       this.setState({itemCheckOutClicked:false})
     }
     if(prevProps.params.id!= this.props.params.id){
@@ -78,13 +77,12 @@ const ProviderProfile = React.createClass({
       this.props.openLoginModal(true);
     }
   },
-  scrollToElement(elementName){
-    let scroller = Scroll.scroller;
-    scroller.scrollTo(elementName, {
-      duration: 1500,
-      delay: 100,
-      smooth: true,
-    })
+  scrollToElement(elementClassName){
+    scrollToElement('.'+elementClassName, {
+      offset: 0,
+      ease: 'linear',
+      duration: 500
+    });
   },
   refreshPage(){
     this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
@@ -95,7 +93,6 @@ const ProviderProfile = React.createClass({
     let userSearchAndPlaceId;
     let self = this;
     const {user} = this.props.globalState.core.toJS();
-    let Element = Scroll.Element;
     let userViewingOwnProfile = false;
     if(this.props.params && this.props.params.id && user && user._id){
       if(this.props.params.id === user._id){
@@ -118,7 +115,7 @@ const ProviderProfile = React.createClass({
         (foodItemAvailable)?currentItems.push(foodItem): pastItems.push(foodItem);
       })
     }
-    return (provider && provider.userType && user && user.name || (provider && !this.props.globalState.core.get('userLoggedIn')))?
+    return (provider && !isEmptyObj(provider) && provider.userType && user && user.name || (provider && !isEmptyObj(provider) && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="provider-profile">
           <div className="pure-u-1 profile-wrapper">
               <div className="pure-u-1 pure-u-md-1-4 is-center">
@@ -128,7 +125,7 @@ const ProviderProfile = React.createClass({
               </div>
               <div className="pure-u-1 pure-u-md-3-4 provider-desc-wrapper">
                 <div className="brand-title">{provider.title}</div>
-                <div>{/*provider.description*/}Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</div>
+                <div>{provider.description}</div>
                 <div className="addtnl-info">
                   <span>Services Offered:</span>
                   {
@@ -158,6 +155,7 @@ const ProviderProfile = React.createClass({
                   style={{width:'100%',height:'auto',lineHeight:'auto'}}
                   hoverColor="#8AA62F"
                   onClick={(event)=>self.context.router.push('/providers/'+provider._id+'/edit')}
+                  disableTouchRipple={true}
                 />
             </div>
             :
@@ -255,7 +253,7 @@ const ProviderProfile = React.createClass({
                 :
                 undefined
               }
-              <Element name="link1"></Element>
+              <div className="checkout-section"></div>
             </div> 
           </div>
         </div>

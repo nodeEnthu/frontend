@@ -86,15 +86,15 @@ const Checkout = React.createClass({
             <div className="content-subhead">Checkout</div>
             <div className="checkout-section-wrapper">
               {
-                (provider.doYouDeliverFlag && !provider.pickUpFlag)?
-                <div>Your delivery order</div>:undefined
+                (provider.serviceOffered === 2 ||  this.state.pickup.toString() ==="false")?
+                <div className="checkout-label">Your delivery order</div>:undefined
               }
               {
-                (!provider.doYouDeliverFlag && provider.pickUpFlag)?
-                <div>Your pick-up order</div>:undefined
+                (provider.serviceOffered === 1 ||  this.state.pickup.toString() ==="true")?
+                <div className="checkout-label">Your pick-up order</div>:undefined
               }
               {
-                (provider.doYouDeliverFlag && provider.pickUpFlag)?
+                (provider.serviceOffered ===3)?
                 <div>
                   <label className="checkout-label" style={{display:'block',margin:"0.5em 0"}}>Order type</label>
                   <RadioButtonGroup name="foodOptions" 
@@ -103,7 +103,7 @@ const Checkout = React.createClass({
                   >
                     <RadioButton
                       value="true"
-                      label="pick-up"
+                      label="pickup"
                     />
                     <RadioButton
                       value="false"

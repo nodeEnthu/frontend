@@ -22,7 +22,6 @@ const FoodItem = React.createClass({
   },
   componentWillMount() {
     let self= this;
-    console.log(this.props.foodItemId)
     getCall('/api/foodItem/'+this.props.foodItemId)
             .then(function(resolvedResponse) {
                 self.setState({foodItem:resolvedResponse.data});
@@ -64,7 +63,7 @@ const FoodItem = React.createClass({
                           editing={false}
                           starCount={5}
                           starColor={'#FF6F00'}
-                          value={3}
+                          value={foodItem.rating || 0 }
                        />
                     </div>
                     <div className="num-of-reviews">

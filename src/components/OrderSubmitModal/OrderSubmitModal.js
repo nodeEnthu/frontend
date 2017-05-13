@@ -66,7 +66,8 @@ const OrderSubmitModal = React.createClass({
       // if userAddressSearch.searchText exists that means user entered a new address at Home (/) or search (/search) page which SHOULD already be registered
       customerAddress = (userAddressSearch)? userAddressSearch.searchText : user.userSeachLocations[user.deliveryAddressIndex].searchText;
       customerName =(user && user.name)? user.name : undefined;
-    } 
+    }
+    console.log(itemsCheckedOut); 
     this.checkOutOrderDetails={
       _creator:user._id,
       itemsCheckedOut:itemsCheckedOut,

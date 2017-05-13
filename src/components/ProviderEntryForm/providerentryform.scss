@@ -17,9 +17,7 @@
     }
     .react-autosuggest__container {
         width: 100%;
-    }
-    .react-datepicker__input-container {
-        width: 100%
+        z-index:9;
     }
     .remove-margin-bottom {
         margin-bottom: 0px;

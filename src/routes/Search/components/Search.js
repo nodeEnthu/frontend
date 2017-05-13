@@ -76,6 +76,7 @@ const Search = React.createClass({
     },
 
     onSuggestionSelected(event,{suggestion}){
+        let self= this;
     	this.props.userAddressSearchChange(suggestion.address);
         this.props.userAddressUpdatePlaceId(suggestion.place_id);
         // also register this address in the address book if the user is logged in
@@ -85,11 +86,11 @@ const Search = React.createClass({
        		if(suggestion.place_id){
 	       		securedGetCall('api/locations/registerMostRecentSearchLocation',{address:suggestion.address,place_id:suggestion.place_id})
 	        		.then(function(result){
-	        			// dont do anything
+                        self.fetchQueryData();
 	        		}); 	
        		}
     	}
-        this.props.setDirty(true);
+        else this.props.setDirty(true);
     },
 
     createQuery() {
@@ -342,7 +343,7 @@ const Search = React.createClass({
 										                            editing={false}
 										                            starCount={5}
                                                                     starColor={'#FF6F00'}
-										                            value={3}
+										                            value={foodItem.rating || 0 }
 										                         />
 									                         </div>
 									                         <div className="num-of-reviews">

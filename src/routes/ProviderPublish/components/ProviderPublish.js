@@ -16,17 +16,18 @@ const Provider = React.createClass ({
   },
   publishProvider(){
     let self = this;
-      this.setState({showSpinner:true})
-      securedPostCall('/api/providers/publish')
-        .then(function(res){
-          if(res && res.data && res.data._id){
-            self.setState({showSpinner:false});
-            // refresh the page and the on Enter hook should automatically default it to the profile page
-            // ... no.. I dont think thats a hack
-            // this will make a call to get providers profile and store will be updated with most updated information
-            window.location.reload();
-          }
-        })
+    const {user} = this.props.globalState.core.toJS();
+    this.setState({showSpinner:true})
+    securedPostCall('/api/providers/publish',{_creator:user._id})
+      .then(function(res){
+        if(res && res.data && res.data._id){
+          self.setState({showSpinner:false});
+          // refresh the page and the on Enter hook should automatically default it to the profile page
+          // ... no.. I dont think thats a hack
+          // this will make a call to get providers profile and store will be updated with most updated information
+          window.location.reload();
+        }
+      })
   },
   render() {
     const {user} = this.props.globalState.core.toJS();

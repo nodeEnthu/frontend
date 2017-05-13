@@ -51,7 +51,7 @@ var Login = React.createClass({
 
                   if(redirectPath){
                     // special treatment for first time provider entry here as we dont know the objectID
-                    redirectPath = (redirectPath ==='provider')? '/provider/'+res.user._id+'/providerProfileEntry':redirectPath;
+                    redirectPath = (redirectPath ==='providerProfileEntry')? '/provider/'+res.user._id+'/providerProfileEntry':redirectPath;
                     self.context.router.push(redirectPath);
                     // reset it back to ''
                     dispatch(actions.postLoginUrlRedirect(''));

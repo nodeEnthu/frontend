@@ -4,19 +4,25 @@ import { connect } from 'react-redux'
 import * as actions from '../../layouts/CoreLayout/coreReducer'
 import Login from '../Login/Login'
 import './Header.scss'
-export  class Header extends React.Component {
-    constructor(props) {
-        super(props);
-        this.removeToken = this.removeToken.bind(this);
-    }
+const Header =React.createClass ({
     removeToken(){
       this.props.dispatch(actions.addToken(''));
       sessionStorage.removeItem('token');
       location.reload();
-    }
-    componentDidMount() {
-           
-    }
+    },
+    contextTypes: {
+      router: React.PropTypes.object.isRequired
+    },
+    checkLoginAndredirect(){
+      const {user} = this.props.globalState.core.toJS();
+      if (user && user._id){
+        this.context.router.push('/provider/'+user._id+'/providerProfileEntry' )
+      }
+      else{
+        this.props.dispatch(actions.postLoginUrlRedirect('providerProfileEntry'));
+        this.props.dispatch(actions.openLoginModal());
+      }
+    },
     render() {
         const { globalState } = this.props;
         const {user} = globalState.core.toJS();
@@ -64,9 +70,9 @@ export  class Header extends React.Component {
                   }
                   {((user && user.userType === 'consumer') || !globalState.core.get('token').length)?
                     <li>
-                      <Link to={'/provider/'+user._id+'/providerProfileEntry'} >
+                      <a href="javascript:void(0)" onClick={this.checkLoginAndredirect}>
                         LIST YOURSELF
-                      </Link>
+                      </a>
                     </li>
                     :
                     undefined
@@ -102,11 +108,11 @@ export  class Header extends React.Component {
         </div>
         );
     }
-};
+});
 
 function mapStateToProps(state) {
     return {
-        globalState: state
+        globalState: state,
     };
 }
 export default connect(mapStateToProps)(Header)

@@ -3,6 +3,7 @@ import moment from 'moment'
 export const FoodItem = Map({
             name:'',
             imgUrl:'',
+            _creator:'',
             nameErrorMsg:'', 
             description:'', 
             cuisineType:'',
@@ -12,7 +13,8 @@ export const FoodItem = Map({
             descriptionErrorMsg:'', 
             availability:List(),
             availabilityErrorMsg:'',
-            placeOrderBy:0, 
+            placeOrderBy:0,
+            rating:0, 
             placeOrderByErrorMsg:'', 
             pickUpStartTime:'', 
             pickUpEndTime:'',

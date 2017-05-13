@@ -17,6 +17,7 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import Snackbar from 'material-ui/Snackbar';
+import scrollToElement from 'scroll-to-element';
 
 const maxCount = 100;
 
@@ -33,6 +34,13 @@ const FoodItemEntryForm= React.createClass({
         if(this.props.params.foodId){
             this.props.fetchData('/api/foodItem/'+this.props.params.foodId , 'foodItemCall','FOOD_ITEM')
         }
+    },
+    scrollToElement(elementClassName){
+        scrollToElement('.'+elementClassName, {
+            offset: 0,
+            ease: 'linear',
+            duration: 500
+        });
     },
     onAllClear(){
         this.setState({showSpinner:false});
@@ -171,7 +179,7 @@ const FoodItemEntryForm= React.createClass({
             }else this.submitFoodItem(addAnother) 
         } else{
             //scroll to the top
-            window.scrollTo(0, 23);
+            this.scrollToElement('food-item-container');
             // show snackbar
             this.props.addFoodItemInfo({storeKey:'snackBarMessage',payload:'Please fill the required fields'});
             this.props.addFoodItemInfo({storeKey:'snackBarOpen',payload:true});
@@ -180,6 +188,9 @@ const FoodItemEntryForm= React.createClass({
     submitFoodItem(addAnother) {
         let self = this;
         let requestBody=this.props.foodItemEntryForm.toJS();
+        let {user} = this.props.globalState.core.toJS();
+        // add the creator name for verification;
+        requestBody._creator= user._id;
         // send it to server and clear out some of the item specific info
         if(this.props.mode ==="PROVIDER_ENTRY"){
             requestBody.publishStage=2;
@@ -190,12 +201,14 @@ const FoodItemEntryForm= React.createClass({
                 self.props.dispatch(actions.userFoodItemUpdate(response.data._id));
                 // delete all the prior information
                 self.props.removeFoodItemInfo();
-                console.log(addAnother);
                 if(addAnother){
                     // show the snackbar, turn the spinner off and dont go to the next page
                     self.setState({showSpinner:false});
                     self.props.addFoodItemInfo({storeKey:'snackBarOpen',payload:true});
+                    self.props.removeFoodItemInfo();
                     self.props.addFoodItemInfo({storeKey:'snackBarMessage',payload:'Item added to menu'});
+                    //scroll to the top
+                    self.scrollToElement('food-item-container');
                 } else self.onAllClear();
             })
     },
@@ -204,7 +217,7 @@ const FoodItemEntryForm= React.createClass({
         let self = this;
         let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, price,priceErrorMsg,descriptionErrorMsg,availability,availabilityErrorMsg,placeOrderBy, placeOrderByErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting,snackBarOpen,snackBarMessage} = this.props.foodItemEntryForm.toJS();
         //console.log(availability,organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting);
-
+        console.log('imgUrl',imgUrl);
         return (
             <div className="food-item-entry">
                 <div className="food-item-container">
