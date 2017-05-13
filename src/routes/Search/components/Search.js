@@ -86,6 +86,7 @@ const Search = React.createClass({
        		if(suggestion.place_id){
 	       		securedGetCall('api/locations/registerMostRecentSearchLocation',{address:suggestion.address,place_id:suggestion.place_id})
 	        		.then(function(result){
+                        self.props.flushOutStaleData();
                         self.fetchQueryData();
 	        		}); 	
        		}
@@ -96,7 +97,6 @@ const Search = React.createClass({
     createQuery() {
         let combinedQuery = {};
         const {place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
-        console.log(place_id);
         combinedQuery.guestLocation = {'place_id':place_id};
         combinedQuery.cuisineSelectedMap = this.props.search.get('cuisineSelectedMap').toJS();
         combinedQuery.dietSelectedMap = this.props.search.get('dietSelectedMap').toJS();
