@@ -22,6 +22,7 @@ const ProviderEntryForm = React.createClass({
         }  
     },
     componentWillMount() {
+        let self = this;
         // check whether its an edit to an already present provider
         if(this.props.params.id){
             this.props.fetchSecuredData('/api/users/'+this.props.params.id , 'providerProfileCall',this.props.mode)
@@ -30,8 +31,12 @@ const ProviderEntryForm = React.createClass({
             // note to Gautam: see this is what we have to do when state does not match the things we save in db
             .then((res)=>{
                 if(res && res.payload &&res.payload.data && res.payload.data.data && res.payload.data.data.loc){
-                    this.props.addProviderInfo({storeKey:'searchText',payload:res.payload.data.data.loc.searchText});
-                    this.props.addProviderInfo({storeKey:'place_id',payload:res.payload.data.data.loc.place_id})
+                    let provider = res.payload.data.data;
+                    this.props.addProviderInfo({storeKey:'searchText',payload:provider.loc.searchText});
+                    this.props.addProviderInfo({storeKey:'place_id',payload:provider.loc.place_id});
+                    if(self.props.mode === "PROVIDER_ENTRY" && provider.publishStage ===2){
+                        self.context.router.push('/provider/'+provider._id+'/providerFoodEntry');
+                    }
                 }
             })
         }

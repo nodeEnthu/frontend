@@ -67,7 +67,6 @@ const OrderSubmitModal = React.createClass({
       customerAddress = (userAddressSearch)? userAddressSearch.searchText : user.userSeachLocations[user.deliveryAddressIndex].searchText;
       customerName =(user && user.name)? user.name : undefined;
     }
-    console.log(itemsCheckedOut); 
     this.checkOutOrderDetails={
       _creator:user._id,
       itemsCheckedOut:itemsCheckedOut,

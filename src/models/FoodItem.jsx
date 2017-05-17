@@ -9,6 +9,7 @@ export const FoodItem = Map({
             cuisineType:'',
             cuisineTypeErrorMsg:'', 
             price:'',
+            avalilabilityType:'onOrder',
             priceErrorMsg:'',
             descriptionErrorMsg:'', 
             availability:List(),

@@ -23,6 +23,9 @@ const Header =React.createClass ({
         this.props.dispatch(actions.openLoginModal());
       }
     },
+    goToHomePage(user){
+      this.context.router.push('/providerProfile/'+user._id)
+    },
     render() {
         const { globalState } = this.props;
         const {user} = globalState.core.toJS();
@@ -53,7 +56,7 @@ const Header =React.createClass ({
                   }
                   {(globalState.core.get('token').length>0 )?
                     <li>
-                      <Link to={'/user/'+user._id+'/order-summary'} >
+                      <Link to={'/user/'+user._id+'/order-summary/#'} >
                         ORDERS
                       </Link>
                     </li>
@@ -68,7 +71,7 @@ const Header =React.createClass ({
                     :
                     undefined
                   }
-                  {((user && user.userType === 'consumer') || !globalState.core.get('token').length)?
+                  {((user && (user.userType === 'consumer' || !user.published)) || !globalState.core.get('token').length)?
                     <li>
                       <a href="javascript:void(0)" onClick={this.checkLoginAndredirect}>
                         LIST YOURSELF
@@ -90,7 +93,7 @@ const Header =React.createClass ({
                       <Login{...this.props}/>
                      } 
                   </li>
-                  <li className="profile-pic">
+                  <li className="profile-pic" onClick={()=>this.goToHomePage(user)}>
                   {(user.img)?
                     <img src={user.img} 
                       style = {{

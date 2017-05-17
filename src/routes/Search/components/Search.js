@@ -18,32 +18,33 @@ import Truncate from 'react-truncate';
 import FoodItemModal from 'components/FoodItemModal';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 import RaisedButton from 'material-ui/RaisedButton';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import {amber900} from 'material-ui/styles/colors';
+import {PLACE_ORDER_BY} from 'routes/Search/constants/searchFilters'
+
 const Search = React.createClass({
     getInitialState() {
         return {
-            pageNum: 0,
             queryBaseUrl: '/api/query/providers',
             searchActivated:false,
             placeIdErrorMsg:'',
             showFilters:false,
             foodItemModalOpen:false,
-            foodIdSelected:undefined
+            foodIdSelected:undefined,
+            
         };
     },
+    pageNum: 0,
+    avalilabilityType:'specificDates',
     showFilter(e){
         this.setState({showFilters:!this.state.showFilters})
     },
     contextTypes: {
         router: React.PropTypes.object.isRequired
     },
-    validatePlaceId(){
-    	let {place_id} = this.props.globalState.core.get('userAddressSearch').toJS();
-    	return (place_id)? true:false;
-    },
     filterCuisineOrDietType(val,dietOrCuisine) {
         this.props.setDirty(true);
         this.props.selectCuisineOrDiet(dietOrCuisine,val);
-        this.props.setDirty(true);
     },
 
     // defaults for the first time you load the page 
@@ -65,14 +66,8 @@ const Search = React.createClass({
     },
 
     loadMore() {
-       	let newPageNum = this.state.pageNum + 1;
-       	let self = this;
-  		this.fetchQueryData()
-	       	.then(function(err, response) {
-	                self.setState({
-	                    pageNum: newPageNum
-	                })
-	            })
+        this.pageNum = this.pageNum + 1;
+  		this.fetchQueryData();
     },
 
     onSuggestionSelected(event,{suggestion}){
@@ -102,7 +97,8 @@ const Search = React.createClass({
         combinedQuery.dietSelectedMap = this.props.search.get('dietSelectedMap').toJS();
         combinedQuery.addtnlQuery = this.props.search.get('addtnlQuery').toJS();
         //combinedQuery.addtnlQuery.date = combinedQuery.addtnlQuery.date || moment().startOf('day').valueOf();
-        combinedQuery.filterspageNum = this.state.pageNum;
+        combinedQuery.filterspageNum = this.pageNum;
+        combinedQuery.onOrder= (this.avalilabilityType === 'onOrder')? true:false;
         return combinedQuery;
     },
 
@@ -119,6 +115,7 @@ const Search = React.createClass({
 
     componentDidUpdate(prevProps){
         if(this.props.search.get('dirty')){
+            this.pageNum = 0;
             this.props.setDirty(false);
             this.createAndFetchNewQuery();
         }
@@ -136,10 +133,19 @@ const Search = React.createClass({
         }
     	else this.context.router.push('/providerProfile/'+foodItem._creator);
     },
-
+    handleActive(tab) {
+        // remove whats currently being shown
+        this.props.flushOutStaleData();
+        // fetch a query
+        this.pageNum = 0;
+        this.resolvedData = [];
+        this.avalilabilityType = tab.props['data-route'];
+        this.createAndFetchNewQuery();
+    },
     render() {
         let { data, addtnlQuery, dietSelectedMap } = this.props.search.toJS();
-        const { pageNum,placeIdErrorMsg} = this.state;
+        const {placeIdErrorMsg} = this.state;
+        const {pageNum} = this;
         const {userAddressSearch} = this.props.globalState.core.toJS();
         let resolvedData = [];
         for (let i = 0; i < data.length; i++) {
@@ -319,10 +325,11 @@ const Search = React.createClass({
 						})}
 					</Carousel>
 				</div>
-				
-				<div className="providers-wrapper">
-					<div className="pure-g">
-					{	(resolvedData)? 
+				<Tabs style={{marginTop:"1em"}} inkBarStyle={{border:"2px solid "+ amber900}}>
+                    <Tab buttonStyle={{backgroundColor:"white","color":amber900}}label="Available now" data-route="specificDates" onActive={this.handleActive} >
+				        <div className="providers-wrapper">
+        					<div className="pure-g">
+            					{(resolvedData)? 
 								resolvedData.map(function(foodItem,index){
 									return 	<div key={index} className="pure-u-1 pure-u-md-1-3 provider-profile-wrapper"
 												onClick={(event)=>self.foodItemClicked(event,foodItem)}>
@@ -356,6 +363,16 @@ const Search = React.createClass({
                                                                   {foodItem.description}
                                                             </Truncate>
                                                         </div>
+                                                        <div className="food-desc">
+                                                            {
+                                                                foodItem.availability.map(function(date,index){
+                                                                  if(foodItem.availability.length != (index+1)){
+                                                                    return moment(date).format("MMM, D")+' | ';
+                                                                  }else return moment(date).format("MMM, D");
+                                                                  
+                                                                })
+                                                            }
+                                                        </div>
 											    		<div className="add-to-cart">
 											    			<div className="food-price">{'$'+ foodItem.price}</div>
 											    		</div>
@@ -366,28 +383,104 @@ const Search = React.createClass({
 										})
 										:
 										undefined
-					}
-					</div>
-					{
-						(data  && data.length >= 12*(pageNum+1))?
-						<div className="load-more-center">
-							<RaisedButton 
-								label="Show more results" 
-								primary={true} 
-								style={{width:'50%',margin:"1em"}}
-								onClick={this.loadMore}
-								disableTouchRipple={true}
-						/>
-						</div>
-						:
-						undefined
-					}
+            					} 
+        					</div>
+    					{
+    						(data  && data.length >= 12*(pageNum+1))?
+    						<div className="load-more-center">
+    							<RaisedButton 
+    								label="Show more results" 
+    								primary={true} 
+    								style={{width:'50%',margin:"1em"}}
+    								onClick={this.loadMore}
+    								disableTouchRipple={true}
+    						/>
+    						</div>
+    						:
+    						undefined
+    					}
+    				    </div>
+                    </Tab>
+                    <Tab  buttonStyle={{backgroundColor:"white","color":amber900}} label="On Order" data-route="onOrder" onActive={this.handleActive}>
+                        <div className="providers-wrapper">
+                            <div className="pure-g">
+                                {(resolvedData)? 
+                                resolvedData.map(function(foodItem,index){
+                                    return  <div key={index} className="pure-u-1 pure-u-md-1-3 provider-profile-wrapper"
+                                                onClick={(event)=>self.foodItemClicked(event,foodItem)}>
+                                                <div>
+                                                    <div className="pure-u-1 provider-img-section">
+                                                        <div className="img-avatar">
+                                                            <img className="gallery-img portrait"src={foodItem.imgUrl}/>
+                                                        </div>
+                                                    </div>
+                                                    <div className="pure-u-1 provider-info-section">
+                                                        <div className="foodItem-name">
+                                                            {foodItem.name}
+                                                        </div>
+                                                        <div className="star-rating">
+                                                            <div className="provider-star-rating">
+                                                                <StarRatingComponent 
+                                                                    name={foodItem._id} 
+                                                                    editing={false}
+                                                                    starCount={5}
+                                                                    starColor={'#FF6F00'}
+                                                                    value={foodItem.rating || 0 }
+                                                                 />
+                                                             </div>
+                                                             <div className="num-of-reviews">
+                                                                <span style={{color:"#FF6F00"}}>(</span>{(foodItem.numOfReviews)? foodItem.numOfReviews: 0}<span style={{color:"#FF6F00"}}>)</span>
+                                                             </div>
+                                                             <div className="miles-away"><span>{foodItem.distance}</span><span>mi</span></div>
+                                                        </div>
+                                                        <div className="food-desc">
+                                                            <Truncate lines={2} ellipsis={<span>... <a className="read-more"href="javascript:void(0)" >Read more</a></span>}>
+                                                                  {foodItem.description}
+                                                            </Truncate>
+                                                        </div>
+                                                        <div className="food-desc">
+                                                        { 
+                                                            PLACE_ORDER_BY.map(function(orderDate){
+                                                              if(orderDate.value === foodItem.placeOrderBy){
+                                                                return 'Order '+orderDate.label;
+                                                              }
+                                                            })
+                                                          }
+                                                        </div>
+                                                        <div className="add-to-cart">
+                                                            <div className="food-price">{'$'+ foodItem.price}</div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        })
+                                        :
+                                        undefined
+                                } 
+                            </div>
+                        {
+                            (data  && data.length >= 12*(pageNum+1))?
+                            <div className="load-more-center">
+                                <RaisedButton 
+                                    label="Show more results" 
+                                    primary={true} 
+                                    style={{width:'50%',margin:"1em"}}
+                                    onClick={this.loadMore}
+                                    disableTouchRipple={true}
+                            />
+                            </div>
+                            :
+                            undefined
+                        }
                     <FoodItemModal foodId={this.props.foodIdSelected}
                                   openModal={this.props.openModal}
                                   stateProps={this.props.search}
-                  />
-				</div>
-			</div>
+                    />
+                    </div>
+                </Tab>
+            </Tabs>
+		</div>
         );
     }
 })

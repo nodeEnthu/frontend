@@ -22,6 +22,8 @@ import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
 import FlatButton from 'material-ui/FlatButton';
 import FoodItemModal from 'components/FoodItemModal';
 import {isEmptyObj} from 'utils/formUtils/formValidation';
+import Truncate from 'react-truncate';
+
 const ProviderProfile = React.createClass({
   getInitialState() {
       return {
@@ -100,19 +102,21 @@ const ProviderProfile = React.createClass({
       }
     }
     // seperate between current and past items
-    let currentItems=[] , pastItems=[], currentDate;
+    let currentItems=[] , pastItems=[], onOrderItems=[],currentDate;
     if(provider && provider.foodItems){
       userSearchAndPlaceId= getSearchAddressAndPlaceId(provider);
       provider.foodItems.forEach(function(foodItem){
         let availability= foodItem.availability;
         let foodItemAvailable = false;
-        for(let i=0; i < availability.length ; i++){
-          if(moment(availability[i]).isAfter(moment(), 'day') || moment(availability[i]).isSame(moment(), 'day')){
-            foodItemAvailable=true;
-            break;
-          }else foodItemAvailable=false;
-        }
-        (foodItemAvailable)?currentItems.push(foodItem): pastItems.push(foodItem);
+        if(foodItem.avalilabilityType != 'onOrder'){
+          for(let i=0; i < availability.length ; i++){
+            if(moment(availability[i]).isAfter(moment(), 'day') || moment(availability[i]).isSame(moment(), 'day')){
+              foodItemAvailable=true;
+              break;
+            }else foodItemAvailable=false;
+          }
+          (foodItemAvailable)?currentItems.push(foodItem): pastItems.push(foodItem);
+        } else onOrderItems.push(foodItem);
       })
     }
     return (provider && !isEmptyObj(provider) && provider.userType && user && user.name || (provider && !isEmptyObj(provider) && !this.props.globalState.core.get('userLoggedIn')))?
@@ -136,7 +140,12 @@ const ProviderProfile = React.createClass({
                 </div>
                 <div className="provider-details">
                   <CommunicationLocationOn/>
-                  <span className="provider-detail">{provider.loc.searchText}</span>
+                  <span className="provider-detail">
+                    <Truncate lines={1}>
+                      {provider.loc.searchText}
+                    </Truncate>
+                    
+                  </span>
                 </div>
                 <div>
                  <CommunicationEmail/>
@@ -199,6 +208,31 @@ const ProviderProfile = React.createClass({
                                 providerProfile = {this.props.providerProfile}
                                 foodItem={foodItem}
                                 mode = {this.props.mode}
+                                foodIdSelected={this.props.foodIdSelected}
+                              />
+                    })
+                  }
+                  {
+                    (onOrderItems && onOrderItems.length>0)?
+                      <h1 className="content-subhead">On Order Items</h1>
+                      :
+                      undefined
+                  }
+                  { 
+                    onOrderItems.map((foodItem)=>{
+                      return <FoodItemInProviderProfile
+                                provider={provider}
+                                key={foodItem._id}
+                                userViewingOwnProfile={userViewingOwnProfile}
+                                refreshPage= {this.refreshPage}
+                                checkOutItem = {self.checkOutItem}
+                                writeReviewModal = {self.writeReviewModal}
+                                postSecuredData = {this.props.postSecuredData}
+                                openModal = {this.props.openModal}
+                                providerProfile = {this.props.providerProfile}
+                                foodItem={foodItem}
+                                mode = {this.props.mode}
+                                onOrder={true}
                                 foodIdSelected={this.props.foodIdSelected}
                               />
                     })

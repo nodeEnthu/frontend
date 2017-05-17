@@ -10,7 +10,7 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import {timeOfDay,resolvePickUpTime} from 'components/FoodItemEntryForm/constants';
 import Truncate from 'react-truncate';
-
+import {PLACE_ORDER_BY} from 'routes/Search/constants/searchFilters'
 const FoodItemInProviderProfile = React.createClass({
   contextTypes: {
         router: React.PropTypes.object.isRequired
@@ -31,7 +31,7 @@ const FoodItemInProviderProfile = React.createClass({
     })
   },
   render(){
-    let {foodItem,mode,provider}= this.props;
+    let {foodItem,mode,provider,onOrder}= this.props;
     let self = this;
     const {deleteItemModalOpen} = this.props.providerProfile.toJS() || false;
     const availabilityLength = foodItem.availability.length;
@@ -85,16 +85,39 @@ const FoodItemInProviderProfile = React.createClass({
                 <table className="pure-table remove-border">
                   <tbody>
                       <tr>
+                        {
+                          (onOrder)?
+                          <td>Place Order</td>
+                          :
                           <td>Availability</td>
-                          <td className="add-padding-left">{foodItem.availability.map(function(date,index){
-                            if(availabilityLength != (index+1)){
-                              return moment(date).format("MMM, D")+' | ';
-                            }else return moment(date).format("MMM, D");
-                            
-                          })}</td>
+                        }
+                        {
+                          (onOrder)?
+                          <td className="add-padding-left">
+                          { 
+                            PLACE_ORDER_BY.map(function(orderDate){
+                              if(orderDate.value === foodItem.placeOrderBy){
+                                return orderDate.label;
+                              }
+                            })
+                          }
+                          </td>
+                          :
+                          <td className="add-padding-left">
+                          {
+                            foodItem.availability.map(function(date,index){
+                              if(availabilityLength != (index+1)){
+                                return moment(date).format("MMM, D")+' | ';
+                              }else return moment(date).format("MMM, D");
+                              
+                            })
+                          }
+                          </td>
+                        }
+                          
                       </tr>
                       <tr>
-                          <td>Pick-up time</td>
+                          <td>Pickup/delivery time</td>
                           <td className="add-padding-left">{resolvePickUpTime(foodItem.pickUpStartTime)} - {resolvePickUpTime(foodItem.pickUpEndTime)}</td>
                       </tr>
                   </tbody>
