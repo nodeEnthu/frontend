@@ -15,6 +15,19 @@ export default (initialState = {}, cb) => {
     // ======================================================
     const middleware = [thunk]
 
+<<<<<<< HEAD
+  // ======================================================
+  // Store Enhancers
+  // ======================================================
+  const enhancers = []
+
+  let composeEnhancers = compose
+
+  if (__DEV__) {
+    const composeWithDevToolsExtension = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    if (typeof composeWithDevToolsExtension === 'function') {
+      composeEnhancers = composeWithDevToolsExtension
+=======
     // ======================================================
     // Store Enhancers
     // ======================================================
@@ -24,8 +37,20 @@ export default (initialState = {}, cb) => {
         if (typeof devToolsExtension === 'function') {
             enhancers.push(devToolsExtension())
         }
+>>>>>>> with-react-toolbox
     }
 
+<<<<<<< HEAD
+  // ======================================================
+  // Store Instantiation and HMR Setup
+  // ======================================================
+  const store = createStore(
+    makeRootReducer(),
+    initialState,
+    composeEnhancers(
+      applyMiddleware(...middleware),
+      ...enhancers
+=======
     // ======================================================
     // Store Instantiation and HMR Setup
     // ======================================================
@@ -36,6 +61,7 @@ export default (initialState = {}, cb) => {
             applyMiddleware(...middleware),
             ...enhancers
         )
+>>>>>>> with-react-toolbox
     )
     store.asyncReducers = {};
 
