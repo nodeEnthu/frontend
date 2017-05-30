@@ -4,9 +4,10 @@ import './search.scss'
 import IconButton from 'material-ui/IconButton';
 import NavigationArrowForward from 'material-ui/svg-icons/navigation/arrow-forward';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import createReactClass from 'create-react-class';
 
 const Decorators = [{
-		  component: React.createClass({
+		  component: createReactClass({
 		    render() {
 				return (<div className="arrow-decorator">
 							<IconButton
@@ -25,7 +26,7 @@ const Decorators = [{
 		    left: 'auto'
 		  }
 		},{
-		  component: React.createClass({
+		  component: createReactClass({
 		    render() {
 		    	return (<div className="arrow-decorator">
 			    			<IconButton

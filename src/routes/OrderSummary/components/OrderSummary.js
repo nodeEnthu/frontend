@@ -4,6 +4,9 @@ import {postCall} from 'utils/httpUtils/apiCallWrapper';
 import CheckMark from 'components/CheckMark'
 import {Tabs, Tab} from 'material-ui/Tabs';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
+
 import {
   Step,
   Stepper,
@@ -20,7 +23,7 @@ const styles = {
   },
 };
 
-const OrderAction = React.createClass({
+const OrderAction = createReactClass({
   getInitialState() {
     return{
       value: 'a',
@@ -256,9 +259,9 @@ const OrderAction = React.createClass({
 })
 
 OrderAction.propTypes = {
-  globalState:React.PropTypes.object.isRequired,
-  ordersAsCustomer:React.PropTypes.object.isRequired,
-  ordersAsProvider:React.PropTypes.object.isRequired,
-  fetchSecuredData:React.PropTypes.func.isRequired
+  globalState:PropTypes.object.isRequired,
+  ordersAsCustomer:PropTypes.object.isRequired,
+  ordersAsProvider:PropTypes.object.isRequired,
+  fetchSecuredData:PropTypes.func.isRequired
 }
 export default OrderAction;

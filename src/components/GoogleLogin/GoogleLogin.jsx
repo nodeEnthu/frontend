@@ -1,5 +1,6 @@
-import React, { PropTypes, Component } from 'react';
+import React, {Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
+import PropTypes from 'prop-types';
 
 class GoogleLogin extends Component {
   static propTypes = {
@@ -12,7 +13,7 @@ class GoogleLogin extends Component {
     redirectUri: PropTypes.string,
     cookiePolicy: PropTypes.string,
     loginHint: PropTypes.string,
-    children: React.PropTypes.node,
+    children: PropTypes.node,
   };
 
   static defaultProps = {

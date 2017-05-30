@@ -2,7 +2,8 @@ import React from 'react'
 import './CoreLayout.scss'
 import '../../styles/core.scss'
 import Header from '../../components/Header/index'
- 
+import PropTypes from 'prop-types';
+
 export const CoreLayout = ({ children }) => (
   <div className='container'>
   	<Header/>
@@ -26,7 +27,7 @@ export const CoreLayout = ({ children }) => (
 )
 
 CoreLayout.propTypes = {
-  children: React.PropTypes.element.isRequired
+  children: PropTypes.element.isRequired
 }
 
 export default CoreLayout

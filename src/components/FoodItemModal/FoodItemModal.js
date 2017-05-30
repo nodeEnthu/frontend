@@ -3,11 +3,13 @@ import './foodItemModal.scss'
 import Dialog from 'material-ui/Dialog';
 import classNames from 'classnames';
 import FoodItem from 'components/FoodItem'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
-const FoodItemModal = React.createClass({
+const FoodItemModal = createReactClass({
   
  contextTypes: {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
   },
   closeModal(){
     this.props.openModal({storeKey:'foodItemModalOpen', openModal:false});

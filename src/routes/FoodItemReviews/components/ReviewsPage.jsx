@@ -1,7 +1,9 @@
 import React from 'react';
 import StarRatingComponent from 'react-star-rating-component';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
-const ReviewsPage= React.createClass({
+const ReviewsPage= createReactClass({
 	componentDidMount() {
 		const foodItemId = this.props.params.id;
 		this.props.fetchData('/api/foodItem/'+this.props.params.id+'/reviews','getReviews','REVIEWS')
@@ -42,8 +44,8 @@ const ReviewsPage= React.createClass({
 })
 
 ReviewsPage.propTypes= {
-    fetchData:React.PropTypes.func.isRequired,
-    reviews:React.PropTypes.object.isRequired,
-    globalState:React.PropTypes.object.isRequired
+    fetchData:PropTypes.func.isRequired,
+    reviews:PropTypes.object.isRequired,
+    globalState:PropTypes.object.isRequired
 };
 export default ReviewsPage;

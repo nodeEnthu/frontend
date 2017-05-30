@@ -4,8 +4,10 @@ import './orderSubmitModal.scss'
 import Dialog from 'material-ui/Dialog';
 import classNames from 'classnames';
 import RaisedButton from 'material-ui/RaisedButton';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
-const OrderSubmitModal = React.createClass({
+const OrderSubmitModal = createReactClass({
   checkOutOrderDetails:{},
   getInitialState() {
       return {
@@ -14,7 +16,7 @@ const OrderSubmitModal = React.createClass({
       };
   },
  contextTypes: {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
   },
   closeModal(){
     this.props.openModal({storeKey:'orderSubmitModalOpen', openModal:false});

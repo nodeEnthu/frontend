@@ -1,7 +1,9 @@
 import React from 'react';
 import './checkMark.scss';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
-const CheckMark = React.createClass({
+const CheckMark = createReactClass({
   render(){
     return(
       <div style={this.props.style}>
@@ -21,8 +23,8 @@ const CheckMark = React.createClass({
 })
 
 CheckMark.propTypes = {
-  content: React.PropTypes.string,
-  style:React.PropTypes.object
+  content: PropTypes.string,
+  style:PropTypes.object
 }
 
 export default CheckMark;

@@ -6,6 +6,8 @@ import shortid from 'shortid';
 import {initialImageUrl} from 'utils/constants';
 import 'blueimp-canvas-to-blob/js/canvas-to-blob';
 import EXIF from 'exif-js';
+import PropTypes from 'prop-types';
+
 const styles = {
   button: {
     margin: 12,
@@ -130,8 +132,8 @@ class ImageUploader extends React.Component {
   }
 }
 
-React.propTypes={
-  onImageChange: React.PropTypes.func.isRequired,
+ImageUploader.PropTypes={
+  onImageChange: PropTypes.func.isRequired,
 }
 
 export default ImageUploader;

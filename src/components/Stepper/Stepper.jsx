@@ -1,7 +1,9 @@
 import React from 'react';
 import './stepper.scss';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
-const Stepper = React.createClass({
+const Stepper = createReactClass({
   getInitialState() {
     return {
       steps:this.props.steps,
@@ -45,10 +47,10 @@ const Stepper = React.createClass({
 })
 
 Stepper.propTypes = {
-  steps:React.PropTypes.array.isRequired,
-  activeStep: React.PropTypes.number.isRequired,
-  style:React.PropTypes.object,
-  className:React.PropTypes.string
+  steps:PropTypes.array.isRequired,
+  activeStep: PropTypes.number.isRequired,
+  style:PropTypes.object,
+  className:PropTypes.string
 }
 
 export default Stepper;

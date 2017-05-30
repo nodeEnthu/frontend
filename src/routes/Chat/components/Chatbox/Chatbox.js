@@ -1,8 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Chat from 'components/Chat';
 import { connect } from 'react-redux';
 import io from 'socket.io-client';
 import * as actions from '../../modules/chat';
+import PropTypes from 'prop-types';
+
 const socket = io('', { path: '/api/chat' });
 const initialChannel = 'Lobby'; // NOTE: I hard coded this value for my example.  Change this as you see fit
 
@@ -18,7 +20,7 @@ export default class ChatContainer extends Component {
 
 ChatContainer.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  chat: React.PropTypes.object.isRequired
+  chat: PropTypes.object.isRequired
 }
 
 

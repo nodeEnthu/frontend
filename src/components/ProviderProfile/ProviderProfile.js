@@ -22,8 +22,10 @@ import FlatButton from 'material-ui/FlatButton';
 import FoodItemModal from 'components/FoodItemModal';
 import {isEmptyObj} from 'utils/formUtils/formValidation';
 import Truncate from 'react-truncate';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
-const ProviderProfile = React.createClass({
+const ProviderProfile = createReactClass({
   getInitialState() {
       return {
           counter:0,
@@ -31,7 +33,7 @@ const ProviderProfile = React.createClass({
       };
   },
   contextTypes: {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
   },
   componentWillMount() {
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
@@ -306,23 +308,23 @@ const ProviderProfile = React.createClass({
 export default ProviderProfile
 
 ProviderProfile.propTypes = {
-  providerProfile:React.PropTypes.object,
-  providerFoodItemCheckout:React.PropTypes.func,
-  fetchMayBeSecuredData:React.PropTypes.func,
-  updateCheckedOutItem:React.PropTypes.func,
-  deleteCheckedOutItem:React.PropTypes.func,
-  removeAllCheckedOutItems:React.PropTypes.func,
-  globalState:React.PropTypes.object,
-  postSecuredData:React.PropTypes.func,
-  openLoginModal:React.PropTypes.func,
-  selectItemForReview:React.PropTypes.func,
-  selectStarRating:React.PropTypes.func,
-  submitTypedReview:React.PropTypes.func,
-  reviewError:React.PropTypes.func,
-  actionName:React.PropTypes.string,
-  mode:React.PropTypes.string,
-  flushOutStaleReviewData:React.PropTypes.func,
-  flushProviderData:React.PropTypes.func,
-  updateUser:React.PropTypes.func,
-  foodIdSelected:React.PropTypes.func
+  providerProfile:PropTypes.object,
+  providerFoodItemCheckout:PropTypes.func,
+  fetchMayBeSecuredData:PropTypes.func,
+  updateCheckedOutItem:PropTypes.func,
+  deleteCheckedOutItem:PropTypes.func,
+  removeAllCheckedOutItems:PropTypes.func,
+  globalState:PropTypes.object,
+  postSecuredData:PropTypes.func,
+  openLoginModal:PropTypes.func,
+  selectItemForReview:PropTypes.func,
+  selectStarRating:PropTypes.func,
+  submitTypedReview:PropTypes.func,
+  reviewError:PropTypes.func,
+  actionName:PropTypes.string,
+  mode:PropTypes.string,
+  flushOutStaleReviewData:PropTypes.func,
+  flushProviderData:PropTypes.func,
+  updateUser:PropTypes.func,
+  foodIdSelected:PropTypes.func
 }

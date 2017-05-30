@@ -6,8 +6,10 @@ import StarRatingComponent from 'react-star-rating-component';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import { DIET_TYPES} from 'routes/Search/constants/searchFilters';
 import moment from 'moment';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
-const FoodItem = React.createClass({
+const FoodItem = createReactClass({
   getInitialState() {
     return{
       foodItem:undefined,
@@ -155,7 +157,7 @@ const FoodItem = React.createClass({
 })
 
 FoodItem.propTypes = {
-  foodItemId:React.PropTypes.string
+  foodItemId:PropTypes.string
 }
 
 export default FoodItem;

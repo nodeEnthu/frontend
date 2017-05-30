@@ -10,10 +10,13 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import {timeOfDay,resolvePickUpTime} from 'components/FoodItemEntryForm/constants';
 import Truncate from 'react-truncate';
-import {PLACE_ORDER_BY} from 'routes/Search/constants/searchFilters'
-const FoodItemInProviderProfile = React.createClass({
+import {PLACE_ORDER_BY} from 'routes/Search/constants/searchFilters';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
+
+const FoodItemInProviderProfile = createReactClass({
   contextTypes: {
-        router: React.PropTypes.object.isRequired
+        router: PropTypes.object.isRequired
   },
   openFoodItemModal(event,foodItem){
     let className= event.target.className;

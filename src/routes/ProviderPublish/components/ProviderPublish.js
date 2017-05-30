@@ -5,14 +5,17 @@ import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import Stepper from 'components/Stepper'
 import RaisedButton from 'material-ui/RaisedButton';
 import * as actions from 'layouts/CoreLayout/coreReducer';
-const Provider = React.createClass ({
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
+
+const Provider = createReactClass ({
   getInitialState() {
     return {
       showSpinner:false
     }
   },
   contextTypes: {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
   },
   publishProvider(){
     let self = this;
@@ -63,11 +66,11 @@ const Provider = React.createClass ({
 })
 
 Provider.propTypes= {
-    globalState:React.PropTypes.object,
-    fetchData:React.PropTypes.func,
-    fetchSecuredData:React.PropTypes.func,
-    providerPublish:React.PropTypes.object,
-    fetchMayBeSecuredData:React.PropTypes.func,
-    dispatch:React.PropTypes.func
+    globalState:PropTypes.object,
+    fetchData:PropTypes.func,
+    fetchSecuredData:PropTypes.func,
+    providerPublish:PropTypes.object,
+    fetchMayBeSecuredData:PropTypes.func,
+    dispatch:PropTypes.func
   };
 export default Provider;

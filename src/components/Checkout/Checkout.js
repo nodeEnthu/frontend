@@ -17,7 +17,8 @@ import {amber900} from 'material-ui/styles/colors';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import {DATES} from 'routes/Search/constants/searchFilters'
-const Checkout = React.createClass({
+import createReactClass from 'create-react-class'
+const Checkout = createReactClass({
   getInitialState() {
       return {
          submitOrderModalOPen:false,

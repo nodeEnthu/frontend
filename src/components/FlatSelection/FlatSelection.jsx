@@ -1,7 +1,9 @@
 import React from 'react';
 import './flatSelection.scss';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
-const FlatSelection = React.createClass({
+const FlatSelection = createReactClass({
   getInitialState() {
     return  {
       selections:this.props.selections,
@@ -59,8 +61,8 @@ const FlatSelection = React.createClass({
 })
 
 FlatSelection.propTypes = {
-  style:React.PropTypes.object,
-  selections:React.PropTypes.array
+  style:PropTypes.object,
+  selections:PropTypes.array
 }
 
 export default FlatSelection;

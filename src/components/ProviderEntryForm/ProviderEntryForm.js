@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import './providerentryform.scss';
 import { email, maxLength, required } from './../../utils/formUtils/formValidation';
 import Toggle from 'material-ui/Toggle';
@@ -13,9 +13,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Stepper from 'components/Stepper';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Snackbar from 'material-ui/Snackbar';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
 const maxCount = 100;
-const ProviderEntryForm = React.createClass({
+const ProviderEntryForm = createReactClass({
     getInitialState() {
       return{
         showSpinner:false      
@@ -37,7 +39,7 @@ const ProviderEntryForm = React.createClass({
         }
     },
     contextTypes: {
-        router: React.PropTypes.object.isRequired
+        router: PropTypes.object.isRequired
     },
     mapFieldsToValidationType : {
         title: {validationType: required,validationMessage:'title is required'},
@@ -370,13 +372,13 @@ const ProviderEntryForm = React.createClass({
     }
 });
 ProviderEntryForm.propTypes = {
-    addProviderInfo:React.PropTypes.func,
-    addProviderErrorMsg:React.PropTypes.func,
-    providerEntryForm: React.PropTypes.object,
-    params:React.PropTypes.object,
-    fetchSecuredData:React.PropTypes.func,
-    mode:React.PropTypes.string,
-    nextLabel:React.PropTypes.string,
-    linkToRedirectOnAllClear:React.PropTypes.string
+    addProviderInfo:PropTypes.func,
+    addProviderErrorMsg:PropTypes.func,
+    providerEntryForm: PropTypes.object,
+    params:PropTypes.object,
+    fetchSecuredData:PropTypes.func,
+    mode:PropTypes.string,
+    nextLabel:PropTypes.string,
+    linkToRedirectOnAllClear:PropTypes.string
 };
 export default ProviderEntryForm;

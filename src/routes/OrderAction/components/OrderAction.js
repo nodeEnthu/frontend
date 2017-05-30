@@ -4,8 +4,9 @@ import {getCall,postCall} from 'utils/httpUtils/apiCallWrapper';
 import CheckMark from 'components/CheckMark'
 import RaisedButton from 'material-ui/RaisedButton';
 import moment from 'moment';
+import createReactClass from 'create-react-class'
 
-const OrderAction = React.createClass({
+const OrderAction = createReactClass({
   getInitialState() {
     return{
       customerId:'',

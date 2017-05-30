@@ -21,8 +21,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import {amber900} from 'material-ui/styles/colors';
 import {PLACE_ORDER_BY} from 'routes/Search/constants/searchFilters'
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
-const Search = React.createClass({
+const Search = createReactClass({
     getInitialState() {
         return {
             queryBaseUrl: '/api/query/providers',
@@ -40,7 +42,7 @@ const Search = React.createClass({
         this.setState({showFilters:!this.state.showFilters})
     },
     contextTypes: {
-        router: React.PropTypes.object.isRequired
+        router: PropTypes.object.isRequired
     },
     filterCuisineOrDietType(val,dietOrCuisine) {
         this.props.setDirty(true);
@@ -488,16 +490,16 @@ const Search = React.createClass({
     }
 })
 Search.propTypes = {
-    globalState: React.PropTypes.object.isRequired,
-    flushOutStaleData: React.PropTypes.func.isRequired,
-    fetchMayBeSecuredData: React.PropTypes.func.isRequired,
-    selectCuisineOrDiet: React.PropTypes.func.isRequired,
-    selectAddtnlQuery: React.PropTypes.func.isRequired,
-    search: React.PropTypes.object.isRequired,
-    updateUser: React.PropTypes.func.isRequired,
-    setDirty:React.PropTypes.func.isRequired,
-    openModal:React.PropTypes.func.isRequired,
-    foodIdSelected:React.PropTypes.func.isRequired
+    globalState: PropTypes.object.isRequired,
+    flushOutStaleData: PropTypes.func.isRequired,
+    fetchMayBeSecuredData: PropTypes.func.isRequired,
+    selectCuisineOrDiet: PropTypes.func.isRequired,
+    selectAddtnlQuery: PropTypes.func.isRequired,
+    search: PropTypes.object.isRequired,
+    updateUser: PropTypes.func.isRequired,
+    setDirty:PropTypes.func.isRequired,
+    openModal:PropTypes.func.isRequired,
+    foodIdSelected:PropTypes.func.isRequired
 };
 
 export default Search;

@@ -3,8 +3,10 @@ import './providerFoodEntry.scss'
 import FoodItemEntryForm from 'components/FoodItemEntryForm/FoodItemEntryForm'
 import * as actions from 'layouts/CoreLayout/coreReducer';
 import Stepper from 'components/Stepper'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
-const ProviderFoodEntry = React.createClass ({
+const ProviderFoodEntry = createReactClass ({
   
  
   render() { 
@@ -36,11 +38,11 @@ const ProviderFoodEntry = React.createClass ({
 })
 
 ProviderFoodEntry.propTypes= {
-    globalState:React.PropTypes.object,
-    foodItemEntryForm: React.PropTypes.object,
-    addFoodItemInfo:React.PropTypes.func,
-    removeFoodItemInfo:React.PropTypes.func,
-    fetchData:React.PropTypes.func,
-    dispatch: React.PropTypes.func
+    globalState:PropTypes.object,
+    foodItemEntryForm: PropTypes.object,
+    addFoodItemInfo:PropTypes.func,
+    removeFoodItemInfo:PropTypes.func,
+    fetchData:PropTypes.func,
+    dispatch: PropTypes.func
   };
 export default ProviderFoodEntry;

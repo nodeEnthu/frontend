@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import './fooditementryform.scss';
 import { email, maxLength, required, regexTime, regexDate, requiredArray } from 'utils/formUtils/formValidation';
 import FlatButton from 'material-ui/FlatButton';
@@ -18,17 +18,19 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import Snackbar from 'material-ui/Snackbar';
 import scrollToElement from 'scroll-to-element';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
 const maxCount = 100;
 
-const FoodItemEntryForm= React.createClass({
+const FoodItemEntryForm= createReactClass({
     getInitialState() {
         return{
             showSpinner:false        
         }
     },
     contextTypes: {
-        router: React.PropTypes.object.isRequired
+        router: PropTypes.object.isRequired
     },
     componentDidMount() {
         this.props.removeFoodItemInfo();
@@ -453,13 +455,13 @@ const FoodItemEntryForm= React.createClass({
     }
 })
 FoodItemEntryForm.propTypes = {
-    globalState:React.PropTypes.object,
-    foodItemEntryForm : React.PropTypes.object.isRequired,
-    addFoodItemInfo : React.PropTypes.func.isRequired, 
-    fetchData : React.PropTypes.func.isRequired,
-    removeFoodItemInfo: React.PropTypes.func.isRequired,
-    params:React.PropTypes.object,
-    dispatch:React.PropTypes.func,
-    mode:React.PropTypes.string
+    globalState:PropTypes.object,
+    foodItemEntryForm : PropTypes.object.isRequired,
+    addFoodItemInfo : PropTypes.func.isRequired, 
+    fetchData : PropTypes.func.isRequired,
+    removeFoodItemInfo: PropTypes.func.isRequired,
+    params:PropTypes.object,
+    dispatch:PropTypes.func,
+    mode:PropTypes.string
 };
 export default FoodItemEntryForm;

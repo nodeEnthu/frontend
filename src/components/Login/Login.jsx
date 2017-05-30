@@ -8,12 +8,14 @@ import GoogleLogin from 'components/GoogleLogin';
 import * as actions from '../../layouts/CoreLayout/coreReducer';
 import {getCall,postCall,securedGetCall} from 'utils/httpUtils/apiCallWrapper';
 import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
 const customStyles = {
 
 };
 
-var Login = React.createClass({
+var Login = createReactClass({
     openModal() {
         const { dispatch } = this.props;
         dispatch(actions.openLoginModal());
@@ -25,7 +27,7 @@ var Login = React.createClass({
     componentDidMount() {
     },
     contextTypes: {
-      router: React.PropTypes.object.isRequired
+      router: PropTypes.object.isRequired
     },
     successfullLogin(response) {
       let self = this;

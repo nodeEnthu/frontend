@@ -1,7 +1,9 @@
 import React from 'react';
 import ProviderProfile from 'components/ProviderProfile'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
-const ProviderProfilePage = React.createClass({
+const ProviderProfilePage = createReactClass({
 	getInitialState() {
 	    return {
 	          
@@ -18,14 +20,14 @@ const ProviderProfilePage = React.createClass({
     }
 });
 ProviderProfile.propTypes = {
-  fetchMayBeSecuredData:React.PropTypes.func,
-  providerProfile:React.PropTypes.object,
-  updateCheckedOutItem:React.PropTypes.func,
-  deleteCheckedOutItem:React.PropTypes.func,
-  globalState:React.PropTypes.object,
-  postSecuredData:React.PropTypes.func,
-  openLoginModal:React.PropTypes.func,
-  openModal:React.PropTypes.func,
-  flushOutStaleReviewData:React.PropTypes.func
+  fetchMayBeSecuredData:PropTypes.func,
+  providerProfile:PropTypes.object,
+  updateCheckedOutItem:PropTypes.func,
+  deleteCheckedOutItem:PropTypes.func,
+  globalState:PropTypes.object,
+  postSecuredData:PropTypes.func,
+  openLoginModal:PropTypes.func,
+  openModal:PropTypes.func,
+  flushOutStaleReviewData:PropTypes.func
 }
 export default ProviderProfilePage;

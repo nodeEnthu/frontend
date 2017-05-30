@@ -9,7 +9,10 @@ import CommunicationLocationOn from 'material-ui/svg-icons/communication/locatio
 import './HomeView.scss'
 import { getCall,securedGetCall } from 'utils/httpUtils/apiCallWrapper';
 import Stepper from 'components/Stepper';
-const HomeView = React.createClass({
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
+
+const HomeView = createReactClass({
     getInitialState() {
         return {
             fetchingAddresses: false,
@@ -19,7 +22,7 @@ const HomeView = React.createClass({
         };
     },
     contextTypes: {
-        router: React.PropTypes.object.isRequired
+        router: PropTypes.object.isRequired
     },
     componentDidMount() {
 
@@ -219,10 +222,10 @@ const HomeView = React.createClass({
 })
 
 HomeView.propTypes = {
-    globalState: React.PropTypes.object.isRequired,
-    updateUser: React.PropTypes.func.isRequired,
-    openLoginModal:React.PropTypes.func.isRequired,
-    postLoginUrlRedirect:React.PropTypes.func.isRequired
+    globalState: PropTypes.object.isRequired,
+    updateUser: PropTypes.func.isRequired,
+    openLoginModal:PropTypes.func.isRequired,
+    postLoginUrlRedirect:PropTypes.func.isRequired
 }
 
 

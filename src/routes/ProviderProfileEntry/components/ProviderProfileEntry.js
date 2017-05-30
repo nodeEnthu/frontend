@@ -2,8 +2,11 @@ import React from 'react'
 import './providerProfileEntry.scss'
 import ProviderEntryForm from 'components/ProviderEntryForm/ProviderEntryForm'
 import * as actions from 'layouts/CoreLayout/coreReducer';
-import Stepper from 'components/Stepper'
-const ProviderProfileEntry = React.createClass ({
+import Stepper from 'components/Stepper';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
+
+const ProviderProfileEntry = createReactClass ({
   componentDidMount() {
     
   },
@@ -40,11 +43,11 @@ const ProviderProfileEntry = React.createClass ({
 })
 
 ProviderProfileEntry.propTypes= {
-    globalState:React.PropTypes.object,
-    providerEntryForm: React.PropTypes.object,
-    addProviderInfo:React.PropTypes.func,
-    addProviderErrorMsg:React.PropTypes.func,
-    dispatch: React.PropTypes.func,
-    fetchSecuredData:React.PropTypes.func.isRequired
+    globalState:PropTypes.object,
+    providerEntryForm: PropTypes.object,
+    addProviderInfo:PropTypes.func,
+    addProviderErrorMsg:PropTypes.func,
+    dispatch: PropTypes.func,
+    fetchSecuredData:PropTypes.func.isRequired
   };
 export default ProviderProfileEntry;

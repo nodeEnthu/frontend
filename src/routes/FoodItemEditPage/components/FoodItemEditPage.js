@@ -2,8 +2,10 @@ import React from 'react'
 import './foodItemEditPage.scss'
 import RaisedButton from 'material-ui/RaisedButton'
 import FoodEntryForm from 'components/FoodItemEntryForm/FoodItemEntryForm';
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
-const FoodItemEditPage = React.createClass({
+const FoodItemEditPage = createReactClass({
     render() {
         return ( <FoodEntryForm foodItemEntryForm = { this.props.foodItemEntryForm }
             globalState = { this.props.globalState }
@@ -19,11 +21,11 @@ const FoodItemEditPage = React.createClass({
     }
 })
 FoodItemEditPage.propTypes = {
-    globalState: React.PropTypes.object.isRequired,
-    dispatch: React.PropTypes.func.isRequired,
-    foodItemEntryForm: React.PropTypes.object.isRequired,
-    fetchData: React.PropTypes.func.isRequired,
-    addFoodItemInfo: React.PropTypes.func.isRequired,
-    removeFoodItemInfo: React.PropTypes.func.isRequired
+    globalState: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    foodItemEntryForm: PropTypes.object.isRequired,
+    fetchData: PropTypes.func.isRequired,
+    addFoodItemInfo: PropTypes.func.isRequired,
+    removeFoodItemInfo: PropTypes.func.isRequired
 }
 export default FoodItemEditPage;

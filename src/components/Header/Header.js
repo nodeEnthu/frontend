@@ -12,9 +12,10 @@ import ActionSearch from 'material-ui/svg-icons/action/search'
 import ActionChromeReaderMode from 'material-ui/svg-icons/action/chrome-reader-mode'
 import ActionHome from 'material-ui/svg-icons/action/home'
 import ActionPermIdentity from 'material-ui/svg-icons/action/perm-identity'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types';
 
-
-const Header =React.createClass ({
+const Header =createReactClass ({
     getInitialState() {
       return {leftNavOpen:false}
     },
@@ -27,7 +28,7 @@ const Header =React.createClass ({
       location.reload();
     },
     contextTypes: {
-      router: React.PropTypes.object.isRequired
+      router: PropTypes.object.isRequired
     },
     checkLoginAndredirect(){
       const {user} = this.props.globalState.core.toJS();

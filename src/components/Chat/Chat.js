@@ -4,6 +4,8 @@ import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import * as actions from '../../routes/Chat/modules/chat'
 import moment from 'moment'
 import fetch from 'isomorphic-fetch'
+import PropTypes from 'prop-types';
+
 export class Chat extends React.Component{
   constructor(props){
     super(props);
@@ -236,8 +238,8 @@ export class Chat extends React.Component{
 }; 
 
 Chat.propTypes = {
-  chat: React.PropTypes.object.isRequired,
-  dispatch:React.PropTypes.func.isRequired,
-  socket:React.PropTypes.object.isRequired
+  chat: PropTypes.object.isRequired,
+  dispatch:PropTypes.func.isRequired,
+  socket:PropTypes.object.isRequired
 }
 export default Chat;

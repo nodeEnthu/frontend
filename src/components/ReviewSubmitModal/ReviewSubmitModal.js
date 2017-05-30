@@ -5,6 +5,7 @@ import Dialog from 'material-ui/Dialog';
 import classNames from 'classnames';
 import StarRatingComponent from 'react-star-rating-component';
 import FlatButton from 'material-ui/FlatButton';
+import createReactClass from 'create-react-class'
 
 const customStyles = {
     content: {
@@ -18,7 +19,7 @@ const customStyles = {
         transform: 'translate(-50%, -50%)'
     }
 };
-const ReviewSubmitModal = React.createClass({
+const ReviewSubmitModal = createReactClass({
   getInitialState() {
       return {
           reviewFoodItemModalOpen:false,
