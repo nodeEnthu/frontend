@@ -111,7 +111,7 @@ const HomeView = createReactClass({
                         <h1 className="promotion-heading">
                             Find the best professionals in your neighborhood
                         </h1>
-                        <div className="pure-g search-sec-wrapper">
+                        <div className="search-sec-wrapper">
                             <div className = "pure-u-1 pure-u-md-1-3 search-wrapper">
                                 <div className="splash move-right">
                                     <div className="category-wrapper">
@@ -158,7 +158,7 @@ const HomeView = createReactClass({
                         </div>
                     </div>
                 </div>
-                <div className="pure-g steps">
+                <div className="steps">
                     <div className="pure-u-1 steps-text">
                         3 easy steps to find the best professional
                     </div>
@@ -193,7 +193,7 @@ const HomeView = createReactClass({
                         </div>
                     </div>
                 </div>
-                <div className="pure-g list-business">
+                <div className="list-business">
                     <div className="pure-u-md-1-2 pure-u-1 cook-photo">
                          <img className="gallery-img portrait" src="shared/home/cookPhoto.jpg"/>
                     </div>

@@ -51,11 +51,6 @@ const FoodItem = createReactClass({
       (foodItem)?
         <div className="food-item">
             <div className="pure-u-1 item-wrapper">
-              <div className="pure-u-1 pure-u-md-1-4 is-center">
-                <div>
-                  <img className = "pure-img-responsive" src={foodItem.imgUrl}/>
-                </div>
-              </div>
               <div className="pure-u-1 pure-u-md-3-4 food-desc-wrapper">
                 <div className="food-name">{foodItem.name}</div>
                 <div className="star-rating">

@@ -161,7 +161,7 @@ const Search = createReactClass({
         addtnlQuery.date = addtnlQuery.date || DATES(7)[0].value ;
         return (
             <div className="search">
-                <div className="panel pure-g" id="showfilters">
+                <div className="panel" id="showfilters">
                     <div className="close-panel">
                         <a href="#">
                             <ContentClear/> 
@@ -249,7 +249,7 @@ const Search = createReactClass({
                     </div>
                     
                 </div>
-            	<div className="pure-g">
+            	<div >
             		<div className="pure-u-1 pure-u-md-2-5 display-table">
                         <div className="move-center">
                             <div className="center-inline-image">
@@ -333,7 +333,7 @@ const Search = createReactClass({
 				<Tabs style={{marginTop:"1em"}} inkBarStyle={{border:"2px solid "+ amber900}}>
                     <Tab buttonStyle={{backgroundColor:"white","color":amber900}}label="Available now" data-route="specificDates" onActive={this.handleActive} >
 				        <div className="providers-wrapper">
-        					<div className="pure-g">
+        					<div>
             					{(resolvedData)? 
 								resolvedData.map(function(foodItem,index){
 									return 	<div key={index} className="pure-u-1 pure-u-md-1-3 provider-profile-wrapper"
@@ -408,7 +408,7 @@ const Search = createReactClass({
                     </Tab>
                     <Tab  buttonStyle={{backgroundColor:"white","color":amber900}} label="On Order" data-route="onOrder" onActive={this.handleActive}>
                         <div className="providers-wrapper">
-                            <div className="pure-g">
+                            <div>
                                 {(resolvedData)? 
                                 resolvedData.map(function(foodItem,index){
                                     return  <div key={index} className="pure-u-1 pure-u-md-1-3 provider-profile-wrapper"
