@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_flows "http://ns.adobe.com/Flows/1.0/">
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+]>
+<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="24.01px" height="24.01px" viewBox="0 0 24.01 24.01" enable-background="new 0 0 24.01 24.01"
+	 xml:space="preserve">
+<g>
+	<path fill="#ED2224" stroke="#ED2224" stroke-width="0.5" stroke-miterlimit="10" d="M9.766,17.585
+		c-1.103-1.103-2.894-1.103-3.996,0c-1.102,1.102-1.102,2.894,0,3.995c1.104,1.102,2.895,1.102,3.996,0S10.867,18.687,9.766,17.585z
+		 M9.495,17.854c0.907,0.907,0.95,2.356,0.13,3.315l-3.444-3.444C7.14,16.903,8.588,16.946,9.495,17.854z M6.04,21.311
+		c-0.907-0.908-0.95-2.354-0.13-3.314l3.444,3.443C8.396,22.26,6.947,22.217,6.04,21.311z"/>
+	<g>
+		<path fill="#010101" d="M12.481,17.817c0,0-1.313,3.195,2.906,4.588C15.389,22.405,16.782,18.679,12.481,17.817z"/>
+		<path fill="#010101" d="M16.411,22.405c4.22-1.393,2.908-4.588,2.908-4.588C15.019,18.679,16.411,22.405,16.411,22.405z"/>
+		<path fill="#010101" d="M12.626,14.354c0,0-1.287,3.137,2.856,4.505C15.482,18.857,16.851,15.196,12.626,14.354z"/>
+		<path fill="#010101" d="M16.486,18.857c4.144-1.368,2.855-4.505,2.855-4.505C15.119,15.196,16.486,18.857,16.486,18.857z"/>
+		<path fill="#010101" d="M15.318,15.014c0,0,1.268-3.395-2.648-4.178C12.67,10.836,11.476,13.745,15.318,15.014z"/>
+		<path fill="#010101" d="M18.897,10.836c-3.916,0.783-2.648,4.178-2.648,4.178C20.092,13.745,18.897,10.836,18.897,10.836z"/>
+		<path fill="#010101" d="M15.909,7.326c0,0-2.606,1.76-0.111,4.945C15.798,12.271,18.735,10.147,15.909,7.326z"/>
+		<rect x="13.311" y="3.9" fill="#010101" width="0.728" height="5.815"/>
+		<rect x="17.783" y="3.9" fill="#010101" width="0.727" height="5.815"/>
+		<rect x="15.563" y="2.405" fill="#010101" width="0.727" height="4.069"/>
+	</g>
+</g>
+</svg>

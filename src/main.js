@@ -1,59 +1,81 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import createStore from './store/createStore'
-import './styles/main.scss'
+import AppContainer from './containers/AppContainer'
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import {amber900} from 'material-ui/styles/colors';
 
-// Store Initialization
-// ------------------------------------
-const store = createStore(window.__INITIAL_STATE__)
-
-// Render Setup
-// ------------------------------------
-const MOUNT_NODE = document.getElementById('root')
-
-let render = () => {
-  const App = require('./components/App').default
-  const routes = require('./routes/index').default(store)
-
-  ReactDOM.render(
-    <App store={store} routes={routes} />,
-    MOUNT_NODE
-  )
-}
-
-// Development Tools
-// ------------------------------------
-if (__DEV__) {
-  if (module.hot) {
-    const renderApp = render
-    const renderError = (error) => {
-      const RedBox = require('redbox-react').default
-
-      ReactDOM.render(<RedBox error={error} />, MOUNT_NODE)
-    }
-
-    render = () => {
-      try {
-        renderApp()
-      } catch (e) {
-        console.error(e)
-        renderError(e)
+// ========================================================
+// Store Instantiation
+// ========================================================
+const initialState = window.___INITIAL_STATE__;
+createStore(initialState,function(store){
+  // ========================================================
+  // Render Setup
+  // ========================================================
+  const MOUNT_NODE = document.getElementById('root')
+  injectTapEventPlugin();
+  let render = () => {
+    const routes = require('./routes/index').default(store)
+    const muiTheme = getMuiTheme({
+      palette: {
+        primary1Color: amber900,
       }
-    }
-
-    // Setup hot module replacement
-    module.hot.accept([
-      './components/App',
-      './routes/index',
-    ], () =>
-      setImmediate(() => {
-        ReactDOM.unmountComponentAtNode(MOUNT_NODE)
-        render()
-      })
-    )
+    });
+    ReactDOM.render(
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <AppContainer
+          store={store}
+          routes={routes}
+        />
+      </MuiThemeProvider>,MOUNT_NODE
+    );
   }
-}
 
-// Let's Go!
-// ------------------------------------
-if (!__TEST__) render()
+  // ========================================================
+  // Developer Tools Setup
+  // ========================================================
+  if (__DEV__) {
+    if (window.devToolsExtension) {
+      window.devToolsExtension.open()
+    }
+  }
+
+  // This code is excluded from production bundle
+  if (__DEV__) {
+    if (module.hot) {
+      // Development render functions
+      const renderApp = render
+      const renderError = (error) => {
+        const RedBox = require('redbox-react').default
+
+        ReactDOM.render(<RedBox error={error} />, MOUNT_NODE)
+      }
+
+      // Wrap render in try/catch
+      render = () => {
+        try {
+          renderApp()
+        } catch (error) {
+          renderError(error)
+        }
+      }
+
+      // Setup hot module replacement
+      module.hot.accept('./routes/index', () =>
+        setImmediate(() => {
+          ReactDOM.unmountComponentAtNode(MOUNT_NODE)
+          render()
+        })
+      )
+    }
+  }
+
+  // ========================================================
+  // Go!
+  // ========================================================
+  render()
+})
+

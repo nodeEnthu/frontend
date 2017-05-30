@@ -1,6 +1,9 @@
-import HomeView from './components/HomeView'
+import React from 'react'
+import HomeContainer from './containers/HomeContainer'
 
 // Sync route definition
 export default {
-  component : HomeView
+  component: HomeContainer
 }
+
+

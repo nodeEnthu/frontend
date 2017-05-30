@@ -1,0 +1,38 @@
+.provider-entry-form {
+    .retain-letter-spacing {
+        letter-spacing: normal;
+    }
+    .react-autosuggest__input {
+        width: 100%;
+    }
+    .text-align-left {
+        text-align: left;
+    }
+    .display-inline {
+        display: inline-block;
+    }
+    .pull-left {
+        float: left;
+        text-align: left;
+    }
+    .react-autosuggest__container {
+        width: 100%;
+        z-index:9;
+    }
+    .remove-margin-bottom {
+        margin-bottom: 0px;
+    }
+    .pure-override-letter-spacing {
+        letter-spacing: normal;
+    }
+    .error-message {
+        color: red;
+    }
+    .address-justification {
+        display: inline;
+        font-size: 12px;
+        font-style: italic;
+        text-decoration: underline;
+        margin-left: 12px;
+    }
+}

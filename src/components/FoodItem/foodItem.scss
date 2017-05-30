@@ -1,0 +1,67 @@
+.food-item {
+    color: black;
+    .is-center {
+        text-align: center;
+        vertical-align: middle;
+    }
+    /* LAYOUT CSS */
+    .pure-img-responsive {
+        max-width: 100%;
+        height: auto;
+    }
+    .food-desc-wrapper {
+        padding: 1em;
+    }
+    .food-name {
+        font-size: 130%;
+        margin-bottom: 0.5em;
+    }
+    .star-rating {
+        display: inline-block;
+    }
+    .provider-star-rating {
+        display: inline-block;
+    }
+    .num-of-reviews {
+        display: inline-block;
+        vertical-align: super;
+        margin-left: 3px;
+        font-size: 10px;
+    }
+    .pure-table td {
+        padding: 0.25em 0;
+    }
+    td.reduce-padding {
+        padding: 0px;
+    }
+    table.remove-border,
+    table.remove-border td {
+        border: none;
+        padding-left: 0px;
+        .add-padding-left {
+            padding-left: 0.5em;
+        }
+    }
+    td.add-padding-left {
+        padding-left: 0.5em;
+    }
+    .food-price {
+        font-size: 120%;
+        font-weight: 600;
+        margin-top: 1em;
+    }
+    .tab-section-wrapper {
+        margin-top: 0.75em;
+    }
+}
+
+@media (max-width: 48em) {
+    .food-item {
+        .food-desc-wrapper {
+            padding: 0.5em;
+        }
+        .food-price {
+            margin-top: 0.5em;
+        }
+    }
+}

@@ -1,0 +1,195 @@
+.search {
+    padding: 0.5em 0.25em;
+    .show-hide-filter .inline-radio {
+        border: 1px solid #FF6F00;
+    }
+    .display-table {
+        height: 2.5em;
+        display: table;
+        text-align: center;
+    }
+    .center-inline-image {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+    }
+    .move-center {
+        position: relative;
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .select-date {
+        position: relative;
+        bottom: 15px;
+    }
+    .adjust-delivery {
+        margin: 0 2.5em;
+    }
+    .react-autosuggest__container {
+        width: 90%;
+    }
+    .react-autosuggest__input {
+        width: inherit;
+        border: 1px solid #efefef;
+        height: 1.75em;
+    }
+    .pure-form input[type] {
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+    .Select-input input {
+        border: none;
+        box-shadow: none;
+    }
+    .show-hide-filter {
+        text-align: right;
+        a {
+            padding: 0.25em 0.75em;
+            color: #FF6F00;
+            border: 1px solid #FF6F00;
+            border-radius: 3px;
+        }
+        .inline-radio label {
+            background: white;
+            color: #FF6F00;
+            border: 0.5px solid #FF6F00;
+        }
+    }
+    .inline-radio input {
+        height: 1.5em;
+    }
+    .cuisine-carousel-wrapper {
+        width: 50%;
+        margin: auto;
+        .inline {
+            border: none;
+        }
+        .inline-radio {
+            border: none;
+        }
+        .inline-radio input {
+            width: 100%;
+            height: 80px;
+            opacity: 0;
+        }
+        .inline-radio label {
+            background: none;
+        }
+        .inline-radio input:checked + label {
+            background: #FF6F00;
+            font-weight: 500;
+            color: white;
+            opacity: 0.7;
+        }
+    }
+    .arrow-decorator {
+        border-radius: 50%;
+        background-color: lightgrey;
+    }
+    .arrow-decorator:hover {
+        background-color: #FF6F00;
+    }
+    .diet-filter-wrapper {
+        margin: 0 auto;
+        padding: 1em 1.5em;
+        .inline-radio {
+            opacity: 0.7;
+        }
+        .inline-radio input {
+            height: 45px;
+        }
+    }
+    .providers-wrapper {
+        margin-top: 1em;
+    }
+    .provider-profile-wrapper {
+        background: #fff;
+        border-radius: 2px;
+        display: inline-block;
+        padding: 5px;
+        position: relative;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.24);
+        transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+        cursor: pointer;
+    }
+    .provider-profile-wrapper:hover {
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    }
+    .provider-img-section {
+        min-width: 120px;
+        min-height: 120px;
+        display: inline-block;
+        background-image: linear-gradient(to top, rgba(22, 22, 22, 0.1) 0%, rgba(22, 22, 22, 0) 50%);
+    }
+    .img-avatar {
+        margin: 0 auto;
+        min-height: 230px;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
+    .provider-info-section {
+        padding: 1em;
+        display: inline-block;
+        vertical-align: top;
+        font-size: 14px;
+    }
+    .provider-star-rating {
+        display: inline-block;
+    }
+    .filter-top-margin {
+        padding-top: 1em;
+    }
+    .num-of-reviews {
+        display: inline-block;
+        vertical-align: super;
+        margin-left: 3px;
+        font-size: 10px;
+    }
+    .miles-away {
+        display: inline-block;
+        font-size: 12px;
+        vertical-align: super;
+        margin-left: 5px;
+    }
+    .load-more-center {
+        text-align: center;
+    }
+    .foodItem-name {
+        display: inline-block;
+        font-weight: 600;
+        margin-bottom: 0.5em;
+    }
+    .star-rating {
+        display: inline-block;
+        float: right;
+    }
+    .food-desc {
+        margin-bottom: 0.5em;
+    }
+    .food-price {
+         display: inline-block;
+        font-weight: 600;
+    }
+    .add {
+        float: right;
+    }
+    .close-panel{
+        padding:1em 0 0 1em;
+    }
+}
+
+@media (max-width: 48em) {
+    .search {
+        .cuisine-carousel-wrapper {
+            width:70%;
+        }
+        .panel {
+            height: auto;
+            width: 95%;
+        }
+        .panel:target {
+            margin: 0 2.5%;
+        }
+    }
+}

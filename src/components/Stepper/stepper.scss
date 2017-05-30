@@ -1,0 +1,72 @@
+.stepper {
+    text-align: center;
+    margin: 1em auto;
+    .fa {
+        display: block;
+    }
+    .step {
+        float: left;
+        font-size: 15px;
+        margin: 0 12px;
+        position: relative;
+    }
+    .divider {
+        border-bottom: 1px solid #cfcfcf;
+        float: left;
+        height: 12px;
+        margin: 0 5px;
+        width: 45px;
+    }
+    .step-icon {
+        position: absolute;
+        background: #cfcfcf;
+        border-radius: 50%;
+        color: #ffffff;
+        float: left;
+        font-size: 13px;
+        height: 24px;
+        line-height: 24px;
+        text-align: center;
+        width: 24px;
+    }
+    .label {
+        color: #cfcfcf;
+        float: left;
+        margin-left: 30px;
+        line-height: 25px;
+    }
+    .active {
+        .step-icon {
+            background: #ef7521;
+        }
+        .label {
+            color: #5b5b5b;
+            font-weight: 400;
+        }
+    }
+    .complete {
+        .step-icon {
+            background-color: #ef7521;
+        }
+        .icon {
+            font-size: 30px;
+            position: relative;
+            top: -3px;
+        }
+        .label {
+            color: #5b5b5b;
+            font-weight: 400;
+        }
+    }
+}
+
+@media (max-width: 48em) {
+    .stepper {
+        .divider {
+            width: 8px;
+        }
+        .step {
+            margin: 0;
+        }
+    }
+}

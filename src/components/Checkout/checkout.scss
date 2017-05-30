@@ -1,0 +1,99 @@
+.checkout {
+   
+    .react-autosuggest__container {
+        width: 100%;
+    }
+    .react-autosuggest__input {
+        width: 75%;
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        border-radius: 0;
+    }
+    .checkout-section-wrapper {
+        margin-bottom: 0.5em;
+    }
+    .checkout-label {
+        font-size: 115%;
+        font-weight: 550;
+    }
+    textarea {
+        box-shadow: none;
+        border-radius: 0;
+        width: 100%;
+        height: 4em;
+    }
+    .grand-total {
+        float: right;
+        width: 30%;
+        line-height: 2em;
+        text-align: center;
+        background: #6f6868;
+        color: white;
+        border-radius: 25px;
+    }
+    .item-property {
+        position: relative;
+        line-height: 1em;
+        text-align: center;
+    }
+    .checked-out-item-wrapper {
+        position: relative;
+        margin: 0.5em 0;
+    }
+    .checkout-sec-1 {
+        position: relative;
+        background: #dad7d7;
+        height: 4em;
+        text-align: center;
+    }
+    .checkout-sec-2 {
+        background: #eaeae8;
+        text-align: center;
+        textarea {
+            width: 95%;
+        }
+    }
+    .quantity {
+        position: absolute;
+        right: 48%;
+    }
+    .item-property {
+        height: 1em;
+        line-height: 2em;
+        font-size: 0.75em;
+    }
+    .item-wi-desc {
+        height: 3em;
+        line-height: 3em;
+        position: relative;
+    }
+    .item-wo-desc {
+        height: 4em;
+        line-height: 4em;
+        position: relative;
+    }
+}
+
+@media (max-width: 48em) {
+    .checkout {
+        .display-none-small {
+            display: none;
+        }
+        .react-autosuggest__input {
+            width: 100%;
+        }
+        .item-wo-desc {
+            height: 2.5em;
+            line-height: 3em;
+        }
+        .checkout-sec-1 {
+            height: 5em;
+        }
+        .item-quantity {
+            line-height: 3em;
+            position: absolute;
+            top: 30px;
+            left: -10px;
+        }
+    }
+}

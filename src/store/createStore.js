@@ -1,51 +1,71 @@
-import { applyMiddleware, compose, createStore as createReduxStore } from 'redux'
+import { applyMiddleware, compose, createStore } from 'redux'
 import thunk from 'redux-thunk'
 import { browserHistory } from 'react-router'
 import makeRootReducer from './reducers'
+import 'react-fastclick';
+import { getCall, postCall, securedGetCall } from 'utils/httpUtils/apiCallWrapper';
 import { updateLocation } from './location'
+import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
+// Actions
+import * as actions from 'layouts/CoreLayout/coreReducer'
+export default (initialState = {}, cb) => {
 
-const createStore = (initialState = {}) => {
-  // ======================================================
-  // Middleware Configuration
-  // ======================================================
-  const middleware = [thunk]
+    // ======================================================
+    // Middleware Configuration
+    // ======================================================
+    const middleware = [thunk]
 
-  // ======================================================
-  // Store Enhancers
-  // ======================================================
-  const enhancers = []
-  let composeEnhancers = compose
-
-  if (__DEV__) {
-    if (typeof window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ === 'function') {
-      composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    // ======================================================
+    // Store Enhancers
+    // ======================================================
+    const enhancers = []
+    if (__DEV__) {
+        const devToolsExtension = window.devToolsExtension
+        if (typeof devToolsExtension === 'function') {
+            enhancers.push(devToolsExtension())
+        }
     }
-  }
 
-  // ======================================================
-  // Store Instantiation and HMR Setup
-  // ======================================================
-  const store = createReduxStore(
-    makeRootReducer(),
-    initialState,
-    composeEnhancers(
-      applyMiddleware(...middleware),
-      ...enhancers
+    // ======================================================
+    // Store Instantiation and HMR Setup
+    // ======================================================
+    const store = createStore(
+        makeRootReducer(),
+        initialState,
+        compose(
+            applyMiddleware(...middleware),
+            ...enhancers
+        )
     )
-  )
-  store.asyncReducers = {}
+    store.asyncReducers = {};
 
-  // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
-  store.unsubscribeHistory = browserHistory.listen(updateLocation(store))
+    // initializing code goes here .. bit of a hack .. should be improved
+    let token = sessionStorage.getItem('token');
+    if (sessionStorage.getItem('token')) {
+        securedGetCall('/api/users/me')
+            .then(function(result) {
+                let user = result.data;
+                if (user && user.name) {
+                    store.dispatch(actions.userLoggedIn(true));
+                    store.dispatch(actions.addUser(user));
+                    store.dispatch(actions.addToken(token));
+                }
+                cb(store);
+            })
+    } else {
+        store.dispatch(actions.userLoggedIn(false));
+        cb(store);
+    }
+    // initialization code ends here
 
-  if (module.hot) {
-    module.hot.accept('./reducers', () => {
-      const reducers = require('./reducers').default
-      store.replaceReducer(reducers(store.asyncReducers))
-    })
-  }
 
-  return store
+    // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
+    store.unsubscribeHistory = browserHistory.listen(updateLocation(store))
+
+    if (module.hot) {
+        module.hot.accept('./reducers', () => {
+            const reducers = require('./reducers').default
+            store.replaceReducer(reducers(store.asyncReducers))
+        })
+    }
 }
-
-export default createStore

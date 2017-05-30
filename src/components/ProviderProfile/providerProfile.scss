@@ -1,0 +1,112 @@
+.provider-profile {
+    .content {
+        padding: 1em;
+    }
+    a {
+        text-decoration: none;
+        color: rgb(61, 146, 201);
+    }
+    .react-autosuggest__input {
+        width: 100%;
+    }
+    a:hover,
+    a:focus {
+        text-decoration: underline;
+    }
+    h3 {
+        font-weight: 100;
+    }
+    .is-center {
+        text-align: center;
+        vertical-align: middle;
+    }
+    /* LAYOUT CSS */
+    .pure-img-responsive {
+        max-width: 100%;
+        height: auto;
+    }
+    .profile-wrapper {
+        padding: 1em;
+        box-shadow: 1px 1px 1px 1px lightgrey;
+        background-color: white;
+    }
+    .provider-desc-wrapper {
+        padding: 1em;
+    }
+    .brand-title {
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 0.5em;
+    }
+    .addtnl-info {
+        margin-top: 0.5em;
+        span {
+            font-weight: 600;
+        }
+    }
+    .service-offered {
+        margin-left: 0.5em;
+    }
+    .provider-details {
+        position: relative;
+        margin-top: 0.5em;
+    }
+    .provider-detail {
+        position: absolute;
+        font-size: 1em;
+        line-height: 1.5em;
+        margin-left: 1em;
+    }
+    .checkout-details {
+        margin-left: 20px;
+    }
+    .content-subhead {
+        text-transform: uppercase;
+        border-bottom: 1px solid black;
+        padding: 0.4em 0;
+        font-size: 120%;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+    }
+    .order-title {
+        border-bottom: 1px solid #eee;
+        padding: 0.4em 0;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        margin-bottom: 1em;
+    }
+    .order-header {
+        text-align: center;
+        margin-bottom: 1em;
+        padding-bottom: 1em;
+        border-bottom: 1px solid #eee;
+    }
+    .order-address-heading {
+        margin-bottom: 0.5em;
+    }
+    .delivery-box {
+        width: 70%;
+    }
+    .order-submit > table {
+        margin: 0 auto;
+    }
+    .error-message {
+        color: red;
+        padding-bottom: .7em;
+    }
+    .provider-profile-link {
+        style: none;
+        color: white;
+    }
+    .row{
+        display: flex;
+    }
+}
+
+@media (min-width: 48em) {
+    .provider-profile {
+        .post-description {
+            padding-left: 1em;
+        }
+    }
+}
