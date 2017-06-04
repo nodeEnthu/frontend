@@ -13,8 +13,8 @@
         margin-bottom: 0.5em;
     }
     .checkout-label {
+        position:relative;
         font-size: 115%;
-        font-weight: 550;
     }
     textarea {
         box-shadow: none;
@@ -26,6 +26,7 @@
         float: right;
         width: 30%;
         line-height: 2em;
+        margin-bottom:0.5em;
         text-align: center;
         background: #6f6868;
         color: white;
@@ -51,6 +52,8 @@
         text-align: center;
         textarea {
             width: 95%;
+            margin:0 auto;
+            margin-top: 0.35em;
         }
     }
     .quantity {
@@ -94,6 +97,11 @@
             position: absolute;
             top: 30px;
             left: -10px;
+        }
+        .checkout-sec-2{
+            textarea{
+                margin-bottom: 0.5em;
+            }
         }
     }
 }

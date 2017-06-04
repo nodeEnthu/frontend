@@ -27,7 +27,7 @@ const ProviderEntryForm = createReactClass({
         let self = this;
         // check whether its an edit to an already present provider
         if(this.props.params.id){
-            this.props.fetchSecuredData('/api/users/'+this.props.params.id , 'providerProfileCall',this.props.mode)
+            this.props.fetchSecuredData('/api/users/'+this.props.params.id+'/profileEdit' , 'providerProfileCall',this.props.mode)
             .then((res)=>{
                 if(res && res.payload &&res.payload.data && res.payload.data.data && res.payload.data.data.loc){
                     let provider = res.payload.data.data;
@@ -83,7 +83,9 @@ const ProviderEntryForm = createReactClass({
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
-        this.props.addProviderInfo({storeKey:stateKeyName,payload:input}); 
+        this.props.addProviderInfo({storeKey:stateKeyName,payload:input});
+        // forcibly re-render
+        window.setTimeout(function() {this.setState({foo: "bar"});}.bind(this),0); 
     },
     onSuggestionSelected(event,{suggestion}){
         this.props.addProviderInfo({storeKey:'searchText', payload:suggestion.address });
@@ -152,7 +154,21 @@ const ProviderEntryForm = createReactClass({
     },
     render() {
         let {chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,serviceOffered,addtnlComments, includeAddressInEmail,deliveryMinOrder,deliveryRadius,providerAddressJustificationModalOpen,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg,snackBarOpen,snackBarMessage } = this.props.providerEntryForm.toJS();
-        serviceOffered = serviceOffered || 'pickup';
+        switch(serviceOffered){
+            case 1:
+                serviceOffered = "pickup"
+                break;
+            case 2:
+                serviceOffered = "both"
+                break;
+            case 3:
+                serviceOffered = "delivery"
+                break;
+            default:
+                // dont do anything
+                break;
+        }
+
         return (
             <div className="provider-entry-form">
                 <div className="is-center">
@@ -249,14 +265,12 @@ const ProviderEntryForm = createReactClass({
                                 value="pickup"
                                 label="pickup"
                                 labelPosition="right"
-                                
                               />
                               <RadioButton
                                 name="serviceOffered"
                                 value="delivery"
                                 label="delivery"
                                 labelPosition="right"
-                                
                               />
                               <RadioButton
                                 name="serviceOffered"

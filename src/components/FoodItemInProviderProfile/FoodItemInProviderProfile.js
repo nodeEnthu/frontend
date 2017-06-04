@@ -13,7 +13,6 @@ import Truncate from 'react-truncate';
 import {PLACE_ORDER_BY} from 'routes/Search/constants/searchFilters';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
-
 const FoodItemInProviderProfile = createReactClass({
   contextTypes: {
         router: PropTypes.object.isRequired
@@ -25,9 +24,9 @@ const FoodItemInProviderProfile = createReactClass({
       this.props.openModal({storeKey:'foodItemModalOpen', openModal:true})
     }
   },
-  deleteFoodItem(id){
+  deleteFoodItem(foodItem){
     let self = this;
-    this.props.postSecuredData('/api/foodItem/'+id+'/remove','removeItem','REMOVE_ITEM')
+    this.props.postSecuredData('/api/foodItem/'+foodItem._id+'/remove','removeItem','REMOVE_ITEM',{_creator:foodItem._creator})
     .then(function(){
       self.props.refreshPage();
       self.props.openModal({storeKey:'deleteItemModalOpen', openModal:false})
@@ -57,33 +56,35 @@ const FoodItemInProviderProfile = createReactClass({
                
               </div>
               <div className="pure-u-1 provider-info-section">
-                <div className="foodItem-name">
-                    {foodItem.name}
-                </div>
-                <div className="star-rating">
-                  <div className="provider-star-rating">
-                    <StarRatingComponent 
-                        name={foodItem._id} 
-                        editing={false}
-                        starCount={5}
-                        starColor={'#FF6F00'}
-                        value={foodItem.rating || 0 }
-                     />
+                <div onClick={(event)=>this.openFoodItemModal(event,foodItem)}  >
+                  <div className="foodItem-name">
+                      {foodItem.name}
                   </div>
-                  <div className="num-of-reviews">
-                    <span className="primary-color">(</span>{(foodItem.numOfReviews)? foodItem.numOfReviews: 0}<span className="primary-color" >)</span>
+                  <div className="star-rating">
+                    <div className="provider-star-rating">
+                      <StarRatingComponent 
+                          name={foodItem._id}
+                          editing={false}
+                          starCount={5}
+                          starColor={'#FF6F00'}
+                          value={foodItem.rating || 0 }
+                       />
+                    </div>
+                    <div className="num-of-reviews">
+                      <span className="primary-color">(</span>{(foodItem.numOfReviews)? foodItem.numOfReviews: 0}<span className="primary-color" >)</span>
+                    </div>
                   </div>
-                </div>
-                <div className="food-desc" onClick={(event)=>this.openFoodItemModal(event,foodItem)}>
-                    {
-                      (foodItem.description)?
-                        <Truncate lines={2} ellipsis={<span>... <a href="javascript:void(0)">Read more</a></span>}>
-                          {foodItem.description}
-                        </Truncate>
-                        :
-                        <span>... <a href="javascript:void(0)">Read more</a></span>
-                    }
-                    
+                  <div className="food-desc">
+                      {
+                        (foodItem.description)?
+                          <Truncate lines={2} ellipsis={<span>... <a href="javascript:void(0)">Read more</a></span>}>
+                            {foodItem.description}
+                          </Truncate>
+                          :
+                          <span>... <a href="javascript:void(0)">Read more</a></span>
+                      }
+                      
+                  </div>
                 </div>
                 <table className="pure-table remove-border">
                   <tbody>
@@ -135,7 +136,7 @@ const FoodItemInProviderProfile = createReactClass({
                           label="+add"
                           labelStyle={{color:'white'}}
                           style={{height:'24px',lineHeight:'24px',minWidth:'80px'}}
-                          onClick={(event)=> this.props.checkOutItem(event,foodItem)}
+                          onTouchTap={(event)=> this.props.checkOutItem(event,foodItem)}
                           disableTouchRipple={true}
                         />
                       </div>
@@ -159,12 +160,12 @@ const FoodItemInProviderProfile = createReactClass({
                     </p>
                     <div>
                         <FlatButton label="Cancel"
-                            onClick={()=>this.props.openModal({storeKey:'deleteItemModalOpen', openModal:false})}
+                            onTouchTap={()=>this.props.openModal({storeKey:'deleteItemModalOpen', openModal:false})}
                         />
                         <FlatButton 
                           backgroundColor="red" 
                           label="Delete" 
-                          onClick={(event)=>this.deleteFoodItem(foodItem._id)}
+                          onTouchTap={(event)=>this.deleteFoodItem(foodItem)}
                         />
                     </div>
                   </div>
@@ -182,7 +183,7 @@ const FoodItemInProviderProfile = createReactClass({
                         icon={<EditorModeEdit/>}
                         style={{width:'99.5%',height:'auto',lineHeight:'auto'}}
                         hoverColor="#8AA62F"
-                        onClick={(event)=>self.context.router.push('/provider/'+provider._id+'/foodItems/'+foodItem._id+'/edit')}
+                        onTouchTap={(event)=>self.context.router.push('/provider/'+provider._id+'/foodItems/'+foodItem._id+'/edit')}
                         disableTouchRipple={true}
                       />
                     </div>
@@ -194,6 +195,7 @@ const FoodItemInProviderProfile = createReactClass({
                         style={{width:'99.5%',height:'auto',lineHeight:'auto'}}
                         hoverColor="red"
                         disableTouchRipple={true}
+                        onTouchTap={(event)=> self.props.openModal({storeKey:'deleteItemModalOpen', openModal:true})}
                       />
                     </div>
                   </div>

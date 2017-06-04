@@ -52,8 +52,11 @@ class ImageUploader extends React.Component {
       destCanvas = document.getElementById("myCanvas");
     reader.onload = function(event){
         let img = new Image();
+        img.src = event.target.result;
         img.onload = function(){
+            console.log("reaching here 3",img,EXIF);
             EXIF.getData(img,function(){
+              console.log("reaching here 4");
               let degree, 
                 cw = img.width, ch = img.height, cx = 0, cy = 0;
               switch(EXIF.getTag(this,'Orientation')){  
@@ -101,13 +104,14 @@ class ImageUploader extends React.Component {
               });
             }) 
           }
-      img.src = event.target.result;
+     
     }
     reader.readAsDataURL(file);
   }
 
   render() {
     let {imgUploaded,imagePreviewUrl} = this.state;
+    console.log(imgUploaded,imagePreviewUrl)
     let $imagePreview = (imagePreviewUrl)? (<img style={{width:'100%', maxWidth:'250px'}}src={imagePreviewUrl} />) : (<div className="previewText"></div>) ;
     return (
       <div className="previewComponent">
@@ -124,7 +128,7 @@ class ImageUploader extends React.Component {
           style={styles.button}
           disableTouchRipple={true}
           >
-          <input name="userfile" style={styles.exampleImageInput} onChange={(e)=>this._handleImageChange(e)} type="file" accept="image/*" capture="camera"/>
+          <input name="userfile" style={styles.exampleImageInput} onChange={(e)=>this._handleImageChange(e)} type="file" accept="image/*;capture=camera"/>
           </RaisedButton>
         </div>
       </div>

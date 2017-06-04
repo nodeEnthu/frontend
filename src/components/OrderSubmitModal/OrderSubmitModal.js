@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import RaisedButton from 'material-ui/RaisedButton';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
+import {resolvePickUpTime} from 'components/FoodItemEntryForm/constants';
 
 const OrderSubmitModal = createReactClass({
   checkOutOrderDetails:{},
@@ -49,8 +50,8 @@ const OrderSubmitModal = createReactClass({
   },
   render(){
     const {providerProfileCall, itemsCheckedOut,orderSubmitModalOpen} = this.props.providerProfile.toJS();
-    const {user,userAddressSearch} = this.props.globalState.core.toJS();
-    const {addtnlAddressInfo} = this.props;
+    const {user} = this.props.globalState.core.toJS();
+    const {addtnlAddressInfo,orderTime} = this.props;
     let data = providerProfileCall.data;
     let resolvedItemsCheckedOut= [];
     let grandTotal = 0;
@@ -66,7 +67,7 @@ const OrderSubmitModal = createReactClass({
     let customerName , customerAddress;
     if(user && user.name){    // this means check if there is some user logged .. which it should be
       // if userAddressSearch.searchText exists that means user entered a new address at Home (/) or search (/search) page which SHOULD already be registered
-      customerAddress = (userAddressSearch)? userAddressSearch.searchText : user.userSeachLocations[user.deliveryAddressIndex].searchText;
+      customerAddress = user.searchText;
       customerName =(user && user.name)? user.name : undefined;
     }
     this.checkOutOrderDetails={
@@ -76,6 +77,7 @@ const OrderSubmitModal = createReactClass({
       providerName:(data)?data.title : undefined,
       _providerId:data._id,
       customerName:customerName,
+      orderTime: resolvePickUpTime(orderTime),
       providerAddress:(data)?data.loc.searchText:undefined,
       customerAddress: customerAddress,
       customerEmailId:user.email,
@@ -86,7 +88,6 @@ const OrderSubmitModal = createReactClass({
       subTotal:grandTotal,
       modeOfPayment:'Cash/CreditCard'
     }
-    console.log(this.checkOutOrderDetails.itemsCheckedOut);
     // ends here
     return <Dialog
             open={orderSubmitModalOpen}

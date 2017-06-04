@@ -8,7 +8,7 @@ import moment from 'moment';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import AsyncAutocomplete from 'components/AsyncAutocomplete'
 import {securedGetCall} from 'utils/httpUtils/apiCallWrapper';
-import {timeOfDay,resolvePickUpTime} from 'components/FoodItemEntryForm/constants';
+import {timeOfDay} from 'components/FoodItemEntryForm/constants';
 import IconButton from 'material-ui/IconButton';
 import ContentAddCircle from 'material-ui/svg-icons/content/add-circle'
 import ContentRemoveCircle from 'material-ui/svg-icons/content/remove-circle'
@@ -26,6 +26,7 @@ const Checkout = createReactClass({
          searchTextError:'',
          checkoutSubmitError:'',
          addtnlAddressInfo:'',
+         orderTime:undefined,
          pickup:true   
       };
   },
@@ -56,8 +57,13 @@ const Checkout = createReactClass({
   deleteCheckedOutItem(foodId){
     this.props.deleteCheckedOutItem(foodId);
   },
-  onChange(event){
-    this.setState({[event.target.name]:event.target.value});
+  onChange(event,key,val){
+    console.log(key,val);
+    if(event){
+      this.setState({[event.target.name]:event.target.value})
+    }else{
+      this.setState({[key]:val});
+    }
   },
   checkOutItems(){
     this.props.openModal({storeKey:'orderSubmitModalOpen', openModal:true})
@@ -79,16 +85,14 @@ const Checkout = createReactClass({
   },
   render(){
     const {itemsCheckedOut,providerProfileCall} = this.props.providerProfile.toJS();
-    const{addtnlAddressInfo} = this.state;
+    const{addtnlAddressInfo,orderTime} = this.state;
     const {place_id,searchText} = this.props.globalState.core.get('user').toJS();
-    console.log(place_id,searchText);
     const provider = providerProfileCall.data;
     let resolvedItemsCheckedOut= [];
-    let addtnlItemOrderInfo, grandTotal = 0;
+    let grandTotal = 0;
     for(var key in itemsCheckedOut){
       if(itemsCheckedOut.hasOwnProperty(key)){
         resolvedItemsCheckedOut.push(itemsCheckedOut[key]);
-        let addtnlItemOrderInfo = itemsCheckedOut[key].addtnlItemOrderInfo || '';
         grandTotal = grandTotal + parseInt(itemsCheckedOut[key].price * parseInt(itemsCheckedOut[key].quantity));
       }
     };
@@ -99,19 +103,31 @@ const Checkout = createReactClass({
             <div className="checkout-section-wrapper">
               {
                 (provider.serviceOffered === 3 ||  (provider.serviceOffered === 2 && this.state.pickup.toString()) ==="false")?
-                <div className="checkout-label">Your delivery order</div>:undefined
+                <span className="checkout-label">Delivery order at</span>:undefined
               }
               {
                 (provider.serviceOffered === 1 ||  this.state.pickup.toString() ==="true")?
-                <div className="checkout-label">Your pick-up order</div>:undefined
+                <span className="checkout-label">Pick-up order at</span>:undefined
               }
+              <DropDownMenu value={orderTime} onChange={(event, index, value)=>this.onChange(undefined,'orderTime',value)}
+                            iconStyle={{fill:"rgb(0, 0, 0)"}}
+                            underlineStyle={{borderTop:"1px solid black"}}
+              >
+                <MenuItem style={{width:'100%'}} value={undefined} primaryText={"Please select time"}/>
+                {
+                  timeOfDay().map(function(time,index){
+                      return <MenuItem style={{width:'100%'}} key={time.value} value={time.value} primaryText={time.label}/>
+                  })
+                }
+              </DropDownMenu>
               {
                 (provider.serviceOffered ===2)?
                 <div>
-                  <label className="checkout-label" style={{display:'block',margin:"0.5em 0"}}>Order type</label>
+                  <label className="checkout-label" style={{display:'block',margin:"0.5em 0"}}>Order type:</label>
                   <RadioButtonGroup name="foodOptions" 
                       valueSelected={this.state.pickup.toString()}
                       onChange={(event)=>this.toggleFlags('pickup')}
+                      style={{marginTop:"-1.25em"}}
                   >
                     <RadioButton
                       value="true"
@@ -130,7 +146,7 @@ const Checkout = createReactClass({
             {
               (provider.serviceOffered === 3 ||  (provider.serviceOffered === 2 && this.state.pickup.toString()) ==="false")?
                 <div className="checkout-section-wrapper">
-                  <div className="pure-u-md-1-5 pure-u-1 checkout-label">Your Address</div>
+                  <div style={{marginTop: "1em"}}className="pure-u-md-1-5 pure-u-1 checkout-label">Your Address</div>
                   <div className="pure-u-md-4-5">
                     <AsyncAutocomplete  name={'searchText'}
                                         userSearchText = {this.state.searchText}
@@ -156,7 +172,7 @@ const Checkout = createReactClass({
                 undefined
             }
             <div className="checkout-section-wrapper">
-              <div className="pure-u-md-1-5 pure-u-1 checkout-label">Your Order</div>
+              <div className="pure-u-md-1-5 pure-u-1 checkout-label"></div>
               <div className="pure-u-md-4-5">
                 <div className= "grand-total">Total &nbsp; {'$ '+grandTotal}</div>
               </div>
@@ -196,7 +212,7 @@ const Checkout = createReactClass({
                           <div className="pure-u-1 checkout-sec-2">
                             <div className="pure-u-md-1-3">
                               <div className="pure-u-1 item-property">
-                                Date & Time
+                                Date
                               </div>
                               { (itemCheckedOut.avalilabilityType === 'specificDates')?
                                 <DropDownMenu value={itemCheckedOut.orderDate} onChange={(event, index, value)=>self.changeStoreVal(itemCheckedOut._id,'orderDate',value)}
@@ -222,8 +238,6 @@ const Checkout = createReactClass({
                                   }
                                 </DropDownMenu>
                               }
-                                
-                                {/*resolvePickUpTime(itemCheckedOut.pickUpStartTime)} - {resolvePickUpTime(itemCheckedOut.pickUpEndTime)*/}
                             </div>
                             <div className="pure-u-md-1-3 display-none-small">
                               <div className="pure-u-1 item-property">
@@ -233,7 +247,7 @@ const Checkout = createReactClass({
                             </div>
                             <div className="pure-u-md-1-3">
                               <form className="pure-form pure-form-stacked">
-                                <textarea className = "pure-u-1" name="addtnlItemOrderInfo" placeholder="Add more information how you yant your meal to be cooked" value={addtnlItemOrderInfo} onChange={(event)=>self.changeStoreVal(itemCheckedOut._id,event.target.name,event.target.value)}/>
+                                <textarea className = "pure-u-1" name="addtnlItemOrderInfo" placeholder="Add more information how you yant your meal to be cooked" value={itemCheckedOut.addtnlItemOrderInfo || ''} onChange={(event)=>self.changeStoreVal(itemCheckedOut._id,event.target.name,event.target.value)}/>
                               </form>
                             </div>
                           </div>   
@@ -242,17 +256,24 @@ const Checkout = createReactClass({
               }
             </div>
             <div className="is-center">
+            {
+              (!orderTime)?
+                <div style={{marginBottom:'0.5em'}}>{'Please select your pickup/delivery time'}</div>
+                :
+                undefined
+            }
               <RaisedButton
                 primary={true}
                 label = "Place Order"
                 onClick={this.checkOutItems}
                 disableTouchRipple={true}
-                disabled={(!place_id)?true:false}
+                disabled={(!place_id || !orderTime)?true:false}
               >
               </RaisedButton>
             </div>
             <OrderSubmitModal{... this.props}
               addtnlAddressInfo={this.state.addtnlAddressInfo}
+              orderTime={this.state.orderTime}
               orderType={(this.state.pickup)?'Pickup':'Delivery'}
             />
           </div>

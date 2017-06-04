@@ -91,3 +91,11 @@ export const PLACE_ORDER_BY =[
     { value: 2, label: 'Atleast 2 days before' },
     { value: 3, label: 'Atleast 3 days before' }
 ];
+export const CANCEL_REASONS =[
+    { value: 1, label: 'Sold out' },
+    { value: 2, label: 'User pickup/delivery time is not acceptable' },
+    { value: 3, label: 'User address is out of delivery area' },
+    { value: 4, label: 'Unknown/incomplete user address for delivery' },
+    { value: 5, label: 'Questions about customer authenticity' },
+    { value: 6, label: 'Other' }
+];

@@ -61,10 +61,10 @@ const OrderAction = createReactClass({
             index = index+1;
             itemRows.push(
                     <div key={key +Math.random()} className="order-details">
-                      <div className="pure-u-1-4 order-detail">{index}</div>
                       <div className="pure-u-1-4 order-detail">{order.itemsCheckedOut[key].name}</div>
                       <div className="pure-u-1-4 order-detail">{order.itemsCheckedOut[key].quantity}</div>
                       <div className="pure-u-1-4 order-detail">{order.itemsCheckedOut[key].price}</div>
+                      <div className="pure-u-1-4 order-detail">{order.itemsCheckedOut[key].orderDate}</div>
                       <div className="pure-u-1 customer-comments order-detail">
                       {
                         (order.itemsCheckedOut[key].addtnlItemOrderInfo)?
@@ -114,7 +114,7 @@ const OrderAction = createReactClass({
                                   style={{marginBottom:'1em',border:(order._id === queryObj.orderId)? '1px solid tomato':'inherit'}}
                                 >
                                   <CardHeader
-                                    title={order.orderType + ' order with  ' + order.providerName}
+                                    title={order.orderType + ' order with  ' + order.providerName + ' at ' +order.orderTime}
                                     subtitle={order.providerAddress}
                                     actAsExpander={true}
                                     showExpandableButton={true}
@@ -136,6 +136,15 @@ const OrderAction = createReactClass({
                                   </CardText>
                                   :undefined
                                 }
+                                {
+                                  (order.cancelReason || order.cancelText)?
+                                  <CardText
+                                    style={{padding:'0px 16px'}}
+                                  > 
+                                    <span className="comment-intro">Cancel Reason:</span>{order.cancelText}
+                                  </CardText>
+                                  :undefined
+                                }
                                   
                                 
                                 {
@@ -144,7 +153,16 @@ const OrderAction = createReactClass({
                                       style={{padding:'5px 16px'}}
                                     > 
                                       <span className="comment-intro">Status:</span>
-                                      Confirmed, please visit <a href={'/providerProfile/'+order._providerId}> provider page</a> to leave a review
+                                      {
+                                        (order.status ===1)?
+                                        <span>
+                                          Confirmed, please visit <a href={'/providerProfile/'+order._providerId}> provider page</a> to leave a review
+                                        </span>
+                                        :
+                                        <span>
+                                          Oops! your order was cancelled
+                                        </span>
+                                      }
                                     </CardText>
                                     :
                                     <CardText
@@ -159,16 +177,13 @@ const OrderAction = createReactClass({
                                       </Step>
 
                                       <Step>
-                                        <StepLabel style={{fontSize:'0.7em'}}>Receive confirmation e-mail</StepLabel>
+                                        <StepLabel style={{fontSize:'0.7em'}}>Receive provider e-mail</StepLabel>
                                       </Step>
                                     </Stepper>
 
                                   
                                   <CardText expandable={true} style={{textAlign:'center'}}>
                                     <div className="heading" style={{margin:'0 auto'}}>
-                                      <div className="pure-u-1-4">
-                                        #
-                                      </div>
                                       <div className="pure-u-1-4">
                                         Name
                                       </div>
@@ -177,6 +192,9 @@ const OrderAction = createReactClass({
                                       </div>
                                       <div className="pure-u-1-4">
                                         Price
+                                      </div>
+                                      <div className="pure-u-1-4">
+                                        Date
                                       </div>
                                     </div>
                                   {getResolvedItems(order)}
@@ -197,11 +215,37 @@ const OrderAction = createReactClass({
                                   style={{marginBottom:'1em',border:(order._id === queryObj.orderId)? '1px solid tomato':'inherit'}}
                                 >
                                   <CardHeader
-                                    title={order.orderType + ' order with  ' + order.customerName}
+                                    title={order.orderType + ' order with  ' + order.customerName + ' at ' +order.orderTime}
                                     subtitle={order.customerAddress}
                                     actAsExpander={true}
                                     showExpandableButton={true}
                                   />
+                                  {
+                                    (order.providerAddtnlInfo)?
+                                    <CardText style={{padding:'0 16px'}}>
+                                      <span className="comment-intro">Addtnl Provider info:</span>{order.providerAddtnlInfo}
+                                    </CardText>
+                                    :undefined
+                                  }
+                                    
+                                  {
+                                    (order.addtnlAddressInfo)?
+                                    <CardText
+                                      style={{padding:'0px 16px'}}
+                                    > 
+                                      <span className="comment-intro">Addtnl address info:</span>{order.addtnlAddressInfo}
+                                    </CardText>
+                                    :undefined
+                                  }
+                                  {
+                                    (order.cancelReason || order.cancelText)?
+                                    <CardText
+                                      style={{padding:'0px 16px'}}
+                                    > 
+                                      <span className="comment-intro">Cancel Reason:</span>{order.cancelText}
+                                    </CardText>
+                                    :undefined
+                                  }
                                   <CardText
                                     style={{padding:'0px'}}
                                   >
@@ -209,7 +253,12 @@ const OrderAction = createReactClass({
                                     {
                                       (order.mailSentToCustomer)?
                                       <div>
-                                        Status: Confirmed ! 
+                                        {
+                                          (order.status === 1)?
+                                          <span>Status: Confirmed! </span>
+                                          :
+                                          <span>Status: Cancelled! </span>
+                                        }
                                       </div>
                                       :
                                       <div>
@@ -223,16 +272,13 @@ const OrderAction = createReactClass({
                                       </Step>
 
                                       <Step>
-                                        <StepLabel style={{fontSize:'0.7em'}}>Sent confirm/cancel email</StepLabel>
+                                        <StepLabel style={{fontSize:'0.7em'}}>Send confirm/cancel email</StepLabel>
                                       </Step>
                                     </Stepper>
 
                                   </CardText>
                                   <CardText expandable={true} style={{textAlign:'center'}}>
                                     <div className="heading" style={{margin:'0 auto'}}>
-                                      <div className="pure-u-1-4">
-                                        #
-                                      </div>
                                       <div className="pure-u-1-4">
                                         Name
                                       </div>
@@ -241,6 +287,9 @@ const OrderAction = createReactClass({
                                       </div>
                                       <div className="pure-u-1-4">
                                         Price
+                                      </div>
+                                      <div className="pure-u-1-4">
+                                        Date
                                       </div>
                                     </div>
                                     {getResolvedItems(order)}

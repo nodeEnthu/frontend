@@ -24,6 +24,7 @@ import {isEmptyObj} from 'utils/formUtils/formValidation';
 import Truncate from 'react-truncate';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
+import {Circle} from 'rc-progress';
 
 const ProviderProfile = createReactClass({
   getInitialState() {
@@ -93,6 +94,7 @@ const ProviderProfile = createReactClass({
   render() {
     const {providerProfileCall} = this.props.providerProfile.toJS();
     let provider = providerProfileCall.data;
+    let responseRatio
     let self = this;
     const {user} = this.props.globalState.core.toJS();
     let userViewingOwnProfile = false;
@@ -104,6 +106,8 @@ const ProviderProfile = createReactClass({
     // seperate between current and past items
     let currentItems=[] , pastItems=[], onOrderItems=[],currentDate;
     if(provider && provider.foodItems){
+      responseRatio = parseInt((parseInt(provider.ordersConfirmed || 0) + parseInt(provider.ordersCancelled || 0))/parseInt(provider.ordersReceived || 1) *100) || undefined;
+      console.log(provider.ordersConfirmed, provider.ordersCancelled, provider.ordersReceived);
       provider.foodItems.forEach(function(foodItem){
         let availability= foodItem.availability;
         let foodItemAvailable = false;
@@ -121,9 +125,14 @@ const ProviderProfile = createReactClass({
     return (provider && !isEmptyObj(provider) && provider.userType && user && user.name || (provider && !isEmptyObj(provider) && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="provider-profile">
           <div className="pure-u-1 profile-wrapper">
-              <div className="pure-u-1 pure-u-md-1-4 is-center">
-                <div>
-                  <img className = "pure-img-responsive" src={provider.imgUrl}/>
+              <div className="pure-u-1 pure-u-md-1-4 is-center position-relative">
+                <img className = "pure-img-responsive" src={provider.imgUrl}/>
+                <div className="response-ratio">
+                  <Circle strokeLinecap ="butt" percent={(responseRatio)? responseRatio.toString() : '100'} strokeWidth="5" strokeColor="#FF6F00" />
+                  <div className="response-percentage">{(responseRatio)? responseRatio.toString() + '%' : ' 100%'}</div>
+                </div>
+                <div className="rating-overlay">
+                  <div className="response-heading">Response ratio</div>
                 </div>
               </div>
               <div className="pure-u-1 pure-u-md-3-4 provider-desc-wrapper">

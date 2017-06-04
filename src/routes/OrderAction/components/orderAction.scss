@@ -14,6 +14,7 @@
     }
     textarea {
         box-shadow: none;
+        margin: 0 auto;
         border-radius: 0;
         width: 107%;
         height: 4em;
@@ -29,12 +30,13 @@
         background: #6f6868;
         color: white;
         border-radius: 25px;
+        margin-bottom: 0.5em;
     }
     .item-title {
         float: left;
     }
-    .action-taken-message{
-        padding:0.5em;
+    .action-taken-message {
+        padding: 0.5em;
         font-size: 115%;
     }
     .item-property {
@@ -55,14 +57,14 @@
     .checkout-sec-2 {
         background: #eaeae8;
         text-align: center;
+        height: 4.5em;
         textarea {
             width: 95%;
         }
     }
     .quantity {
-        position: absolute;
-        right: 47%;
-        top: 45%;
+        position: relative;
+        top: 15px;
     }
     .item-property {
         height: 1em;
@@ -81,15 +83,19 @@
     }
     .date-wrapper {
         position: relative;
-        right: 63%;
+        right: 10%;
     }
-    .quantity-wrapper{
-        position:relative;
-        right:40%
+    .quantity-wrapper {
+        position: relative;
+        left: 10%;
+    }
+    .order-result {
+        font-size: 115%;
+        margin: 1em 0;
     }
 }
 
-@media (max-width: 60em) {
+@media (max-width: 53em) {
     .order-action {
         .display-none-small {
             display: none;
@@ -104,22 +110,11 @@
         .checkout-sec-1 {
             height: 6em;
         }
-        .item-quantity {
-            line-height: 3em;
-            position: absolute;
-            top: 30px;
-            left: -10px;
+        .checkout-sec-2 {
+            height: 8.5em;
         }
         .quantity {
-            right: 60%;
-            top: 65%;
-        }
-        textarea {
-            width: 100%;
-        }
-        .date-wrapper {
-            position: relative;
-            right: 10%;
+            top: 10px;
         }
     }
 }

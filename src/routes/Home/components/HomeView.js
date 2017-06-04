@@ -1,6 +1,5 @@
 import React from 'react'
 import { IndexLink, Link } from 'react-router'
-import FileIcons from '../assets/file-icons.png'
 import Autosuggest from 'react-autosuggest'
 import AsyncAutocomplete from 'components/AsyncAutocomplete'
 import store from 'store/createStore'

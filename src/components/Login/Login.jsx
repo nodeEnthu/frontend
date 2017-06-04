@@ -91,7 +91,7 @@ var Login = createReactClass({
               <div>
                   <a
                     onClick={this.openModal}
-                    >LOGIN
+                    >Login
                   </a>
                 <Dialog
                   open={loginModalOPen || false}
