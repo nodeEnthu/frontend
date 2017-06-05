@@ -107,7 +107,6 @@ const OrderSubmitModal = createReactClass({
                 <div className="pure-u-1-2">
                   <div className="order-address-heading">{this.props.orderType+' '} order:</div>
                   <div>{this.checkOutOrderDetails.customerName}</div>
-                  <div>{this.checkOutOrderDetails.customerEmailId}</div>
                   {(this.props.orderType === "Delivery")?
                     <div className="delivery-box">
                       {this.checkOutOrderDetails.customerAddress}
@@ -119,7 +118,6 @@ const OrderSubmitModal = createReactClass({
                 <div className="pure-u-1-2 provider-address">
                   <div className="order-address-heading">Provider:</div>
                   <div>{data.name}</div>
-                  <div className="delivery-box">{this.checkOutOrderDetails.providerEmailId}</div>
                   <div className="delivery-box">{this.checkOutOrderDetails.providerAddress}</div>
                 </div>
               </div>

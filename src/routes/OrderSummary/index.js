@@ -1,7 +1,10 @@
 import { injectReducer } from '../../store/reducers'
+import { onOrderRouteEnter} from 'utils/auth/onEnterAuth'
 
 export default (store) => ({
   path : '/user/:userId/order-summary',
+  onEnter: (nextState, replace) => onOrderRouteEnter(nextState, replace, store),
+
   /*  Async getComponent is only invoked when route matches   */
   getComponent (nextState, cb) {
     /*  Webpack - use 'require.ensure' to create a split point

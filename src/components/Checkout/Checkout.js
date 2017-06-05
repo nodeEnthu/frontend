@@ -58,7 +58,6 @@ const Checkout = createReactClass({
     this.props.deleteCheckedOutItem(foodId);
   },
   onChange(event,key,val){
-    console.log(key,val);
     if(event){
       this.setState({[event.target.name]:event.target.value})
     }else{
@@ -144,7 +143,9 @@ const Checkout = createReactClass({
               }
             </div>
             {
-              (provider.serviceOffered === 3 ||  (provider.serviceOffered === 2 && this.state.pickup.toString()) ==="false")?
+              ((provider.serviceOffered === 3 ||  (provider.serviceOffered === 2 && this.state.pickup.toString()) ==="false")
+                || !place_id
+                )?
                 <div className="checkout-section-wrapper">
                   <div style={{marginTop: "1em"}}className="pure-u-md-1-5 pure-u-1 checkout-label">Your Address</div>
                   <div className="pure-u-md-4-5">
@@ -158,15 +159,21 @@ const Checkout = createReactClass({
                    
                     {
                       (!place_id)?
-                      <div>Please enter address</div>:undefined
+                      <div style={{color:'red'}}>*Please enter your address</div>:undefined
                     }
                   </div>
-                  <div className="pure-u-md-1-5 pure-u-1 checkout-label display-none-small"></div>
-                  <div className="pure-u-md-3-5 is-center">
-                    <form className="pure-form pure-form-stacked">
-                      <textarea className = "pure-u-1" name="addtnlAddressInfo" placeholder="Landmarks / apartment number etc." value={addtnlAddressInfo} onChange={this.onChange}/>
-                    </form>
+                { (provider.serviceOffered === 3 ||  (provider.serviceOffered === 2 && this.state.pickup.toString()) ==="false")?
+                  <div>
+                    <div className="pure-u-md-1-5 pure-u-1 checkout-label display-none-small"></div>
+                    <div className="pure-u-md-3-5 is-center">
+                      <form className="pure-form pure-form-stacked">
+                        <textarea className = "pure-u-1" name="addtnlAddressInfo" placeholder="Landmarks / apartment number etc." value={addtnlAddressInfo} onChange={this.onChange}/>
+                      </form>
+                    </div>
                   </div>
+                  :
+                  undefined
+                }
                 </div>
                 :
                 undefined
@@ -262,20 +269,24 @@ const Checkout = createReactClass({
                 :
                 undefined
             }
-              <RaisedButton
-                primary={true}
-                label = "Place Order"
-                onClick={this.checkOutItems}
-                disableTouchRipple={true}
-                disabled={(!place_id || !orderTime)?true:false}
-              >
-              </RaisedButton>
+            
+            <RaisedButton
+              primary={true}
+              label = "Place Order"
+              onClick={this.checkOutItems}
+              disableTouchRipple={true}
+              disabled={(!place_id || !orderTime)?true:false}
+            >
+            </RaisedButton>
+            
             </div>
             <OrderSubmitModal{... this.props}
               addtnlAddressInfo={this.state.addtnlAddressInfo}
               orderTime={this.state.orderTime}
               orderType={(this.state.pickup)?'Pickup':'Delivery'}
             />
+            <div className="checkout-place-order">
+            </div>
           </div>
           :
           <div></div>

@@ -48,24 +48,24 @@ var Login = createReactClass({
                   dispatch(actions.updateUser('place_id',userSearchAndPlaceId.placeId));
                   sessionStorage.setItem('token', res.token);
                   if(self.context.router.location.pathname === '/'){
-                  // get the path to redirect to
-                  let redirectPath = globalState.core.get('postLoginUrlRedirect');
+                    // get the path to redirect to
+                    let redirectPath = globalState.core.get('postLoginUrlRedirect');
 
-                  if(redirectPath){
-                    // special treatment for first time provider entry here as we dont know the objectID
-                    redirectPath = (redirectPath ==='providerProfileEntry')? '/provider/'+res.user._id+'/providerProfileEntry':redirectPath;
-                    self.context.router.push(redirectPath);
-                    // reset it back to ''
-                    dispatch(actions.postLoginUrlRedirect(''));
-                  } else{
-                    // now based on the userType take an action
-                    if (res.user.userType === 'consumer'){
-                      self.context.router.push('/search');
-                    }else {
-                      self.context.router.push('/providerProfile/'+res.user._id);
+                    if(redirectPath){
+                      // special treatment for first time provider entry here as we dont know the objectID
+                      redirectPath = (redirectPath ==='providerProfileEntry')? '/provider/'+res.user._id+'/providerProfileEntry':redirectPath;
+                      self.context.router.push(redirectPath);
+                      // reset it back to ''
+                      dispatch(actions.postLoginUrlRedirect(''));
+                    } else{
+                      // now based on the userType take an action
+                      if (res.user.userType === 'consumer'){
+                        self.context.router.push('/search');
+                      }else {
+                        self.context.router.push('/providerProfile/'+res.user._id);
+                      }
                     }
                   }
-                }
               }
           })
     },

@@ -52,7 +52,7 @@ const OrderAction = createReactClass({
   render(){
     const ordersAsCustomer = this.props.ordersAsCustomer.get('data');
     const ordersAsProvider = this.props.ordersAsProvider.get('data');
-
+    const user = this.props.globalState.core.get('user').toJS();
     function getResolvedItems(order){
       let itemRows =[];
       let index = 0;
@@ -104,7 +104,7 @@ const OrderAction = createReactClass({
               value={this.state.value}
               onChange={this.handleChange}
             >
-              <Tab label="Placed" value="a" >
+              <Tab label="Summary" value="a" >
                 <div>
                   <h2 style={styles.headline}>Orders Placed</h2>
                   <div>
@@ -205,6 +205,7 @@ const OrderAction = createReactClass({
                   </div>
                 </div>
               </Tab>
+            {(user.userType === 'provider')?
               <Tab label="Received" value="b">
                 <div>
                   <h2 style={styles.headline}>Orders Received</h2>
@@ -300,6 +301,9 @@ const OrderAction = createReactClass({
                   </div>
                 </div>
               </Tab>
+              :
+              undefined
+            }
             </Tabs>
           </div>
          </div>

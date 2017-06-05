@@ -50,3 +50,17 @@ export function onProviderNotPublish(nextState, replace, store) {
         replace('/provider/' + user._id + '/publish');
     }
 }
+
+export function onOrderRouteEnter(nextState, replace, store) {
+    let globalState = store.getState();
+    const { user, userLoggedIn } = globalState.core.toJS();
+    if (!userLoggedIn ) {
+        // is user is not logged it .. send them to home page
+        replace('/');
+        // user has access to some on else's profile
+    }else if(userLoggedIn && user._id != nextState.params.userId){
+
+        // redirect to their own profile
+        replace('/user/'+user._id+'/order-summary');
+    }
+}

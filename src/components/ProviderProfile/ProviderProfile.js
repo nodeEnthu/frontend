@@ -33,6 +33,7 @@ const ProviderProfile = createReactClass({
           counter:0,
           itemCheckOutClicked:false,
           snackBarOpen: false,
+          addItemAfterLogin:undefined
       };
   },
   contextTypes: {
@@ -49,6 +50,14 @@ const ProviderProfile = createReactClass({
             self.props.alreadyScrolled();
           }
       })
+  },
+  componentWillReceiveProps(nextProps){
+    const foodItemAddedbeforeLogin = this.state.addItemAfterLogin; 
+    if(nextProps.globalState.core.get('userLoggedIn') && foodItemAddedbeforeLogin) {
+      // that means user tried to add an item to the checkout before logging in
+      this.setState({addItemAfterLogin:undefined});
+      this.checkOutItem(undefined, foodItemAddedbeforeLogin,true);
+    }
   },
   componentWillUnmount() {
     if (this.props.removeAllCheckedOutItems) this.props.removeAllCheckedOutItems();
@@ -67,22 +76,22 @@ const ProviderProfile = createReactClass({
   },
   componentDidUpdate(prevProps) {
     //check whether clicking on add to cart made component update
+    let self = this;
     if(this.state.counter===1 && this.state.itemCheckOutClicked){
-      this.scrollToElement('checkout-section');
+      setTimeout(function(){self.scrollToElement('checkout')},200);
       this.setState({itemCheckOutClicked:false})
     }
     if(prevProps.params.id!= this.props.params.id){
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
     }
   },
-  checkOutItem(event,foodItem){
-    this.setState({snackBarOpen:true})
+  checkOutItem(event,foodItem,override){
     // check whether user is logged in 
-    if(this.props.globalState.core.get('userLoggedIn')){
+    if(this.props.globalState.core.get('userLoggedIn') || override){
       // initialize the quantity checked out to 1
+      this.setState({snackBarOpen:true})
       foodItem.quantity =1; 
       this.props.providerFoodItemCheckout(foodItem);
-
       if(this.state.counter === 0){
         this.setState({
           counter:this.state.counter+1,
@@ -92,6 +101,8 @@ const ProviderProfile = createReactClass({
     }else{
       // open the modal for user login
       this.props.openLoginModal(true);
+      // add item to login after login.. as the page will re-render
+      this.setState({addItemAfterLogin:foodItem});
     }
   },
   handleRequestClose(){
@@ -127,7 +138,6 @@ const ProviderProfile = createReactClass({
     let currentItems=[] , pastItems=[], onOrderItems=[],currentDate;
     if(provider && provider.foodItems){
       responseRatio = parseInt((parseInt(provider.ordersConfirmed || 0) + parseInt(provider.ordersCancelled || 0))/parseInt(provider.ordersReceived || 1) *100) || undefined;
-      console.log(provider.ordersConfirmed, provider.ordersCancelled, provider.ordersReceived);
       provider.foodItems.forEach(function(foodItem){
         let availability= foodItem.availability;
         let foodItemAvailable = false;
