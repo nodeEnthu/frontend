@@ -38,7 +38,7 @@ const FoodItemInProviderProfile = createReactClass({
     const {deleteItemModalOpen} = this.props.providerProfile.toJS() || false;
     const availabilityLength = foodItem.availability.length;
     let editOrReOffer=(this.props.pastItem === true)? 'OFFER': 'EDIT';
-    return <div className="pure-u-1 pure-u-md-1-3 food-item-profile provider-profile-wrapper">
+    return <div id={foodItem.name.match(/[a-zA-Z]+/g).join('')} className="pure-u-1 pure-u-md-1-3 food-item-profile provider-profile-wrapper">
               <div className="pure-u-1 provider-img-section" onClick={(event)=>this.openFoodItemModal(event,foodItem)}>
                 <div className="img-avatar">
                   <img className="gallery-img portrait"src={foodItem.imgUrl}/>

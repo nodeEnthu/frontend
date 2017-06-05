@@ -153,7 +153,10 @@ const Search = createReactClass({
             this.props.foodIdSelected(foodItem._id);
             this.props.openModal({storeKey:'foodItemModalOpen', openModal:true})
         }
-    	else this.context.router.push('/providerProfile/'+foodItem._creator);
+    	else {
+            this.props.userProfileScrollPosition(foodItem.name);
+            this.context.router.push('/providerProfile/'+foodItem._creator);
+        }
     },
     handleActive(tab) {
         // remove whats currently being shown
@@ -527,6 +530,7 @@ Search.propTypes = {
     selectAddtnlQuery: PropTypes.func.isRequired,
     search: PropTypes.object.isRequired,
     updateUser: PropTypes.func.isRequired,
+    userProfileScrollPosition: PropTypes.func.isRequired,
     setDirty:PropTypes.func.isRequired,
     openModal:PropTypes.func.isRequired,
     foodIdSelected:PropTypes.func.isRequired

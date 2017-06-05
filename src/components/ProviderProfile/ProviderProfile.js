@@ -25,19 +25,30 @@ import Truncate from 'react-truncate';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import {Circle} from 'rc-progress';
+import Snackbar from 'material-ui/Snackbar';
 
 const ProviderProfile = createReactClass({
   getInitialState() {
       return {
           counter:0,
           itemCheckOutClicked:false,
+          snackBarOpen: false,
       };
   },
   contextTypes: {
     router: PropTypes.object.isRequired
   },
   componentWillMount() {
-      this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
+    let self = this;
+    this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName)
+      .then(function(){
+        let {globalState} = self.props;
+          let userProfileScroll = globalState.core.get('userProfileScroll');
+          if(userProfileScroll.get('id') && !userProfileScroll.get('onceScrolled')){
+            self.scrollToElement(userProfileScroll.get('id').match(/[a-zA-Z]+/g).join(''),'id');
+            self.props.alreadyScrolled();
+          }
+      })
   },
   componentWillUnmount() {
     if (this.props.removeAllCheckedOutItems) this.props.removeAllCheckedOutItems();
@@ -65,11 +76,13 @@ const ProviderProfile = createReactClass({
     }
   },
   checkOutItem(event,foodItem){
+    this.setState({snackBarOpen:true})
     // check whether user is logged in 
     if(this.props.globalState.core.get('userLoggedIn')){
       // initialize the quantity checked out to 1
       foodItem.quantity =1; 
       this.props.providerFoodItemCheckout(foodItem);
+
       if(this.state.counter === 0){
         this.setState({
           counter:this.state.counter+1,
@@ -81,8 +94,15 @@ const ProviderProfile = createReactClass({
       this.props.openLoginModal(true);
     }
   },
-  scrollToElement(elementClassName){
-    scrollToElement('.'+elementClassName, {
+  handleRequestClose(){
+    this.setState({snackBarOpen:false})
+  },
+  scrollToElement(elementName,isId){
+    let element;
+    if(isId){
+      element = '#'+elementName;
+    } else element = '.'+ elementName;
+    scrollToElement(element, {
       offset: 0,
       ease: 'linear',
       duration: 500
@@ -308,6 +328,12 @@ const ProviderProfile = createReactClass({
               <div className="checkout-section"></div>
             </div> 
           </div>
+          <Snackbar
+            open={this.state.snackBarOpen}
+            message="Item added to checkout"
+            autoHideDuration={4000}
+            onRequestClose={this.handleRequestClose}
+          />
         </div>
         :
         <div></div> 
@@ -325,6 +351,7 @@ ProviderProfile.propTypes = {
   removeAllCheckedOutItems:PropTypes.func,
   globalState:PropTypes.object,
   postSecuredData:PropTypes.func,
+  alreadyScrolled:PropTypes.func,
   openLoginModal:PropTypes.func,
   selectItemForReview:PropTypes.func,
   selectStarRating:PropTypes.func,

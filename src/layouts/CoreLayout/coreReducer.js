@@ -10,6 +10,8 @@ export const UPDATE_USER = 'UPDATE_USER';
 export const USER_FOOD_ITEM_UPDATE = 'USER_FOOD_ITEM_UPDATE'
 export const PUBLISH_USER = "PUBLISH_USER"
 export const POST_LOGIN_URL_REDIRECT = "POST_LOGIN_URL_REDIRECT"
+export const SCORLL_TO_ITEM_IN_USER_PROFILE = "SCORLL_TO_ITEM_IN_USER_PROFILE"
+export const ALREADY_SCROLLED = "ALREADY_SCROLLED"
 
 export function addToken(value) {
     return {
@@ -68,8 +70,17 @@ export function postLoginUrlRedirect(url) {
         payload:url
     }
 }
-
-
+export function userProfileScrollPosition(id) {
+    return {
+        type: SCORLL_TO_ITEM_IN_USER_PROFILE,
+        payload:id
+    }
+}
+export function alreadyScrolled() {
+    return {
+        type: ALREADY_SCROLLED
+    }
+}
 
 const ACTION_HANDLERS = {
     [ADD_TOKEN]: (state, action) => {
@@ -99,7 +110,14 @@ const ACTION_HANDLERS = {
     },
     [POST_LOGIN_URL_REDIRECT]: (state, action) => {
         return state.set('postLoginUrlRedirect', action.payload)
-    }
+    },
+    [SCORLL_TO_ITEM_IN_USER_PROFILE]:(state,action)=>{
+        return state.setIn(['userProfileScroll', 'id'],action.payload)
+                    .setIn(['userProfileScroll', 'onceScrolled'],false)
+    },
+    [ALREADY_SCROLLED]:(state,action)=>{
+        return state.setIn(['userProfileScroll', 'onceScrolled'],true)
+    },
 }
 
 const initialState = Map({
@@ -124,8 +142,11 @@ const initialState = Map({
     }),
     loginModalOPen: undefined,
     userLoggedIn: false,
-    postLoginUrlRedirect:''
-
+    postLoginUrlRedirect:'',
+    userProfileScroll:Map({
+        id:undefined,
+        onceScrolled:false
+    })
 })
 
 export function coreReducer(state = initialState, action) {

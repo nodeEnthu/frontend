@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import {selectCuisineOrDiet,flushOutStaleData,selectAddtnlQuery,setDirty,foodIdSelected,openModal} from '../modules/search'
-import { updateUser } from 'layouts/CoreLayout/coreReducer'
+import { updateUser,userProfileScrollPosition } from 'layouts/CoreLayout/coreReducer'
 import {fetchMayBeSecuredData} from 'utils/actionUtils/defaultHttpActions';
  
 /*  This is a container component. Notice it does not contain any JSX,
@@ -20,6 +20,7 @@ const mapDispatchToProps = {
   selectCuisineOrDiet,
   selectAddtnlQuery,
   updateUser,
+  userProfileScrollPosition,
   setDirty,
   foodIdSelected,
   openModal,

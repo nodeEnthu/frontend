@@ -78,7 +78,7 @@ const OrderSubmitModal = createReactClass({
       _providerId:data._id,
       customerName:customerName,
       orderTime: resolvePickUpTime(orderTime),
-      providerAddress:(data)?data.loc.searchText:undefined,
+      providerAddress:(data)?data.displayAddress : undefined,
       customerAddress: customerAddress,
       customerEmailId:user.email,
       providerEmailId:data.email,

@@ -24,6 +24,7 @@ ProviderProfile.propTypes = {
   providerProfile:PropTypes.object,
   updateCheckedOutItem:PropTypes.func,
   deleteCheckedOutItem:PropTypes.func,
+  alreadyScrolled:PropTypes.func,
   globalState:PropTypes.object,
   postSecuredData:PropTypes.func,
   openLoginModal:PropTypes.func,
