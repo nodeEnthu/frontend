@@ -86,7 +86,7 @@ const FoodItem = createReactClass({
                         </tr>
                     </tbody>
                   </table>
-                  <div className="food-price">{'$'+ foodItem.price}</div>
+                  <div className="food-price">{foodItem.displayPrice || '$'+ foodItem.price}</div>
               </div>
               <div className="tabs-wrapper">
                 <Tabs

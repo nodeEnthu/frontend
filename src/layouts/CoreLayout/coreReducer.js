@@ -138,7 +138,8 @@ const initialState = Map({
         deliveryAddressIndex:undefined,
         userType:'',
         searchText: '',
-        place_id: ''
+        place_id: '',
+        currency:undefined
     }),
     loginModalOPen: undefined,
     userLoggedIn: false,

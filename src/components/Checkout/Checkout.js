@@ -95,17 +95,18 @@ const Checkout = createReactClass({
         grandTotal = grandTotal + parseInt(itemsCheckedOut[key].price * parseInt(itemsCheckedOut[key].quantity));
       }
     };
+    const orderType = (provider.serviceOffered === 3 ||  (provider.serviceOffered === 2 && this.state.pickup.toString() ==="false") )? "Delivery": "Pickup"
     let self= this;
     return (resolvedItemsCheckedOut && resolvedItemsCheckedOut.length)?
           <div className="checkout">
             <div className="content-subhead">Checkout</div>
             <div className="checkout-section-wrapper">
               {
-                (provider.serviceOffered === 3 ||  (provider.serviceOffered === 2 && this.state.pickup.toString()) ==="false")?
+                (provider.serviceOffered === 3 ||  (provider.serviceOffered === 2 && this.state.pickup.toString() ==="false") )?
                 <span className="checkout-label">Delivery order at</span>:undefined
               }
               {
-                (provider.serviceOffered === 1 ||  this.state.pickup.toString() ==="true")?
+                (provider.serviceOffered === 1 || (provider.serviceOffered === 2 && this.state.pickup.toString() === "true"))?
                 <span className="checkout-label">Pick-up order at</span>:undefined
               }
               <DropDownMenu value={orderTime} onChange={(event, index, value)=>this.onChange(undefined,'orderTime',value)}
@@ -181,7 +182,7 @@ const Checkout = createReactClass({
             <div className="checkout-section-wrapper">
               <div className="pure-u-md-1-5 pure-u-1 checkout-label"></div>
               <div className="pure-u-md-4-5">
-                <div className= "grand-total">Total &nbsp; {'$ '+grandTotal}</div>
+                <div className= "grand-total">Total &nbsp; {grandTotal}</div>
               </div>
               {
                 resolvedItemsCheckedOut.map(function(itemCheckedOut){
@@ -283,10 +284,8 @@ const Checkout = createReactClass({
             <OrderSubmitModal{... this.props}
               addtnlAddressInfo={this.state.addtnlAddressInfo}
               orderTime={this.state.orderTime}
-              orderType={(this.state.pickup)?'Pickup':'Delivery'}
+              orderType={orderType}
             />
-            <div className="checkout-place-order">
-            </div>
           </div>
           :
           <div></div>

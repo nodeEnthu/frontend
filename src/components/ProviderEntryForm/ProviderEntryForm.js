@@ -307,7 +307,7 @@ const ProviderEntryForm = createReactClass({
                                     </div>
                                 </div>
                                 <div className="pure-u-1 pure-u-md-1-2">
-                                    <label>Minimum Order for delivery ($)</label>
+                                    <label>Minimum order price for delivery (please enter an amount) </label>
                                     <input id="min-order" placeholder="Example: 25" type="text"
                                         name="deliveryMinOrder"
                                         onBlur={this.handleChange} 

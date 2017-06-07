@@ -118,7 +118,7 @@ const OrderAction = createReactClass({
             <div className="checkout-section-wrapper">
               <div className="pure-u-md-1-5 pure-u-1 checkout-label">Order details</div>
               <div className="pure-u-md-4-5">
-                <div className= "grand-total">Total &nbsp; {'$ '+order.subTotal}</div>
+                <div className= "grand-total">Total &nbsp; {order.subTotal}</div>
               </div>
               {
                 resolvedItemsCheckedOut.map(function(itemCheckedOut){
@@ -136,7 +136,7 @@ const OrderAction = createReactClass({
                               </div>
                             </div>
                             <div className="pure-u-1-5 item-wo-desc">
-                               <span>{'$ '+itemCheckedOut.price}</span>
+                               <span>{itemCheckedOut.displayPrice || '$ '+itemCheckedOut.price}</span>
                             </div>
                           </div>
                           <div className="pure-u-1 checkout-sec-2">

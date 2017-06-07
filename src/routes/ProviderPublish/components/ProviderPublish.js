@@ -23,7 +23,7 @@ const Provider = createReactClass ({
     this.setState({showSpinner:true})
     securedPostCall('/api/providers/publish',{_creator:user._id})
       .then(function(res){
-        if(res && res.data && res.data._id){
+        if(res && res.data && res.data.status ==='ok'){
           self.setState({showSpinner:false});
           // refresh the page and the on Enter hook should automatically default it to the profile page
           // ... no.. I dont think thats a hack

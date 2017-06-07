@@ -127,7 +127,7 @@ const FoodItemInProviderProfile = createReactClass({
                   </tbody>
                 </table>
                 <div className="add-to-cart">
-                  <div className="food-price">{'$'+ foodItem.price}</div>
+                  <div className="food-price">{foodItem.displayPrice || '$'+ foodItem.price}</div>
                   {
                     (this.props.mode != 'providerEntry' && !this.props.userViewingOwnProfile && !this.props.pastItem )?
                       <div className="add">

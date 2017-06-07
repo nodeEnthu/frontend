@@ -93,7 +93,7 @@ const OrderAction = createReactClass({
               <div style={{ margin:'1em'}}>
                 <CheckMark style={{width:'15%',margin:"0 auto"}}/>
                 <span>
-                  Your order has been submitted to provider. Please wait for a confirmation email after the order is approved by the provider
+                  Awwright!! your order has been submitted to the provider. Once approved we will send you a confirmation email.
                 </span>
               </div>
               :

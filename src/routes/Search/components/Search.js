@@ -402,7 +402,7 @@ const Search = createReactClass({
                                                             }
                                                         </div>
 											    		<div className="add-to-cart">
-											    			<div className="food-price">{'$'+ foodItem.price}</div>
+											    			<div className="food-price">{foodItem.displayPrice || '$'+ foodItem.price}</div>
 											    		</div>
 											    		
 											    	</div>
@@ -483,7 +483,7 @@ const Search = createReactClass({
                                                           }
                                                         </div>
                                                         <div className="add-to-cart">
-                                                            <div className="food-price">{'$'+ foodItem.price}</div>
+                                                            <div className="food-price">{foodItem.displayPrice || '$'+ foodItem.price}</div>
                                                         </div>
                                                         
                                                     </div>

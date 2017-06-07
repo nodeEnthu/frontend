@@ -59,10 +59,8 @@ var Login = createReactClass({
                       dispatch(actions.postLoginUrlRedirect(''));
                     } else{
                       // now based on the userType take an action
-                      if (res.user.userType === 'consumer'){
-                        self.context.router.push('/search');
-                      }else {
-                        self.context.router.push('/providerProfile/'+res.user._id);
+                      if (res.user.userType === 'provider'){
+                         self.context.router.push('/providerProfile/'+res.user._id);
                       }
                     }
                   }

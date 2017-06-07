@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './fooditementryform.scss';
-import { email, maxLength, required, regexTime, regexDate, requiredArray } from 'utils/formUtils/formValidation';
+import { email, maxLength, required, regexTime, regexDate, requiredArray,requiredInteger } from 'utils/formUtils/formValidation';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton'
 import classNames from 'classnames';
@@ -58,7 +58,7 @@ const FoodItemEntryForm= createReactClass({
         description:required,
         placeOrderBy: required,
         cuisineType: required,
-        price:required
+        price:requiredInteger
     },
     addTimeOffset(orignalDate){
         return new Date(orignalDate.getTime()+orignalDate.getTimezoneOffset()*60000) ;

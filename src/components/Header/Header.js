@@ -12,12 +12,29 @@ import ActionSearch from 'material-ui/svg-icons/action/search'
 import ActionChromeReaderMode from 'material-ui/svg-icons/action/chrome-reader-mode'
 import ActionHome from 'material-ui/svg-icons/action/home'
 import ActionPermIdentity from 'material-ui/svg-icons/action/perm-identity'
+import ActionDelete from 'material-ui/svg-icons/action/delete';
+import Dialog from 'material-ui/Dialog';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
+import RaisedButton from 'material-ui/RaisedButton';
+import {securedPostCall} from 'utils/httpUtils/apiCallWrapper'
 
 const Header =createReactClass ({
     getInitialState() {
-      return {leftNavOpen:false}
+      return {
+        leftNavOpen:false,
+        deleteAccntModalOpen:false,
+        deleteText:'',
+        showSpinner:false,
+        accntDeleted:false,
+        deleteResult:''
+      }
+    },
+    handleModalOpen (){
+      this.setState({deleteAccntModalOpen: true});
+    },
+    handleModalClose(){
+      this.setState({deleteAccntModalOpen: false});
     },
     handleToggle(){
       this.setState({leftNavOpen:true});
@@ -28,7 +45,7 @@ const Header =createReactClass ({
       location.reload();
     },
     contextTypes: {
-      router: PropTypes.object.isRequired
+      router: PropTypes.object.isRequired 
     },
     checkLoginAndredirect(){
       const {user} = this.props.globalState.core.toJS();
@@ -49,16 +66,37 @@ const Header =createReactClass ({
         this.context.router.push('/providerProfile/'+user._id)
       } 
     },
+    deleteAccnt(userId){
+      let self = this;
+      this.setState({showSpinner:true,deleteResult: 'Deleting your profile'});
+      securedPostCall('/api/providers/remove',{userId:userId, _id:userId})
+        .then(function(res){
+          self.setState({showSpinner:false});
+          if(res && res.data && res.data.message && res.data.message === 'done' ){
+            self.setState({accntDeleted:true,deleteResult: 'Account successfully deleted'});
+            setTimeout(function(){
+              self.context.router.push('/');
+              self.removeToken();
+            },2000);
+          } else{
+            self.setState({accntDeleted:false,deleteResult: 'Oops! something went wrong. Plese try again later'});
+          }
+          self.context.router.push('/');
+          
+        })
+    },
     render() {
         const { globalState } = this.props;
         const {user} = globalState.core.toJS();
+        user.title = user.title || 'someRandomString';
+        let {deleteText,deleteAccntModalOpen, showSpinner, accntDeleted} = this.state;
         return (
               <AppBar
                 title=""
                 onLeftIconButtonTouchTap={()=>this.handleToggle()}
                 titleStyle={{flex :'0 0 0'}}
               >
-                <div className="frame">
+                <div className="frame" onClick={()=>this.context.router.push('/')}>
                   <img className = "logo" src="/general/logo.png"></img>
                 </div>
 
@@ -104,6 +142,13 @@ const Header =createReactClass ({
                     :
                     undefined
                   }
+                  {(globalState.core.get('token').length>0 )?
+                    <MenuItem style ={{position: 'absolute', bottom:'0'}} leftIcon={<ActionDelete/>}>
+                        <a onClick = {this.handleModalOpen}>Delete account</a>
+                    </MenuItem>
+                    :
+                    undefined
+                  }
                 </Drawer>
                 <nav id="sub-nav" role="navigation">
                     <ul>
@@ -129,6 +174,51 @@ const Header =createReactClass ({
                       </li>
                     </ul>
                   </nav>
+                  <Dialog 
+                    modal={true}
+                    open={deleteAccntModalOpen}
+                    onRequestClose={this.handleClose}
+                    className="is-center">
+                    <p>Are you sure you want to  delete your account ?</p>
+                    <p> Please be aware that you will loose all your data </p>
+                    <p>This process is irreversible</p>
+                    <p className="is-center"> Still want to go ahead with it ?</p>
+                    {
+                      (user && user.userType === 'provider')?
+                      <form className="pure-form pure-form-stacked">
+                        <textarea className = "pure-u-1" value={deleteText} placeholder="Please type in your profile/business name to confirm." onChange={(event)=>this.setState({deleteText:event.target.value})}/>
+                      </form>
+                      :
+                      undefined
+                    }
+                    
+                    <div style={{display:(this.state.showSpinner)?'block':'none'}}>
+                        <img src= "/general/loading.svg"/>
+                    </div>
+                  { (accntDeleted === false && !showSpinner)?
+                    <div>
+                      <RaisedButton label="No"
+                        onTouchTap={()=>this.setState({deleteAccntModalOpen:false})}
+                      />
+                      <div className="pure-u-1-12">
+                      </div>
+                      {
+                        (user.title || user.userType === 'consumer')?
+                        <RaisedButton 
+                          backgroundColor="red" 
+                          label="Yes" 
+                          onTouchTap={(event)=>this.deleteAccnt(user._id)}
+                          disabled={(this.state.deleteText.toUpperCase() != user.title.toUpperCase() && user.userType != 'consumer')}
+                        />
+                        :undefined
+                      }
+                    </div>
+                    :
+                    <div>Your account has been successfully deleted !</div>
+                  }
+                      
+                      
+                  </Dialog>
               </AppBar>
                 
         );

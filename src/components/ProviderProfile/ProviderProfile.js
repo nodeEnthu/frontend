@@ -56,7 +56,11 @@ const ProviderProfile = createReactClass({
     if(nextProps.globalState.core.get('userLoggedIn') && foodItemAddedbeforeLogin) {
       // that means user tried to add an item to the checkout before logging in
       this.setState({addItemAfterLogin:undefined});
-      this.checkOutItem(undefined, foodItemAddedbeforeLogin,true);
+      // check if the user is in its own profile
+      console.log(nextProps.globalState.core.get('user').get('_id'));
+      if(nextProps.globalState.core.get('user').get('_id') != this.props.params.id){
+        this.checkOutItem(undefined, foodItemAddedbeforeLogin,true);
+      }
     }
   },
   componentWillUnmount() {
@@ -78,7 +82,7 @@ const ProviderProfile = createReactClass({
     //check whether clicking on add to cart made component update
     let self = this;
     if(this.state.counter===1 && this.state.itemCheckOutClicked){
-      setTimeout(function(){self.scrollToElement('checkout')},200);
+      setTimeout(function(){self.scrollToElement('checkout')},500);
       this.setState({itemCheckOutClicked:false})
     }
     if(prevProps.params.id!= this.props.params.id){
@@ -101,7 +105,7 @@ const ProviderProfile = createReactClass({
     }else{
       // open the modal for user login
       this.props.openLoginModal(true);
-      // add item to login after login.. as the page will re-render
+      // add item to cart after login.. as the page will re-render after login is completed
       this.setState({addItemAfterLogin:foodItem});
     }
   },

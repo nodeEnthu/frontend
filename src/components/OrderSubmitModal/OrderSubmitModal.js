@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import {resolvePickUpTime} from 'components/FoodItemEntryForm/constants';
-
+import moment from 'moment';
 const OrderSubmitModal = createReactClass({
   checkOutOrderDetails:{},
   getInitialState() {
@@ -124,19 +124,20 @@ const OrderSubmitModal = createReactClass({
               <table className="pure-table pure-table-horizontal" style={{margin: "0px auto", marginTop:"1em"}}>
                 <thead>
                     <tr>
-                        <th>#</th>
                         <th>Item</th>
-                        <th>Quantity</th>
+                        <th>Qty</th>
+                        <th>Date</th>
                         <th>Price</th>
+
                     </tr>
                 </thead>
                 <tbody>
                   {
                     resolvedItemsCheckedOut.map(function(itemCheckedOut,index){
                       return <tr key={itemCheckedOut._id}>
-                              <td>{index+1}</td>
                               <td>{itemCheckedOut.name}</td>
                               <td>{itemCheckedOut.quantity}</td>
+                              <td>{moment(itemCheckedOut.orderDate).format("dd, Do")}</td>
                               <td>{itemCheckedOut.price}</td>
                             </tr>
                     })
@@ -144,6 +145,9 @@ const OrderSubmitModal = createReactClass({
                 </tbody>
               </table>
               <div className="move-center">
+                <div style={{display:(this.state.showOrderSubmitSpinner)?'block':'none'}}>
+                    <img src= "/general/loading.svg"/>
+                </div>
                 <RaisedButton
                   label="Submit your order"
                   primary={true}

@@ -65,11 +65,17 @@ export function requiredArray(value,message){
         return message || 'Required';
     }
 }
+export function requiredInteger(value,message){
+    if (isEmptyArray(value)) {
+        return message || 'Required';
+    }else if(!(parseInt(Number(value)) == value && !isNaN(parseInt(value, 10)))){
+        return message || ' Only numbers are allowed here'
+    }
+}
 export function isEmptyObj(obj) {
     for(var prop in obj) {
         if(obj.hasOwnProperty(prop))
             return false;
     }
-
     return true;
 }
