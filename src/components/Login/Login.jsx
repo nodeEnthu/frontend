@@ -11,9 +11,6 @@ import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 
-const customStyles = {
-
-};
 
 var Login = createReactClass({
     openModal() {
@@ -32,10 +29,7 @@ var Login = createReactClass({
     successfullLogin(response) {
       let self = this;
       const {globalState,dispatch } = this.props;
-      const {userAddressSearch} = (globalState && globalState.core)?globalState.core.toJS():undefined;
-      if(userAddressSearch){
-        response.userAddressSearch = userAddressSearch;
-      }
+      const {searchText, place_id} = globalState.core.get('user').toJS();
       postCall('/api/users/signUp', JSON.stringify(response))
           .then(function(result) {
               let res = result.data;
@@ -43,7 +37,14 @@ var Login = createReactClass({
                   dispatch(actions.addToken(res.token));
                   dispatch(actions.addUser(res.user));
                   dispatch(actions.userLoggedIn(true));
-                  let userSearchAndPlaceId = getSearchAddressAndPlaceId(res.user);
+                  let userSearchAndPlaceId;
+                  dispatch(actions.updateUser('firstTime',res.firstTime));
+                  // check whether the person was looking for a new address before logging in 
+                  if(searchText && place_id){
+                    // register the new location
+                    securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
+                    userSearchAndPlaceId = {address:searchText, placeId:place_id}
+                  } else userSearchAndPlaceId = getSearchAddressAndPlaceId(res.user);
                   dispatch(actions.updateUser('searchText',userSearchAndPlaceId.address));
                   dispatch(actions.updateUser('place_id',userSearchAndPlaceId.placeId));
                   sessionStorage.setItem('token', res.token);
@@ -63,7 +64,7 @@ var Login = createReactClass({
                          self.context.router.push('/providerProfile/'+res.user._id);
                       }
                     }
-                  }
+                  } 
               }
           })
     },

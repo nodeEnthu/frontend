@@ -10,6 +10,7 @@ import { getCall,securedGetCall } from 'utils/httpUtils/apiCallWrapper';
 import Stepper from 'components/Stepper';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
+import Dialog from 'material-ui/Dialog';
 
 const HomeView = createReactClass({
     getInitialState() {
@@ -102,7 +103,7 @@ const HomeView = createReactClass({
     },
     render() {
         let {showAddressError,addressErrorMessage,fetchingAddresses} = this.state;
-        
+        let {user} = this.props.globalState.core.toJS();
         return (
             <div className="home">
 				<div className="splash-container pure-override-letter-spacing">

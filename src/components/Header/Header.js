@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import * as actions from '../../layouts/CoreLayout/coreReducer'
 import Login from '../Login/Login'
 import './Header.scss'
+import {securedPostCall} from 'utils/httpUtils/apiCallWrapper'
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
@@ -17,7 +18,7 @@ import Dialog from 'material-ui/Dialog';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
-import {securedPostCall} from 'utils/httpUtils/apiCallWrapper'
+
 
 const Header =createReactClass ({
     getInitialState() {
@@ -66,6 +67,9 @@ const Header =createReactClass ({
         this.context.router.push('/providerProfile/'+user._id)
       } 
     },
+    closeModal(){
+       this.props.dispatch(actions.updateUser('firstTime', false));
+    },
     deleteAccnt(userId){
       let self = this;
       this.setState({showSpinner:true,deleteResult: 'Deleting your profile'});
@@ -88,7 +92,7 @@ const Header =createReactClass ({
     render() {
         const { globalState } = this.props;
         const {user} = globalState.core.toJS();
-        user.title = user.title || 'someRandomString';
+        user.title = user.title || 'someRandomString'; // name of the business
         let {deleteText,deleteAccntModalOpen, showSpinner, accntDeleted} = this.state;
         return (
               <AppBar
@@ -114,7 +118,7 @@ const Header =createReactClass ({
                       Home
                     </MenuItem>
                   }
-                  {(globalState.core.get('token').length>0 && user&& user.name)?
+                  {(globalState.core.get('token').length>0 && user && user.name && user.place_id)?
                     <MenuItem leftIcon={<ActionSearch/>} onTouchTap={()=>this.goToPage('/search')}>
                       Search
                     </MenuItem>
@@ -175,13 +179,12 @@ const Header =createReactClass ({
                     </ul>
                   </nav>
                   <Dialog 
-                    modal={true}
                     open={deleteAccntModalOpen}
                     onRequestClose={this.handleClose}
-                    className="is-center">
+                    className="is-center"
+                  >
                     <p>Are you sure you want to  delete your account ?</p>
-                    <p> Please be aware that you will loose all your data </p>
-                    <p>This process is irreversible</p>
+                    <p> Please be aware that you will loose all your data <strong>permanently</strong></p>
                     <p className="is-center"> Still want to go ahead with it ?</p>
                     {
                       (user && user.userType === 'provider')?
@@ -214,11 +217,48 @@ const Header =createReactClass ({
                       }
                     </div>
                     :
-                    <div>Your account has been successfully deleted !</div>
+                    undefined
                   }
-                      
+                  {
+                    (accntDeleted)?
+                    <div>Your account has been successfully deleted !</div>
+                    :
+                    undefined
+                  }    
                       
                   </Dialog>
+                  <div className="is-center">
+                    <Dialog
+                      modal={true}
+                      title={ <div className="welcome-title">
+                                 <img className="welcome-img" src= "/general/logo.png"/>
+                                 <span className="welcome-text">welcomes you</span>
+                              </div> 
+                            }
+                      style={{color:'black'}}
+                      titleStyle={{backgroundColor:"#FF6F00",color:"white",fontSize:"100%"}}
+                      open={user.firstTime || false}
+                      contentClassName="happy-welcome"
+                      style={{ width: '100%', maxWidth:''}}
+                    > 
+                      <div style={{margin:'1em auto', textAlign:"center",color:"black",fontSize:"105%"}}>
+                         Hello {user.name}, your email on file is {user.email} 
+                      </div>
+                      
+                      
+                      <div className="is-center">
+                        <RaisedButton
+                          label="Close"
+                          primary={true}
+                          onTouchTap={this.closeModal}
+                          className="is-center"
+                          style={{marginTop:'1.5em'}}
+                          disableTouchRipple={true}
+                        />
+                      </div>
+                    </Dialog>
+                  </div>
+
               </AppBar>
                 
         );

@@ -1,6 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import { charsLeft, addProviderInfo, addProviderErrorMsg, prefilProviderEntryForm, addFoodItemInfo, removeFoodItemInfo, addProviderEntryState, showHideSpinner } from '../modules/providerProfileEntry'
+import { charsLeft, addProviderInfo, addProviderErrorMsg } from '../modules/providerProfileEntry'
 import { fetchSecuredData } from 'utils/actionUtils/defaultHttpActions'
 
 
@@ -21,11 +21,6 @@ const mapActionCreators = (dispatch) => {
         dispatch,
         addProviderInfo,
         addProviderErrorMsg,
-        addFoodItemInfo,
-        removeFoodItemInfo,
-        addProviderEntryState,
-        prefilProviderEntryForm,
-        showHideSpinner,
         fetchSecuredData
     }, dispatch)
 

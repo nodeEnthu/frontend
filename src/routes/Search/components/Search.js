@@ -4,7 +4,6 @@ import Carousel from 'nuka-carousel'
 import './search.scss'
 import classNames from 'classnames'
 import StarRatingComponent from 'react-star-rating-component';
-import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import AsyncAutocomplete from 'components/AsyncAutocomplete';
@@ -86,6 +85,7 @@ const Search = createReactClass({
 
     onSuggestionSelected(event,{suggestion}){
         let self= this;
+        // this changes the user address in store
         this.props.updateUser('searchText',suggestion.address);
         this.props.updateUser('place_id',suggestion.place_id);
         // also register this address in the address book if the user is logged in
@@ -301,7 +301,7 @@ const Search = createReactClass({
                                 </div>
                               <div className="adjust-delivery" >  
                                   <FlatSelection selections={[{title:'5mi',value:'5'},{title:'10',value:'10'},{title:'15',value:'15'},{title:'20',value:'20'}]}
-                                                 defaultChecked="10"
+                                                 defaultChecked={addtnlQuery.providerRadius || "10"}
                                                  storeKey='providerRadius'
                                                  onClick={this.selectOption}
                                   />
@@ -317,7 +317,7 @@ const Search = createReactClass({
                                 </div>
                               <div className="adjust-delivery" >  
                                   <FlatSelection selections={[{title:'delivery',value:'delivery'},{title:'pickup',value:'pickup'},{title:'both',value:'both'}]}
-                                                 defaultChecked="both"
+                                                 defaultChecked={addtnlQuery.orderMode || "both"}
                                                  storeKey='orderMode'
                                                  onClick={this.selectOption}
                                   />
@@ -412,7 +412,7 @@ const Search = createReactClass({
 										:
 										<div style={{display:(!this.state.showSpinner)?'block':'none'}} className="is-center no-results-wrapper">
                                             <div>Sorry! no results were found</div>
-                                            <div className="sub-text">Try broadening your filters</div>
+                                            <div className="sub-text">Tried broadening filters ?</div>
                                         </div>
 
             					} 
@@ -493,7 +493,7 @@ const Search = createReactClass({
                                         :
                                         <div style={{display:(!this.state.showSpinner)?'block':'none'}} className="is-center no-results-wrapper">
                                             <div>Sorry! no results were found</div>
-                                            <div className="sub-text">Try broadening your filters</div>
+                                            <div className="sub-text">Tried broadening filters ?</div>
                                         </div>
                                 } 
                             </div>

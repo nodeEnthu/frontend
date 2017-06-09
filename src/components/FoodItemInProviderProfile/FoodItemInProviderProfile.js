@@ -33,7 +33,7 @@ const FoodItemInProviderProfile = createReactClass({
     })
   },
   render(){
-    let {foodItem,mode,provider,onOrder}= this.props;
+    let {foodItem,mode,provider,onOrder,disableAdd}= this.props;
     let self = this;
     const {deleteItemModalOpen} = this.props.providerProfile.toJS() || false;
     const availabilityLength = foodItem.availability.length;
@@ -132,12 +132,13 @@ const FoodItemInProviderProfile = createReactClass({
                     (this.props.mode != 'providerEntry' && !this.props.userViewingOwnProfile && !this.props.pastItem )?
                       <div className="add">
                         <FlatButton
-                          backgroundColor="#FF6F00"
+                          backgroundColor={(disableAdd)? "lightgrey" : "#FF6F00"}
                           label="+add"
                           labelStyle={{color:'white'}}
                           style={{height:'24px',lineHeight:'24px',minWidth:'80px'}}
                           onTouchTap={(event)=> this.props.checkOutItem(event,foodItem)}
                           disableTouchRipple={true}
+                          disabled = {disableAdd}
                         />
                       </div>
                       :

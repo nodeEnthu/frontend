@@ -251,7 +251,7 @@ const ProviderEntryForm = createReactClass({
                                 </div>
                                 <div style={{padding:"0.25em 0"}}> will appear as: </div>
                                 <div>
-                                    <i>San Jose, Ca</i>
+                                    <i>San Jose, Ca, USA</i>
                                 </div>
                             </div>
                             :
@@ -363,21 +363,20 @@ const ProviderEntryForm = createReactClass({
                     }}
                   >
                     <p>
-                        Address is used to match you with:
-                        <ul>
-                            <li>
-                                customers searching for food in the area. 
-                            </li>
-                        </ul> 
+                        Address is used to match you with customers searching for food in your area. 
                     </p>
                     <p>
-                         Still not convinced. Please feel free to give ur your cross street address.
-                         <br/>
-                         However make sure to cordinate with your customer regarding the accurate location for pick-up
+                        Accurate address will help us find more closer customers
                     </p>
-                  <p>
-                        fillurtummy is dedicated to keeping your data private
-                  </p>
+                    <p>
+                        Calljack-ie is is dedicated towards keeping your personal details <strong>private</strong>
+                    </p>
+                    <p>
+                        Please note that you can always change your pickup address to make it accurate  and add additional comments at the time of confirming an order
+                    </p>
+                    <p>
+                        Now go ahead and start getting orders!!
+                    </p>
 
                   </div>
                 </Dialog>

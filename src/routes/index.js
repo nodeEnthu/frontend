@@ -13,6 +13,7 @@ import Chat from './Chat'
 import ProviderProfileEntry from './ProviderProfileEntry'
 import ProviderFoodEntry from './ProviderFoodEntry'
 import ProviderPublish from './ProviderPublish'
+import ContactUs from './ContactUs'
 import { onMainPageEnter} from 'utils/auth/onEnterAuth'
 
 
@@ -37,7 +38,8 @@ export const createRoutes = (store) => ({
         FoodItemAddPage(store),
         OrderAction(store),
         OrderSummary(store),
-        Chat(store)
+        Chat(store),
+        ContactUs(store)
     ]
 
 })

@@ -53,6 +53,7 @@ const OrderSubmitModal = createReactClass({
     const {user} = this.props.globalState.core.toJS();
     const {addtnlAddressInfo,orderTime} = this.props;
     let data = providerProfileCall.data;
+    let self =this;
     let resolvedItemsCheckedOut= [];
     let grandTotal = 0;
     for(var key in itemsCheckedOut){
@@ -82,10 +83,9 @@ const OrderSubmitModal = createReactClass({
       customerAddress: customerAddress,
       customerEmailId:user.email,
       providerEmailId:data.email,
-      orderId:'tbd',
-      tip:'tbd',
+      currency: this.props.currency,
       orderType:this.props.orderType,
-      subTotal:grandTotal,
+      subTotal:this.props.currency + ' ' + grandTotal,
       modeOfPayment:'Cash/CreditCard'
     }
     // ends here
@@ -138,7 +138,7 @@ const OrderSubmitModal = createReactClass({
                               <td>{itemCheckedOut.name}</td>
                               <td>{itemCheckedOut.quantity}</td>
                               <td>{moment(itemCheckedOut.orderDate).format("dd, Do")}</td>
-                              <td>{itemCheckedOut.price}</td>
+                              <td>{(itemCheckedOut.displayPrice && itemCheckedOut.displayPrice!="undefined")? itemCheckedOut.displayPrice : self.props.currency + ' ' + itemCheckedOut.price }</td>
                             </tr>
                     })
                   }

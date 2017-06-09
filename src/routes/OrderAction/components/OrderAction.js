@@ -175,16 +175,16 @@ const OrderAction = createReactClass({
                     <img src= "/general/loading.svg"/>
                   </div>
                  <RaisedButton label="Cancel"
-                  style={{marginRight:'10%',width:"30%",height:'3em',lineHeight:"3em"}}
-                  labelStyle={{fontSize:"125%"}}
+                  style={{marginRight:'10%',width:"35%",height:'3em',lineHeight:"3em"}}
+                  labelStyle={{fontSize:"105%"}}
                   disableTouchRipple={true}
                   onClick={()=>this.setState({deleteItemModalOpen:true})}
                  />
                 <RaisedButton
                   primary={true}
                   label = "Confirm"
-                  style={{marginLeft:'10%',width:"30%",height:'3em',lineHeight:"3em"}}
-                  labelStyle={{fontSize:"125%"}}
+                  style={{marginLeft:'10%',width:"35%",height:'3em',lineHeight:"3em"}}
+                  labelStyle={{fontSize:"105%"}}
                   disableTouchRipple={true}
                   onClick={this.confirmOrder}
                 >

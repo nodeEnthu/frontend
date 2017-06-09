@@ -96,6 +96,7 @@ const Checkout = createReactClass({
       }
     };
     const orderType = (provider.serviceOffered === 3 ||  (provider.serviceOffered === 2 && this.state.pickup.toString() ==="false") )? "Delivery": "Pickup"
+    const currency = (provider.currency && provider.currency != 'undefined')? provider.currency : '$';
     let self= this;
     return (resolvedItemsCheckedOut && resolvedItemsCheckedOut.length)?
           <div className="checkout">
@@ -127,7 +128,6 @@ const Checkout = createReactClass({
                   <RadioButtonGroup name="foodOptions" 
                       valueSelected={this.state.pickup.toString()}
                       onChange={(event)=>this.toggleFlags('pickup')}
-                      style={{marginTop:"-1.25em"}}
                   >
                     <RadioButton
                       value="true"
@@ -182,7 +182,7 @@ const Checkout = createReactClass({
             <div className="checkout-section-wrapper">
               <div className="pure-u-md-1-5 pure-u-1 checkout-label"></div>
               <div className="pure-u-md-4-5">
-                <div className= "grand-total">Total &nbsp; {grandTotal}</div>
+                <div className= "grand-total">Total &nbsp; {currency + ' ' +grandTotal}</div>
               </div>
               {
                 resolvedItemsCheckedOut.map(function(itemCheckedOut){
@@ -214,7 +214,7 @@ const Checkout = createReactClass({
                               </div>
                             </div>
                             <div className="pure-u-1-5 item-wo-desc">
-                               <span>{'$ '+itemCheckedOut.price}</span>
+                               <span>{(itemCheckedOut.displayPrice && itemCheckedOut.displayPrice !="undefined")? itemCheckedOut.displayPrice :'$ '+itemCheckedOut.price}</span>
                             </div>
                           </div>
                           <div className="pure-u-1 checkout-sec-2">
@@ -285,6 +285,7 @@ const Checkout = createReactClass({
               addtnlAddressInfo={this.state.addtnlAddressInfo}
               orderTime={this.state.orderTime}
               orderType={orderType}
+              currency={currency}
             />
           </div>
           :

@@ -52,6 +52,11 @@ const ProviderProfile = createReactClass({
       })
   },
   componentWillReceiveProps(nextProps){
+    // when user goes from one profile to another componentWillUnmount is not called
+    if(nextProps.params.id != this.props.params.id){
+      if (this.props.removeAllCheckedOutItems) this.props.removeAllCheckedOutItems();
+    }
+    // this is to add the food item to checkout after user tried to do it in guest mode
     const foodItemAddedbeforeLogin = this.state.addItemAfterLogin; 
     if(nextProps.globalState.core.get('userLoggedIn') && foodItemAddedbeforeLogin) {
       // that means user tried to add an item to the checkout before logging in
@@ -127,7 +132,8 @@ const ProviderProfile = createReactClass({
     this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
   },
   render() {
-    const {providerProfileCall} = this.props.providerProfile.toJS();
+    let {providerProfileCall, itemsCheckedOut} = this.props.providerProfile.toJS();
+    itemsCheckedOut = itemsCheckedOut || {};
     let provider = providerProfileCall.data;
     let responseRatio
     let self = this;
@@ -261,6 +267,7 @@ const ProviderProfile = createReactClass({
                                 foodItem={foodItem}
                                 mode = {this.props.mode}
                                 foodIdSelected={this.props.foodIdSelected}
+                                disableAdd = {(itemsCheckedOut[foodItem._id])? true: false}
                               />
                     })
                   }
@@ -286,6 +293,7 @@ const ProviderProfile = createReactClass({
                                 mode = {this.props.mode}
                                 onOrder={true}
                                 foodIdSelected={this.props.foodIdSelected}
+                                disableAdd = {(itemsCheckedOut[foodItem._id])? true: false}
                               />
                     })
                   }
