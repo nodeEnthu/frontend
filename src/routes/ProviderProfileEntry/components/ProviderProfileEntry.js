@@ -29,6 +29,7 @@ const ProviderProfileEntry = createReactClass ({
             <ProviderEntryForm  providerEntryForm = {this.props.providerEntryForm}
                                 addProviderInfo = {this.props.addProviderInfo}
                                 addProviderErrorMsg = {this.props.addProviderErrorMsg}
+                                addMethodOfPayment = {this.props.addMethodOfPayment}
                                 dispatch={this.props.dispatch}
                                 params = {{id:this.props.params.id}}
                                 mode = {"PROVIDER_ENTRY"}
@@ -47,6 +48,7 @@ ProviderProfileEntry.propTypes= {
     providerEntryForm: PropTypes.object,
     addProviderInfo:PropTypes.func,
     addProviderErrorMsg:PropTypes.func,
+    addMethodOfPayment:PropTypes.func,
     dispatch: PropTypes.func,
     fetchSecuredData:PropTypes.func.isRequired
   };

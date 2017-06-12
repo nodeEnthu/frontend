@@ -37,7 +37,13 @@ const Checkout = createReactClass({
       if(itemsCheckedOut[key].avalilabilityType === 'specificDates'){
         // take the first date
         if(!itemsCheckedOut[key].orderDate){
-          this.changeStoreVal(key,'orderDate',itemsCheckedOut[key].availability[0])
+          // dates may be past so lets check first
+          for(var i=0; i< itemsCheckedOut[key].availability.length ; i++){
+            if(moment(itemsCheckedOut[key].availability[i]).startOf('day').utc().isSameOrAfter(moment().startOf('day').utc())){
+              this.changeStoreVal(key,'orderDate',itemsCheckedOut[key].availability[i]);
+              break;
+            }
+          }
         }
       } else{
         if(!itemsCheckedOut[key].orderDate){
@@ -228,8 +234,11 @@ const Checkout = createReactClass({
                                               underlineStyle={{borderTop:"1px solid black"}}
                                 >
                                   {itemCheckedOut.availability.map(function(availableDate,index){
-                                      return <MenuItem key={index} value={availableDate} primaryText={moment(availableDate).format("dd, MMM Do")} />
-                                    })}
+                                      if(moment(availableDate).isSameOrAfter(moment().startOf('day').utc())){
+                                        return <MenuItem key={index} value={availableDate} primaryText={moment(availableDate).format("dd, MMM Do")} />
+                                      }
+                                    }
+                                  )}
                                 </DropDownMenu>
                                 :
                                 <DropDownMenu value={itemCheckedOut.orderDate} onChange={(event, index, value)=>self.changeStoreVal(itemCheckedOut._id,'orderDate',value)}
@@ -238,7 +247,7 @@ const Checkout = createReactClass({
                                 >
                                   {
                                     DATES(7,"ddd, MMM D","add").map(function(date,index){
-                                      return (moment().add(itemCheckedOut.placeOrderBy,"days").startOf('day') <= moment(date.value))?
+                                      return (moment().add(itemCheckedOut.placeOrderBy,"days").startOf('day') <= moment(date.value).startOf('day').utc())?
                                               <MenuItem style={{width:'100%'}} key={index} value={date.value} primaryText={date.title}/>
                                               :
                                               undefined
@@ -286,6 +295,7 @@ const Checkout = createReactClass({
               orderTime={this.state.orderTime}
               orderType={orderType}
               currency={currency}
+              grandTotal={grandTotal}
             />
           </div>
           :

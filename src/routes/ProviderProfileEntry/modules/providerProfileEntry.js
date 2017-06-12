@@ -6,12 +6,14 @@ import Provider from 'models/Provider';
 // ------------------------------------
 export const CHARS_LEFT = 'CHARS_LEFT'
 export const ADD_PROVIDER_INFO = "ADD_PROVIDER_INFO"
+export const ADD_METHOD_OF_PAYMENT = "ADD_METHOD_OF_PAYMENT"
 export const ADD_PROVIDER_ERROR_MSG = 'ADD_PROVIDER_ERROR_MSG'
 
 
 export const REQUEST_DATA_PROVIDER_ENTRY = "REQUEST_DATA_PROVIDER_ENTRY";
 export const FAIL_DATA_PROVIDER_ENTRY = "FAIL_DATA_PROVIDER_ENTRY";
 export const RECEIVE_DATA_PROVIDER_ENTRY = "RECEIVE_DATA_PROVIDER_ENTRY";
+
 
 export const MAX_COUNT_PROVIDER_DESC = 100;
 
@@ -36,6 +38,13 @@ export function addProviderInfo(obj) {
         payload: obj.payload
     }
 }
+export function addMethodOfPayment(obj) {
+    return {
+        type: ADD_METHOD_OF_PAYMENT,
+        storeKey: obj.storeKey,
+        payload: obj.payload
+    }
+}
 
 
 export function addProviderErrorMsg(obj) {
@@ -55,6 +64,14 @@ const ACTION_HANDLERS = {
     [REQUEST_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], true),
     [FAIL_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], action.data).setIn([action.payload.storeKey, 'data'], Map()),
     [RECEIVE_DATA_PROVIDER_ENTRY]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], action.payload.data.data).set('providerEntryForm', Map(action.payload.data.data)),
+    [ADD_METHOD_OF_PAYMENT]:(state,action)=>{
+        let methodsOfPayment = state.get('providerEntryForm').toJS().methodsOfPayment || [];
+        let index = methodsOfPayment.indexOf(action.payload)
+        if(index > -1){
+            methodsOfPayment.splice(index,1);
+        } else methodsOfPayment.push(action.payload);
+        return state.setIn(['providerEntryForm','methodsOfPayment'],List(methodsOfPayment));
+    }
 }
 
 // ------------------------------------

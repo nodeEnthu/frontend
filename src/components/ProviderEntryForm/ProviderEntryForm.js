@@ -12,10 +12,11 @@ import s3ImageUpload from 'utils/uploader/s3ImageUpload';
 import RaisedButton from 'material-ui/RaisedButton';
 import Stepper from 'components/Stepper';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import Checkbox from 'material-ui/Checkbox';
 import Snackbar from 'material-ui/Snackbar';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
-
+import {METHODS_OF_PAYMENT} from './constants'
 const maxCount = 100;
 const ProviderEntryForm = createReactClass({
     getInitialState() {
@@ -83,7 +84,12 @@ const ProviderEntryForm = createReactClass({
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
-        this.props.addProviderInfo({storeKey:stateKeyName,payload:input});
+         this.props.addProviderInfo({storeKey:stateKeyName,payload:input});
+        // forcibly re-render
+        window.setTimeout(function() {this.setState({foo: "bar"});}.bind(this),0); 
+    },
+    changeMethodsofPayment(methodsOfPayment,val){
+        this.props.addMethodOfPayment({storeKey:methodsOfPayment,payload:val});
         // forcibly re-render
         window.setTimeout(function() {this.setState({foo: "bar"});}.bind(this),0); 
     },
@@ -153,7 +159,9 @@ const ProviderEntryForm = createReactClass({
         }
     },
     render() {
-        let {chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, keepAddressPrivateFlag,serviceOffered,addtnlComments, includeAddressInEmail,deliveryMinOrder,deliveryRadius,providerAddressJustificationModalOpen,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg,snackBarOpen,snackBarMessage } = this.props.providerEntryForm.toJS();
+        let {chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, methodsOfPayment, keepAddressPrivateFlag,serviceOffered,addtnlComments, includeAddressInEmail,deliveryMinOrder,deliveryRadius,providerAddressJustificationModalOpen,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg,snackBarOpen,snackBarMessage } = this.props.providerEntryForm.toJS();
+        methodsOfPayment = methodsOfPayment || [];
+        let self = this;
         switch(serviceOffered){
             case 1:
                 serviceOffered = "pickup"
@@ -179,7 +187,7 @@ const ProviderEntryForm = createReactClass({
                 </div>
                 <form className="pure-form pure-form-stacked">
                     <fieldset>
-                        <input value={title} type="text" className="pure-u-1" placeholder="*title" name="title" 
+                        <input value={title} type="text" className="pure-u-1" placeholder="*your business name " name="title" 
                             onChange={this.changeStoreVal}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus}
@@ -201,7 +209,7 @@ const ProviderEntryForm = createReactClass({
                         />
                         <div className = "error-message">{(emailErrorMsg)?'*'+emailErrorMsg:undefined}</div>
                         <legend className="pull-left">
-                            <div>
+                            <div style={{marginTop:"1em"}}>
                                 Address:
                             </div>
                             <div>
@@ -257,8 +265,8 @@ const ProviderEntryForm = createReactClass({
                             :
                             undefined
                         }
-                        <div style={{marginTop:"0.5em"}}>
-                            Services offered:
+                        <div>
+                            <legend style={{margin: "1em 0"}}>Services offered:</legend>
                             <RadioButtonGroup name="serviceOffered" valueSelected={serviceOffered} onChange={this.changeStoreVal}>
                               <RadioButton
                                 name="serviceOffered"
@@ -332,7 +340,22 @@ const ProviderEntryForm = createReactClass({
                                 >
                                 </textarea>
                             </fieldset>
-                        </div>                         
+                        </div>
+
+                        <fieldset className = "pure-group">
+                            <legend style={{margin:"1em 0"}}>Methods of payment accepted (can select multiple):</legend>
+                            {
+                                METHODS_OF_PAYMENT.map(function(methodOfPayment, index){
+                                    return <Checkbox
+                                                name="methodsOfPayment"
+                                                key={index}
+                                                label= {methodOfPayment.label}
+                                                checked={(methodsOfPayment.indexOf(methodOfPayment.value) > -1)? true: false }
+                                                onCheck={()=>self.changeMethodsofPayment("methodsOfPayment",methodOfPayment.value)}
+                                            />
+                                })
+                            }
+                        </fieldset>
                     </fieldset>
                 </form>
                 <div className="is-center">
@@ -388,6 +411,7 @@ ProviderEntryForm.propTypes = {
     addProviderInfo:PropTypes.func,
     addProviderErrorMsg:PropTypes.func,
     providerEntryForm: PropTypes.object,
+    addMethodOfPayment: PropTypes.func,
     params:PropTypes.object,
     fetchSecuredData:PropTypes.func,
     mode:PropTypes.string,

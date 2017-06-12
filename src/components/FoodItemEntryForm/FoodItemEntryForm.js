@@ -300,7 +300,7 @@ const FoodItemEntryForm= createReactClass({
                                         })
                                     }
                                 </div>
-                                 <div style={{marginTop:"0.5em"}}>
+                                <div style={{marginTop:"0.5em"}}>
                                     This food item is available:
                                     <RadioButtonGroup name="avalilabilityType" valueSelected={avalilabilityType} onChange={this.changeStoreVal}>
                                       <RadioButton

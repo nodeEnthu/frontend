@@ -51,7 +51,7 @@ const OrderSubmitModal = createReactClass({
   render(){
     const {providerProfileCall, itemsCheckedOut,orderSubmitModalOpen} = this.props.providerProfile.toJS();
     const {user} = this.props.globalState.core.toJS();
-    const {addtnlAddressInfo,orderTime} = this.props;
+    const {addtnlAddressInfo, orderTime, currency} = this.props;
     let data = providerProfileCall.data;
     let self =this;
     let resolvedItemsCheckedOut= [];
@@ -120,6 +120,10 @@ const OrderSubmitModal = createReactClass({
                   <div>{data.name}</div>
                   <div className="delivery-box">{this.checkOutOrderDetails.providerAddress}</div>
                 </div>
+              </div>
+              <div className="pure-u-md-1-5 pure-u-1 checkout-label"></div>
+              <div className="pure-u-md-4-5">
+                <div className= "grand-total">Total &nbsp; {currency + ' ' +grandTotal}</div>
               </div>
               <table className="pure-table pure-table-horizontal" style={{margin: "0px auto", marginTop:"1em"}}>
                 <thead>

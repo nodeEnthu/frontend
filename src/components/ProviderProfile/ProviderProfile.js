@@ -26,6 +26,7 @@ import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import {Circle} from 'rc-progress';
 import Snackbar from 'material-ui/Snackbar';
+import {METHODS_OF_PAYMENT} from 'components/ProviderEntryForm/constants'
 
 const ProviderProfile = createReactClass({
   getInitialState() {
@@ -145,7 +146,7 @@ const ProviderProfile = createReactClass({
       }
     }
     // seperate between current and past items
-    let currentItems=[] , pastItems=[], onOrderItems=[],currentDate;
+    let currentItems=[] , pastItems=[], onOrderItems=[], methodsOfPayment = [], currentDate;
     if(provider && provider.foodItems){
       responseRatio = parseInt((parseInt(provider.ordersConfirmed || 0) + parseInt(provider.ordersCancelled || 0))/parseInt(provider.ordersReceived || 1) *100) || undefined;
       provider.foodItems.forEach(function(foodItem){
@@ -161,7 +162,15 @@ const ProviderProfile = createReactClass({
           (foodItemAvailable)?currentItems.push(foodItem): pastItems.push(foodItem);
         } else onOrderItems.push(foodItem);
       })
+      provider.methodsOfPayment.map(function(methodOfPayment,index){
+        METHODS_OF_PAYMENT.forEach(function(constPaymentMethods){
+          if(constPaymentMethods.value === methodOfPayment){
+            methodsOfPayment.push(constPaymentMethods.label);
+          }
+        })
+      })
     }
+
     return (provider && !isEmptyObj(provider) && provider.userType && user && user.name || (provider && !isEmptyObj(provider) && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="provider-profile">
           <div className="pure-u-1 profile-wrapper">
@@ -196,6 +205,20 @@ const ProviderProfile = createReactClass({
                       :''
                   }
                 </div>
+              {
+                (provider.addtnlComments)?
+                <div className="addtnl-info">
+                  <span>Additional Comments:</span>
+                  <span className="service-offered">{provider.addtnlComments}</span>
+                </div>
+                :
+                undefined
+              }
+              <div className="addtnl-info">
+                <span>Payment methods accepted:</span>
+                <span className="service-offered">{methodsOfPayment.join(' , ')}</span>
+              </div>
+              
                 <div className="provider-details">
                   <CommunicationLocationOn/>
                   <span className="provider-detail">

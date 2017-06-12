@@ -6,4 +6,18 @@
     .circle-wrapper {
     	margin:1em auto;
     }
+    .checkout-label {
+        position:relative;
+        font-size: 115%;
+    }
+    .grand-total {
+        float: right;
+        width: 30%;
+        line-height: 2em;
+        margin-bottom:0.5em;
+        text-align: center;
+        background: #6f6868;
+        color: white;
+        border-radius: 25px;
+    }
 }

@@ -1,4 +1,4 @@
-import {Map} from 'immutable';
+import {Map,List} from 'immutable';
 
 const Provider = Map({
             imgUrl:'',
@@ -10,6 +10,7 @@ const Provider = Map({
             place_id: '',
             place_idErrorMsg:'',
             keepAddressPrivateFlag: false,
+            methodsOfPayment: List([]),
             userType: 'provider',
             email: '',
             serviceOffered: 'pickup',
