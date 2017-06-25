@@ -1,7 +1,7 @@
 import React from 'react'
 import './../ProviderProfile/providerProfile.scss'
 import './orderSubmitModal.scss'
-import Dialog from 'material-ui/Dialog';
+import FullscreenDialog from 'material-ui-fullscreen-dialog'
 import classNames from 'classnames';
 import RaisedButton from 'material-ui/RaisedButton';
 import createReactClass from 'create-react-class'
@@ -89,65 +89,78 @@ const OrderSubmitModal = createReactClass({
       modeOfPayment:'Cash/CreditCard'
     }
     // ends here
-    return <Dialog
+    return <FullscreenDialog
             open={orderSubmitModalOpen}
             onRequestClose={this.closeModal}
-            autoScrollBodyContent={true}
-            style={{paddingTop:"0p"}}
-            contentStyle={{paddingTop:'0px',width:'95%',top:"-100px"}}
-            repositionOnUpdate={false}
-            autoDetectWindowHeight={false}
            >
             <div className="order-submit">
               <div className="order-title">
                 <div className="order-header">
                   Order summary
                 </div>
-                <hr style={{margin:"1em 0"}}/>
                 <div className="pure-u-1-2">
-                  <div className="order-address-heading">{this.props.orderType+' '} order:</div>
-                  <div>{this.checkOutOrderDetails.customerName}</div>
-                  {(this.props.orderType === "Delivery")?
-                    <div className="delivery-box">
-                      {this.checkOutOrderDetails.customerAddress}
-                    </div>
-                    :
-                    undefined
-                  }
+                  <div className="address-details">
+                    <div className="order-address-heading">{this.props.orderType+' '} order:</div>
+                      <div>{this.checkOutOrderDetails.customerName}</div>
+                      {(this.props.orderType === "Delivery")?
+                        <div className="delivery-box">
+                          {this.checkOutOrderDetails.customerAddress}
+                        </div>
+                        :
+                        undefined
+                      }
+                  </div>
                 </div>
-                <div className="pure-u-1-2 provider-address">
-                  <div className="order-address-heading">Provider:</div>
-                  <div>{data.name}</div>
-                  <div className="delivery-box">{this.checkOutOrderDetails.providerAddress}</div>
+                <div className="pure-u-1-2">
+                  <div className="address-details">
+                    <div className="order-address-heading">Provider:</div>
+                    <div>{data.name}</div>
+                    <div className="delivery-box">{this.checkOutOrderDetails.providerAddress}</div>
+                  </div>
                 </div>
               </div>
-              <div className="pure-u-md-1-5 pure-u-1 checkout-label"></div>
-              <div className="pure-u-md-4-5">
+              <div className="pure-u-md-1-5 pure-u-1"></div>
+              <div className="pure-u-md-4-5 final-total">
                 <div className= "grand-total">Total &nbsp; {currency + ' ' +grandTotal}</div>
               </div>
-              <table className="pure-table pure-table-horizontal" style={{margin: "0px auto", marginTop:"1em"}}>
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Qty</th>
-                        <th>Date</th>
-                        <th>Price</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                  {
-                    resolvedItemsCheckedOut.map(function(itemCheckedOut,index){
-                      return <tr key={itemCheckedOut._id}>
-                              <td>{itemCheckedOut.name}</td>
-                              <td>{itemCheckedOut.quantity}</td>
-                              <td>{moment(itemCheckedOut.orderDate).format("dd, Do")}</td>
-                              <td>{(itemCheckedOut.displayPrice && itemCheckedOut.displayPrice!="undefined")? itemCheckedOut.displayPrice : self.props.currency + ' ' + itemCheckedOut.price }</td>
-                            </tr>
-                    })
-                  }
-                </tbody>
-              </table>
+              <div className="order-wrapper">
+                <div className="heading" style={{margin:'0 auto'}}>
+                  <div className="pure-u-1-4">
+                    Name
+                  </div>
+                  <div className="pure-u-1-4">
+                    Quantity
+                  </div>
+                  <div className="pure-u-1-4">
+                    Price
+                  </div>
+                  <div className="pure-u-1-4">
+                    Date
+                  </div>
+                </div>  
+            {
+              resolvedItemsCheckedOut.map(function(itemCheckedOut,index){
+                return <div key={itemCheckedOut._id} className="order-details">
+                <div className="pure-u-1-4 order-detail">{itemCheckedOut.name}</div>
+                <div className="pure-u-1-4 order-detail">{itemCheckedOut.quantity}</div>
+                <div className="pure-u-1-4 order-detail">{itemCheckedOut.price}</div>
+                <div className="pure-u-1-4 order-detail">{moment(itemCheckedOut.orderDate).format("ddd, MMM Do")}</div>
+                <div className="pure-u-1 customer-comments order-detail">
+                {
+                  (itemCheckedOut.addtnlItemOrderInfo)?
+                  <div>
+                    <span className="comment-intro">Customer remarks:</span>
+                    {itemCheckedOut.addtnlItemOrderInfo}
+                  </div>
+                  :
+                  undefined
+                }
+                  
+                </div>
+              </div>
+              })
+            }
+              </div>
               <div className="move-center">
                 <div style={{display:(this.state.showOrderSubmitSpinner)?'block':'none'}}>
                     <img src= "/general/loading.svg"/>
@@ -161,7 +174,7 @@ const OrderSubmitModal = createReactClass({
                 />
               </div>
             </div>
-          </Dialog>
+          </FullscreenDialog>
   }
 })
 

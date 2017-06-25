@@ -27,6 +27,7 @@ import PropTypes from 'prop-types';
 import {Circle} from 'rc-progress';
 import Snackbar from 'material-ui/Snackbar';
 import {METHODS_OF_PAYMENT} from 'components/ProviderEntryForm/constants'
+import Dialog from 'material-ui/Dialog';
 
 const ProviderProfile = createReactClass({
   getInitialState() {
@@ -34,7 +35,8 @@ const ProviderProfile = createReactClass({
           counter:0,
           itemCheckOutClicked:false,
           snackBarOpen: false,
-          addItemAfterLogin:undefined
+          addItemAfterLogin:undefined,
+          itemToBeDeleted:undefined
       };
   },
   contextTypes: {
@@ -62,8 +64,7 @@ const ProviderProfile = createReactClass({
     if(nextProps.globalState.core.get('userLoggedIn') && foodItemAddedbeforeLogin) {
       // that means user tried to add an item to the checkout before logging in
       this.setState({addItemAfterLogin:undefined});
-      // check if the user is in its own profile
-      console.log(nextProps.globalState.core.get('user').get('_id'));
+      // check if the user is in its own profile before adding to the cart
       if(nextProps.globalState.core.get('user').get('_id') != this.props.params.id){
         this.checkOutItem(undefined, foodItemAddedbeforeLogin,true);
       }
@@ -94,6 +95,19 @@ const ProviderProfile = createReactClass({
     if(prevProps.params.id!= this.props.params.id){
       this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
     }
+  },
+  deleteFoodItem(foodItem){
+    this.props.openModal({storeKey:'deleteItemModalOpen', openModal:true});
+    this.setState({itemToBeDeleted: foodItem});
+  },
+  deleteFoodItemSubmit(foodItem){
+    let self = this;
+    this.props.postSecuredData('/api/foodItem/'+foodItem._id+'/remove','removeItem','REMOVE_ITEM',{_creator:foodItem._creator})
+    .then(function(){
+      self.setState({itemToBeDeleted: undefined});
+      self.refreshPage();
+      self.props.openModal({storeKey:'deleteItemModalOpen', openModal:false})
+    })
   },
   checkOutItem(event,foodItem,override){
     // check whether user is logged in 
@@ -133,7 +147,8 @@ const ProviderProfile = createReactClass({
     this.props.fetchMayBeSecuredData('/api/users/'+this.props.params.id,'providerProfileCall',this.props.actionName);
   },
   render() {
-    let {providerProfileCall, itemsCheckedOut} = this.props.providerProfile.toJS();
+    let {providerProfileCall, itemsCheckedOut, deleteItemModalOpen} = this.props.providerProfile.toJS();
+    const {itemToBeDeleted} =this.state;
     itemsCheckedOut = itemsCheckedOut || {};
     let provider = providerProfileCall.data;
     let responseRatio
@@ -162,13 +177,15 @@ const ProviderProfile = createReactClass({
           (foodItemAvailable)?currentItems.push(foodItem): pastItems.push(foodItem);
         } else onOrderItems.push(foodItem);
       })
-      provider.methodsOfPayment.map(function(methodOfPayment,index){
-        METHODS_OF_PAYMENT.forEach(function(constPaymentMethods){
-          if(constPaymentMethods.value === methodOfPayment){
-            methodsOfPayment.push(constPaymentMethods.label);
-          }
+      if(provider.methodsOfPayment){
+        provider.methodsOfPayment.map(function(methodOfPayment,index){
+          METHODS_OF_PAYMENT.forEach(function(constPaymentMethods){
+            if(constPaymentMethods.value === methodOfPayment){
+              methodsOfPayment.push(constPaymentMethods.label);
+            }
+          })
         })
-      })
+      }
     }
 
     return (provider && !isEmptyObj(provider) && provider.userType && user && user.name || (provider && !isEmptyObj(provider) && !this.props.globalState.core.get('userLoggedIn')))?
@@ -281,10 +298,10 @@ const ProviderProfile = createReactClass({
                                 provider={provider}
                                 key={foodItem._id}
                                 userViewingOwnProfile={userViewingOwnProfile}
-                                refreshPage= {this.refreshPage}
                                 checkOutItem = {self.checkOutItem}
                                 writeReviewModal = {self.writeReviewModal}
                                 postSecuredData = {this.props.postSecuredData}
+                                deleteFoodItem={this.deleteFoodItem}
                                 openModal = {this.props.openModal}
                                 providerProfile = {this.props.providerProfile}
                                 foodItem={foodItem}
@@ -306,10 +323,10 @@ const ProviderProfile = createReactClass({
                                 provider={provider}
                                 key={foodItem._id}
                                 userViewingOwnProfile={userViewingOwnProfile}
-                                refreshPage= {this.refreshPage}
                                 checkOutItem = {self.checkOutItem}
                                 writeReviewModal = {self.writeReviewModal}
                                 postSecuredData = {this.props.postSecuredData}
+                                deleteFoodItem={this.deleteFoodItem}
                                 openModal = {this.props.openModal}
                                 providerProfile = {this.props.providerProfile}
                                 foodItem={foodItem}
@@ -333,9 +350,9 @@ const ProviderProfile = createReactClass({
                                 provider={provider}
                                 userViewingOwnProfile={userViewingOwnProfile}
                                 checkOutItem = {self.checkOutItem}
-                                refreshPage= {this.refreshPage}
                                 writeReviewModal = {self.writeReviewModal}
                                 postSecuredData = {this.props.postSecuredData}
+                                deleteFoodItem={this.deleteFoodItem}
                                 openModal = {this.props.openModal}
                                 foodItem={foodItem}
                                 providerProfile = {this.props.providerProfile}
@@ -369,6 +386,34 @@ const ProviderProfile = createReactClass({
                 </div>
                 :
                 undefined
+              }
+              {
+                (this.props.mode != 'PROVIDER_ENTRY'  && itemToBeDeleted)?
+                  <Dialog
+                    open={deleteItemModalOpen}
+                    onRequestClose={()=>this.props.openModal({storeKey:'deleteItemModalOpen', openModal:false})}
+                  >
+                  <div style={{textAlign:"center", color:"black"}}>
+                    <p>
+                      Are you sure you want to delete ... <span style={{fontWeight:"bold"}}>{" "+ itemToBeDeleted.name}</span>
+                    </p>
+                    <p>
+                      You will loose all your data including the reviews !!
+                    </p>
+                    <div>
+                        <FlatButton label="Cancel"
+                            onTouchTap={()=>this.props.openModal({storeKey:'deleteItemModalOpen', openModal:false})}
+                        />
+                        <FlatButton 
+                          backgroundColor="red" 
+                          label="Delete" 
+                          onTouchTap={(event)=>this.deleteFoodItemSubmit(itemToBeDeleted)}
+                        />
+                    </div>
+                  </div>
+                 </Dialog>
+                  :
+                  undefined 
               }
               <div className="checkout-section"></div>
             </div> 

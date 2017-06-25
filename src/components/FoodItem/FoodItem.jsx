@@ -8,6 +8,7 @@ import { DIET_TYPES} from 'routes/Search/constants/searchFilters';
 import moment from 'moment';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
+import {PLACE_ORDER_BY} from 'routes/Search/constants/searchFilters'
 
 const FoodItem = createReactClass({
   getInitialState() {
@@ -41,6 +42,7 @@ const FoodItem = createReactClass({
   },
   render(){
     const {foodItem,reviews}= this.state;
+    let self = this;
     let dietTypes=[];
     DIET_TYPES.map(function(diet){
       if(foodItem && foodItem[diet.value] && foodItem[diet.value] === true){
@@ -53,7 +55,7 @@ const FoodItem = createReactClass({
             <div className="pure-u-1 item-wrapper">
               <div className="pure-u-1 pure-u-md-3-4 food-desc-wrapper">
                 <div className="food-name">{foodItem.name}</div>
-                <div className="star-rating">
+                <div className="star-rating" onClick={()=>this.tabChange("reviews")}>
                     <div className="provider-star-rating">
                       <StarRatingComponent 
                           name={foodItem._id} 
@@ -70,18 +72,26 @@ const FoodItem = createReactClass({
                   <table className="pure-table remove-border">
                       <tbody>
                         <tr>
-                            <td>Availability</td>
+                            <td>Availability: </td>
                             <td className="add-padding-left">
-                            {
-                              foodItem.availability.map(function(date,index){
-                                if(foodItem.availability.length != (index+1)){
-                                  return moment(date).format("MMM, D")+' | ';
-                                }else return moment(date).format("MMM, D");
-                              })
-                            }</td>
+                            { (foodItem.avalilabilityType === 'specificDates')?
+                             
+                                foodItem.availability.map(function(date,index){
+                                  if(foodItem.availability.length != (index+1)){
+                                    return moment(date).format("MMM, D")+' | ';
+                                  }else return moment(date).format("MMM, D");
+                                })
+                                :
+                                PLACE_ORDER_BY.map(function(orderDate){
+                                  if(orderDate.value === foodItem.placeOrderBy){
+                                    return 'Order '+orderDate.label;
+                                  }
+                                })
+                            }
+                            </td>
                         </tr>
                         <tr>
-                            <td>Pick-up time</td>
+                            <td>Pickup/Delivery time: </td>
                             <td className="add-padding-left">{resolvePickUpTime(foodItem.pickUpStartTime)} - {resolvePickUpTime(foodItem.pickUpEndTime)}</td>
                         </tr>
                     </tbody>
@@ -113,15 +123,23 @@ const FoodItem = createReactClass({
                       </p>
                     </div>
                   </Tab>
-                  <Tab label="Reviews" value="reviews" style={{backgroundColor:"white",color:"black"}}>
+                  <Tab 
+                    label={ 
+                        <div>
+                          <span>Reviews</span>
+                          <div className="num-of-reviews">
+                            <span className="primary-color">(</span>{(foodItem.numOfReviews)? foodItem.numOfReviews: 0}<span className="primary-color" >)</span>
+                          </div>
+                        </div>
+                      }
+                    value="reviews" 
+                    style={{backgroundColor:"white",color:"black"}}
+                  >
                     <div className="tab-section-wrapper">
                       {
                         reviews.map((review)=>{
-                          return  <div key={review._id}
-                                  style={{
-                                    padding:'20px'
-                                  }}>
-                                  <div className = "pure-u-1" style={{marginBottom:'-20px'}}>
+                          return  <div key={review._id}>
+                                  <div className = "pure-u-1" >
                                     <StarRatingComponent 
                                       name={review._id}
                                       editing={false}

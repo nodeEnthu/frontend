@@ -1,7 +1,7 @@
 import React from 'react'
 import './../ProviderProfile/providerProfile.scss'
 import './reviewSubmitModal.scss'
-import Dialog from 'material-ui/Dialog';
+import FullscreenDialog from 'material-ui-fullscreen-dialog'
 import classNames from 'classnames';
 import StarRatingComponent from 'react-star-rating-component';
 import FlatButton from 'material-ui/FlatButton';
@@ -124,7 +124,7 @@ const ReviewSubmitModal = createReactClass({
       reviews.reviewMap[item._id].rating = (reviews.reviewMap[item._id].rating)?reviews.reviewMap[item._id].rating : 0;
       reviews.reviewMap[item._id].review = (reviews.reviewMap[item._id].review)?reviews.reviewMap[item._id].review :'';
     }
-    return  <Dialog
+    return  <FullscreenDialog
               open={reviewSubmitModalOpen || false}
               onRequestClose={this.closeModal}
             >{
@@ -171,7 +171,7 @@ const ReviewSubmitModal = createReactClass({
               :
               undefined
             }
-            </Dialog>
+            </FullscreenDialog>
   }
 })
 

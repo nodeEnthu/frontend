@@ -4,7 +4,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import StarRatingComponent from 'react-star-rating-component';
 import { Link } from 'react-router';
 import moment from 'moment';
-import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
@@ -23,14 +22,6 @@ const FoodItemInProviderProfile = createReactClass({
       this.props.foodIdSelected(foodItem._id);
       this.props.openModal({storeKey:'foodItemModalOpen', openModal:true})
     }
-  },
-  deleteFoodItem(foodItem){
-    let self = this;
-    this.props.postSecuredData('/api/foodItem/'+foodItem._id+'/remove','removeItem','REMOVE_ITEM',{_creator:foodItem._creator})
-    .then(function(){
-      self.props.refreshPage();
-      self.props.openModal({storeKey:'deleteItemModalOpen', openModal:false})
-    })
   },
   render(){
     let {foodItem,mode,provider,onOrder,disableAdd}= this.props;
@@ -146,34 +137,7 @@ const FoodItemInProviderProfile = createReactClass({
                   }  
                 </div>
               </div>
-              {
-                (mode != 'PROVIDER_ENTRY')?
-                  <Dialog
-                    open={deleteItemModalOpen}
-                    onRequestClose={()=>this.props.openModal({storeKey:'deleteItemModalOpen', openModal:false})}
-                  >
-                  <div style={{textAlign:"center"}}>
-                    <p>
-                      Are you sure you want to delete ... <span style={{fontWeight:"bold"}}>{" "+ foodItem.name}</span>
-                    </p>
-                    <p>
-                      You will loose all your data including the reviews !!
-                    </p>
-                    <div>
-                        <FlatButton label="Cancel"
-                            onTouchTap={()=>this.props.openModal({storeKey:'deleteItemModalOpen', openModal:false})}
-                        />
-                        <FlatButton 
-                          backgroundColor="red" 
-                          label="Delete" 
-                          onTouchTap={(event)=>this.deleteFoodItem(foodItem)}
-                        />
-                    </div>
-                  </div>
-                 </Dialog>
-                  :
-                  undefined 
-              }
+             
               {
                 (this.props.userViewingOwnProfile)?
                   <div className="pure-u-1">
@@ -196,7 +160,7 @@ const FoodItemInProviderProfile = createReactClass({
                         style={{width:'99.5%',height:'auto',lineHeight:'auto'}}
                         hoverColor="red"
                         disableTouchRipple={true}
-                        onTouchTap={(event)=> self.props.openModal({storeKey:'deleteItemModalOpen', openModal:true})}
+                        onTouchTap={(event)=> self.props.deleteFoodItem(foodItem)}
                       />
                     </div>
                   </div>

@@ -1,10 +1,11 @@
 import React from 'react'
 import './foodItemModal.scss'
-import Dialog from 'material-ui/Dialog';
+import FullscreenDialog from 'material-ui-fullscreen-dialog'
 import classNames from 'classnames';
 import FoodItem from 'components/FoodItem'
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
+import FlatButton from 'material-ui/FlatButton';
 
 const FoodItemModal = createReactClass({
   
@@ -19,19 +20,18 @@ const FoodItemModal = createReactClass({
   },
   render(){
     const {foodItemModalOpen,foodIdSelected} = this.props.stateProps.toJS();
-    return <Dialog
+    return <FullscreenDialog
             open={foodItemModalOpen}
             onRequestClose={this.closeModal}
-            autoScrollBodyContent={true}
-            style={{paddingTop:"0p"}}
-            contentStyle={{paddingTop:'0px',width:'95%',top:"-250px"}}
-            repositionOnUpdate={false}
-            autoDetectWindowHeight={false}
+            actionButton={<FlatButton
+              label='Done'
+              onTouchTap={() => this.closeModal()}
+            />}
            >
             <div>
               <FoodItem foodItemId={foodIdSelected}/>
             </div>
-          </Dialog>
+          </FullscreenDialog>
   }
 })
 

@@ -115,7 +115,7 @@ const OrderAction = createReactClass({
                                 >
                                   <CardHeader
                                     title={order.orderType + ' order with  ' + order.providerName + ' at ' +order.orderTime}
-                                    subtitle={order.providerAddress}
+                                    subtitle={'Provider address: ' +order.providerAddress}
                                     actAsExpander={true}
                                     showExpandableButton={true}
                                   />
@@ -217,7 +217,7 @@ const OrderAction = createReactClass({
                                 >
                                   <CardHeader
                                     title={order.orderType + ' order with  ' + order.customerName + ' at ' +order.orderTime}
-                                    subtitle={order.customerAddress}
+                                    subtitle={'Customer Address: ' + order.customerAddress}
                                     actAsExpander={true}
                                     showExpandableButton={true}
                                   />

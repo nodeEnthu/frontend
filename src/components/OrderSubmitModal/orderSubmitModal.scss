@@ -1,23 +1,59 @@
 .order-submit {
-    .move-center , .circle-wrapper {
+    .move-center,
+    .circle-wrapper {
         margin: 0 auto;
         text-align: center;
     }
-    .circle-wrapper {
-    	margin:1em auto;
+    .order-title {
+        border-bottom: 1px solid #eee;
+        padding: 0.4em 0;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        margin-bottom: 1em;
     }
-    .checkout-label {
-        position:relative;
+    .order-header {
         font-size: 115%;
-    }
-    .grand-total {
-        float: right;
-        width: 30%;
-        line-height: 2em;
-        margin-bottom:0.5em;
         text-align: center;
-        background: #6f6868;
-        color: white;
-        border-radius: 25px;
+        padding: 1em;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 1em;
+    }
+    .order-address-heading {
+        margin-bottom: 0.5em;
+    }
+    .address-details {
+        display: table;
+        margin: 0 auto;
+    }
+    .circle-wrapper {
+        margin: 1em auto;
+    }
+    .final-total {
+        clear: both;
+        overflow: hidden;
+        padding: 0 1em;
+        max-width: 1000px;
+    }
+    .delivery-box {
+        width: 90%;
+    }
+    .heading {
+        margin: 0px auto;
+        background: lightgrey;
+        padding: 0.5em;
+    }
+    .order-details {
+        padding: 0.5em;
+    }
+    .order-detail:last-child {
+        border-bottom: 1px solid lightgrey;
+    }
+    .customer-comments {
+        padding: 0.25em 0;
+        text-align: left;
+    }
+    .comment-intro {
+        font-weight: 600;
+        padding-right: 0.5em;
     }
 }
