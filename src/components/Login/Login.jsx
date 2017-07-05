@@ -2,7 +2,7 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import { Link, IndexLink } from 'react-router';
-
+import './login.scss';
 import FacebookLogin from 'components/Facebook/Facebook';
 import GoogleLogin from 'components/GoogleLogin';
 import * as actions from '../../layouts/CoreLayout/coreReducer';
@@ -29,7 +29,8 @@ var Login = createReactClass({
     successfullLogin(response) {
       let self = this;
       const {globalState,dispatch } = this.props;
-      const {searchText, place_id} = globalState.core.get('user').toJS();
+      const {user} = globalState.core.toJS();
+      const {searchText, place_id} = user;
       postCall('/api/users/signUp', JSON.stringify(response))
           .then(function(result) {
               let res = result.data;
@@ -85,7 +86,7 @@ var Login = createReactClass({
       this.successfullLogin(normalizedResponse);
     },
     render: function() {
-        const { loginModalOPen } = this.props.globalState.core.toJS();
+        const { loginModalOPen, envVars } = this.props.globalState.core.toJS();
         return (
               <div>
                   <a
@@ -93,28 +94,39 @@ var Login = createReactClass({
                     >Login
                   </a>
                 <Dialog
+                  title={ <div className="welcome-title">
+                             <img className="welcome-img" src= "/general/logo.png"/>
+                             <span className="welcome-text">welcomes you</span>
+                          </div> 
+                        }
+                  style={{color:'black',height:'100%'}}
+                  titleStyle={{backgroundColor:"#FF6F00",color:"white",fontSize:"100%"}}
                   open={loginModalOPen || false}
                   onRequestClose={()=>this.closeModal()}
-                >
-                  <div ref="subtitle"
-                    style={{
-                      textAlign:'center'
-                    }}>
-                    Please login with your facebook or gmail account
-                  </div>
-                    <div style={{textAlign:"center"}}>
+                  contentClassName="happy-welcome"
+                  style={{ width: '100%', maxWidth:''}}
+                > 
+                  <div style={{margin:'1em auto', textAlign:"center",color:"black",fontSize:"105%"}}>
+                     <div className="pure-u-1">Please login with your facebook or gmail account</div>
+                     <div className="pure-u-1">
                       <FacebookLogin
-                        appId="116207178810953"
+                        appId={envVars.facebookLoginId}
                         autoLoad={true}
                         fields="id,email,name,link,picture"
                         callback={this.successfullFbLogin} 
                       />
+                    </div>
+                    <div className="pure-u-1">
                       <GoogleLogin
-                        clientId="1038006636920-ilhv28295jr3l244jhvf79u9j115bl9e.apps.googleusercontent.com"
+                        clientId={envVars.googleLoginId}
                         buttonText="Login"
                         callback={this.successfullGmailLogin} 
                       />
-                    </div>                  
+                    </div> 
+                  </div>
+                  <div className="pure-u-1 disclaimer-text">
+                    by logging in you agree to our <Link to="/termsandconditions" onClick={()=>this.closeModal()}>terms and conditions</Link>
+                  </div>
                 </Dialog>
               </div>
         );

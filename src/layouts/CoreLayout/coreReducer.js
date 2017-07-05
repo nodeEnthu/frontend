@@ -12,6 +12,7 @@ export const PUBLISH_USER = "PUBLISH_USER"
 export const POST_LOGIN_URL_REDIRECT = "POST_LOGIN_URL_REDIRECT"
 export const SCORLL_TO_ITEM_IN_USER_PROFILE = "SCORLL_TO_ITEM_IN_USER_PROFILE"
 export const ALREADY_SCROLLED = "ALREADY_SCROLLED"
+export const ADD_ENV_VARS = "ADD_ENV_VARS"
 
 export function addToken(value) {
     return {
@@ -43,10 +44,10 @@ export function userLoggedIn(val) {
     };
 };
 
-export function updateUser(storeKey,storeVal) {
+export function updateUser(storeKey, storeVal) {
     return {
         type: UPDATE_USER,
-        storeKey:storeKey,
+        storeKey: storeKey,
         payload: storeVal
     };
 };
@@ -61,24 +62,30 @@ export function publishUser() {
 export function userFoodItemUpdate(_id) {
     return {
         type: USER_FOOD_ITEM_UPDATE,
-        payload:_id
+        payload: _id
     }
 }
 export function postLoginUrlRedirect(url) {
     return {
         type: POST_LOGIN_URL_REDIRECT,
-        payload:url
+        payload: url
     }
 }
 export function userProfileScrollPosition(id) {
     return {
         type: SCORLL_TO_ITEM_IN_USER_PROFILE,
-        payload:id
+        payload: id
     }
 }
 export function alreadyScrolled() {
     return {
         type: ALREADY_SCROLLED
+    }
+}
+export function addEnvVars(envVars) {
+    return {
+        type: ADD_ENV_VARS,
+        payload: envVars
     }
 }
 
@@ -90,8 +97,8 @@ const ACTION_HANDLERS = {
         let newUser = Map(action.payload);
         return state.set('user', newUser)
     },
-    [PUBLISH_USER]:(state,action)=>{
-        return state.setIn(['user', 'published'],true).setIn(['user', 'userType'],'provider')
+    [PUBLISH_USER]: (state, action) => {
+        return state.setIn(['user', 'published'], true).setIn(['user', 'userType'], 'provider')
     },
     [OPEN_MODAL_LOGIN]: (state, action) => {
         return state.set('loginModalOPen', true)
@@ -103,27 +110,30 @@ const ACTION_HANDLERS = {
         return state.set('userLoggedIn', action.payload);
     },
     [UPDATE_USER]: (state, action) => {
-        return  state.setIn(['user', action.storeKey],action.payload);
+        return state.setIn(['user', action.storeKey], action.payload);
     },
-    [USER_FOOD_ITEM_UPDATE]:(state,action)=>{
-        return state.setIn(['user', 'foodItemAddedInEntryMode'],true)
+    [USER_FOOD_ITEM_UPDATE]: (state, action) => {
+        return state.setIn(['user', 'foodItemAddedInEntryMode'], true)
     },
     [POST_LOGIN_URL_REDIRECT]: (state, action) => {
         return state.set('postLoginUrlRedirect', action.payload)
     },
-    [SCORLL_TO_ITEM_IN_USER_PROFILE]:(state,action)=>{
-        return state.setIn(['userProfileScroll', 'id'],action.payload)
-                    .setIn(['userProfileScroll', 'onceScrolled'],false)
+    [SCORLL_TO_ITEM_IN_USER_PROFILE]: (state, action) => {
+        return state.setIn(['userProfileScroll', 'id'], action.payload)
+            .setIn(['userProfileScroll', 'onceScrolled'], false)
     },
-    [ALREADY_SCROLLED]:(state,action)=>{
-        return state.setIn(['userProfileScroll', 'onceScrolled'],true)
+    [ALREADY_SCROLLED]: (state, action) => {
+        return state.setIn(['userProfileScroll', 'onceScrolled'], true)
+    },
+    [ADD_ENV_VARS]: (state, action) => {
+        return state.set('envVars', Map(action.payload))
     },
 }
 
 const initialState = Map({
     token: '',
     user: Map({
-        _id:undefined,
+        _id: undefined,
         name: '',
         email: '',
         provider: '',
@@ -132,21 +142,26 @@ const initialState = Map({
         gmailUserID: '',
         publishStage: 0,
         published: false,
-        foodItemAddedInEntryMode:false,
-        foodItems:undefined,
-        loc:undefined,
-        deliveryAddressIndex:undefined,
-        userType:'',
+        foodItemAddedInEntryMode: false,
+        foodItems: undefined,
+        loc: undefined,
+        deliveryAddressIndex: undefined,
+        userType: '',
         searchText: '',
         place_id: '',
-        currency:undefined
+        currency: undefined
     }),
     loginModalOPen: undefined,
     userLoggedIn: false,
-    postLoginUrlRedirect:'',
-    userProfileScroll:Map({
-        id:undefined,
-        onceScrolled:false
+    postLoginUrlRedirect: '',
+    userProfileScroll: Map({
+        id: undefined,
+        onceScrolled: false
+    }),
+    envVars: Map({
+        initialImageUrl: '',
+        googleLoginId: '',
+        facebookLoginId: ''
     })
 })
 

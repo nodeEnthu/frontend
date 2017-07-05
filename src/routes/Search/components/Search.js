@@ -35,7 +35,8 @@ const Search = createReactClass({
             showFilters:false,
             foodItemModalOpen:false,
             foodIdSelected:undefined,
-            showSpinner:false
+            showSpinner:false,
+            value:"specificDates"
         };
     },
     pageNum: 0,
@@ -157,6 +158,11 @@ const Search = createReactClass({
             this.props.userProfileScrollPosition(foodItem.name);
             this.context.router.push('/providerProfile/'+foodItem._creator);
         }
+    },
+    handleTabChange(value){
+        this.setState({
+          value: value,
+        });
     },
     handleActive(tab) {
         // remove whats currently being shown
@@ -350,8 +356,8 @@ const Search = createReactClass({
 						})}
 					</Carousel>
 				</div>
-				<Tabs style={{marginTop:"1em"}} inkBarStyle={{border:"2px solid "+ amber900}}>
-                    <Tab buttonStyle={{backgroundColor:"white","color":amber900}}label="Available now" data-route="specificDates" onActive={this.handleActive} >
+				<Tabs style={{marginTop:"1em"}} inkBarStyle={{border:"2px solid "+ amber900}} onChange={this.handleTabChange} value = {this.state.value}>
+                    <Tab buttonStyle={{backgroundColor:"white","color":amber900}} label="Available now" value="specificDates" data-route="specificDates" onActive={this.handleActive} >
 				        <div className="providers-wrapper">
                              <div className="is-center" style={{display:(this.state.showSpinner)?'block':'none'}}>
                                 <img src= "/general/loading.svg"/>
@@ -412,7 +418,8 @@ const Search = createReactClass({
 										:
 										<div style={{display:(!this.state.showSpinner)?'block':'none'}} className="is-center no-results-wrapper">
                                             <div>Sorry! no results were found</div>
-                                            <div className="sub-text">Tried broadening filters ?</div>
+                                            <div>Try looking in <a href="javascript:void(0)" onClick={()=>this.handleTabChange("onOrder")}> on-order items</a></div>
+                                            <div className="sub-text">also broaden filters ?</div>
                                         </div>
 
             					} 
@@ -433,7 +440,7 @@ const Search = createReactClass({
     					}
     				    </div>
                     </Tab>
-                    <Tab  buttonStyle={{backgroundColor:"white","color":amber900}} label="On Order" data-route="onOrder" onActive={this.handleActive}>
+                    <Tab  buttonStyle={{backgroundColor:"white","color":amber900}} label="On Order" value = "onOrder" data-route="onOrder" onActive={this.handleActive}>
                         <div className="providers-wrapper">
                              <div className="is-center" style={{display:(this.state.showSpinner)?'block':'none'}}>
                                 <img src= "/general/loading.svg"/>

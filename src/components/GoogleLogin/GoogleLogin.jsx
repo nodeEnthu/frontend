@@ -79,13 +79,14 @@ class GoogleLogin extends Component {
       <button className="pure-button"
             style={{background:"#dd4b39", 
               color:"white",
-              width:"10em",
-              marginTop:'1em'
+              width:"12em",
+              height:"3em",
+              marginTop:'1.5em'
             }}
             onClick={this.onBtnClick}
         >
             <i className="fa fa-google">
-            </i> &nbsp; Google login
+            </i> &nbsp;&nbsp; Google login
         </button>
     );
   }

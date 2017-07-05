@@ -124,8 +124,9 @@ class FacebookLogin extends React.Component {
         return (
         <button className="pure-button pure-button-primary"
             style={{
-                 width:"10em",
-                 marginTop:'1em'
+                 width:"12em",
+                 height:"3em",
+                 marginTop:'3em'
             }}
             onClick={this.click}
         >

@@ -323,7 +323,7 @@ const FoodItemEntryForm= createReactClass({
                                         <label>Select date(s): </label>
                                         <div className = "error-message">{(availabilityErrorMsg)?'*'+availabilityErrorMsg:undefined}</div>
                                         <legend></legend>
-                                        {DATES(8,"dd, MMM D",'add').map(function(date,index){
+                                        {DATES(8,"dd, D",'add').map(function(date,index){
                                                         return <div key={index} className="pure-u-1-3 pure-u-md-1-6" style={{paddingBottom : '0.25em'}}>
                                                                 <div className="parent-box">
                                                                         <div className="child-box-1">
