@@ -7,18 +7,6 @@ import StarRatingComponent from 'react-star-rating-component';
 import FlatButton from 'material-ui/FlatButton';
 import createReactClass from 'create-react-class'
 
-const customStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        minWidth:'50%',
-        minHeight:'60%',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)'
-    }
-};
 const ReviewSubmitModal = createReactClass({
   getInitialState() {
       return {

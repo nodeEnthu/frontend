@@ -26,7 +26,8 @@ const ProviderProfileEntry = createReactClass ({
             <p>
               Please give a brief history about your cooking skills along with a picture showcasing you/your business
             </p>
-            <ProviderEntryForm  providerEntryForm = {this.props.providerEntryForm}
+            <ProviderEntryForm  globalState = {this.props.globalState}
+                                providerEntryForm = {this.props.providerEntryForm}
                                 addProviderInfo = {this.props.addProviderInfo}
                                 addProviderErrorMsg = {this.props.addProviderErrorMsg}
                                 addMethodOfPayment = {this.props.addMethodOfPayment}

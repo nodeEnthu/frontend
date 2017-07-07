@@ -15,6 +15,7 @@ export const CoreLayout = ({ children }) => (
         <div className="pure-menu pure-menu-horizontal">
           <ul>
               <li className="pure-menu-item"><a href="/termsandconditions" className="pure-menu-link">Terms and conditions</a></li>
+              <li className="pure-menu-item"><a href="mailto:support@calljack-ie.com" className="pure-menu-link">Contact-us</a></li>
           </ul>
         </div>
       </div>

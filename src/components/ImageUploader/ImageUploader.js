@@ -3,7 +3,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import './ImageUploader.scss';
 import pica from 'pica/dist/pica';
 import shortid from 'shortid';
-import {initialImageUrl} from 'utils/constants';
 import 'blueimp-canvas-to-blob/js/canvas-to-blob';
 import EXIF from 'exif-js';
 import PropTypes from 'prop-types';
@@ -96,6 +95,7 @@ class ImageUploader extends React.Component {
               ctx.drawImage(img,0,0);
               pica.resizeCanvas(srcCanvas,destCanvas,{},function(err){
                 destCanvas.toBlob(function(blob){
+                  let initialImageUrl = self.props.globalState.core.toJS().envVars.initialImageUrl;
                   let imageUrl = initialImageUrl + modifiedFileName;
                   self.props.onImageChange(blob,imageUrl,{name:modifiedFileName,type:file.type});
                 })

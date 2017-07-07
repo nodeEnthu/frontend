@@ -229,6 +229,7 @@ const FoodItemEntryForm= createReactClass({
                 <div className="food-item-container">
                     <div className="is-center">
                         <ImageUploader
+                            globalState = {this.props.globalState}
                             onImageChange = {this.onImageChange}
                             initialImgUrl={imgUrl}
                             onImageUploadStart = {this.onImageUploadStart}

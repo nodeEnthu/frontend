@@ -30,7 +30,7 @@ const ProviderEntryForm = createReactClass({
         if(this.props.params.id){
             this.props.fetchSecuredData('/api/users/'+this.props.params.id+'/profileEdit' , 'providerProfileCall',this.props.mode)
             .then((res)=>{
-                if(res && res.payload &&res.payload.data && res.payload.data.data && res.payload.data.data.loc){
+                if(res && res.payload &&res.payload.data && res.payload.data.data && res.payload.data.data.name){
                     let provider = res.payload.data.data;
                     if(self.props.mode === "PROVIDER_ENTRY" && provider.publishStage >=2){
                         self.context.router.push('/provider/'+provider._id+'/providerFoodEntry');
@@ -181,6 +181,7 @@ const ProviderEntryForm = createReactClass({
             <div className="provider-entry-form">
                 <div className="is-center">
                     <ImageUploader
+                        globalState = {this.props.globalState}
                         onImageChange = {this.onImageChange}
                         initialImgUrl={imgUrl}
                     />
@@ -408,6 +409,7 @@ const ProviderEntryForm = createReactClass({
     }
 });
 ProviderEntryForm.propTypes = {
+    globalState: PropTypes.object,
     addProviderInfo:PropTypes.func,
     addProviderErrorMsg:PropTypes.func,
     providerEntryForm: PropTypes.object,

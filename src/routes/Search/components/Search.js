@@ -222,7 +222,12 @@ const Search = createReactClass({
                                     }
                                     onSuggestionSelected = {this.onSuggestionSelected}
         	                    />
-        	                    <div>{placeIdErrorMsg}</div>
+                                {(!user.place_id)?
+                                     <div className="place_id_error">*please select a suggested address.</div>
+                                     :
+                                        undefined
+                                }
+        	                   
                             </div>
     	                </div>
     					<div className="pure-u-3-5 pure-u-md-1-5 display-table">

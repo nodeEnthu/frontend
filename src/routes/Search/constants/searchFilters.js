@@ -60,7 +60,7 @@ export const DIET_TYPES = [{
     src: 'diets/vegetarian.svg'
 }, {
     value: 'nutfree',
-    src: 'diets/organic.svg'
+    src: 'diets/nut-free.svg'
 }, {
     value: 'glutenfree',
     src: 'diets/gluten-free.svg'
@@ -73,6 +73,9 @@ export const DIET_TYPES = [{
 }, {
     value: 'indianfasting',
     src: 'diets/indian-fasting.svg'
+}, {
+    value: 'nonveg',
+    src: 'diets/non-veg.svg'
 }]
 
 export const RADIUS_OPTIONS = [
