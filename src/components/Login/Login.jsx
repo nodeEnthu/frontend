@@ -10,7 +10,7 @@ import {getCall,postCall,securedGetCall} from 'utils/httpUtils/apiCallWrapper';
 import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
-
+import initializeOneSignal from 'utils/initializeOneSignal';
 
 var Login = createReactClass({
     openModal() {
@@ -29,7 +29,7 @@ var Login = createReactClass({
     successfullLogin(response) {
       let self = this;
       const {globalState,dispatch } = this.props;
-      const {user} = globalState.core.toJS();
+      const {user,envVars} = globalState.core.toJS();
       const {searchText, place_id} = user;
       postCall('/api/users/signUp', JSON.stringify(response))
           .then(function(result) {
@@ -48,11 +48,15 @@ var Login = createReactClass({
                   } else userSearchAndPlaceId = getSearchAddressAndPlaceId(res.user);
                   dispatch(actions.updateUser('searchText',userSearchAndPlaceId.address));
                   dispatch(actions.updateUser('place_id',userSearchAndPlaceId.placeId));
+                  // user will be logged in for just this tab
                   sessionStorage.setItem('token', res.token);
+                  // initialize one signal here .. 
+                  //but first get the appId dependent upon the environment
+                  initializeOneSignal(envVars.oneSignalAppId);
+                  // check where is user right now .. if they currently on home page do some trickery
                   if(self.context.router.location.pathname === '/'){
                     // get the path to redirect to
                     let redirectPath = globalState.core.get('postLoginUrlRedirect');
-
                     if(redirectPath){
                       // special treatment for first time provider entry here as we dont know the objectID
                       redirectPath = (redirectPath ==='providerProfileEntry')? '/provider/'+res.user._id+'/providerProfileEntry':redirectPath;
@@ -95,7 +99,7 @@ var Login = createReactClass({
                   </a>
                 <Dialog
                   title={ <div className="welcome-title">
-                             <img className="welcome-img" src= "/general/logo.png"/>
+                             <img className="welcome-img" src= "/general/logo-desktop.png"/>
                              <span className="welcome-text">welcomes you</span>
                           </div> 
                         }

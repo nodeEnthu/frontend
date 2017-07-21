@@ -149,7 +149,8 @@ const initialState = Map({
         userType: '',
         searchText: '',
         place_id: '',
-        currency: undefined
+        currency: undefined,
+        firstTime:''
     }),
     loginModalOPen: undefined,
     userLoggedIn: false,
@@ -161,7 +162,8 @@ const initialState = Map({
     envVars: Map({
         initialImageUrl: '',
         googleLoginId: '',
-        facebookLoginId: ''
+        facebookLoginId: '',
+        oneSignalAppId:''
     })
 })
 

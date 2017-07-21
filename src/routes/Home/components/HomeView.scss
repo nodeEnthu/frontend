@@ -1,4 +1,5 @@
 .home {
+    background: #fff8f1;
     .react-autosuggest__suggestions-container {
         width: 100%;
         line-height: 1em;
@@ -31,7 +32,7 @@
         clear: both;
     }
     .promotion-heading {
-        font-weight:400;
+        font-weight: 400;
         padding-top: 20px;
     }
     .search-sec-wrapper {
@@ -116,26 +117,56 @@
         color: black;
         font-size: 0.75em;
     }
+    .sub-content-wrapper {
+        margin: 0 auto;
+        width: 100%;
+        background-color: #fff;
+    }
+    .steps {
+        margin: 0 auto;
+        padding-bottom: 50px;
+    }
     .steps-text {
-        padding: 50px 190px 40px;
+        padding: 50px 190px 50px;
         text-align: center;
-        font-size: 40px;
+        font-size: 35px;
     }
-    .step {
+    .steps-intro-text {
+        font-weight: 200;
         text-align: center;
+        font-size: 2em;
+        padding-bottom: 1em;
     }
+    .step {}
     .step-heading {
-        padding: 0.75em 0 0.5em 0;
+        line-height: 2em;
     }
-    .step-text {
-        padding: 0 5em;
+    .step-text {}
+    .dotted:after {
+        content: "";
+        border-left: 2px dotted black;
+    }
+    .dotted {
+        position: relative;
+    }
+    .dotted:after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        height: 1em;
+        left: 16.5%;
+        border-left: 2px solid dotted lightgrey;
+    }
+    .step-img-wrapper {
+        text-align: center;
     }
     .step-summary {
         color: #FF6F00;
     }
     .list-business {
-        margin-top: 67px;
         display: flex;
+        width: 100%;
+        margin: 0 auto;
         img {
             width: 100%;
             height: 100%;
@@ -163,17 +194,16 @@
         padding: .75em;
     }
     .business-step {
-        text-align: center;
-        margin-bottom: 0.5em;
+        margin-bottom: 1em;
     }
     .cook-photo {
         position: relative;
         min-height: 280px;
     }
-    .salutation{
+    .salutation {
         background: yellow;
-        font-size:110%;
-        padding:1em;
+        font-size: 110%;
+        padding: 1em;
     }
 }
 
@@ -248,7 +278,6 @@
         }
         .steps-text {
             padding: 24px 0;
-            text-align: center;
             font-size: 2em;
         }
         .your-business {}
@@ -273,5 +302,14 @@
     /* We increase the header font size even more */
     .home .splash-head {
         font-size: 300%;
+    }
+}
+
+@media (min-width: 1330px) {
+    /* We increase the header font size even more */
+    .home {
+        .sub-content-wrapper {
+            width: 70%;
+        }
     }
 }

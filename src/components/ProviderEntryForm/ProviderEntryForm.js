@@ -393,7 +393,7 @@ const ProviderEntryForm = createReactClass({
                         Accurate address will help us find more closer customers
                     </p>
                     <p>
-                        Calljack-ie is is dedicated towards keeping your personal details <strong>private</strong>
+                        Spoon&Spanner is is dedicated towards keeping your personal details <strong>private</strong>
                     </p>
                     <p>
                         Please note that you can always change your pickup address to make it accurate  and add additional comments at the time of confirming an order

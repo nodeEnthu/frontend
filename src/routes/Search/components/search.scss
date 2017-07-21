@@ -25,6 +25,7 @@
     }
     .adjust-delivery {
         margin: 0 2.5em;
+        max-width:300px;
     }
     .react-autosuggest__container {
         width: 93%;
@@ -82,6 +83,9 @@
         margin-top: 1.5em;
         padding: 0 3.5em 1.5em 2.5em;
         position: relative;
+        .diet-wrapper{
+            max-width: 600px;
+        }
         .inline-radio {
             opacity: 0.7;
         }

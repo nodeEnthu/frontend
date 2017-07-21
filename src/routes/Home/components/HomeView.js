@@ -16,6 +16,7 @@ const HomeView = createReactClass({
     getInitialState() {
         return {
             fetchingAddresses: false,
+            goTosearchPageDelaySpinner:false,
             showBackDrop:false,
             showAddressError:false,
             addressErrorMessage:''
@@ -28,15 +29,16 @@ const HomeView = createReactClass({
 
     },
     onSuggestionSelected(event,{suggestion}){
+        this.setState({addressErrorMessage:undefined});
     	this.props.updateUser('searchText',suggestion.address);
-         this.props.updateUser('place_id',suggestion.place_id);
+        this.props.updateUser('place_id',suggestion.place_id);
     },
     checkAddress(){
         const {place_id,searchText} = this.props.globalState.core.get('user').toJS();
         let validAddress = (place_id &&searchText)? true:false;
         let addressErrorMessage;
         if(!validAddress){
-            addressErrorMessage = (!place_id && searchText)? 'Please select one of the suggested options':'Please enter address';
+            addressErrorMessage = (!place_id && searchText)? '*Please select one of the suggested options':'*Please enter address';
         }
         return {validAddress: validAddress,addressErrorMessage:addressErrorMessage };
     },
@@ -46,6 +48,7 @@ const HomeView = createReactClass({
         if (page === 'search') {
             let checkValidAddress = this.checkAddress();
             if(checkValidAddress.validAddress){
+                this.setState({goTosearchPageDelaySpinner:true});
                 if(this.props.globalState.core.get('userLoggedIn')){
                     const {searchText,place_id} = this.props.globalState.core.get('user').toJS();
                     //register this at a new location if possible as the user needs to be logged in for this
@@ -53,6 +56,7 @@ const HomeView = createReactClass({
                     securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
                         .then(function(result){
                             self.state.showBackDrop = false;
+                            self.setState({showBackDrop:false,goTosearchPageDelaySpinner:false});
                             self.context.router.push(page);
                         }); 
                 } else{
@@ -70,7 +74,7 @@ const HomeView = createReactClass({
             const {user} = this.props.globalState.core.toJS();
             if(!this.props.globalState.core.get('userLoggedIn')){
                 // set the page to go to after login
-                this.props.postLoginUrlRedirect('provider');
+                this.props.postLoginUrlRedirect('providerProfileEntry');
                 this.props.openLoginModal();
             }else this.context.router.push('/provider/'+user._id+'/providerProfileEntry');
         }
@@ -102,7 +106,7 @@ const HomeView = createReactClass({
         }
     },
     render() {
-        let {showAddressError,addressErrorMessage,fetchingAddresses} = this.state;
+        let {showAddressError,addressErrorMessage,fetchingAddresses,goTosearchPageDelaySpinner} = this.state;
         let {user} = this.props.globalState.core.toJS();
         return (
             <div className="home">
@@ -118,7 +122,7 @@ const HomeView = createReactClass({
                                         <span>Im looking for</span>
                                         <select defaultValue ="food" name="select-category">
                                             <option value="food">
-                                                Food
+                                                Food providers
                                             </option>
                                         </select>
                                         <span className="display-none-small" style={{margin:"0 10px"}}>in</span>
@@ -139,7 +143,7 @@ const HomeView = createReactClass({
                                                                                     showAddressError:false
                                                                                 });
                                                                                 this.props.updateUser('searchText',value.newValue);
-                                                                               
+                                                                                this.props.updateUser('place_id',null);
                                                                             }
                                                             }
                                                 onSuggestionSelected = {this.onSuggestionSelected}
@@ -150,69 +154,131 @@ const HomeView = createReactClass({
                                             <div className="locate-me display-none-small">Locate me</div>
                                         </div>
                                         <div className="search-button" onClick={()=>this.goToPage("search")}>
-                                            <img src="iconSearch.png"></img>
+                                            <img src={(goTosearchPageDelaySpinner)?"general/loading.svg": "iconSearch.png"}></img>
                                         </div>
                                     </div>
+                                    {(addressErrorMessage)?<div>{addressErrorMessage}</div>:undefined}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="steps">
+                <div className="sub-content-wrapper">
                     <div className="pure-u-1 steps-text">
-                        3 easy steps to find the best professional
+                        3 steps to get started
                     </div>
-                    <div className="business-step pure-u-md-1-3 pure-u-1">
-                        <img src="shared/home/icon-SearchBig.png">
-                        </img>
-                        <div className="step-heading">
-                            Step 1 - <span className="step-summary">Search</span>
+                    <div className="pure-u-md-1-2 pure-u-1 steps">
+                        <div className="steps-intro-text">
+                            I&#39;m a customer
                         </div>
-                        <div className="step-text">
-                            Search for the service and provider
+                        <div className="business-step dotted">
+                            <div className="pure-u-1-3 step-img-wrapper">
+                                <img src="shared/home/icon-SearchBig.png"/>
+                            </div>
+                            <div className="pure-u-2-3">
+                                <div className="step-heading">
+                                    Step 1 - <span className="step-summary">Search</span>
+                                </div>
+                                <div className="step-text">
+                                    Search for the service and provider
+                                </div>
+                            </div>
+                        </div>
+                        <div className="business-step dotted">
+                            <div className="pure-u-1-3 step-img-wrapper">
+                                <img src="shared/home/icon-QuoteBig.png"/>
+                            </div>
+                            <div className="pure-u-2-3">
+                                <div className="step-heading" >
+                                    Step 2 - <span className="step-summary">Browse</span>
+                                </div>
+                                <div className="step-text">
+                                    Browse different provider profiles
+                                </div>
+                            </div>
+                        </div>
+                        <div className="business-step">
+                            <div className="pure-u-1-3 step-img-wrapper">
+                                <img src="shared/home/icon-HireBig.png">
+                                </img>
+                            </div>
+                            <div className="pure-u-2-3">
+                                <div className="step-heading">
+                                    Step-3 - <span className="step-summary">Order</span>
+                                </div>
+                                <div className="step-text">
+                                    Order and receive confirmation email from provider
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className="business-step pure-u-md-1-3 pure-u-1">
-                        <img src="shared/home/icon-QuoteBig.png">
-                        </img>
-                        <div className="step-heading" >
-                            Step 2 - <span className="step-summary">Browse</span>
+                    <div className="pure-u-md-1-2 pure-u-1 steps">
+                        <div className="steps-intro-text">
+                            I&#39;m a provider
                         </div>
-                        <div className="step-text">
-                            Browse different provider profiles
+                        <div className="business-step dotted">
+                            <div className="pure-u-1-3 step-img-wrapper">
+                                <img src="shared/home/icon-ProfileBig.png"/>
+                            </div>
+                            <div className="pure-u-2-3">
+                                <div className="step-heading">
+                                    Step 1 - <span className="step-summary">Create Profile</span>
+                                </div>
+                                <div className="step-text">
+                                    Click "List your business" on top nav bar
+                                </div>
+                            </div>
+                        </div>
+                        <div className="business-step dotted">
+                            <div className="pure-u-1-3 step-img-wrapper">
+                                <img src="shared/home/icon-ItemsBig.png"/>
+                            </div>
+                            <div className="pure-u-2-3">
+                                <div className="step-heading" >
+                                    Step 2 - <span className="step-summary">Add Food Items</span>
+                                </div>
+                                <div className="step-text">
+                                    Add food item(s) you wish to provide
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div className="business-step">
+                            <div className="pure-u-1-3 step-img-wrapper">
+                                <img src="shared/home/icon-PublishBig.png">
+                                </img>
+                            </div>
+                            <div className="pure-u-2-3">
+                                <div className="step-heading">
+                                    Step-3 - <span className="step-summary">Preview and Publish</span>
+                                </div>
+                                <div className="step-text">
+                                    You&#39;re DONE! start getting orders
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className="business-step pure-u-md-1-3 pure-u-1">
-                        <img src="shared/home/icon-HireBig.png">
-                        </img>
-                        <div className="step-heading">
-                            Step-3 - <span className="step-summary">Order</span>
+                    <div className="list-business">
+                        <div className="pure-u-md-1-2 pure-u-1 cook-photo">
+                             <img className="gallery-img portrait" src="shared/home/cookPhoto.jpg"/>
                         </div>
-                        <div className="step-text">
-                            Order and receive a confirmation email from provider
-                        </div>
-                    </div>
-                </div>
-                <div className="list-business">
-                    <div className="pure-u-md-1-2 pure-u-1 cook-photo">
-                         <img className="gallery-img portrait" src="shared/home/cookPhoto.jpg"/>
-                    </div>
-                    <div className="pure-u-md-1-2 pure-u-1 your-business">
-                        <div className="business-heading">
-                            List your business with us
-                        </div>
-                        <div className="business-promotion">
-                            <p>
-                                Start showcasing your profile and accepting orders quickly with our
-                                easy form based page builder
-                            </p>
-                            <p>
-                                We are starting off with food with a vision of expanding this service to 
-                                other categories like electricians, plumbers etc as well
-                            </p>
-                            <p className="business-signup" onClick={()=>this.goToPage('providerEntry')}>
-                                Sign up now
-                            </p>
+                        <div className="pure-u-md-1-2 pure-u-1 your-business">
+                            <div className="business-heading">
+                                List your business with us
+                            </div>
+                            <div className="business-promotion">
+                                <p>
+                                    Start showcasing your profile and accepting orders quickly with our
+                                    easy form based page builder
+                                </p>
+                                <p>
+                                    We are starting off with food with a vision of expanding this service to 
+                                    other categories like electricians, plumbers etc as well
+                                </p>
+                                <p className="business-signup" onClick={()=>this.goToPage('providerEntry')}>
+                                    Sign up now
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>

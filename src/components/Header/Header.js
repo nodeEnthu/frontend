@@ -101,7 +101,8 @@ const Header =createReactClass ({
                 titleStyle={{flex :'0 0 0'}}
               >
                 <div className="frame" onClick={()=>this.context.router.push('/')}>
-                  <img className = "logo" src="/general/logo.png"></img>
+                  <img className = "logo show-desktop" src="/general/logo-desktop.png"></img>
+                  <img className = "logo show-mobile" src="/general/logo-mobile.png"></img>
                 </div>
 
                 <Drawer
@@ -163,6 +164,13 @@ const Header =createReactClass ({
                           <Login{...this.props}/>
                          } 
                       </li>
+                      {(!globalState.core.get('token').length)?
+                        <li onClick={this.checkLoginAndredirect}>
+                            <a href="javascript:void(0)">LIST YOURSELF</a>
+                        </li>
+                        :
+                        undefined
+                      }
                       <li className="profile-pic" onClick={()=>this.goToHomePage(user)}>
                       {(user.img)?
                         <img src={user.img} 
@@ -231,7 +239,7 @@ const Header =createReactClass ({
                     <Dialog
                       modal={true}
                       title={ <div className="welcome-title">
-                                 <img className="welcome-img" src= "/general/logo.png"/>
+                                 <img className="welcome-img" src= "/general/logo-desktop.png"/>
                                  <span className="welcome-text">welcomes you</span>
                               </div> 
                             }

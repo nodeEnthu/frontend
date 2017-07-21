@@ -24,7 +24,7 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import ActionSearch from 'material-ui/svg-icons/action/search'
 import {Card,CardHeader,CardTitle, CardText} from 'material-ui/Card';
-
+import FoodItemInSearchPage from 'components/FoodItemInSearchPage'
 
 const Search = createReactClass({
     getInitialState() {
@@ -32,18 +32,14 @@ const Search = createReactClass({
             queryBaseUrl: '/api/query/providers',
             searchActivated:false,
             placeIdErrorMsg:'',
-            showFilters:false,
             foodItemModalOpen:false,
             foodIdSelected:undefined,
             showSpinner:false,
-            value:"specificDates"
+            value:"onOrder"
         };
     },
     pageNum: 0,
-    avalilabilityType:'specificDates',
-    showFilter(e){
-        this.setState({showFilters:!this.state.showFilters})
-    },
+    avalilabilityType:'onOrder',
     contextTypes: {
         router: PropTypes.object.isRequired
     },
@@ -263,24 +259,26 @@ const Search = createReactClass({
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8.1 13.34l2.83-2.83L3.91 3.5c-1.56 1.56-1.56 4.09 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"/></svg>
                                 </div>
                             </div>
-                            {DIET_TYPES.map((diet,index)=>{
-                                return <FlatSelection   classname="pure-u-1-2 pure-u-md-1-3"  
-                                                        key={index}
-                                                        name={diet.value}
-                                                        value = {diet.value}
-                                                        defaultChecked = {diet.value} 
-                                                        selections={[{title:diet.value,value:diet.value}]}
-                                                        storeKey='dietSelectedMap'
-                                                        defaultChecked = {(dietSelectedMap[diet.value] === true)? diet.value: undefined }
-                                                        onClick={this.filterCuisineOrDietType}
-                                                        style={{    
-                                                                    background:'url('+diet.src+')  0 75% no-repeat',
-                                                                    backgroundSize:'60%',
-                                                                    backgroundSize: 'contain'                                                            
-                                                                }}
-                                        />
+                            <div className="diet-wrapper">
+                                {DIET_TYPES.map((diet,index)=>{
+                                    return <FlatSelection   classname="pure-u-1-2 pure-u-md-1-3"  
+                                                            key={index}
+                                                            name={diet.value}
+                                                            value = {diet.value}
+                                                            defaultChecked = {diet.value} 
+                                                            selections={[{title:diet.value,value:diet.value}]}
+                                                            storeKey='dietSelectedMap'
+                                                            defaultChecked = {(dietSelectedMap[diet.value] === true)? diet.value: undefined }
+                                                            onClick={this.filterCuisineOrDietType}
+                                                            style={{    
+                                                                        background:'url('+diet.src+')  0 75% no-repeat',
+                                                                        backgroundSize:'60%',
+                                                                        backgroundSize: 'contain'                                                            
+                                                                    }}
+                                            />
 
-                            })}
+                                })}
+                            </div>
                         </div>
                         {/*<div className="pure-u-1 pure-u-md-3-5 display-table">
                             <div className="move-center">
@@ -362,90 +360,7 @@ const Search = createReactClass({
 					</Carousel>
 				</div>
 				<Tabs style={{marginTop:"1em"}} inkBarStyle={{border:"2px solid "+ amber900}} onChange={this.handleTabChange} value = {this.state.value}>
-                    <Tab buttonStyle={{backgroundColor:"white","color":amber900}} label="Available now" value="specificDates" data-route="specificDates" onActive={this.handleActive} >
-				        <div className="providers-wrapper">
-                             <div className="is-center" style={{display:(this.state.showSpinner)?'block':'none'}}>
-                                <img src= "/general/loading.svg"/>
-                            </div>
-        					<div>
-            					{(resolvedData && resolvedData.length >0)? 
-								resolvedData.map(function(foodItem,index){
-									return 	<div key={index} className="pure-u-1 pure-u-md-1-3 provider-profile-wrapper"
-												onClick={(event)=>self.foodItemClicked(event,foodItem)}>
-												<div>
-											    	<div className="pure-u-1 provider-img-section">
-											    		<div className="img-avatar">
-											    			<img className="gallery-img portrait"src={foodItem.imgUrl}/>
-											    		</div>
-											    	</div>
-											    	<div className="pure-u-1 provider-info-section">
-											    		<div className="foodItem-name">
-                                                            {foodItem.name}
-                                                        </div>
-											    		<div className="star-rating">
-											    			<div className="provider-star-rating">
-													    		<StarRatingComponent 
-										                            name={foodItem._id} 
-										                            editing={false}
-										                            starCount={5}
-                                                                    starColor={'#FF6F00'}
-										                            value={foodItem.rating || 0 }
-										                         />
-									                         </div>
-									                         <div className="num-of-reviews">
-									                         	<span style={{color:"#FF6F00"}}>(</span>{(foodItem.numOfReviews)? foodItem.numOfReviews: 0}<span style={{color:"#FF6F00"}}>)</span>
-									                         </div>
-									                         <div className="miles-away"><span>{foodItem.distance}</span><span>mi</span></div>
-											    		</div>
-                                                        <div className="food-desc">
-                                                            <Truncate lines={2} ellipsis={<span>... <a className="read-more"href="javascript:void(0)" >Read more</a></span>}>
-                                                                  {foodItem.description}
-                                                            </Truncate>
-                                                        </div>
-                                                        <div className="food-desc">
-                                                            {
-                                                                foodItem.availability.map(function(date,index){
-                                                                  if(foodItem.availability.length != (index+1)){
-                                                                    return moment(date).format("MMM, D")+' | ';
-                                                                  }else return moment(date).format("MMM, D");
-                                                                  
-                                                                })
-                                                            }
-                                                        </div>
-											    		<div className="add-to-cart">
-											    			<div className="food-price">{foodItem.displayPrice || '$'+ foodItem.price}</div>
-											    		</div>
-											    		
-											    	</div>
-											    </div>
-											</div>
-										})
-										:
-										<div style={{display:(!this.state.showSpinner)?'block':'none'}} className="is-center no-results-wrapper">
-                                            <div>Sorry! no results were found</div>
-                                            <div>Try looking in <a href="javascript:void(0)" onClick={()=>this.handleTabChange("onOrder")}> on-order items</a></div>
-                                            <div className="sub-text">also broaden filters ?</div>
-                                        </div>
-
-            					} 
-        					</div>
-    					{
-    						(data  && data.length >= 12*(pageNum+1))?
-    						<div className="load-more-center">
-    							<RaisedButton 
-    								label="Show more results" 
-    								primary={true} 
-    								style={{width:'50%',margin:"1em"}}
-    								onClick={this.loadMore}
-    								disableTouchRipple={true}
-    						/>
-    						</div>
-    						:
-    						undefined
-    					}
-    				    </div>
-                    </Tab>
-                    <Tab  buttonStyle={{backgroundColor:"white","color":amber900}} label="On Order" value = "onOrder" data-route="onOrder" onActive={this.handleActive}>
+                    <Tab buttonStyle={{backgroundColor:"white","color":amber900}} label="On Order" value = "onOrder" data-route="onOrder" onActive={this.handleActive}>
                         <div className="providers-wrapper">
                              <div className="is-center" style={{display:(this.state.showSpinner)?'block':'none'}}>
                                 <img src= "/general/loading.svg"/>
@@ -453,54 +368,12 @@ const Search = createReactClass({
                             <div>
                                 {(resolvedData && resolvedData.length >0)? 
                                 resolvedData.map(function(foodItem,index){
-                                    return  <div key={index} className="pure-u-1 pure-u-md-1-3 provider-profile-wrapper"
-                                                onClick={(event)=>self.foodItemClicked(event,foodItem)}>
-                                                <div>
-                                                    <div className="pure-u-1 provider-img-section">
-                                                        <div className="img-avatar">
-                                                            <img className="gallery-img portrait"src={foodItem.imgUrl}/>
-                                                        </div>
-                                                    </div>
-                                                    <div className="pure-u-1 provider-info-section">
-                                                        <div className="foodItem-name">
-                                                            {foodItem.name}
-                                                        </div>
-                                                        <div className="star-rating">
-                                                            <div className="provider-star-rating">
-                                                                <StarRatingComponent 
-                                                                    name={foodItem._id} 
-                                                                    editing={false}
-                                                                    starCount={5}
-                                                                    starColor={'#FF6F00'}
-                                                                    value={foodItem.rating || 0 }
-                                                                 />
-                                                             </div>
-                                                             <div className="num-of-reviews">
-                                                                <span style={{color:"#FF6F00"}}>(</span>{(foodItem.numOfReviews)? foodItem.numOfReviews: 0}<span style={{color:"#FF6F00"}}>)</span>
-                                                             </div>
-                                                             <div className="miles-away"><span>{foodItem.distance}</span><span>mi</span></div>
-                                                        </div>
-                                                        <div className="food-desc">
-                                                            <Truncate lines={2} ellipsis={<span>... <a className="read-more"href="javascript:void(0)" >Read more</a></span>}>
-                                                                  {foodItem.description}
-                                                            </Truncate>
-                                                        </div>
-                                                        <div className="food-desc">
-                                                        { 
-                                                            PLACE_ORDER_BY.map(function(orderDate){
-                                                              if(orderDate.value === foodItem.placeOrderBy){
-                                                                return 'Order '+orderDate.label;
-                                                              }
-                                                            })
-                                                          }
-                                                        </div>
-                                                        <div className="add-to-cart">
-                                                            <div className="food-price">{foodItem.displayPrice || '$'+ foodItem.price}</div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    return  <FoodItemInSearchPage
+                                                key={index}
+                                                foodItem={foodItem}
+                                                foodItemClicked={self.foodItemClicked}
+                                                mode = {"onOrder"}
+                                            />
                                         })
                                         :
                                         <div style={{display:(!this.state.showSpinner)?'block':'none'}} className="is-center no-results-wrapper">
@@ -529,6 +402,45 @@ const Search = createReactClass({
                     />
                     </div>
                 </Tab>
+                 <Tab buttonStyle={{backgroundColor:"white","color":amber900}} label="Available now" value="specificDates" data-route="specificDates" onActive={this.handleActive} >
+                        <div className="providers-wrapper">
+                             <div className="is-center" style={{display:(this.state.showSpinner)?'block':'none'}}>
+                                <img src= "/general/loading.svg"/>
+                            </div>
+                            <div>
+                                {(resolvedData && resolvedData.length >0)? 
+                                resolvedData.map(function(foodItem,index){
+                                    return  <FoodItemInSearchPage
+                                                key={index}
+                                                foodItem={foodItem}
+                                                foodItemClicked={self.foodItemClicked}
+                                                mode = {"specificDates"}
+                                            />
+                                        })
+                                        :
+                                        <div style={{display:(!this.state.showSpinner)?'block':'none'}} className="is-center no-results-wrapper">
+                                            <div>Sorry! no results were found</div>
+                                            <div className="sub-text">also broaden filters ?</div>
+                                        </div>
+
+                                } 
+                            </div>
+                        {
+                            (data  && data.length >= 12*(pageNum+1))?
+                            <div className="load-more-center">
+                                <RaisedButton 
+                                    label="Show more results" 
+                                    primary={true} 
+                                    style={{width:'50%',margin:"1em"}}
+                                    onClick={this.loadMore}
+                                    disableTouchRipple={true}
+                            />
+                            </div>
+                            :
+                            undefined
+                        }
+                        </div>
+                    </Tab>
             </Tabs>
 		</div>
         );

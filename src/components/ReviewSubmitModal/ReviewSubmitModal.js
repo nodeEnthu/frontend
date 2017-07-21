@@ -64,7 +64,7 @@ const ReviewSubmitModal = createReactClass({
     let {reviews} = this.props.providerProfile.toJS();
     let item = reviews.item;
     let userInput = reviews.reviewMap[item._id];
-    if(item && userInput && userInput.review){
+    if(item && userInput && userInput.review && userInput.rating){
       this.setState({showSpinner:true});
       const {user} = this.props.globalState.core.toJS();
       let combinedQuery={
