@@ -54,6 +54,10 @@ export default (initialState = {}, cb) => {
                                 store.dispatch(actions.userLoggedIn(true));
                                 store.dispatch(actions.addUser(user));
                                 store.dispatch(actions.addToken(token));
+                                // send uer to google tag manager
+                                if(dataLayer && user._id){
+                                    dataLayer.push({'userID': user._id+'_'+user.userType});
+                                }
                             }
                             callback();
                         })
