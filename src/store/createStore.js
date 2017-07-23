@@ -55,6 +55,9 @@ export default (initialState = {}, cb) => {
                                 store.dispatch(actions.addUser(user));
                                 store.dispatch(actions.addToken(token));
                             }
+                            if(dataLayer && user._id){
+                                dataLayer.push({'userID': user._id+'_'+user.userType});
+                            }
                             callback();
                         })
                 } else {
