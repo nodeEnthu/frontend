@@ -27,10 +27,9 @@ const TermsAndConditions = createReactClass({
 		    <p className="c68 c94"><span className="c14">&nbsp;VI. &nbsp; INDEMNIFICATION FOR THIRD-PARTY CLAIMS</span></p>
 		    <p className="c3"><span className="c14">&nbsp;VII. &nbsp; COMPLIANCE WITH APPLICABLE LAWS</span></p>
 		    <p className="c28"><span className="c14">&nbsp; &nbsp;VIII. &nbsp; DISPUTE RESOLUTION</span></p>
-		    <p className="c61"><span className="c14">&nbsp; IX. &nbsp; DISPUTE RESOLUTION </span></p>
-		    <p className="c61"><span className="c14">&nbsp; &nbsp;X. &nbsp; CHANGES AND AMENDMENTS TO OUR SERVICES</span></p>
-		    <p className="c3"><span className="c14">&nbsp; XI. &nbsp; TERM AND TERMINATION</span></p>
-		    <p className="c68 c88"><span className="c14">&nbsp; XII. &nbsp; GENERAL AND MISCELLANEOUS PROVISIONS</span></p>
+		    <p className="c61"><span className="c14">&nbsp; &nbsp;IX. &nbsp; CHANGES AND AMENDMENTS TO OUR SERVICES</span></p>
+		    <p className="c3"><span className="c14">&nbsp; X. &nbsp; TERM AND TERMINATION</span></p>
+		    <p className="c68 c88"><span className="c14">&nbsp; XI. &nbsp; GENERAL AND MISCELLANEOUS PROVISIONS</span></p>
 		    <p className="c85"><span className="c14">&nbsp;</span></p>
 		    <p className="c16 c85"><span className="c14"></span></p>
 		    <p className="c85 c16"><span className="c50"></span></p>
