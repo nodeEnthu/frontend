@@ -57,6 +57,8 @@ export default (initialState = {}, cb) => {
                             }
                             if(dataLayer && user._id){
                                 dataLayer.push({'userID': user._id+'_'+user.userType});
+                            } else{
+                                dataLayer.push({'userID': 'guest'});
                             }
                             callback();
                         })

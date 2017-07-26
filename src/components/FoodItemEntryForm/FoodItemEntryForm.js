@@ -307,13 +307,13 @@ const FoodItemEntryForm= createReactClass({
                                       <RadioButton
                                         name="avalilabilityType"
                                         value="specificDates"
-                                        label="On specific dates"
+                                        label="Available on (dates)"
                                         labelPosition="right"
                                       />
                                       <RadioButton
                                         name="avalilabilityType"
                                         value="onOrder"
-                                        label="Only on order"
+                                        label="On order"
                                         labelPosition="right"
                                         
                                       />

@@ -1,8 +1,6 @@
  // this code is initialed when someone is logged in
  import { securedPostCall } from 'utils/httpUtils/apiCallWrapper';
 
- console.log("Raching here i m the new version");
-
  function initializeOneSignal(appId) {
      let OneSignal = window.OneSignal || [];
      OneSignal.push(["init", {

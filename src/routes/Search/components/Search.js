@@ -402,7 +402,7 @@ const Search = createReactClass({
                     />
                     </div>
                 </Tab>
-                 <Tab buttonStyle={{backgroundColor:"white","color":amber900}} label="Available now" value="specificDates" data-route="specificDates" onActive={this.handleActive} >
+                 <Tab buttonStyle={{backgroundColor:"white","color":amber900}} label="Available On" value="specificDates" data-route="specificDates" onActive={this.handleActive} >
                         <div className="providers-wrapper">
                              <div className="is-center" style={{display:(this.state.showSpinner)?'block':'none'}}>
                                 <img src= "/general/loading.svg"/>

@@ -53,6 +53,9 @@ var Login = createReactClass({
                   // initialize one signal here .. 
                   //but first get the appId dependent upon the environment
                   initializeOneSignal(envVars.oneSignalAppId);
+                    if(dataLayer && res.user._id){
+                        dataLayer.push({'userID': res.user._id+'_'+res.user.userType});
+                    } 
                   // check where is user right now .. if they currently on home page do some trickery
                   if(self.context.router.location.pathname === '/'){
                     // get the path to redirect to

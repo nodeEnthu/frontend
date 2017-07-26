@@ -3,7 +3,6 @@ import classes from './Chat.scss'
 import PureRenderMixin from 'react/lib/ReactComponentWithPureRenderMixin';
 import * as actions from '../../routes/Chat/modules/chat'
 import moment from 'moment'
-import fetch from 'isomorphic-fetch'
 import PropTypes from 'prop-types';
 
 export class Chat extends React.Component{
@@ -13,30 +12,57 @@ export class Chat extends React.Component{
     this.handleChange = this.handleChange.bind(this);
   }
   componentDidMount() {
-    const { socket,dispatch } = this.props;
-    socket.emit('chat mounted', { user: "username", channel: "Lobby" });
-    socket.on('typing bc', user =>
-      dispatch(actions.typing(user))
-    );
-    socket.on('stop typing bc', user =>
-      dispatch(actions.stopTyping(user))
-    );
+    const { dispatch, client } = this.props;
+    // socket.emit('chat mounted', { user: "username", channel: "Lobby" });
+    // socket.on('typing bc', user =>
+    //   dispatch(actions.typing(user))
+    // );
+    // socket.on('stop typing bc', user =>
+    //   dispatch(actions.stopTyping(user))
+    // );
+    client.connect({
+      host: "127.0.0.1",
+      port: "4040",
+    }, function(){
+      // get details about myself
+      console.log(client.details);
+      // try an action
+      var params = { key: "mykey", value: "myValue" };
+      client.actionWithParams("cacheTest", params, function(err, apiResponse, delta){
+        console.log("cacheTest action response: " + apiResponse.cacheTestResults.saveResp);
+        console.log(" ~ request duration: " + delta + "ms");
+      });
+
+      // join a chat room and talk
+      client.roomAdd("defaultRoom", function(err){
+        client.say("defaultRoom", "Hello from the ActionheroClient");
+        client.roomLeave("defaultRoom");
+      });
+
+      // leave
+      setTimeout(function(){
+        client.disconnect(function(){
+          console.log("all done!");
+        });
+      }, 1000);
+
+    });
   }
   sendMessage(){
-    const {text} = this.props.chat.toJS();
-    let randomUser = Math.random();
-    const reqBody={
-      text:text,
-      user:randomUser.toString(),
-      time: moment().format('LT')
-    }
-    this.props.dispatch(actions.createMessage(JSON.stringify(reqBody)));
+    // const {text} = this.props.chat.toJS();
+    // let randomUser = Math.random();
+    // const reqBody={
+    //   text:text,
+    //   user:randomUser.toString(),
+    //   time: moment().format('LT')
+    // }
+    // this.props.dispatch(actions.createMessage(JSON.stringify(reqBody)));
   }
   handleChange(event){
-    let input = event.target.value;
-    const {socket}= this.props;
-    socket.emit('typing', { user: "username", channel: "Lobby" });
-    this.props.dispatch(actions.addMessage(input));
+    // let input = event.target.value;
+    // const {socket}= this.props;
+    // socket.emit('typing', { user: "username", channel: "Lobby" });
+    // this.props.dispatch(actions.addMessage(input));
   }
   render(){
     const {dispatch} = this.props;
@@ -240,6 +266,5 @@ export class Chat extends React.Component{
 Chat.propTypes = {
   chat: PropTypes.object.isRequired,
   dispatch:PropTypes.func.isRequired,
-  socket:PropTypes.object.isRequired
 }
 export default Chat;
