@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const project = require('../project.config')
+const WriteFilePlugin = require('write-file-webpack-plugin');
 
 const inProject = path.resolve.bind(path, project.basePath)
 const inProjectSrc = (file) => inProject(project.srcDir, file)
@@ -58,8 +59,7 @@ config.module.rules.push({
       cacheDirectory: true,
       plugins: [
         'babel-plugin-transform-class-properties',
-        'babel-plugin-syntax-dynamic-import',
-        [
+        'babel-plugin-syntax-dynamic-import', [
           'babel-plugin-transform-runtime',
           {
             helpers: true,
@@ -75,8 +75,7 @@ config.module.rules.push({
         ],
       ],
       presets: [
-        'babel-preset-react',
-        ['babel-preset-env', {
+        'babel-preset-react', ['babel-preset-env', {
           modules: false,
           targets: {
             ie9: true,
@@ -100,8 +99,7 @@ config.module.rules.push({
   test: /\.(sass|scss)$/,
   loader: extractStyles.extract({
     fallback: 'style-loader',
-    use: [
-      {
+    use: [{
         loader: 'css-loader',
         options: {
           sourceMap: project.sourcemaps,
@@ -112,7 +110,7 @@ config.module.rules.push({
               browsers: ['last 2 versions'],
             },
             discardComments: {
-              removeAll : true,
+              removeAll: true,
             },
             discardUnused: false,
             mergeIdents: false,
@@ -139,16 +137,17 @@ config.plugins.push(extractStyles)
 // Images
 // ------------------------------------
 config.module.rules.push({
-  test    : /\.(png|jpg|gif)$/,
-  loader  : 'url-loader',
-  options : {
-    limit : 8192,
+  test: /\.(png|jpg|gif)$/,
+  loader: 'url-loader',
+  options: {
+    limit: 8192,
   },
 })
 
 // Fonts
 // ------------------------------------
-;[
+;
+[
   ['woff', 'application/font-woff'],
   ['woff2', 'application/font-woff2'],
   ['otf', 'font/opentype'],
@@ -160,11 +159,11 @@ config.module.rules.push({
   const mimetype = font[1]
 
   config.module.rules.push({
-    test    : new RegExp(`\\.${extension}$`),
-    loader  : 'url-loader',
-    options : {
-      name  : 'fonts/[name].[ext]',
-      limit : 10000,
+    test: new RegExp(`\\.${extension}$`),
+    loader: 'url-loader',
+    options: {
+      name: 'fonts/[name].[ext]',
+      limit: 10000,
       mimetype,
     },
   })
@@ -180,6 +179,7 @@ config.plugins.push(new HtmlWebpackPlugin({
   },
 }))
 
+
 // Development Tools
 // ------------------------------------
 if (__DEV__) {
@@ -192,6 +192,7 @@ if (__DEV__) {
   )
 }
 
+config.plugins.push(new WriteFilePlugin());
 // Bundle Splitting
 // ------------------------------------
 if (!__TEST__) {

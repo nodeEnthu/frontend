@@ -24,7 +24,7 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import ActionSearch from 'material-ui/svg-icons/action/search'
 import {Card,CardHeader,CardTitle, CardText} from 'material-ui/Card';
-import FoodItemInSearchPage from 'components/FoodItemInSearchPage'
+import FoodItemInSearchPage from 'components/FoodItemInSearchPage' 
 
 const Search = createReactClass({
     getInitialState() {
