@@ -9,38 +9,31 @@ import createReactClass from 'create-react-class'
 const Chat = createReactClass({
   getInitialState() {
     return{
-      messageBeingTyped:undefined
+      messageBeingTyped:undefined,
+      roooms:{}
     }
   },
   client:undefined,
   componentDidMount() {
     this.client = this.props.client;
-    const {user} = this.props.globalState.core.toJS();
-    this.client.on('connected',function(){ console.log('connected!') });
-    this.client.on('error', function(error){ console.log('error', error.stack) });
-    this.client.on('reconnect',function(){ console.log('reconnect') });
-    this.client.on('reconnecting',function(){ console.log('reconnecting') });
-    this.client.on('message', function(message){ console.log(message) })
-    this.client.on('alert', function(message){ alert( JSON.stringify(message) ) })
-    this.client.on('api',function(message){ alert( JSON.stringify(message) ) })
-    this.client.on('welcome',function(message){  })
-    this.client.on('say',function(messageBlock){})
     let self = this;
+    const {user} = this.props.globalState.core.toJS();
+    this.client.on('say',function(messageBlock){
+      const userId = messageBlock.userId;
+      let message = JSON.parse(messageBlock.message);
+      this.setState()
+    })
     this.client.connect(function(error, details){
       if(error != null){
-        console.log(error);
       }else{
-        self.client.action('createChatRoom', {name: 'defaultRoom', userId:'gautam'}, function(data){
-          console.log(data);
-          self.client.roomAdd('defaultRoom', function(error){ if(error){ console.log(error);} });
+          self.client.action('createChatRoom', {name: 'defaultRoom', userId:'gautam'}, function(data){
+          self.client.roomAdd("defaultRoom", function(error){ if(error){ console.log(error);} });
         });        
-        console.log(self.client.userMessages);
       }
     });
   },
- 
   sendMessage(){
-    this.client.say(this.client.rooms[0], this.state.messageBeingTyped);
+    this.client.say("defaultRoom", JSON.stringify({message:this.state.messageBeingTyped, clientId:'gmehra'}) );
     this.setState({messageBeingTyped:undefined});
   },
   handleChange(event){
@@ -52,10 +45,6 @@ const Chat = createReactClass({
         <div> 
           <div className="container-chat clearfix" >
             <div className="people-list people-list">
-              <div className="search">
-                <input type="text" placeholder="search" />
-                <i className="fa fa-search"></i>
-              </div>
               <ul className="list">
                 <li className="clearfix">
                   <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />
