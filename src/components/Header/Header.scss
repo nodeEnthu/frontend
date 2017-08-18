@@ -215,6 +215,19 @@
     }
   }
 
+  ul.overlapping-avatars {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    li:nth-child(n+2) {
+      left: -50px;
+    }
+  }
+
+  ul:hover li:nth-child(n+2) {
+    left: -10px;
+  }
+
   @media only screen and ( max-width: 40em)
   /* 640 */
 

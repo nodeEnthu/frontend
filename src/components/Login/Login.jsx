@@ -11,7 +11,7 @@ import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import initializeOneSignal from 'utils/initializeOneSignal';
-
+import initializeWebSockets from 'utils/initializeWebSockets'
 var Login = createReactClass({
     openModal() {
         const { dispatch } = this.props;
@@ -53,6 +53,7 @@ var Login = createReactClass({
                   // initialize one signal here .. 
                   //but first get the appId dependent upon the environment
                   initializeOneSignal(envVars.oneSignalAppId);
+                  initializeWebSockets(res.user,dispatch,actions);
                     if(dataLayer && res.user._id){
                         dataLayer.push({'userID': res.user._id+'_'+res.user.userType});
                     } 

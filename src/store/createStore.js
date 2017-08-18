@@ -8,6 +8,7 @@ import { updateLocation } from './location'
 import getSearchAddressAndPlaceId from 'utils/getSearchAddressAndPlaceId'
 import async from 'async'
 import initializeOneSignal from 'utils/initializeOneSignal';
+import initializeWebSockets from 'utils/initializeWebSockets'
 
 // Actions
 import * as actions from 'layouts/CoreLayout/coreReducer'
@@ -54,6 +55,7 @@ export default (initialState = {}, cb) => {
                                 store.dispatch(actions.userLoggedIn(true));
                                 store.dispatch(actions.addUser(user));
                                 store.dispatch(actions.addToken(token));
+                                initializeWebSockets(user,store.dispatch,actions);
                             }
                             if(dataLayer && user._id){
                                 dataLayer.push({'userID': user._id+'_'+user.userType});

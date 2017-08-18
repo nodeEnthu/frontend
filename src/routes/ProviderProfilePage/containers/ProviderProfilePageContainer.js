@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import {providerFoodItemCheckout,updateCheckedOutItem,deleteCheckedOutItem,removeAllCheckedOutItems,selectItemForReview,selectStarRating,submitTypedReview,reviewError,openModal,flushOutStaleReviewData,flushProviderData,foodIdSelected} from './../modules/providerProfilePage'
 import {fetchMayBeSecuredData,postSecuredData} from 'utils/actionUtils/defaultHttpActions';
-import {openLoginModal,updateUser,alreadyScrolled} from 'layouts/CoreLayout/coreReducer';
+import {openLoginModal,updateUser,alreadyScrolled,chatWindowOpen} from 'layouts/CoreLayout/coreReducer';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -31,6 +31,7 @@ const mapDispatchtoProps = {
   flushProviderData,
   updateUser,
   alreadyScrolled,
+  chatWindowOpen,
   foodIdSelected
 }
 

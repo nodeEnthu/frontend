@@ -18,7 +18,7 @@ import Dialog from 'material-ui/Dialog';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
-
+import PopupChat from 'components/PopupChat';
 
 const Header =createReactClass ({
     getInitialState() {
@@ -90,10 +90,13 @@ const Header =createReactClass ({
         })
     },
     render() {
+        let self = this;
         const { globalState } = this.props;
-        const {user} = globalState.core.toJS();
+        const {user,chats} = globalState.core.toJS();
+        let resolvedChats = Object.keys(chats) || [];
         user.title = user.title || 'someRandomString'; // name of the business
         let {deleteText,deleteAccntModalOpen, showSpinner, accntDeleted} = this.state;
+        console.log(chats);
         return (
               <AppBar
                 title=""
@@ -266,7 +269,27 @@ const Header =createReactClass ({
                       </div>
                     </Dialog>
                   </div>
-
+                  <ul className="overlapping-avatars">
+                  {
+                    resolvedChats.map(function(value,index){
+                      if(value){
+                        return <li key={index}>
+                                <PopupChat 
+                                  key={index} 
+                                  img={chats[value].avatar} 
+                                  position={30 + 50*index} 
+                                  room = {value} 
+                                  user={user} 
+                                  globalState= {self.props.globalState}
+                                  chatWindowOpen= {actions.chatWindowOpen}
+                                  resetNewMessageFlag = {actions.resetNewMessageFlag}
+                                  dispatch = {self.props.dispatch}
+                                />
+                              </li>
+                      }
+                    })
+                  }
+                  </ul>
               </AppBar>
                 
         );

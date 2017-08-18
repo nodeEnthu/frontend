@@ -28,6 +28,7 @@ import {Circle} from 'rc-progress';
 import Snackbar from 'material-ui/Snackbar';
 import {METHODS_OF_PAYMENT} from 'components/ProviderEntryForm/constants'
 import Dialog from 'material-ui/Dialog';
+import BottomChat from 'components/BottomChat'
 
 const ProviderProfile = createReactClass({
   getInitialState() {
@@ -424,6 +425,14 @@ const ProviderProfile = createReactClass({
             autoHideDuration={4000}
             onRequestClose={this.handleRequestClose}
           />
+          <BottomChat providerId={provider._id} 
+                      providerName={provider.name}
+                      providerAvatar={provider.img} 
+                      globalState={this.props.globalState} 
+                      chatWindowOpen = {this.props.chatWindowOpen}
+                      globalState = {this.props.globalState}
+                      chatCircleStyle={{height:'20px',width:'20px'}}
+          />
         </div>
         :
         <div></div> 
@@ -452,5 +461,6 @@ ProviderProfile.propTypes = {
   flushOutStaleReviewData:PropTypes.func,
   flushProviderData:PropTypes.func,
   updateUser:PropTypes.func,
-  foodIdSelected:PropTypes.func
+  foodIdSelected:PropTypes.func,
+  chatWindowOpen: PropTypes.func,
 }

@@ -5,6 +5,8 @@ import * as actions from '../../routes/Chat/modules/chat'
 import moment from 'moment'
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class'
+import Hashids from 'hashids'
+import { getCall } from 'utils/httpUtils/apiCallWrapper';
 
 const Chat = createReactClass({
   getInitialState() {
@@ -15,25 +17,36 @@ const Chat = createReactClass({
   },
   client:undefined,
   componentDidMount() {
-    this.client = this.props.client;
+    this.client = new ActionheroClient;
     let self = this;
     const {user} = this.props.globalState.core.toJS();
+    // autoenthu's id 592f5bcdb0a99b118604997b
+    // gautam's id 595fc6d414e17fa86554b310
+    // nomenclature followed it customer first and then provider .. remember its only the customer who will initiate a chat room 
+    // easy to remember ... customer first
+    var hashids = new Hashids();
+    let roomName = hashids.encodeHex('592f5bcdb0a99b1','595fc6d414e17fa86554b310');
     this.client.on('say',function(messageBlock){
       const userId = messageBlock.userId;
-      let message = JSON.parse(messageBlock.message);
-      this.setState()
+      //let message = JSON.parse(messageBlock.message);
     })
     this.client.connect(function(error, details){
       if(error != null){
       }else{
-          self.client.action('createChatRoom', {name: 'defaultRoom', userId:'gautam'}, function(data){
-          self.client.roomAdd("defaultRoom", function(error){ if(error){ console.log(error);} });
-        });        
+            self.client.on('connected', function(){ console.log('connected!') })
+            self.client.on('disconnected', function(){ console.log('disconnected :(') });
+            getCall('/api/chat/createChatRoom', {roomName: roomName, userId:user._id, avatar: user.img, userName: user.name})
+              .then(function(err, data){
+                console.log('call from create chat room', data);
+              });
+            self.client.roomAdd("defaultRoom", function(error){ if(error){ console.log(error);} });
+            self.client.on('say',function(message){console.log(message) })
       }
     });
   },
   sendMessage(){
-    this.client.say("defaultRoom", JSON.stringify({message:this.state.messageBeingTyped, clientId:'gmehra'}) );
+    const {user} = this.props.globalState.core.toJS();
+    this.client.say("defaultRoom", JSON.stringify({message:this.state.messageBeingTyped, clientId: user.name}) );
     this.setState({messageBeingTyped:undefined});
   },
   handleChange(event){
