@@ -125,7 +125,7 @@ export function sessionClosed(room) {
     type: SESSION_CLOSED_FLAG,
     room: room  }
 }
-export function chatWindowClose(room) {
+export function chatWindowDelete(room) {
   return {
     type: CHAT_WINDOW_DELETE,
     room: room  }
@@ -196,9 +196,9 @@ const ACTION_HANDLERS = {
   [RESET_NEW_MESSAGE_FLAG]: (state, action) => {
     return state.setIn(['chats', action.room,'newMessage'],false)
   },
-  // when the other user leaves the room
+  // when the other user leaves the room .. used for showing offline tag next to user
   [SESSION_CLOSED_FLAG]: (state, action) => {
-    return state.setIn(['chats', action.room,'sessionClosed'],false)
+    return state.setIn(['chats', action.room,'sessionClosed'],true)
   },
   // when user closes the chat window 
   [CHAT_WINDOW_DELETE]:(state,action)=>{

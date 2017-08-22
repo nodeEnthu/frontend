@@ -33,6 +33,11 @@ const PopupChat = createReactClass({
     this.setState({showChatBox:false});
     dispatch(chatWindowOpen(room,false));
   },
+  endSession(){
+    let {room,dispatch,chatWindowDelete } = this.props;
+    console.log(" trying the delete the session for room : " + room);
+    dispatch(chatWindowDelete(room));
+  },
   handleChange(event){
     this.setState({messageBeingTyped:event.target.value});
   },
@@ -40,6 +45,7 @@ const PopupChat = createReactClass({
     let {providerName, showChatBox} = this.state;
     const {user,img,position,globalState,room} = this.props;
     const {chats} = globalState.core.toJS();
+    console.log('chats in pop up window' , chats);
     return (
       <div>
           <div className="chat-circle btn btn-raised" onClick={this.startChat} 
@@ -47,7 +53,15 @@ const PopupChat = createReactClass({
           >
             {
               (!chats[room].windowOpen && chats[room].newMessage)?
-              <div className="notification-bell"></div>:
+              <div className="notification-bell"></div>
+              :
+              undefined
+            }
+           <div className = "close-chat"></div>
+            {
+              (chats[room].sessionClosed)?
+              <div className="offline-bell"></div>
+              :
               undefined
             }
             <div className="chat-overlay"></div>
@@ -56,7 +70,8 @@ const PopupChat = createReactClass({
         <ChatWindow toggle={this.toggle} 
                     showChatBox={this.state.showChatBox} 
                     room={this.props.room} 
-                    user = {user} 
+                    user = {user}
+                    endSession = {this.endSession} 
                     globalState = {this.props.globalState}
         />
       </div>
@@ -70,6 +85,7 @@ PopupChat.propTypes = {
   position:PropTypes.number,
   chatWindowOpen:PropTypes.func,
   resetNewMessageFlag: PropTypes.func,
+  chatWindowDelete: PropTypes.func,
   dispatch:PropTypes.func
 }
 export default PopupChat;

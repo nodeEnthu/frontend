@@ -42,6 +42,7 @@ function initializeWebSockets(user, dispatch, actions) {
             let roomToBeDeleted = messagePayload.room;
             ahClient.rooms.splice(ahClient.rooms.indexOf(roomToBeDeleted), 1);
             dispatch(actions.addChatMessage(messagePayload.room, 'user  has left the  chat session'));
+            dispatch(actions.sessionClosed(messagePayload.room));
           }
           // this means its a message between two people where connection is already established
           else {

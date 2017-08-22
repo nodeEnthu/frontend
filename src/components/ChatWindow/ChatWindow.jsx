@@ -3,6 +3,7 @@ import './chatWindow.scss'
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class'
 import { getCall } from 'utils/httpUtils/apiCallWrapper'
+import FlatButton from 'material-ui/FlatButton';
 
 const ChatWindow = createReactClass({
   getInitialState() {
@@ -19,19 +20,21 @@ const ChatWindow = createReactClass({
     if(providerAvatar){
       message.providerAvatar = providerAvatar;
     }
-    console.log(room,message);
     ahClient.say(room, JSON.stringify(message) );
     this.setState({messageBeingTyped:undefined});
   },
   render(){
-    const {showChatBox,img, globalState,position} =  this.props;
+    const {showChatBox,img, globalState,position,room,endSession} =  this.props;
     const {messageBeingTyped} = this.state;
     const {chats} = globalState.core.toJS();
-    let resolvedMessages = (chats[this.props.room] && chats[this.props.room].messages )?chats[this.props.room].messages : [];
+    let resolvedMessages = (chats[room] && chats[room].messages )?chats[room].messages : [];
     return (
         <div className="chat-box" style={{display:(showChatBox)? 'block':'none'}}>
           <div className="chat-box-header" onClick={this.props.toggle}>
-            Chat
+            <span>Chat</span>
+            <FlatButton style={{left:'4em'}} labelStyle={{color:'white'}} label="End session"
+              onClick={endSession}
+            />
           </div>
           <div className="chat-box-body">
             <div className="chat-box-overlay">
@@ -43,10 +46,16 @@ const ChatWindow = createReactClass({
               )}
             </div>
           </div>
-          <div className="chat-input">
-            <input type="text" className="chat-input" placeholder="Send a message..." onChange={this.typeMessage} value = {messageBeingTyped || ' '}/>
-            <button className="chat-submit" onClick={this.submitMessage}><i className="material-icons">send</i></button>
-          </div>
+          {
+            (chats[room] && chats[room].sessionClosed)?
+            undefined
+            :
+            <div className="chat-input">
+              <input type="text" className="chat-input" placeholder="Send a message..." onChange={this.typeMessage} value = {messageBeingTyped || ' '}/>
+              <button className="chat-submit" onClick={this.submitMessage}><i className="material-icons">send</i></button>
+            </div>
+          }
+          
         </div>
   
     );

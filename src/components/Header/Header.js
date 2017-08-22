@@ -94,8 +94,10 @@ const Header =createReactClass ({
         const { globalState } = this.props;
         const {user,chats} = globalState.core.toJS();
         let resolvedChats = Object.keys(chats) || [];
+
         user.title = user.title || 'someRandomString'; // name of the business
         let {deleteText,deleteAccntModalOpen, showSpinner, accntDeleted} = this.state;
+        console.log('resolvedChats',resolvedChats);
         return (
               <AppBar
                 title=""
@@ -271,7 +273,7 @@ const Header =createReactClass ({
                   <ul className="overlapping-avatars">
                   {
                     resolvedChats.map(function(value,index){
-                      if(value){
+                      if(value && chats[value] && chats[value].messages){
                         return <li key={index}>
                                 <PopupChat 
                                   key={index} 
@@ -282,6 +284,7 @@ const Header =createReactClass ({
                                   globalState= {self.props.globalState}
                                   chatWindowOpen= {actions.chatWindowOpen}
                                   resetNewMessageFlag = {actions.resetNewMessageFlag}
+                                  chatWindowDelete = {actions.chatWindowDelete}
                                   dispatch = {self.props.dispatch}
                                 />
                               </li>

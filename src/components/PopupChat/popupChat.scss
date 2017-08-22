@@ -23,3 +23,42 @@
   top: 0px;
   right: 5px;
 }
+
+.offline-bell {
+  width: 20px;
+  height: 20px;
+  background: #b3b0b0;
+  border-radius: 50%;
+  position: absolute;
+  top: 60px;
+  right: 5px;
+}
+
+.online-bell {
+  width: 20px;
+  height: 20px;
+  background: green;
+  border-radius: 50%;
+  position: absolute;
+  top: 60px;
+  right: 5px;
+}
+
+.orangeBox {
+  top: 0;
+  right: 60px;
+  position:absolute;
+  background: #1b1a19;
+  width:20px;
+  height:20px;
+  color: #fff;
+  font-size: 0.75em;
+  text-align: center;
+  border-radius:50%;
+}
+
+.cross-icon {
+  top: 3px;
+  position: absolute;
+  right: 6px;
+}
