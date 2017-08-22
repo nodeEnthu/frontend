@@ -17,6 +17,8 @@ export const ADD_CHAT_WINDOW = "ADD_CHAT_WINDOW"
 export const ADD_CHAT_MESSAGE = "ADD_CHAT_MESSAGE"
 export const CHAT_WINDOW_OPEN = "CHAT_WINDOW_OPEN"
 export const RESET_NEW_MESSAGE_FLAG = "RESET_NEW_MESSAGE_FLAG"
+export const SESSION_CLOSED_FLAG = "SESSION_CLOSED_FLAG"
+export const CHAT_WINDOW_DELETE = "CHAT_WINDOW_DELETE"
 
 export function addToken(value) {
   return {
@@ -118,6 +120,16 @@ export function resetNewMessageFlag(room) {
     type: RESET_NEW_MESSAGE_FLAG,
     room: room  }
 }
+export function sessionClosed(room) {
+  return {
+    type: SESSION_CLOSED_FLAG,
+    room: room  }
+}
+export function chatWindowClose(room) {
+  return {
+    type: CHAT_WINDOW_DELETE,
+    room: room  }
+}
 
 const ACTION_HANDLERS = {
   [ADD_TOKEN]: (state, action) => {
@@ -169,11 +181,10 @@ const ACTION_HANDLERS = {
             })
             .updateIn(['chats', action.room, 'newMessage'],(val)=>true)
             .updateIn(['chats', action.room, 'messages'], (val)=>{
-                var resolvedMessage = action.payload.userName+' : '+action.payload.message
                 if (!val){
-                    return List.of(resolvedMessage);
+                    return List.of(action.payload);
                 }else{
-                    return val.push(resolvedMessage);
+                    return val.push(action.payload);
                 }
             })
   },
@@ -181,9 +192,17 @@ const ACTION_HANDLERS = {
     return state.setIn(['chats', action.room,'newMessage'], false)
                 .setIn(['chats', action.room,'windowOpen'], action.windowOpen);
   },
+  // remove the bell icon
   [RESET_NEW_MESSAGE_FLAG]: (state, action) => {
-    console.log(" i am resetting the flag to false");
     return state.setIn(['chats', action.room,'newMessage'],false)
+  },
+  // when the other user leaves the room
+  [SESSION_CLOSED_FLAG]: (state, action) => {
+    return state.setIn(['chats', action.room,'sessionClosed'],false)
+  },
+  // when user closes the chat window 
+  [CHAT_WINDOW_DELETE]:(state,action)=>{
+    return state.setIn(['chats',action.room],Map());
   }
 }
 

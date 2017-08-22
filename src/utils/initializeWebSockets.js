@@ -11,29 +11,42 @@ function initializeWebSockets(user, dispatch, actions) {
         // check if the person logged in is a provider .. if yes make a room so that online status is detected
         if (user.userType === 'provider') {
           getCall('/api/chat/setUserOnline', { userId: user._id })
-          ahClient.roomAdd(roomName, function(error) {});
+          if (ahClient.rooms.indexOf(roomName) === -1) {
+            console.log('I am a provider and my rrom is : ' + roomName);
+            ahClient.roomAdd(roomName, function(error) {});
+          }
         }
         ahClient.on('say', function(messagePayload) {
           //could be two things happening here
           /*
            * a) call from server to join another room .. when a customer clicks on chat icon
            * b) message from a room already joined
+           * c) person has left the room
            */
-
           let message;
           try { message = JSON.parse(messagePayload.message); } catch (e) { message = messagePayload.message; }
           // lets tacke case a) first .. which will happen ony for providers
           if (message.serverMessage && message.serverMessage === 'joinroom') {
-            ahClient.roomAdd(message.newRoom, function(error) {});
+            if (ahClient.rooms.indexOf(message.newRoom) === -1) {
+              ahClient.roomAdd(message.newRoom, function(error) {});
+
+            }
             // make  backend call to add provider to the room
             getCall('/api/chat/joinChat', { roomName: message.newRoom, userId: user._id, avatar: user.img, userName: user.name });
             // show a chat circle from customer
             dispatch(actions.addChatWindow(message));
+            dispatch(actions.addChatMessage(message.newRoom, 'user  has started a  chat session'));
+          }
+          // case c) user has left the room 
+          else if (message === 'LEFT_ROOM') {
+            let roomToBeDeleted = messagePayload.room;
+            ahClient.rooms.splice(ahClient.rooms.indexOf(roomToBeDeleted), 1);
+            dispatch(actions.addChatMessage(messagePayload.room, 'user  has left the  chat session'));
           }
           // this means its a message between two people where connection is already established
-          else{
-            dispatch(actions.resetNewMessageFlag(messagePayload.room,true));
-            dispatch(actions.addChatMessage(messagePayload.room,message,message.providerAvatar));
+          else {
+            dispatch(actions.resetNewMessageFlag(messagePayload.room, true));
+            dispatch(actions.addChatMessage(messagePayload.room, message.userName + ' : ' + message.message, message.providerAvatar));
           }
         })
       }

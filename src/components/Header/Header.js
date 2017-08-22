@@ -96,7 +96,6 @@ const Header =createReactClass ({
         let resolvedChats = Object.keys(chats) || [];
         user.title = user.title || 'someRandomString'; // name of the business
         let {deleteText,deleteAccntModalOpen, showSpinner, accntDeleted} = this.state;
-        console.log(chats);
         return (
               <AppBar
                 title=""

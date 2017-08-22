@@ -19,6 +19,7 @@ const ChatWindow = createReactClass({
     if(providerAvatar){
       message.providerAvatar = providerAvatar;
     }
+    console.log(room,message);
     ahClient.say(room, JSON.stringify(message) );
     this.setState({messageBeingTyped:undefined});
   },
@@ -26,7 +27,6 @@ const ChatWindow = createReactClass({
     const {showChatBox,img, globalState,position} =  this.props;
     const {messageBeingTyped} = this.state;
     const {chats} = globalState.core.toJS();
-    console.log(chats);
     let resolvedMessages = (chats[this.props.room] && chats[this.props.room].messages )?chats[this.props.room].messages : [];
     return (
         <div className="chat-box" style={{display:(showChatBox)? 'block':'none'}}>

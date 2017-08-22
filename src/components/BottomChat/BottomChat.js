@@ -28,14 +28,18 @@ const BottomChat = createReactClass({
     this.props.chatWindowOpen(roomName,!showChatBox);
     this.setState({showChatBox:!this.state.showChatBox});
     const {user} = this.props.globalState.core.toJS();
-    getCall('/api/chat/startChat',{
-      roomName: roomName,
-      providerId: providerId,
-      userId:user._id,
-      avatar:user.img,
-      userName:user.name,
-      providerAvatar:providerAvatar
-    })
+    console.log(ahClient.rooms, ahClient.rooms.indexOf(roomName), roomName);
+    if(ahClient.rooms.indexOf(roomName) === -1){
+      ahClient.roomAdd(roomName, function(error){ if(error){ } });
+      getCall('/api/chat/startChat',{
+        roomName: roomName,
+        providerId: providerId,
+        userId:user._id,
+        avatar:user.img,
+        userName:user.name,
+        providerAvatar:providerAvatar
+      })
+    }
   },
   toggle(){
     const {showChatBox,roomName} = this.state;
@@ -45,9 +49,8 @@ const BottomChat = createReactClass({
   componentDidMount() {
     let self = this;
     const {user} = this.props.globalState.core.toJS();
-    var hashids = new Hashids();
-    let roomName = hashids.encodeHex(user._id,this.state.providerId);
-    ahClient.roomAdd(roomName, function(error){ if(error){ } });
+    var hashids = new Hashids(user._id);
+    let roomName = hashids.encodeHex(this.state.providerId);
     this.setState({roomName:roomName,providerId:this.props.providerId});
   },
   handleChange(event){
@@ -55,7 +58,7 @@ const BottomChat = createReactClass({
   },
   render(){
     let {providerName, showChatBox} = this.state;
-    const {user} = this.props.globalState.core.toJS();    
+    const {user} = this.props.globalState.core.toJS();
     return (
       <div>
         <div className="chat-circle">

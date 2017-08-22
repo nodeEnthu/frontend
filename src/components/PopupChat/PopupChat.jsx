@@ -26,7 +26,6 @@ const PopupChat = createReactClass({
   startChat(){
     let {room,chatWindowOpen,dispatch,resetNewMessageFlag } = this.props;
     dispatch(chatWindowOpen(room,!this.state.showChatBox));
-
     this.setState({showChatBox:!this.state.showChatBox});
   },
   toggle(){
