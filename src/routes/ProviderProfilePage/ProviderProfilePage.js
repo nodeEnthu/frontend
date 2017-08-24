@@ -30,6 +30,5 @@ ProviderProfile.propTypes = {
   openLoginModal:PropTypes.func,
   openModal:PropTypes.func,
   flushOutStaleReviewData:PropTypes.func,
-  chatWindowOpen:PropTypes.func.isRequired
 }
 export default ProviderProfilePage;

@@ -11,12 +11,15 @@ function initializeWebSockets(user, dispatch, actions) {
         // check if the person logged in is a provider .. if yes make a room so that online status is detected
         if (user.userType === 'provider') {
           getCall('/api/chat/setUserOnline', { userId: user._id })
-          if (ahClient.rooms.indexOf(roomName) === -1) {
-            console.log('I am a provider and my rrom is : ' + roomName);
-            ahClient.roomAdd(roomName, function(error) {});
-          }
+            .then(function() {
+              if (ahClient.rooms.indexOf(roomName) === -1) {
+                ahClient.roomAdd(roomName, function(error) {});
+              }
+            })
+
         }
         ahClient.on('say', function(messagePayload) {
+          console.log(messagePayload)
           //could be two things happening here
           /*
            * a) call from server to join another room .. when a customer clicks on chat icon
@@ -29,7 +32,6 @@ function initializeWebSockets(user, dispatch, actions) {
           if (message.serverMessage && message.serverMessage === 'joinroom') {
             if (ahClient.rooms.indexOf(message.newRoom) === -1) {
               ahClient.roomAdd(message.newRoom, function(error) {});
-
             }
             // make  backend call to add provider to the room
             getCall('/api/chat/joinChat', { roomName: message.newRoom, userId: user._id, avatar: user.img, userName: user.name });

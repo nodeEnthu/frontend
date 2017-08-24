@@ -9,42 +9,50 @@ import Hashids from 'hashids'
 import { getCall } from 'utils/httpUtils/apiCallWrapper'
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
-import ChatWindow from 'components/ChatWindow'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat';
-
+import async from 'async'
 const BottomChat = createReactClass({
   getInitialState() {
     return{
-      messageBeingTyped:undefined,
       providerId: this.props.providerId,
       roomName:undefined,
-      showChatBox:false,
       providerName:this.props.providerName,
       providerAvatar:this.props.providerAvatar
     }
   },
   startChatWithProvider(){
     const {showChatBox,roomName,providerId, providerAvatar} = this.state;
-    this.props.chatWindowOpen(roomName,!showChatBox);
-    this.setState({showChatBox:!this.state.showChatBox});
     const {user} = this.props.globalState.core.toJS();
     console.log(ahClient.rooms, ahClient.rooms.indexOf(roomName), roomName);
     if(ahClient.rooms.indexOf(roomName) === -1){
-      ahClient.roomAdd(roomName, function(error){ if(error){ } });
-      getCall('/api/chat/startChat',{
-        roomName: roomName,
-        providerId: providerId,
-        userId:user._id,
-        avatar:user.img,
-        userName:user.name,
-        providerAvatar:providerAvatar
-      })
+      async.series([
+        function createRoom(cb){
+          ahClient.action('createChatRoom', {roomName: roomName}, function(data){cb()});
+        }, 
+        function addSelfToRoom(cb){
+          ahClient.roomAdd(roomName, function(error){ 
+            if(error){ 
+              console.log(error);
+            } cb();
+          });
+        }, 
+        function sendMessageToSelfAndProvider(){
+          getCall('/api/chat/startChat',{
+              roomName: roomName,
+              providerId: providerId,
+              userId:user._id,
+              avatar:user.img,
+              userName:user.name,
+              providerAvatar:providerAvatar
+            }).then(function(){
+              cb();
+            })
+        }],function (){
+            // do nothing here
+         }
+      )
+
     }
-  },
-  toggle(){
-    const {showChatBox,roomName} = this.state;
-    this.setState({showChatBox:!this.state.showChatBox});
-    this.props.chatWindowOpen(roomName,!showChatBox);
   },
   componentDidMount() {
     let self = this;
@@ -53,14 +61,8 @@ const BottomChat = createReactClass({
     let roomName = hashids.encodeHex(this.state.providerId);
     this.setState({roomName:roomName,providerId:this.props.providerId});
   },
-  handleChange(event){
-    this.setState({messageBeingTyped:event.target.value});
-  },
   render(){
-    let {providerName, showChatBox} = this.state;
-    const {user} = this.props.globalState.core.toJS();
     return (
-      <div>
         <div className="chat-circle">
           <IconButton tooltip="Chat with me"
                       onClick={this.startChatWithProvider}
@@ -69,13 +71,6 @@ const BottomChat = createReactClass({
             <CommunicationChat />
           </IconButton>
         </div>
-        <ChatWindow toggle={this.toggle} 
-                    showChatBox={this.state.showChatBox} 
-                    room={this.state.roomName} 
-                    user={user} 
-                    globalState = {this.props.globalState}
-                    providerAvatar = {this.props.providerAvatar}/>
-      </div>
     );
   }
 }); 
@@ -84,7 +79,6 @@ BottomChat.propTypes = {
   providerId: PropTypes.string.isRequired,
   providerName:PropTypes.string.isRequired,
   providerAvatar:PropTypes.string.isRequired,
-  globalState:PropTypes.object.isRequired,
-  chatWindowOpen:PropTypes.func
+  globalState:PropTypes.object.isRequired
 }
 export default BottomChat;

@@ -7,7 +7,7 @@ export const OPEN_MODAL_LOGIN = 'OPEN_MODAL_LOGIN';
 export const CLOSE_MODAL_LOGIN = 'CLOSE_MODAL_LOGIN';
 export const USER_LOGGED_IN = 'USER_LOGGED_IN';
 export const UPDATE_USER = 'UPDATE_USER';
-export const USER_FOOD_ITEM_UPDATE = 'USER_FOOD_ITEM_UPDATE'
+export const USER_FOOD_ITEM_UPDATE = 'USER_FOOD_ITEM_UPDATE' 
 export const PUBLISH_USER = "PUBLISH_USER"
 export const POST_LOGIN_URL_REDIRECT = "POST_LOGIN_URL_REDIRECT"
 export const SCORLL_TO_ITEM_IN_USER_PROFILE = "SCORLL_TO_ITEM_IN_USER_PROFILE"
@@ -171,14 +171,11 @@ const ACTION_HANDLERS = {
     return state.set('envVars', Map(action.payload))
   },
   [ADD_CHAT_WINDOW]: (state, action) => {
-    return state.setIn(['chats', action.payload.newRoom], Map(action.payload))
+    return state
+                .setIn(['chats', action.payload.newRoom], Map(action.payload));
   },
   [ADD_CHAT_MESSAGE]: (state, action) => {
     return state
-            .updateIn(['chats', action.room, 'avatar'],(val)=>{
-              if(val) return val;
-              else return action.providerAvatar;
-            })
             .updateIn(['chats', action.room, 'newMessage'],(val)=>true)
             .updateIn(['chats', action.room, 'messages'], (val)=>{
                 if (!val){
@@ -196,13 +193,13 @@ const ACTION_HANDLERS = {
   [RESET_NEW_MESSAGE_FLAG]: (state, action) => {
     return state.setIn(['chats', action.room,'newMessage'],false)
   },
-  // when the other user leaves the room .. used for showing offline tag next to user
+  // when the other user leaves the room .. used for showing offline bell next to user
   [SESSION_CLOSED_FLAG]: (state, action) => {
     return state.setIn(['chats', action.room,'sessionClosed'],true)
   },
-  // when user closes the chat window 
+  // when user closes the chat window by clicking on end session
   [CHAT_WINDOW_DELETE]:(state,action)=>{
-    return state.setIn(['chats',action.room],Map());
+    return state.setIn(['chats',action.room, 'windowDeleted'],true);
   }
 }
 

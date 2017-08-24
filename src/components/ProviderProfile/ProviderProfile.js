@@ -429,9 +429,7 @@ const ProviderProfile = createReactClass({
                       providerName={provider.name}
                       providerAvatar={provider.img} 
                       globalState={this.props.globalState} 
-                      chatWindowOpen = {this.props.chatWindowOpen}
                       globalState = {this.props.globalState}
-                      chatCircleStyle={{height:'20px',width:'20px'}}
           />
         </div>
         :
@@ -462,5 +460,4 @@ ProviderProfile.propTypes = {
   flushProviderData:PropTypes.func,
   updateUser:PropTypes.func,
   foodIdSelected:PropTypes.func,
-  chatWindowOpen: PropTypes.func,
 }

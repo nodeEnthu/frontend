@@ -19,7 +19,6 @@ const PopupChat = createReactClass({
     return{
       messageBeingTyped:undefined,
       providerId: this.props.providerId,
-      showChatBox:false,
       providerName:this.props.providerName
     }
   },
@@ -30,19 +29,19 @@ const PopupChat = createReactClass({
   },
   toggle(){
     let {room,chatWindowOpen,dispatch,resetNewMessageFlag } = this.props;
-    this.setState({showChatBox:false});
     dispatch(chatWindowOpen(room,false));
   },
   endSession(){
     let {room,dispatch,chatWindowDelete } = this.props;
-    console.log(" trying the delete the session for room : " + room);
+    // destroy the chat room
     dispatch(chatWindowDelete(room));
+    getCall('/api/chat/destroy/room',{room:room});
   },
   handleChange(event){
     this.setState({messageBeingTyped:event.target.value});
   },
   render(){
-    let {providerName, showChatBox} = this.state;
+    let {providerName} = this.state;
     const {user,img,position,globalState,room} = this.props;
     const {chats} = globalState.core.toJS();
     console.log('chats in pop up window' , chats);
@@ -68,7 +67,7 @@ const PopupChat = createReactClass({
           </div>
         
         <ChatWindow toggle={this.toggle} 
-                    showChatBox={this.state.showChatBox} 
+                    showChatBox={chats[room].windowOpen} 
                     room={this.props.room} 
                     user = {user}
                     endSession = {this.endSession} 
