@@ -26,11 +26,10 @@ const TermsAndConditions = createReactClass({
 		    <p className="c68 c94"><span className="c14">&nbsp; V. &nbsp; LIMITATION OF LIABILITY; RELEASE</span></p>
 		    <p className="c68 c94"><span className="c14">&nbsp;VI. &nbsp; INDEMNIFICATION FOR THIRD-PARTY CLAIMS</span></p>
 		    <p className="c3"><span className="c14">&nbsp;VII. &nbsp; COMPLIANCE WITH APPLICABLE LAWS</span></p>
-		    <p className="c28"><span className="c14">&nbsp; &nbsp;VIII. &nbsp; NOTICE FOR CALIFORNIA WEBSITE USERS</span></p>
-		    <p className="c61"><span className="c14">&nbsp; IX. &nbsp; DISPUTE RESOLUTION </span></p>
-		    <p className="c61"><span className="c14">&nbsp; &nbsp;X. &nbsp; CHANGES AND AMENDMENTS TO OUR SERVICES</span></p>
-		    <p className="c3"><span className="c14">&nbsp; XI. &nbsp; TERM AND TERMINATION</span></p>
-		    <p className="c68 c88"><span className="c14">&nbsp; XII. &nbsp; GENERAL AND MISCELLANEOUS PROVISIONS</span></p>
+		    <p className="c28"><span className="c14">&nbsp; &nbsp;VIII. &nbsp; DISPUTE RESOLUTION</span></p>
+		    <p className="c61"><span className="c14">&nbsp; &nbsp;IX. &nbsp; CHANGES AND AMENDMENTS TO OUR SERVICES</span></p>
+		    <p className="c3"><span className="c14">&nbsp; X. &nbsp; TERM AND TERMINATION</span></p>
+		    <p className="c68 c88"><span className="c14">&nbsp; XI. &nbsp; GENERAL AND MISCELLANEOUS PROVISIONS</span></p>
 		    <p className="c85"><span className="c14">&nbsp;</span></p>
 		    <p className="c16 c85"><span className="c14"></span></p>
 		    <p className="c85 c16"><span className="c50"></span></p>
@@ -406,7 +405,6 @@ const TermsAndConditions = createReactClass({
 		    <ol className="c2 lst-kix_list_24-0" start="12">
 		        <li className="c11 c21"><span className="c22">Our Contact Information</span></li>
 		    </ol>
-		    <p className="c49 c82"><span className="c14">All users of our Services, regardless of their geographic locations, can reach out to us with any questions, complaints, concerns, or claims about our Services by using our contact information provided in Section VIII.1. (&ldquo;Notice for California E-Commerce Website Users&rdquo;) herein.</span></p>
 		    <p className="c0"><span className="c14 c89"></span></p>
 		    <p className="c62"><span className="c14 c89">_____________________</span></p>
 		</div>

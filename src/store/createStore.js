@@ -59,6 +59,9 @@ export default (initialState = {}, cb) => {
                                     dataLayer.push({'userID': user._id+'_'+user.userType});
                                 }
                             }
+                            if(dataLayer && user._id){
+                                dataLayer.push({'userID': user._id+'_'+user.userType});
+                            }
                             callback();
                         })
                 } else {
