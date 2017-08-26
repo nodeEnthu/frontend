@@ -64,7 +64,7 @@ const ChatWindow = createReactClass({
 
 ChatWindow.propTypes = {
   toggle: PropTypes.func.isRequired,
-  showChatBox:PropTypes.bool.isRequired,
+  showChatBox:PropTypes.bool,
   user:PropTypes.object.isRequired,
   providerAvatar:PropTypes.string
 }

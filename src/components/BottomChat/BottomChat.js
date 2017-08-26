@@ -23,20 +23,19 @@ const BottomChat = createReactClass({
   startChatWithProvider(){
     const {showChatBox,roomName,providerId, providerAvatar} = this.state;
     const {user} = this.props.globalState.core.toJS();
-    console.log(ahClient.rooms, ahClient.rooms.indexOf(roomName), roomName);
     if(ahClient.rooms.indexOf(roomName) === -1){
       async.series([
         function createRoom(cb){
-          ahClient.action('createChatRoom', {roomName: roomName}, function(data){cb()});
+          getCall('/api/chat/createChatRoom',{roomName: roomName});
+          cb();
         }, 
         function addSelfToRoom(cb){
           ahClient.roomAdd(roomName, function(error){ 
             if(error){ 
-              console.log(error);
             } cb();
           });
         }, 
-        function sendMessageToSelfAndProvider(){
+        function sendMessageToSelfAndProvider(cb){
           getCall('/api/chat/startChat',{
               roomName: roomName,
               providerId: providerId,
