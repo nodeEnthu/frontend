@@ -113,7 +113,7 @@ const HomeView = createReactClass({
 				<div className="splash-container pure-override-letter-spacing">
                     <div className="banner-wrapper">
                         <h1 className="promotion-heading">
-                            Find the best professionals in your neighborhood
+                            Find the best cooks in your neighborhood
                         </h1>
                         <div className="search-sec-wrapper">
                             <div className = "pure-u-1 pure-u-md-1-3 search-wrapper">
@@ -164,6 +164,20 @@ const HomeView = createReactClass({
                     </div>
                 </div>
                 <div className="sub-content-wrapper">
+                    <div className="provider-promotion-wrapper">
+                        <div className="provider-promotion">
+                            <div className="promotion-free">FREE</div>
+                            <div className="promotion-heading-text">
+                                &#x20b9; 400 GIFT CARD
+                            </div>
+                            <div className="promotion-text-detail">
+                                For the first 100 cooks on their first <strong>confirmed</strong> order
+                            </div>
+                            <div className="promotion-button" onClick={()=>this.goToPage('providerEntry')}> 
+                                Set up now
+                            </div>
+                        </div>
+                    </div>
                     <div className="pure-u-1 steps-text">
                         3 steps to get started
                     </div>
@@ -225,7 +239,7 @@ const HomeView = createReactClass({
                                     Step 1 - <span className="step-summary">Create Profile</span>
                                 </div>
                                 <div className="step-text">
-                                    Click "List your business" on top nav bar
+                                    Click "BECOME A COOK" on top nav bar
                                 </div>
                             </div>
                         </div>

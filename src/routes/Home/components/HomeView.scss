@@ -1,297 +1,335 @@
 .home {
-    background: #fff8f1;
-    .react-autosuggest__suggestions-container {
-        width: 100%;
-        line-height: 1em;
-        ul {
-            li {
-                padding: 0.25em 0.25em 0 0.25em;
-            }
-        }
+  background: #fff8f1;
+  .react-autosuggest__suggestions-container {
+    width: 100%;
+    line-height: 1em;
+    ul {
+      li {
+        padding: 0.25em 0.25em 0 0.25em;
+      }
     }
-    .splash-container {
-        background: url("../assets/mainImage.jpg") no-repeat center center fixed;
-        background-size: cover;
-        /*z-index: 1;*/
-        overflow: hidden;
-        /* The following styles are required for the "scroll-over" effect */
-        width: 100%;
-        height: 500px;
-        top: 3em;
-        left: 0;
-        color: white;
+  }
+  .splash-container {
+    background: url("../assets/mainImage.jpg") no-repeat center center fixed;
+    background-size: cover;
+    /*z-index: 1;*/
+    overflow: hidden;
+    /* The following styles are required for the "scroll-over" effect */
+    width: 100%;
+    height: 500px;
+    top: 3em;
+    left: 0;
+    color: white;
+  }
+  .banner-wrapper {
+    position: relative;
+    top: 24%;
+    width: 95%;
+    height: 45%;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, .7);
+    text-align: center;
+    clear: both;
+  }
+  .promotion-heading {
+    font-weight: 400;
+    padding-top: 20px;
+  }
+  .search-sec-wrapper {
+    background: #ff6f00;
+    font-size: 1em;
+    line-height: 2.5em;
+    width: 90%;
+    margin: 0 auto;
+    padding: 0.5em;
+  }
+  .splash {
+    margin: auto;
+    width: 95%;
+    select {
+      margin-left: 10px;
+      color: #000;
+      -webkit-appearance: none;
+      border: none;
+      border-radius: 0;
+      width: 35%;
+      padding: 0px 10px;
+      background-color: white;
     }
-    .banner-wrapper {
-        position: relative;
-        top: 24%;
-        width: 95%;
-        height: 45%;
-        margin: 0 auto;
-        background: rgba(0, 0, 0, .7);
-        text-align: center;
-        clear: both;
+  }
+  .move-right {
+    text-align: right;
+    float: right;
+  }
+  .move-left {
+    float: left;
+    text-align: left;
+  }
+  .category-wrapper {}
+  .address-wrapper {
+    display: inline-block;
+    width: 100%;
+  }
+  .address-sub-wrapper {
+    display: inline-block;
+    width: 85%;
+    background: white;
+  }
+  .react-autosuggest__container {
+    display: inline-block;
+    width: 70%;
+    color: black;
+  }
+  .react-autosuggest__input {
+    border: none;
+    width: 100%;
+    border-radius: 0;
+  }
+  .icon-locate {
+    display: inline-block;
+    position: relative;
+    width: 30px;
+    height: 20px;
+    font-size: 0.5em;
+    img {
+      position: absolute;
+      width: 100%;
+      height: auto;
     }
-    .promotion-heading {
-        font-weight: 400;
-        padding-top: 20px;
+  }
+  .search-button {
+    display: inline-block;
+    position: relative;
+    width: 30px;
+    height: 20px;
+    margin-left: 0.75em;
+    top: 2px;
+    img {
+      position: absolute;
+      width: 100%;
+      height: auto;
+      bottom: -6px;
     }
-    .search-sec-wrapper {
-        background: #ff6f00;
-        font-size: 1em;
-        line-height: 2.5em;
-        width: 90%;
-        margin: 0 auto;
-        padding: 0.5em;
+  }
+  .locate-me {
+    display: inline-block;
+    margin: 0 2%;
+    color: black;
+    font-size: 0.75em;
+  }
+  .sub-content-wrapper {
+    margin: 0 auto;
+    padding-top: 35px;
+    width: 100%;
+    background-color: #fff;
+  }
+  .steps {
+    margin: 0 auto;
+    padding-bottom: 50px;
+  }
+  .steps-text {
+    padding: 30px 190px;
+    text-align: center;
+    font-size: 35px;
+  }
+  .steps-intro-text {
+    font-weight: 200;
+    text-align: center;
+    font-size: 2em;
+    padding-bottom: 1em;
+  }
+  .step {}
+  .step-heading {
+    line-height: 2em;
+  }
+  .step-text {}
+  .dotted:after {
+    content: "";
+    border-left: 2px dotted black;
+  }
+  .dotted {
+    position: relative;
+  }
+  .dotted:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    height: 1em;
+    left: 16.5%;
+    border-left: 2px solid dotted lightgrey;
+  }
+  .step-img-wrapper {
+    text-align: center;
+  }
+  .step-summary {
+    color: #FF6F00;
+  }
+  .list-business {
+    display: flex;
+    width: 100%;
+    margin: 0 auto;
+    img {
+      width: 100%;
+      height: 100%;
     }
-    .splash {
-        margin: auto;
-        width: 95%;
-        select {
-            margin-left: 10px;
-            color: #000;
-            -webkit-appearance: none;
-            border: none;
-            border-radius: 0;
-            width: 35%;
-            padding: 0px 10px;
-            background-color: white;
-        }
-    }
-    .move-right {
-        text-align: right;
-        float: right;
-    }
-    .move-left {
-        float: left;
-        text-align: left;
-    }
-    .category-wrapper {}
-    .address-wrapper {
-        display: inline-block;
-        width: 100%;
-    }
-    .address-sub-wrapper {
-        display: inline-block;
-        width: 85%;
-        background: white;
-    }
-    .react-autosuggest__container {
-        display: inline-block;
-        width: 70%;
-        color: black;
-    }
-    .react-autosuggest__input {
-        border: none;
-        width: 100%;
-        border-radius: 0;
-    }
-    .icon-locate {
-        display: inline-block;
-        position: relative;
-        width: 30px;
-        height: 20px;
-        font-size: 0.5em;
-        img {
-            position: absolute;
-            width: 100%;
-            height: auto;
-        }
-    }
-    .search-button {
-        display: inline-block;
-        position: relative;
-        width: 30px;
-        height: 20px;
-        margin-left: 0.75em;
-        top: 2px;
-        img {
-            position: absolute;
-            width: 100%;
-            height: auto;
-            bottom: -6px;
-        }
-    }
-    .locate-me {
-        display: inline-block;
-        margin: 0 2%;
-        color: black;
-        font-size: 0.75em;
-    }
-    .sub-content-wrapper {
-        margin: 0 auto;
-        width: 100%;
-        background-color: #fff;
-    }
-    .steps {
-        margin: 0 auto;
-        padding-bottom: 50px;
-    }
-    .steps-text {
-        padding: 50px 190px 50px;
-        text-align: center;
-        font-size: 35px;
-    }
-    .steps-intro-text {
-        font-weight: 200;
-        text-align: center;
-        font-size: 2em;
-        padding-bottom: 1em;
-    }
-    .step {}
-    .step-heading {
-        line-height: 2em;
-    }
-    .step-text {}
-    .dotted:after {
-        content: "";
-        border-left: 2px dotted black;
-    }
-    .dotted {
-        position: relative;
-    }
-    .dotted:after {
-        content: "";
-        position: absolute;
-        top: 100%;
-        height: 1em;
-        left: 16.5%;
-        border-left: 2px solid dotted lightgrey;
-    }
-    .step-img-wrapper {
-        text-align: center;
-    }
-    .step-summary {
-        color: #FF6F00;
-    }
-    .list-business {
-        display: flex;
-        width: 100%;
-        margin: 0 auto;
-        img {
-            width: 100%;
-            height: 100%;
-        }
-    }
-    .your-business {
-        background: #16987e;
-        padding: 1em;
-        color: white;
-        text-align: left;
-        text-align: -webkit-left;
-    }
-    .business-heading {
-        font-size: 2em;
-        font-weight: 500;
-    }
-    .business-promotion {
-        text-align: left;
-        text-align: -webkit-left;
-    }
-    .business-signup {
-        display: inline-block;
-        border: 1px solid #fff;
-        font-size: 120%;
-        padding: .75em;
-    }
-    .business-step {
-        margin-bottom: 1em;
-    }
-    .cook-photo {
-        position: relative;
-        min-height: 280px;
-    }
-    .salutation {
-        background: yellow;
-        font-size: 110%;
-        padding: 1em;
-    }
+  }
+  .your-business {
+    background: #16987e;
+    padding: 1em;
+    color: white;
+    text-align: left;
+    text-align: -webkit-left;
+  }
+  .business-heading {
+    font-size: 2em;
+    font-weight: 500;
+  }
+  .business-promotion {
+    text-align: left;
+    text-align: -webkit-left;
+  }
+  .business-signup {
+    display: inline-block;
+    border: 1px solid #fff;
+    font-size: 120%;
+    padding: .75em;
+  }
+  .business-step {
+    margin-bottom: 1em;
+  }
+  .cook-photo {
+    position: relative;
+    min-height: 280px;
+  }
+  .salutation {
+    background: yellow;
+    font-size: 110%;
+    padding: 1em;
+  }
+  .provider-promotion-wrapper {
+    width: 65%;
+    max-width:450px;
+    background: #CE3F53;
+    margin: 0 auto;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+  }
+  .provider-promotion {
+    padding: 1em;
+  }
+  .promotion-free {
+    display: inline-block;
+    font-size: 25px;
+    border-bottom: 1px solid #fff;
+  }
+  .promotion-heading-text {
+    padding-top:0.5em;
+    font-size: 25px;
+  }
+  .promotion-text-detail {
+    padding: 1em;
+    font-size: 0.85em;
+    line-height: 1.5em;
+  }
+  .promotion-button {
+    display: inline-block;
+    border: 1px solid white;
+    padding: 1em;
+    text-transform: uppercase;
+  }
 }
 
 @media (max-width: 53em) {
-    .home {
-        .home-menu {
-            text-align: left;
-        }
-        .splash-container {
-            background: url("../assets/mainImageMobile.jpg") no-repeat;
-            background-size: cover;
-            color: #fff;
-            background-position-x: 50%;
-        }
-        .react-autosuggest__suggestions-container {
-            width: 118%;
-        }
-        .banner-wrapper {
-            position: absolute;
-            background: rgba(0, 0, 0, .7);
-            top: 20%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            margin: 0 auto;
-            background: none;
-            text-align: center;
-            clear: both;
-        }
-        .splash {
-            select {
-                width: 50%;
-            }
-        }
-        .move-right {
-            text-align: left;
-            float: none;
-        }
-        .move-left {
-            float: none;
-            text-align: left;
-        }
-        /* We increase the height of the splash-container */
-        .splash-container {
-            height: 500px;
-        }
-        .splash-head {
-            font-size: 150%;
-        }
-        .category-wrapper {
-            text-align: left;
-        }
-        .react-autosuggest__container {
-            width: 85%;
-        }
-        .icon-locate {
-            width: 30px;
-            height: 20px;
-        }
-        .locate-me {
-            display: none;
-        }
-        .search-button {
-            width: 30px;
-            height: 30px;
-            margin-left: 5px;
-            top: 5px;
-            img {
-                bottom: -3px;
-                left: 1px;
-            }
-        }
-        .steps-text {
-            padding: 24px 0;
-            font-size: 2em;
-        }
-        .your-business {}
-        .step {
-            margin-bottom: 24px;
-        }
-        .display-none-small {
-            display: none;
-        }
-        .list-business {
-            display: block;
-        }
+  .home {
+    .home-menu {
+      text-align: left;
     }
+    .splash-container {
+      background: url("../assets/mainImageMobile.jpg") no-repeat;
+      background-size: cover;
+      color: #fff;
+      background-position-x: 50%;
+    }
+    .react-autosuggest__suggestions-container {
+      width: 118%;
+    }
+    .banner-wrapper {
+      position: absolute;
+      background: rgba(0, 0, 0, .7);
+      top: 20%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0 auto;
+      background: none;
+      text-align: center;
+      clear: both;
+    }
+    .splash {
+      select {
+        width: 50%;
+      }
+    }
+    .move-right {
+      text-align: left;
+      float: none;
+    }
+    .move-left {
+      float: none;
+      text-align: left;
+    }
+    /* We increase the height of the splash-container */
+    .splash-container {
+      height: 500px;
+    }
+    .splash-head {
+      font-size: 150%;
+    }
+    .category-wrapper {
+      text-align: left;
+    }
+    .react-autosuggest__container {
+      width: 85%;
+    }
+    .icon-locate {
+      width: 30px;
+      height: 20px;
+    }
+    .locate-me {
+      display: none;
+    }
+    .search-button {
+      width: 30px;
+      height: 30px;
+      margin-left: 5px;
+      top: 5px;
+      img {
+        bottom: -3px;
+        left: 1px;
+      }
+    }
+    .steps-text {
+      padding: 24px 0;
+      font-size: 2em;
+    }
+    .your-business {}
+    .step {
+      margin-bottom: 24px;
+    }
+    .display-none-small {
+      display: none;
+    }
+    .list-business {
+      display: block;
+    }
+    .provider-promotion-wrapper {
+        width:90%;
+    }
+  }
 }
+
+
 
 
 /*
@@ -299,17 +337,17 @@
  we want to over-ride some * of the mobile and tablet styles. */
 
 @media (min-width: 78em) {
-    /* We increase the header font size even more */
-    .home .splash-head {
-        font-size: 300%;
-    }
+  /* We increase the header font size even more */
+  .home .splash-head {
+    font-size: 300%;
+  }
 }
 
 @media (min-width: 1330px) {
-    /* We increase the header font size even more */
-    .home {
-        .sub-content-wrapper {
-            width: 70%;
-        }
+  /* We increase the header font size even more */
+  .home {
+    .sub-content-wrapper {
+      width: 70%;
     }
+  }
 }

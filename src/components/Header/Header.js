@@ -57,6 +57,7 @@ const Header =createReactClass ({
         this.props.dispatch(actions.postLoginUrlRedirect('providerProfileEntry'));
         this.props.dispatch(actions.openLoginModal());
       }
+      this.setState({leftNavOpen:false});
     },
     goToPage(link){
       this.context.router.push(link);
@@ -142,7 +143,7 @@ const Header =createReactClass ({
                   }
                   {((user && (user.userType === 'consumer' || !user.published)) || !globalState.core.get('token').length)?
                     <MenuItem leftIcon={<ActionPermIdentity/>} onTouchTap={this.checkLoginAndredirect}>
-                        List yourself
+                        Become a cook
                     </MenuItem>
                     :
                     undefined
@@ -164,9 +165,9 @@ const Header =createReactClass ({
                           <Login{...this.props}/>
                          } 
                       </li>
-                      {(!globalState.core.get('token').length)?
+                      {(!globalState.core.get('token').length || (user && user.published === false))?
                         <li onClick={this.checkLoginAndredirect}>
-                            <a href="javascript:void(0)">LIST YOURSELF</a>
+                            <a style={{padding: (globalState.core.get('token').length)? '0 4em': '0 0.75em'}} href="javascript:void(0)">Become a cook</a>
                         </li>
                         :
                         undefined
