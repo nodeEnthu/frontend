@@ -9,6 +9,8 @@ import Dialog from 'material-ui/Dialog';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import {CANCEL_REASONS} from 'routes/Search/constants/searchFilters'
+import * as browserFingerprint from 'browser-fingerprint'
+
 const OrderAction = createReactClass({
   getInitialState() {
     return{
@@ -47,6 +49,7 @@ const OrderAction = createReactClass({
     order.updatedByProvider = updatedByProvider;
     order.cancelReason = cancelReason;
     order.cancelText = cancelText;
+    order.providerBrowserFingerprint = browserFingerprint();
     return order;
   },
   cancelOrder(){

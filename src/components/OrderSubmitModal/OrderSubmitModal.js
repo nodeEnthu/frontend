@@ -8,6 +8,7 @@ import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import {resolvePickUpTime} from 'components/FoodItemEntryForm/constants';
 import moment from 'moment';
+import * as browserFingerprint from 'browser-fingerprint'
 const OrderSubmitModal = createReactClass({
   checkOutOrderDetails:{},
   getInitialState() {
@@ -86,7 +87,8 @@ const OrderSubmitModal = createReactClass({
       currency: this.props.currency,
       orderType:this.props.orderType,
       subTotal:this.props.currency + ' ' + grandTotal,
-      modeOfPayment:'Cash/CreditCard'
+      modeOfPayment:'Cash/CreditCard',
+      customerBrowserFingerprint: browserFingerprint()
     }
     // ends here
     return <FullscreenDialog
