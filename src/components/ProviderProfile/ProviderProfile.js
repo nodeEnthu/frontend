@@ -28,7 +28,7 @@ import {Circle} from 'rc-progress';
 import Snackbar from 'material-ui/Snackbar';
 import {METHODS_OF_PAYMENT} from 'components/ProviderEntryForm/constants'
 import Dialog from 'material-ui/Dialog';
-
+import MessageWindow from 'components/MessageWindow'
 const ProviderProfile = createReactClass({
   getInitialState() {
       return {
@@ -248,6 +248,13 @@ const ProviderProfile = createReactClass({
                 <div>
                  <CommunicationEmail/>
                   <span className="provider-detail">{provider.email}</span>
+                </div>
+                <div>
+                  <MessageWindow  globalState={this.props.globalState} 
+                                  provider={provider} 
+                                  openLoginModal={this.props.openLoginModal}
+                                  id={this.props.params.id}
+                  />
                 </div>
               </div>
               
