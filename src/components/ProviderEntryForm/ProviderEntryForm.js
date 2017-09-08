@@ -4,7 +4,6 @@ import { email, maxLength, required } from './../../utils/formUtils/formValidati
 import Toggle from 'material-ui/Toggle';
 import classNames from 'classnames';
 import Dialog from 'material-ui/Dialog';
-import FlatSelection from 'components/FlatSelection'
 import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import AsyncAutocomplete from 'components/AsyncAutocomplete';
 import ImageUploader from 'components/ImageUploader';
@@ -16,7 +15,9 @@ import Checkbox from 'material-ui/Checkbox';
 import Snackbar from 'material-ui/Snackbar';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
-import {METHODS_OF_PAYMENT} from './constants'
+import {METHODS_OF_PAYMENT} from './constants';
+import FlatButton from 'material-ui/FlatButton';
+
 const maxCount = 100;
 const ProviderEntryForm = createReactClass({
     getInitialState() {
@@ -159,7 +160,7 @@ const ProviderEntryForm = createReactClass({
         }
     },
     render() {
-        let {chars_left, title, description, email,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg, methodsOfPayment, keepAddressPrivateFlag,serviceOffered,addtnlComments, includeAddressInEmail,deliveryMinOrder,deliveryRadius,providerAddressJustificationModalOpen,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg,snackBarOpen,snackBarMessage } = this.props.providerEntryForm.toJS();
+        let {chars_left, title, description, email,phone,imgUrl,titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg,phoneErrorMsg, methodsOfPayment, keepAddressPrivateFlag,serviceOffered,addtnlComments, includeAddressInEmail,deliveryMinOrder,deliveryRadius,providerAddressJustificationModalOpen,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg,snackBarOpen,snackBarMessage } = this.props.providerEntryForm.toJS();
         methodsOfPayment = methodsOfPayment || [];
         let self = this;
         switch(serviceOffered){
@@ -201,14 +202,32 @@ const ProviderEntryForm = createReactClass({
                         >   
                         </textarea>
                         <div className = "error-message">{(descriptionErrorMsg)?'*'+descriptionErrorMsg:undefined}</div>
-                        <div>{chars_left}/100</div>
-                    
                         <input type="text" className={"pure-u-1"} name="email" placeholder="*email" value={email}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus}
                             onChange={this.changeStoreVal}
                         />
                         <div className = "error-message">{(emailErrorMsg)?'*'+emailErrorMsg:undefined}</div>
+                        <div className="display-inline half-width">
+                            <input type="text" className={"pure-u-1"} name="phone" placeholder="phone" value={phone}
+                                onBlur={this.handleChange} 
+                                onFocus={this.handleFocus}
+                                onChange={this.changeStoreVal}
+                            />
+                        </div>
+                        <div className="display-inline">
+                            <FlatButton 
+                                label="verify"
+                                style={{marginLeft:'1em'}}
+                                backgroundColor="#FF6F00"
+                                labelStyle={{color:'white'}}
+                                onTouchTap={this.formSubmit}
+                                disableTouchRipple={true}
+                            />
+                        </div>
+                        
+                        <div className = "error-message">{(phoneErrorMsg)?'*'+phoneErrorMsg:undefined}</div>
+
                         <legend className="pull-left">
                             <div style={{marginTop:"1em"}}>
                                 Address:

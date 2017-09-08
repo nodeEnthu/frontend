@@ -5,8 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
-import CommunicationChat from 'material-ui/svg-icons/communication/chat';
-import {postCall} from 'utils/httpUtils/apiCallWrapper';
+import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import CheckMark from 'components/CheckMark'
 
 const MessageWindow = createReactClass({
@@ -47,7 +46,14 @@ const MessageWindow = createReactClass({
     router: PropTypes.object.isRequired
   },
   closeModal(){
-    this.setState({messageModalOpen:false});
+    this.setState(
+      {messageModalOpen: false,
+        openModalAfterLogin:false,
+        message:'',
+        errorMessage:'',
+        showSpinner:false,
+        showCheckMark:false,
+        showCrossMark:false});
   },
   componentWillUnmount(){
   },
@@ -63,6 +69,7 @@ const MessageWindow = createReactClass({
     }
   },
   sendMessageToProvider(event){
+    let self = this;
     event.preventDefault();
     if(!this.state.message){
       this.setState({errorMessage:'Please type your message'});
@@ -71,11 +78,12 @@ const MessageWindow = createReactClass({
       let reqBody = {
                       message:this.state.message, 
                       providerEmail:this.props.provider.email, 
-                      customerEmail:this.props.globalState.core.get('user').get('email')
+                      customerEmail:this.props.globalState.core.get('user').get('email'),
+                      customerName: this.props.globalState.core.get('user').get('name'),
                     };
-      postCall('/api/message/provider', reqBody)
+      securedPostCall('/api/message/provider', reqBody)
         .then(function(result){
-          this.setState({showCheckMark:true});
+          self.setState({showSpinner:false, showCheckMark:true});
         });
     }
   },
@@ -83,24 +91,21 @@ const MessageWindow = createReactClass({
     let {messageModalOpen, message, errorMessage, showCheckMark, showCrossMark} = this.state;
     const {user} = this.props.globalState.core.toJS();
     return <div className="message-window">
-            <div className="is-center message-action-button">
-              <FlatButton
-                backgroundColor="#FF6F00"
-                label="Send me a message"
-                labelStyle={{color:'white'}}
-                icon={<CommunicationChat/>}
-                style={{height:'24px',lineHeight:'24px',minWidth:'80px', display:'inline-block'}}
-                onTouchTap={this.checkLoginAndOpenModal}
-                disableTouchRipple={true}
-              />
-            </div>
+            <FlatButton
+              backgroundColor="#16987e"
+              label="Send me a message"
+              labelStyle={{color:'white'}}
+              style={{height:'24px',lineHeight:'24px',minWidth:'80px', display:'inline-block', bottom:'5px', left:'1em'}}
+              onTouchTap={this.checkLoginAndOpenModal}
+              disableTouchRipple={true}
+            />
             <FullscreenDialog
               open={messageModalOpen}
               onRequestClose={this.closeModal}
              >
               <div className="message-container">  
                 <form id="contact">
-                  <h4>Message for {this.props.provider.name}</h4>
+                  <h4>Message for {this.props.provider.title}</h4>
                   <fieldset>
                     <input placeholder="Your name" type="text" value={user.name} disabled={true}/>
                   </fieldset>
