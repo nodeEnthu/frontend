@@ -30,7 +30,7 @@ import {METHODS_OF_PAYMENT} from 'components/ProviderEntryForm/constants'
 import Dialog from 'material-ui/Dialog';
 import MessageWindow from 'components/MessageWindow'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat';
-
+import CommunicationContactPhone from 'material-ui/svg-icons/communication/contact-phone'
 const ProviderProfile = createReactClass({
   getInitialState() {
       return {
@@ -247,6 +247,15 @@ const ProviderProfile = createReactClass({
                     
                   </span>
                 </div>
+                {
+                  (provider.phone)?
+                  <div className="provider-details">
+                    <CommunicationContactPhone/>
+                    <span className="provider-detail">{provider.phone}</span>
+                  </div>
+                  :
+                  undefined
+                }
                 <div className="provider-details">
                  <CommunicationEmail/>
                   <span className="provider-detail">{provider.email}</span>

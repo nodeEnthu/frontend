@@ -1,3 +1,11 @@
 .slider ul {
 	display:none;
 }
+.rrui__input:not(.rrui__input--multiline),
+.rrui__input-label{
+	height:inherit;
+}
+.rrui__select__options:not(.rrui__select__options--menu)
+{
+	z-index:10
+}

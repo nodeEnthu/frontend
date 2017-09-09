@@ -14,6 +14,7 @@ const Provider = Map({
             userType: 'provider',
             email: '',
             phone:'',
+            code:'',
             serviceOffered: 'pickup',
             providerTypeErrorMsg:'',
             addtnlComments: '',
