@@ -16,20 +16,12 @@ import Snackbar from 'material-ui/Snackbar';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import {METHODS_OF_PAYMENT} from './constants';
-import Phone, {formatPhoneNumber, parsePhoneNumber, isValidPhoneNumber} from 'react-phone-number-input'
-import CheckMark from 'components/CheckMark'
-
+import PhoneVerification from 'components/PhoneVerification';
 const maxCount = 100;
 const ProviderEntryForm = createReactClass({
     getInitialState() {
       return{
             showSpinner:false,
-            phoneNumberValid:false,
-            showVerificationSpinner:false,
-            showAuthSpinner:false,
-            showVerificationCodeInputBox:false,
-            verificationSuccess:false,
-            verificationFail:false
         }  
     },
     componentWillMount() {
@@ -112,54 +104,7 @@ const ProviderEntryForm = createReactClass({
         this.setState({showSpinner:false});
         this.context.router.push(this.props.linkToRedirectOnAllClear);
     },
-    checkPhoneNumber(value){
-        this.props.addProviderInfo({storeKey:'phone', payload:value});
-        let isValid = isValidPhoneNumber(value);
-        this.setState({phoneNumberValid:isValid});
-        if(isValid){
-            this.props.addProviderInfo({storeKey:'phoneErrorMsg', payload:null});
-        }else{
-            this.props.addProviderInfo({storeKey:'phoneErrorMsg', payload:'Please enter valid number'});
-        }
-    },
-    sendAuthCode(){
-        let self = this;
-        let {phoneNumberValid} = this.state;
-        let {phone}= this.props.providerEntryForm.toJS();
-        let ino = formatPhoneNumber( parsePhoneNumber( phone ), 'International' );
-        if(phoneNumberValid){
-            this.setState({showVerificationSpinner:true});
-            securedPostCall('/api/message/send/code/provider',{phone:ino})
-                .then(function(response){
-                    if(response.data.status === 'ok'){
-                        self.setState({showVerificationCodeInputBox:true, showVerificationSpinner:false});
-                    }
-                })
-        }
-    },
-    verifyAuthCode(){
-        let self = this;
-        let {code, phone}= this.props.providerEntryForm.toJS();
-        this.setState({showAuthSpinner:true});
-        securedPostCall('/api/message/verify/code',{code:code, phone:phone})
-            .then(function(response){
-                self.setState({showVerificationCodeInputBox:false, showAuthSpinner:false});
-                if(response.data.status === 'ok'){
-                    self.setState({verificationSuccess:true});
-                }else self.setState({verificationFail:true});
-            })
-       
-    },
-    resetPhoneVerification(){
-        this.setState({showSpinner:false,
-            phoneNumberValid:false,
-            showVerificationSpinner:false,
-            showAuthSpinner:false,
-            showVerificationCodeInputBox:false,
-            verificationSuccess:false,
-            verificationFail:false}
-        );
-    },
+    
     validateForm(){
         let self = this;
         let noErrorsInform = true;
@@ -217,7 +162,6 @@ const ProviderEntryForm = createReactClass({
     render() {
         let {chars_left, title, description, email,phone,imgUrl, code, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg,phoneErrorMsg, methodsOfPayment, keepAddressPrivateFlag,serviceOffered,addtnlComments, includeAddressInEmail,deliveryMinOrder,deliveryRadius,providerAddressJustificationModalOpen,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg,snackBarOpen,snackBarMessage } = this.props.providerEntryForm.toJS();
         methodsOfPayment = methodsOfPayment || [];
-        let {phoneNumberValid,showAuthSpinner, showVerificationSpinner, showVerificationCodeInputBox, verificationSuccess, verificationFail} = this.state;
         let self = this;
         switch(serviceOffered){
             case 1:
@@ -269,113 +213,13 @@ const ProviderEntryForm = createReactClass({
                             <div style={{marginTop:"1em"}}>
                                 Phone number (please verify to display)
                             </div>
-                        </legend>
-                        <div className="pure-u-1">
-                            <Phone
-                                country="IN"
-                                placeholder="phone number"
-                                value={phone}
-                                onBlur={this.handleChange} 
-                                onFocus={this.handleFocus}
-                                disabled={verificationSuccess || showVerificationCodeInputBox}
-                                onChange={ value => this.checkPhoneNumber(value) }
+                            <PhoneVerification
+                                phone={phone}
+                                code={code}
+                                changePhoneAttr={this.props.addProviderInfo}
                             />
-                             {/*<div className = "error-message">{(phoneErrorMsg)?'*'+phoneErrorMsg:undefined}</div>*/}
-                        </div>
-                        {
-                            (!showVerificationSpinner && !showVerificationCodeInputBox && !showAuthSpinner && !verificationSuccess && !verificationFail)?
-                            <div className="pure-u-1 is-center">
-                                <RaisedButton 
-                                    label="Send me the phone verification code"
-                                    backgroundColor="#FF6F00"
-                                    labelStyle={{color:'white'}}
-                                    onTouchTap={this.sendAuthCode}
-                                    disableTouchRipple={true}
-                                    disabled={!phoneNumberValid}
-                                    disabledLabelColor="darkgrey"
-                                />
-                            </div>
-                            :undefined
-                        }
-                        {
-                            (showVerificationSpinner)?
-                            <div className="display-inline" style={{position:'relative'}}>
-                                <img style={{position: 'relative', width: '24px', top:'5px', left:'5px'}}src= "/general/loading.svg"/>
-                            </div>
-                            :
-                            undefined
-                        }
-                        <div className="pure-u-1">
-                            {
-                                (showVerificationCodeInputBox && !verificationSuccess && !verificationFail)?
-                                <div className="display-inline">
-                                    <input type="text" name="code" placeholder="4 digit code" value={code || ''}
-                                        onBlur={this.handleChange} 
-                                        onFocus={this.handleFocus}
-                                        onChange={this.changeStoreVal}
-                                    />
-                                </div>
-                                :
-                                undefined
-                            }
-
-                            {
-                                (!showVerificationSpinner && showVerificationCodeInputBox && !showAuthSpinner && !verificationSuccess && !verificationFail)?
-                                <div className="display-inline">
-                                    <RaisedButton 
-                                        label="verify"
-                                        backgroundColor="#FF6F00"
-                                        labelStyle={{color:'white'}}
-                                        style={{marginLeft:'1em'}}
-                                        onTouchTap={this.verifyAuthCode}
-                                        disableTouchRipple={true}
-                                        disabled={!phoneNumberValid}
-                                        disabledLabelColor="darkgrey"
-                                    />
-                                </div>
-                                :
-                                undefined
-
-                            }
-                            {
-                                (showAuthSpinner && !verificationSuccess && !verificationFail)?
-                                <div className="display-inline" style={{position:'relative'}}>
-                                    <img style={{position: 'relative', width: '24px', top:'5px', left:'5px'}}src= "/general/loading.svg"/>
-                                </div>
-                                :
-                                undefined
-                            }
-                            {
-                                (verificationSuccess)?
-                                <div style={{position:'relative'}}>
-                                  <CheckMark style={{width:'5%',minWidth:'35px', display:'inline-block'}}/>
-                                  <span style={{position:'absolute', top:'10px'}}>Your phone number is verified</span>
-                                </div>
-                                :
-                                undefined
-                            }
-                            {
-                                (verificationFail)?
-                                <div style={{position:'relative'}}>
-                                    <span>Sorry! wrong code</span>
-                                    <div className="display-inline">
-                                        <RaisedButton 
-                                            label="Try again"
-                                            backgroundColor="#FF6F00"
-                                            labelStyle={{color:'white'}}
-                                            style={{marginLeft:'3em'}}
-                                            onTouchTap={this.resetPhoneVerification}
-                                            disableTouchRipple={true}
-                                        />
-                                    </div>
-                                </div>
-                                :
-                                undefined
-                            }
-                        </div>
-
-                       
-
+                        </legend>
+                        
                         <legend className="pull-left">
                             <div>
                                 Address:

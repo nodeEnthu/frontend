@@ -18,6 +18,7 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import {DATES} from 'routes/Search/constants/searchFilters'
 import createReactClass from 'create-react-class'
+import PhoneVerification from 'components/PhoneVerification'
 const Checkout = createReactClass({
   getInitialState() {
       return {
@@ -27,12 +28,31 @@ const Checkout = createReactClass({
          checkoutSubmitError:'',
          addtnlAddressInfo:'',
          orderTime:undefined,
-         pickup:true   
+         pickup:true,
+         phone:'',
+         code:'',
+         verified:false
       };
+  },
+  componentDidMount() {
+    let {phone} = this.props.globalState.core.get('user').toJS();
+    this.setState({phone:phone});
+    if(phone) this.setState({verified:true});
+  },
+  changePhoneAttr(obj){
+    this.setState({[obj.storeKey]:obj.payload});
+    if(obj.storeKey === 'verified' && obj.payload === true && this.state.phone)
+      this.props.updateUser('phone',this.state.phone);
+    if(obj.storeKey === 'phone'){
+      let {phone} = this.props.globalState.core.get('user').toJS();
+      console.log(phone, obj.payload, (obj.payload === phone) );
+      if(obj.payload === phone) this.setState({verified: true});
+      else this.setState({verified: false});
+
+    }
   },
   componentDidUpdate(prevProps, prevState) {
     const {itemsCheckedOut,providerProfileCall} = this.props.providerProfile.toJS();
-
     for(var key in itemsCheckedOut){
       if(itemsCheckedOut[key].avalilabilityType === 'specificDates'){
         // take the first date
@@ -90,8 +110,9 @@ const Checkout = createReactClass({
   },
   render(){
     const {itemsCheckedOut,providerProfileCall} = this.props.providerProfile.toJS();
-    const{addtnlAddressInfo,orderTime} = this.state;
-    const {place_id,searchText} = this.props.globalState.core.get('user').toJS();
+    const{addtnlAddressInfo,orderTime, verified,phone, code} = this.state;
+    let {user} = this.props.globalState.core.toJS();
+    let {place_id,searchText} = user;
     const provider = providerProfileCall.data;
     let resolvedItemsCheckedOut= [];
     let grandTotal = 0;
@@ -110,23 +131,33 @@ const Checkout = createReactClass({
             <div className="checkout-section-wrapper">
               {
                 (provider.serviceOffered === 3 ||  (provider.serviceOffered === 2 && this.state.pickup.toString() ==="false") )?
-                <span className="checkout-label">Delivery order at</span>:undefined
+                <span className="checkout-label">Delivery time</span>:undefined
               }
               {
                 (provider.serviceOffered === 1 || (provider.serviceOffered === 2 && this.state.pickup.toString() === "true"))?
-                <span className="checkout-label">Pick-up order at</span>:undefined
+                <span className="checkout-label">Pickup time</span>:undefined
               }
               <DropDownMenu value={orderTime} onChange={(event, index, value)=>this.onChange(undefined,'orderTime',value)}
                             iconStyle={{fill:"rgb(0, 0, 0)"}}
                             underlineStyle={{borderTop:"1px solid black"}}
               >
-                <MenuItem style={{width:'100%'}} value={undefined} primaryText={"time"}/>
+                <MenuItem style={{width:'100%'}} value={undefined} primaryText={"please select"}/>
                 {
                   timeOfDay().map(function(time,index){
                       return <MenuItem style={{width:'100%'}} key={time.value} value={time.value} primaryText={time.label}/>
                   })
                 }
               </DropDownMenu>
+              <form className="pure-form">
+                  <div style={{marginBottom:'0.5em'}}>Your contact phone number for provider:</div>
+                  <PhoneVerification
+                      phone={phone}
+                      code={code}
+                      changePhoneAttr={this.changePhoneAttr}
+                      verified={verified}
+                      style={{marginTop:'0.5em'}}
+                  />
+              </form>
               {
                 (provider.serviceOffered ===2)?
                 <div>
@@ -149,13 +180,15 @@ const Checkout = createReactClass({
                 undefined
               }
             </div>
+            <form className="pure-form">
             {
               ((provider.serviceOffered === 3 ||  (provider.serviceOffered === 2 && this.state.pickup.toString()) ==="false")
                 || !place_id
                 )?
                 <div className="checkout-section-wrapper">
-                  <div style={{marginTop: "1em"}}className="pure-u-md-1-5 pure-u-1 checkout-label">Your Address</div>
+                  <div style={{marginTop: "1em"}}className="pure-u-md-1-5 pure-u-1">Your Address</div>
                   <div className="pure-u-md-4-5">
+
                     <AsyncAutocomplete  name={'searchText'}
                                         userSearchText = {this.state.searchText}
                                         apiUrl = {'/api/locations/addressTypeAssist'}
@@ -163,19 +196,12 @@ const Checkout = createReactClass({
                                         onChange = {(event, value)=>this.setState({searchText:value.newValue})}
                                         onSuggestionSelected = {this.onSuggestionSelected}
                     />
-                   
-                    {
-                      (!place_id)?
-                      <div style={{color:'red'}}>*Please enter your address</div>:undefined
-                    }
                   </div>
                 { (provider.serviceOffered === 3 ||  (provider.serviceOffered === 2 && this.state.pickup.toString()) ==="false")?
                   <div>
                     <div className="pure-u-md-1-5 pure-u-1 checkout-label display-none-small"></div>
                     <div className="pure-u-md-3-5 is-center">
-                      <form className="pure-form pure-form-stacked">
-                        <textarea className = "pure-u-1" name="addtnlAddressInfo" placeholder="Landmarks / apartment number etc." value={addtnlAddressInfo} onChange={this.onChange}/>
-                      </form>
+                      <textarea className = "pure-u-1" name="addtnlAddressInfo" placeholder="Landmarks / apartment number etc. which will help provider to deliver" value={addtnlAddressInfo} onChange={this.onChange}/>
                     </div>
                   </div>
                   :
@@ -185,6 +211,7 @@ const Checkout = createReactClass({
                 :
                 undefined
             }
+            </form>
             <div className="checkout-section-wrapper">
               <div className="pure-u-md-1-5 pure-u-1 checkout-label"></div>
               <div className="pure-u-md-4-5">
@@ -279,7 +306,14 @@ const Checkout = createReactClass({
                 :
                 undefined
             }
-            
+            {
+              (!place_id)?
+              <div className="error">Please enter your address</div>:undefined
+            }
+            {
+              (!verified)?
+              <div className="warning">Please provide one time verified contact number for provider</div>:undefined
+            }
             <RaisedButton
               primary={true}
               label = "Place Order"
@@ -296,6 +330,8 @@ const Checkout = createReactClass({
               orderType={orderType}
               currency={currency}
               grandTotal={grandTotal}
+              phone={user.phone}
+              verified={verified}
             />
           </div>
           :

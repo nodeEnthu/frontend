@@ -84,6 +84,7 @@ const OrderSubmitModal = createReactClass({
       customerAddress: customerAddress,
       customerEmailId:user.email,
       providerEmailId:data.email,
+      phone:(this.props.phone)? this.props.phone: undefined,
       currency: this.props.currency,
       orderType:this.props.orderType,
       subTotal:this.props.currency + ' ' + grandTotal,
@@ -121,6 +122,24 @@ const OrderSubmitModal = createReactClass({
                   </div>
                 </div>
               </div>
+              {
+                (this.props.phone)?
+                <div className="pure-u-1">
+                  <div className="pure-u-2-5">Phone number: </div>
+                  <div className="pure-u-3-5">{this.props.phone}</div>
+                </div>
+                :
+                undefined
+              }
+              {
+                (this.props.addtnlAddressInfo)?
+                <div className="pure-u-1" style={{marginTop:'0.5em'}}>
+                  <div className="pure-u-2-5">Addtnl address info:</div>
+                  <div className="pure-u-3-5">{this.props.addtnlAddressInfo}</div>
+                </div>
+                :
+                undefined
+              }
               <div className="pure-u-md-1-5 pure-u-1"></div>
               <div className="pure-u-md-4-5 final-total">
                 <div className= "grand-total">Total &nbsp; {currency + ' ' +grandTotal}</div>
