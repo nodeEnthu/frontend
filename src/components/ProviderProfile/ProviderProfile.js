@@ -31,6 +31,7 @@ import Dialog from 'material-ui/Dialog';
 import MessageWindow from 'components/MessageWindow'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat';
 import CommunicationContactPhone from 'material-ui/svg-icons/communication/contact-phone'
+import PhoneVerification from 'components/PhoneVerification'
 const ProviderProfile = createReactClass({
   getInitialState() {
       return {
@@ -271,6 +272,7 @@ const ProviderProfile = createReactClass({
               </div>
               
           </div>
+        {/*<PhoneVerification/>*/}
           {
             (userViewingOwnProfile)?
             <div className="pure-u-1">

@@ -14,7 +14,7 @@
     }
     .checkout-label {
         position:relative;
-        font-size: 115%;
+        bottom:20px
     }
     textarea {
         box-shadow: none;
@@ -84,6 +84,9 @@
         }
         .react-autosuggest__input {
             width: 100%;
+        }
+        .grand-total {
+            width:40%;
         }
         .item-wo-desc {
             height: 2.5em;

@@ -120,7 +120,7 @@ const Checkout = createReactClass({
                             iconStyle={{fill:"rgb(0, 0, 0)"}}
                             underlineStyle={{borderTop:"1px solid black"}}
               >
-                <MenuItem style={{width:'100%'}} value={undefined} primaryText={"Please select time"}/>
+                <MenuItem style={{width:'100%'}} value={undefined} primaryText={"time"}/>
                 {
                   timeOfDay().map(function(time,index){
                       return <MenuItem style={{width:'100%'}} key={time.value} value={time.value} primaryText={time.label}/>
@@ -130,7 +130,7 @@ const Checkout = createReactClass({
               {
                 (provider.serviceOffered ===2)?
                 <div>
-                  <label className="checkout-label" style={{display:'block',margin:"0.5em 0"}}>Order type:</label>
+                  <label style={{display:'block',margin:"0.5em 0"}}>Order type:</label>
                   <RadioButtonGroup name="foodOptions" 
                       valueSelected={this.state.pickup.toString()}
                       onChange={(event)=>this.toggleFlags('pickup')}
@@ -275,7 +275,7 @@ const Checkout = createReactClass({
             <div className="is-center">
             {
               (!orderTime)?
-                <div style={{marginBottom:'0.5em'}}>{'Please select your pickup/delivery time'}</div>
+                <div className="error">Please select your pickup/delivery time</div>
                 :
                 undefined
             }
