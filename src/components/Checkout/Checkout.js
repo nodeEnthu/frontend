@@ -29,7 +29,7 @@ const Checkout = createReactClass({
          addtnlAddressInfo:'',
          orderTime:undefined,
          pickup:true,
-         phone:'',
+         phone: this.props.globalState.core.get('user').get('phone') || '',
          code:'',
          verified:false
       };
@@ -39,13 +39,18 @@ const Checkout = createReactClass({
     this.setState({phone:phone});
     if(phone) this.setState({verified:true});
   },
+  componentWillUpdate(nextProps, nextState) {
+    if(this.props.globalState.core.get('user').get('phone') != nextProps.globalState.core.get('user').get('phone')){
+      this.setState({phone:nextProps.globalState.core.get('user').get('phone')});
+      if(nextProps.globalState.core.get('user').get('phone')) this.setState({verified:true});
+    }
+  },
   changePhoneAttr(obj){
     this.setState({[obj.storeKey]:obj.payload});
     if(obj.storeKey === 'verified' && obj.payload === true && this.state.phone)
       this.props.updateUser('phone',this.state.phone);
     if(obj.storeKey === 'phone'){
       let {phone} = this.props.globalState.core.get('user').toJS();
-      console.log(phone, obj.payload, (obj.payload === phone) );
       if(obj.payload === phone) this.setState({verified: true});
       else this.setState({verified: false});
 
@@ -149,7 +154,7 @@ const Checkout = createReactClass({
                 }
               </DropDownMenu>
               <form className="pure-form">
-                  <div style={{marginBottom:'0.5em'}}>Your contact phone number for provider:</div>
+                  <div style={{marginBottom:'0.25em'}}>Your contact phone number for provider:</div>
                   <PhoneVerification
                       phone={phone}
                       code={code}

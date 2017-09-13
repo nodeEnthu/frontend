@@ -84,7 +84,7 @@ const OrderSubmitModal = createReactClass({
       customerAddress: customerAddress,
       customerEmailId:user.email,
       providerEmailId:data.email,
-      phone:(this.props.phone)? this.props.phone: undefined,
+      phone:(this.props.phone)? this.props.phone: '',
       currency: this.props.currency,
       orderType:this.props.orderType,
       subTotal:this.props.currency + ' ' + grandTotal,

@@ -89,7 +89,7 @@ const PhoneVerification = createReactClass({
         (!showVerificationSpinner && !showVerificationCodeInputBox && !showAuthSpinner && !verificationSuccess && !verificationFail && !verified)?
         <div className="pure-u-1 is-center">
             <RaisedButton 
-                label="Send me the phone verification code"
+                label="Send me the verification code"
                 backgroundColor="#FF6F00"
                 labelStyle={{color:'white'}}
                 onTouchTap={this.sendAuthCode}
@@ -108,69 +108,68 @@ const PhoneVerification = createReactClass({
         :
         undefined
       }
-        <div className="pure-u-1">
-          {
-              (showVerificationCodeInputBox && !verificationSuccess && !verificationFail)?
-              <div className="display-inline codebox">
-                  <input type="text" name="code" placeholder="4 digit code" value={code || ''}
-                      onChange={(e)=>this.changeCodeVal(e.target.value)}
-                  />
-              </div>
-              :
-              undefined
-          }
-
-          {
-            (!showVerificationSpinner && showVerificationCodeInputBox && !showAuthSpinner && !verificationSuccess && !verificationFail)?
-              <RaisedButton 
-                  label="verify"
-                  backgroundColor="#FF6F00"
-                  labelStyle={{color:'white'}}
-                  style={{marginLeft:'1em', display:'inline-block'}}
-                  onTouchTap={this.verifyAuthCode}
-                  disableTouchRipple={true}
-                  disabled={!phoneNumberValid}
-                  disabledLabelColor="darkgrey"
+      
+      {
+          (showVerificationCodeInputBox && !verificationSuccess && !verificationFail)?
+          <div className="display-inline codebox">
+              <input type="text" name="code" placeholder="4 digit code" value={code || ''}
+                  onChange={(e)=>this.changeCodeVal(e.target.value)}
               />
-            :
-            undefined
-          }
-          {
-            (showAuthSpinner && !verificationSuccess && !verificationFail)?
-            <div className="display-inline" style={{position:'relative'}}>
-                <img style={{position: 'relative', width: '24px', top:'5px', left:'5px'}}src= "/general/loading.svg"/>
-            </div>
-            :
-            undefined
-          }
-          {
-            (verificationSuccess)?
-            <div style={{position:'relative'}}>
-              <CheckMark style={{width:'5%',minWidth:'35px', display:'inline-block'}}/>
-              <span style={{position:'absolute', top:'10px'}}>Your phone number is verified</span>
-            </div>
-            :
-            undefined
-          }
-          {
-            (verificationFail)?
-            <div style={{position:'relative'}}>
-                <span>Sorry! wrong code</span>
-                <div className="display-inline">
-                    <RaisedButton 
-                        label="Try again"
-                        backgroundColor="#FF6F00"
-                        labelStyle={{color:'white'}}
-                        style={{marginLeft:'3em'}}
-                        onTouchTap={this.resetPhoneVerification}
-                        disableTouchRipple={true}
-                    />
-                </div>
-            </div>
-            :
-            undefined
-          }
+          </div>
+          :
+          undefined
+      }
+
+      {
+        (!showVerificationSpinner && showVerificationCodeInputBox && !showAuthSpinner && !verificationSuccess && !verificationFail)?
+          <RaisedButton 
+              label="verify"
+              backgroundColor="#FF6F00"
+              labelStyle={{color:'white'}}
+              style={{marginLeft:'1em', display:'inline-block'}}
+              onTouchTap={this.verifyAuthCode}
+              disableTouchRipple={true}
+              disabled={!phoneNumberValid}
+              disabledLabelColor="darkgrey"
+          />
+        :
+        undefined
+      }
+      {
+        (showAuthSpinner && !verificationSuccess && !verificationFail)?
+        <div className="display-inline" style={{position:'relative'}}>
+            <img style={{position: 'relative', width: '24px', top:'5px', left:'5px'}}src= "/general/loading.svg"/>
         </div>
+        :
+        undefined
+      }
+      {
+        (verificationSuccess)?
+        <div style={{position:'relative'}}>
+          <CheckMark style={{width:'5%',minWidth:'35px', display:'inline-block'}}/>
+          <span style={{position:'absolute', top:'10px'}}>Your phone number is verified</span>
+        </div>
+        :
+        undefined
+      }
+      {
+        (verificationFail)?
+        <div style={{position:'relative'}}>
+            <span>Sorry! wrong code</span>
+            <div className="display-inline">
+                <RaisedButton 
+                    label="Try again"
+                    backgroundColor="#FF6F00"
+                    labelStyle={{color:'white'}}
+                    style={{marginLeft:'3em'}}
+                    onTouchTap={this.resetPhoneVerification}
+                    disableTouchRipple={true}
+                />
+            </div>
+        </div>
+        :
+        undefined
+      } 
       </div>
     )
   }
