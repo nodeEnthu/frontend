@@ -32,6 +32,8 @@ import MessageWindow from 'components/MessageWindow'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat';
 import CommunicationContactPhone from 'material-ui/svg-icons/communication/contact-phone'
 import PhoneVerification from 'components/PhoneVerification'
+import SocialShareSS from 'components/SocialShare'
+
 const ProviderProfile = createReactClass({
   getInitialState() {
       return {
@@ -56,6 +58,8 @@ const ProviderProfile = createReactClass({
             self.props.alreadyScrolled();
           }
       })
+  },
+  componentDidMount() {
   },
   componentWillReceiveProps(nextProps){
     // when user goes from one profile to another componentWillUnmount is not called
@@ -272,7 +276,10 @@ const ProviderProfile = createReactClass({
               </div>
               
           </div>
-        {/*<PhoneVerification/>*/}
+          <div className="pure-u-1 profile-wrapper" style={{paddingBottom:0}}>
+            <div style={{textAlign:'center', fontSize:'115%'}}>Like my food? help spread the word</div>
+            <SocialShareSS link={"https://spoonandspanner.com/providerProfile/"+this.props.params.id}/>
+          </div>
           {
             (userViewingOwnProfile)?
             <div className="pure-u-1">

@@ -12,7 +12,10 @@
     @import 'pure-core-overwrites';
     @import 'nuka-carousel-overwrites';
     @import 'circularProgressBar';
-    @import 'error_messages'
+    @import 'error_messages';
+    @import '~react-s-alert/dist/s-alert-default.css';
+    @import '~react-s-alert/dist/s-alert-css-effects/slide.css';
+
 }
 
 $call-jack-ie: #FF6F00;

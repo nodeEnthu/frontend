@@ -19,6 +19,8 @@ import MenuItem from 'material-ui/MenuItem';
 import {DATES} from 'routes/Search/constants/searchFilters'
 import createReactClass from 'create-react-class'
 import PhoneVerification from 'components/PhoneVerification'
+import SelectField from 'material-ui/SelectField';
+
 const Checkout = createReactClass({
   getInitialState() {
       return {
@@ -31,7 +33,7 @@ const Checkout = createReactClass({
          pickup:true,
          phone: this.props.globalState.core.get('user').get('phone') || '',
          code:'',
-         verified:false
+         verified:false,
       };
   },
   componentDidMount() {
@@ -45,6 +47,7 @@ const Checkout = createReactClass({
       if(nextProps.globalState.core.get('user').get('phone')) this.setState({verified:true});
     }
   },
+  allOrderDatesSelected:true,
   changePhoneAttr(obj){
     this.setState({[obj.storeKey]:obj.payload});
     if(obj.storeKey === 'verified' && obj.payload === true && this.state.phone)
@@ -69,10 +72,6 @@ const Checkout = createReactClass({
               break;
             }
           }
-        }
-      } else{
-        if(!itemsCheckedOut[key].orderDate){
-          this.changeStoreVal(key,'orderDate',moment().add(itemsCheckedOut[key].placeOrderBy,"days").startOf('day').utc().toISOString())
         }
       }
     }
@@ -119,11 +118,13 @@ const Checkout = createReactClass({
     let {user} = this.props.globalState.core.toJS();
     let {place_id,searchText} = user;
     const provider = providerProfileCall.data;
-    let resolvedItemsCheckedOut= [];
-    let grandTotal = 0;
+    let resolvedItemsCheckedOut= [], 
+        allOrderDatesSelected=true, 
+        grandTotal = 0 ;
     for(var key in itemsCheckedOut){
       if(itemsCheckedOut.hasOwnProperty(key)){
         resolvedItemsCheckedOut.push(itemsCheckedOut[key]);
+        if(!itemsCheckedOut[key].orderDate) allOrderDatesSelected = false;
         grandTotal = grandTotal + parseInt(itemsCheckedOut[key].price * parseInt(itemsCheckedOut[key].quantity));
       }
     };
@@ -142,9 +143,13 @@ const Checkout = createReactClass({
                 (provider.serviceOffered === 1 || (provider.serviceOffered === 2 && this.state.pickup.toString() === "true"))?
                 <span className="checkout-label">Pickup time</span>:undefined
               }
-              <DropDownMenu value={orderTime} onChange={(event, index, value)=>this.onChange(undefined,'orderTime',value)}
-                            iconStyle={{fill:"rgb(0, 0, 0)"}}
-                            underlineStyle={{borderTop:"1px solid black"}}
+              <SelectField
+                value={orderTime}
+                onChange={(event, index, value)=>this.onChange(undefined,'orderTime',value)}
+                errorText={!orderTime && 'Please select time'}
+                errorStyle={{color: 'red'}}
+                style={{display:'inline-block', width:"150px", marginLeft:'1em', textAlign:'center'}}
+                iconStyle={{fill: 'rgb(0,0,0)'}}
               >
                 <MenuItem style={{width:'100%'}} value={undefined} primaryText={"please select"}/>
                 {
@@ -152,7 +157,7 @@ const Checkout = createReactClass({
                       return <MenuItem style={{width:'100%'}} key={time.value} value={time.value} primaryText={time.label}/>
                   })
                 }
-              </DropDownMenu>
+              </SelectField>
               <form className="pure-form">
                   <div style={{marginBottom:'0.25em'}}>Your contact phone number for provider:</div>
                   <PhoneVerification
@@ -162,6 +167,10 @@ const Checkout = createReactClass({
                       verified={verified}
                       style={{marginTop:'0.5em'}}
                   />
+                    {
+                      (!verified)?
+                      <div className="warning">Please provide one time verified contact number for provider</div>:undefined
+                    }
               </form>
               {
                 (provider.serviceOffered ===2)?
@@ -211,6 +220,10 @@ const Checkout = createReactClass({
                   </div>
                   :
                   undefined
+                }
+                {
+                  (!place_id)?
+                  <div className="error">Please enter your address</div>:undefined
                 }
                 </div>
                 :
@@ -265,6 +278,7 @@ const Checkout = createReactClass({
                                               iconStyle={{fill:"rgb(0, 0, 0)"}}
                                               underlineStyle={{borderTop:"1px solid black"}}
                                 >
+                                  <MenuItem style={{width:'100%'}} value={undefined} primaryText={"select date"}/>
                                   {itemCheckedOut.availability.map(function(availableDate,index){
                                       if(moment(availableDate).isSameOrAfter(moment().startOf('day').utc())){
                                         return <MenuItem key={index} value={availableDate} primaryText={moment(availableDate).format("dd, MMM Do")} />
@@ -273,10 +287,16 @@ const Checkout = createReactClass({
                                   )}
                                 </DropDownMenu>
                                 :
-                                <DropDownMenu value={itemCheckedOut.orderDate} onChange={(event, index, value)=>self.changeStoreVal(itemCheckedOut._id,'orderDate',value)}
-                                              iconStyle={{fill:"rgb(0, 0, 0)"}}
-                                              underlineStyle={{borderTop:"1px solid black"}}
+                                <SelectField
+                                  value={itemCheckedOut.orderDate}
+                                  onChange={(event, index, value)=>self.changeStoreVal(itemCheckedOut._id,'orderDate',value)}
+                                  errorText={!itemCheckedOut.orderDate && 'Please select order date'}
+                                  errorStyle={{color: 'red'}}
+                                  style={{display:'inline-block', width:"150px", marginLeft:'1em', textAlign:'center'}}
+                                  iconStyle={{fill: 'rgb(0,0,0)'}}
                                 >
+              
+                                  <MenuItem style={{width:'100%'}} value={undefined} primaryText={"select date"}/>
                                   {
                                     DATES(7,"ddd, MMM D","add").map(function(date,index){
                                       return (moment().add(itemCheckedOut.placeOrderBy,"days").startOf('day') <= moment(date.value).startOf('day').utc())?
@@ -285,7 +305,7 @@ const Checkout = createReactClass({
                                               undefined
                                     })
                                   }
-                                </DropDownMenu>
+                                </SelectField>
                               }
                             </div>
                             <div className="pure-u-md-1-3 display-none-small">
@@ -305,29 +325,14 @@ const Checkout = createReactClass({
               }
             </div>
             <div className="is-center">
-            {
-              (!orderTime)?
-                <div className="error">Please select your pickup/delivery time</div>
-                :
-                undefined
-            }
-            {
-              (!place_id)?
-              <div className="error">Please enter your address</div>:undefined
-            }
-            {
-              (!verified)?
-              <div className="warning">Please provide one time verified contact number for provider</div>:undefined
-            }
-            <RaisedButton
-              primary={true}
-              label = "Place Order"
-              onClick={this.checkOutItems}
-              disableTouchRipple={true}
-              disabled={(!place_id || !orderTime)?true:false}
-            >
-            </RaisedButton>
-            
+              <RaisedButton
+                primary={true}
+                label = "Place Order"
+                onClick={this.checkOutItems}
+                disableTouchRipple={true}
+                disabled={(!place_id || !orderTime || !allOrderDatesSelected )?true:false}
+              >
+              </RaisedButton>
             </div>
             <OrderSubmitModal{... this.props}
               addtnlAddressInfo={this.state.addtnlAddressInfo}

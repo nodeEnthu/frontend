@@ -9,7 +9,6 @@ import FoodItemEditPage from './FoodItemEditPage'
 import FoodItemAddPage from './FoodItemAddPage'
 import OrderAction from './OrderAction'
 import OrderSummary from './OrderSummary'
-import Chat from './Chat'
 import ProviderProfileEntry from './ProviderProfileEntry'
 import ProviderFoodEntry from './ProviderFoodEntry'
 import ProviderPublish from './ProviderPublish'
@@ -39,7 +38,6 @@ export const createRoutes = (store) => ({
         FoodItemAddPage(store),
         OrderAction(store),
         OrderSummary(store),
-        Chat(store),
         ContactUs(store),
         TermsAndConditions(store)
     ]

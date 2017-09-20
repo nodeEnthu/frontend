@@ -3,10 +3,12 @@ import './CoreLayout.scss'
 import '../../styles/core.scss'
 import Header from '../../components/Header/index'
 import PropTypes from 'prop-types';
+import Alert from 'react-s-alert';
 
 export const CoreLayout = ({ children }) => (
   <div className='container'>
   	<Header/>
+    <Alert stack={{limit: 3}} />
     <div className='content'>
       {children}
     </div>
