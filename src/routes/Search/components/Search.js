@@ -45,6 +45,7 @@ const Search = createReactClass({
     },
     filterCuisineOrDietType(val,dietOrCuisine) {
         this.props.setDirty(true);
+        console.log(val,dietOrCuisine);
         this.props.selectCuisineOrDiet(dietOrCuisine,val);
     },
 

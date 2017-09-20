@@ -16,9 +16,6 @@ const FlatSelection = createReactClass({
     }
   },
   componentWillReceiveProps(nextProps) {
-      if(this.props.defaultChecked !=  nextProps.defaultChecked){
-       
-      }
   },
   selectionChanged(e){
     // what is currently checked
@@ -48,7 +45,7 @@ const FlatSelection = createReactClass({
                                 name={selection.title}
                                 value={selection.value}
                                 checked={selection.value === checked}
-                                onChange={self.selectionChanged}
+                                onClick={self.selectionChanged}
                         />
                           <label>{selection.title}</label>
                       </div>
