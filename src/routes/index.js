@@ -15,6 +15,7 @@ import ProviderPublish from './ProviderPublish'
 import ContactUs from './ContactUs'
 import TermsAndConditions from './TermsAndConditions'
 import { onMainPageEnter} from 'utils/auth/onEnterAuth'
+import JobCreate from './JobCreate'
 
 
 /*  Note: Instead of using JSX, we recommend using react-router
@@ -39,6 +40,7 @@ export const createRoutes = (store) => ({
         OrderAction(store),
         OrderSummary(store),
         ContactUs(store),
+        JobCreate(store),
         TermsAndConditions(store)
     ]
 
