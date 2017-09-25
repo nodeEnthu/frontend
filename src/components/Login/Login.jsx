@@ -35,6 +35,8 @@ var Login = createReactClass({
           .then(function(result) {
               let res = result.data;
               if (res.token) {
+                  // user will be logged in for just this tab
+                  sessionStorage.setItem('token', res.token);
                   dispatch(actions.addToken(res.token));
                   dispatch(actions.addUser(res.user));
                   dispatch(actions.userLoggedIn(true));
@@ -43,13 +45,11 @@ var Login = createReactClass({
                   // check whether the person was looking for a new address before logging in 
                   if(searchText && place_id){
                     // register the new location
-                    securedGetCall('api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
+                    securedGetCall('/api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
                     userSearchAndPlaceId = {address:searchText, placeId:place_id}
                   } else userSearchAndPlaceId = getSearchAddressAndPlaceId(res.user);
                   dispatch(actions.updateUser('searchText',userSearchAndPlaceId.address));
                   dispatch(actions.updateUser('place_id',userSearchAndPlaceId.placeId));
-                  // user will be logged in for just this tab
-                  sessionStorage.setItem('token', res.token);
                   // initialize one signal here .. 
                   //but first get the appId dependent upon the environment
                   initializeOneSignal(envVars.oneSignalAppId);

@@ -7,7 +7,7 @@ import OrderSubmitModal from 'components/OrderSubmitModal';
 import moment from 'moment';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import AsyncAutocomplete from 'components/AsyncAutocomplete'
-import {securedGetCall} from 'utils/httpUtils/apiCallWrapper';
+import {getCall, securedGetCall} from 'utils/httpUtils/apiCallWrapper';
 import {timeOfDay} from 'components/FoodItemEntryForm/constants';
 import IconButton from 'material-ui/IconButton';
 import ContentAddCircle from 'material-ui/svg-icons/content/add-circle'
@@ -34,6 +34,9 @@ const Checkout = createReactClass({
          phone: this.props.globalState.core.get('user').get('phone') || '',
          code:'',
          verified:false,
+         providerOutsideDeliveryRadius:false,
+         showSpinner:false,
+         outOfRangeMessage:''
       };
   },
   componentDidMount() {
@@ -56,7 +59,6 @@ const Checkout = createReactClass({
       let {phone} = this.props.globalState.core.get('user').toJS();
       if(obj.payload === phone) this.setState({verified: true});
       else this.setState({verified: false});
-
     }
   },
   componentDidUpdate(prevProps, prevState) {
@@ -95,7 +97,32 @@ const Checkout = createReactClass({
     }
   },
   checkOutItems(){
-    this.props.openModal({storeKey:'orderSubmitModalOpen', openModal:true})
+    // check if its a delivery
+    const {providerProfileCall} = this.props.providerProfile.toJS();
+    let {user} = this.props.globalState.core.toJS();
+    const provider = providerProfileCall.data;
+    if (this.state.pickup === false || provider.serviceOffered === 3){
+      let self = this;
+      this.setState({showSpinner:true});
+      // if pickup(default) is being changed to delivery .. check whether customer is within provider radius
+      getCall('/api/locations/calcDistance',{providerId: provider._id, customerId: user._id})
+        .then(function(res){
+          self.setState({showSpinner:false});
+          let distance =  (res.data.distance)? res.data.distance/1000 :undefined;
+          if(distance){
+             let providerRange = (provider.deliveryRadius)? parseInt(provider.deliveryRadius) :  5;
+            if(distance > 5) self.setState({providerOutsideDeliveryRadius:true, outOfRangeMessage: 'You are '+distance.toFixed(2) +'km away and outside provider\'s delivery range of '+ providerRange+'km .Please contact the provider directly to see whether they can still deliver'});
+            else{
+              self.setState({providerOutsideDeliveryRadius:false, outOfRangeMessage:''});
+              self.props.openModal({storeKey:'orderSubmitModalOpen', openModal:true});
+            }
+          } else {
+              self.setState({providerOutsideDeliveryRadius:false, outOfRangeMessage:''});
+              self.props.openModal({storeKey:'orderSubmitModalOpen', openModal:true});
+            }
+        })
+      
+    }else this.props.openModal({storeKey:'orderSubmitModalOpen', openModal:true});
   },
   onSuggestionSelected(event,{suggestion}){
     this.props.updateUser('searchText',suggestion.address);
@@ -114,7 +141,7 @@ const Checkout = createReactClass({
   },
   render(){
     const {itemsCheckedOut,providerProfileCall} = this.props.providerProfile.toJS();
-    const{addtnlAddressInfo,orderTime, verified,phone, code} = this.state;
+    const{addtnlAddressInfo,orderTime, verified,phone, code, providerOutsideDeliveryRadius, outOfRangeMessage} = this.state;
     let {user} = this.props.globalState.core.toJS();
     let {place_id,searchText} = user;
     const provider = providerProfileCall.data;
@@ -186,7 +213,7 @@ const Checkout = createReactClass({
                     />
                     <RadioButton
                       value="false"
-                      label="delivery"                                    
+                      label="delivery"                      
                     />
                   </RadioButtonGroup>  
                 </div>
@@ -324,7 +351,14 @@ const Checkout = createReactClass({
                 })
               }
             </div>
+            {
+              (providerOutsideDeliveryRadius)?
+              <div className="error">{outOfRangeMessage}</div>:undefined
+            }
             <div className="is-center">
+              <div style={{display:(this.state.showSpinner)?'block':'none' , paddingBottom :'0.5em'}}>
+                  <img src= "/general/loading.svg"/>
+              </div>
               <RaisedButton
                 primary={true}
                 label = "Place Order"

@@ -76,6 +76,7 @@ const Header =createReactClass ({
       this.setState({showSpinner:true,deleteResult: 'Deleting your profile'});
       securedPostCall('/api/providers/remove',{userId:userId, _id:userId})
         .then(function(res){
+          sessionStorage.removeItem('token');
           self.setState({showSpinner:false});
           if(res && res.data && res.data.message && res.data.message === 'done' ){
             self.setState({accntDeleted:true,deleteResult: 'Account successfully deleted'});

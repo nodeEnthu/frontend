@@ -305,7 +305,7 @@ const ProviderEntryForm = createReactClass({
                             <div>
                                 <div className="pure-u-1 pure-u-md-1-2">
                                     <label>
-                                        Delivery within (miles)
+                                        Delivery within (km)
                                     </label>
                                     <div>
                                         <select id="delivery"  className="pure-u-3-4"
@@ -316,13 +316,12 @@ const ProviderEntryForm = createReactClass({
                                             value={deliveryRadius}
                                             style={{width:'100%'}}
                                         >
-                                            <option  value="0">Please select miles</option>
+                                            <option  value="0">Please select kms</option>
+                                            <option>1</option>
+                                            <option>3</option>
                                             <option>5</option>
                                             <option>10 </option>
                                             <option>15</option>
-                                            <option>20</option>
-                                            <option>25</option>
-                                            <option>30</option>
                                         </select>
                                     </div>
                                 </div>

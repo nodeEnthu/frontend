@@ -238,18 +238,30 @@ const ProviderProfile = createReactClass({
                 :
                 undefined
               }
-              <div className="addtnl-info">
-                <span>Payment methods accepted:</span>
-                <span className="service-offered">{methodsOfPayment.join(' , ')}</span>
-              </div>
-              
+              {
+                (provider.deliveryRadius)?
+                <div className="addtnl-info">
+                  <span>Delivery radius:</span>
+                  <span className="service-offered">{provider.deliveryRadius + 'km'}</span>
+                </div>
+                :
+                undefined
+              }
+              {
+                (methodsOfPayment && methodsOfPayment.length >0)?
+                <div className="addtnl-info">
+                  <span>Payment methods accepted:</span>
+                  <span className="service-offered">{methodsOfPayment.join(' , ')}</span>
+                </div>
+                :
+                undefined
+              }
                 <div className="provider-details">
                   <CommunicationLocationOn/>
                   <span className="provider-detail">
                     <Truncate lines={1}>
                       {provider.displayAddress}
                     </Truncate>
-                    
                   </span>
                 </div>
                 {
@@ -276,10 +288,6 @@ const ProviderProfile = createReactClass({
               </div>
               
           </div>
-          <div className="pure-u-1 profile-wrapper" style={{paddingBottom:0}}>
-            <div style={{textAlign:'center', fontSize:'115%'}}>Like my food? help spread the word</div>
-            <SocialShareSS link={"https://spoonandspanner.com/providerProfile/"+this.props.params.id}/>
-          </div>
           {
             (userViewingOwnProfile)?
             <div className="pure-u-1">
@@ -296,7 +304,10 @@ const ProviderProfile = createReactClass({
             :
             undefined
           }
-          
+          <div className="pure-u-1 profile-wrapper" style={{paddingBottom:0}}>
+            <div style={{textAlign:'center', fontSize:'115%'}}>Like my food? help spread the word</div>
+            <SocialShareSS link={"https://spoonandspanner.com/providerProfile/"+this.props.params.id}/>
+          </div>
           <div className = "content pure-u-1">
             <div>
               <div className="posts">
