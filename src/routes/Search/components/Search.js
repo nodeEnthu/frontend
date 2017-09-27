@@ -226,11 +226,6 @@ const Search = createReactClass({
                                                             storeKey='dietSelectedMap'
                                                             defaultChecked = {(dietSelectedMap[diet.value] === true)? diet.value: undefined }
                                                             onClick={this.filterCuisineOrDietType}
-                                                            style={{    
-                                                                        background:'url('+diet.src+')  0 75% no-repeat',
-                                                                        backgroundSize:'60%',
-                                                                        backgroundSize: 'contain'                                                            
-                                                                    }}
                                             />
 
                                 })}

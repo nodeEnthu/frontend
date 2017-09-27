@@ -29,6 +29,7 @@
     }
     .react-autosuggest__container {
         width: 93%;
+        margin-left:23px;
     }
     .react-autosuggest__input {
         width: inherit;
@@ -85,9 +86,6 @@
         position: relative;
         .diet-wrapper{
             max-width: 600px;
-        }
-        .inline-radio {
-            opacity: 0.7;
         }
         .inline-radio input {
             height: 45px;
