@@ -164,20 +164,6 @@ const HomeView = createReactClass({
                     </div>
                 </div>
                 <div className="sub-content-wrapper">
-                    <div className="provider-promotion-wrapper">
-                        <div className="provider-promotion">
-                            <div className="promotion-free">FREE</div>
-                            <div className="promotion-heading-text">
-                                &#x20b9; 400 GIFT CARD
-                            </div>
-                            <div className="promotion-text-detail">
-                                For the first 100 cooks on their first <strong>confirmed</strong> order
-                            </div>
-                            <div className="promotion-button" onClick={()=>this.goToPage('providerEntry')}> 
-                                Set up now
-                            </div>
-                        </div>
-                    </div>
                     <div className="pure-u-1 steps-text">
                         3 steps to get started
                     </div>
