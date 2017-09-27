@@ -167,23 +167,9 @@ const ProviderProfile = createReactClass({
         userViewingOwnProfile=true;
       }
     }
-    // seperate between current and past items
-    let currentItems=[] , pastItems=[], onOrderItems=[], methodsOfPayment = [], currentDate;
+    let methodsOfPayment = [];
     if(provider && provider.foodItems){
       responseRatio = parseInt((parseInt(provider.ordersConfirmed || 0) + parseInt(provider.ordersCancelled || 0))/parseInt(provider.ordersReceived || 1) *100) || undefined;
-      provider.foodItems.forEach(function(foodItem){
-        let availability= foodItem.availability;
-        let foodItemAvailable = false;
-        if(foodItem.avalilabilityType != 'onOrder'){
-          for(let i=0; i < availability.length ; i++){
-            if(moment(availability[i]).isAfter(moment(), 'day') || moment(availability[i]).isSame(moment(), 'day')){
-              foodItemAvailable=true;
-              break;
-            }else foodItemAvailable=false;
-          }
-          (foodItemAvailable)?currentItems.push(foodItem): pastItems.push(foodItem);
-        } else onOrderItems.push(foodItem);
-      })
       if(provider.methodsOfPayment){
         provider.methodsOfPayment.map(function(methodOfPayment,index){
           METHODS_OF_PAYMENT.forEach(function(constPaymentMethods){
@@ -194,7 +180,6 @@ const ProviderProfile = createReactClass({
         })
       }
     }
-
     return (provider && !isEmptyObj(provider) && provider.userType && user && user.name || (provider && !isEmptyObj(provider) && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="provider-profile">
           <div className="pure-u-1 profile-wrapper">
@@ -312,27 +297,21 @@ const ProviderProfile = createReactClass({
             <div>
               <div className="posts">
                   {(userViewingOwnProfile && (this.props.mode != 'PROVIDER_ENTRY'))?
-                    <Link to={'/foodItems/add'}>
+                    <Link to={'/foodItems/add'} style={{display:'block'}}>
                         <IconButton
                           style={{top:'6px'}}
                         >
                             <ContentAddBox/>
                         </IconButton>
-                        <div style={{display:'inline-block'}}>
+                        <span>
                             Add another item
-                        </div>
+                        </span>
                     </Link>
                     :
                     undefined
                   }
-                  {
-                    (currentItems && currentItems.length>0)?
-                      <h1 className="content-subhead">Current Items</h1>
-                      :
-                      undefined
-                  }
                   { 
-                    currentItems.map((foodItem)=>{
+                    provider.foodItems.map((foodItem)=>{
                       return <FoodItemInProviderProfile
                                 provider={provider}
                                 key={foodItem._id}
@@ -348,58 +327,6 @@ const ProviderProfile = createReactClass({
                                 foodIdSelected={this.props.foodIdSelected}
                                 disableAdd = {(itemsCheckedOut[foodItem._id])? true: false}
                               />
-                    })
-                  }
-                  {
-                    (onOrderItems && onOrderItems.length>0)?
-                      <h1 className="content-subhead">On Order Items</h1>
-                      :
-                      undefined
-                  }
-                  { 
-                    onOrderItems.map((foodItem)=>{
-                      return <FoodItemInProviderProfile
-                                provider={provider}
-                                key={foodItem._id}
-                                userViewingOwnProfile={userViewingOwnProfile}
-                                checkOutItem = {self.checkOutItem}
-                                writeReviewModal = {self.writeReviewModal}
-                                postSecuredData = {this.props.postSecuredData}
-                                deleteFoodItem={this.deleteFoodItem}
-                                openModal = {this.props.openModal}
-                                providerProfile = {this.props.providerProfile}
-                                foodItem={foodItem}
-                                mode = {this.props.mode}
-                                onOrder={true}
-                                foodIdSelected={this.props.foodIdSelected}
-                                disableAdd = {(itemsCheckedOut[foodItem._id])? true: false}
-                              />
-                    })
-                  }
-                  {
-                    (pastItems && pastItems.length>0)?
-                      <h1 className="content-subhead">Past Items</h1>
-                      :
-                      undefined
-                  }
-                  { 
-                    pastItems.map((foodItem)=>{
-                      return <FoodItemInProviderProfile
-                                key={foodItem._id}
-                                provider={provider}
-                                userViewingOwnProfile={userViewingOwnProfile}
-                                checkOutItem = {self.checkOutItem}
-                                writeReviewModal = {self.writeReviewModal}
-                                postSecuredData = {this.props.postSecuredData}
-                                deleteFoodItem={this.deleteFoodItem}
-                                openModal = {this.props.openModal}
-                                foodItem={foodItem}
-                                providerProfile = {this.props.providerProfile}
-                                pastItem={true}
-                                mode = {this.props.mode}
-                                foodIdSelected={this.props.foodIdSelected}
-                              />
-                            
                     })
                   }
               </div>

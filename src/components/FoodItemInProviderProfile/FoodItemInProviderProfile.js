@@ -24,10 +24,9 @@ const FoodItemInProviderProfile = createReactClass({
     }
   },
   render(){
-    let {foodItem,mode,provider,onOrder,disableAdd}= this.props;
+    let {foodItem,mode,provider,disableAdd}= this.props;
     let self = this;
     const {deleteItemModalOpen} = this.props.providerProfile.toJS() || false;
-    const availabilityLength = foodItem.availability.length;
     let editOrReOffer=(this.props.pastItem === true)? 'OFFER': 'EDIT';
     return <div id={foodItem.name.match(/[a-zA-Z]+/g).join('')} className="pure-u-1 pure-u-md-1-3 food-item-profile provider-profile-wrapper">
               <div className="pure-u-1 provider-img-section" onClick={(event)=>this.openFoodItemModal(event,foodItem)}>
@@ -80,14 +79,7 @@ const FoodItemInProviderProfile = createReactClass({
                 <table className="pure-table remove-border">
                   <tbody>
                       <tr>
-                        {
-                          (onOrder)?
                           <td>Place Order</td>
-                          :
-                          <td>Availability</td>
-                        }
-                        {
-                          (onOrder)?
                           <td className="add-padding-left">
                           { 
                             PLACE_ORDER_BY.map(function(orderDate){
@@ -97,19 +89,6 @@ const FoodItemInProviderProfile = createReactClass({
                             })
                           }
                           </td>
-                          :
-                          <td className="add-padding-left">
-                          {
-                            foodItem.availability.map(function(date,index){
-                              if(availabilityLength != (index+1)){
-                                return moment(date).format("MMM, D")+' | ';
-                              }else return moment(date).format("MMM, D");
-                              
-                            })
-                          }
-                          </td>
-                        }
-                          
                       </tr>
                       <tr>
                           <td>Pickup/delivery time</td>

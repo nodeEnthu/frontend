@@ -35,11 +35,9 @@ const Search = createReactClass({
             foodItemModalOpen:false,
             foodIdSelected:undefined,
             showSpinner:false,
-            value:"onOrder"
         };
     },
     pageNum: 0,
-    avalilabilityType:'onOrder',
     contextTypes: {
         router: PropTypes.object.isRequired
     },
@@ -112,7 +110,6 @@ const Search = createReactClass({
         combinedQuery.addtnlQuery = this.props.search.get('addtnlQuery').toJS();
         //combinedQuery.addtnlQuery.date = combinedQuery.addtnlQuery.date || moment().startOf('day').valueOf();
         combinedQuery.filterspageNum = this.pageNum;
-        combinedQuery.onOrder= (this.avalilabilityType === 'onOrder')? true:false;
         return combinedQuery;
     },
 
@@ -154,20 +151,6 @@ const Search = createReactClass({
             this.props.userProfileScrollPosition(foodItem.name);
             this.context.router.push('/providerProfile/'+foodItem._creator);
         }
-    },
-    handleTabChange(value){
-        this.setState({
-          value: value,
-        });
-    },
-    handleActive(tab) {
-        // remove whats currently being shown
-        this.props.flushOutStaleData();
-        // fetch a query
-        this.pageNum = 0;
-        this.resolvedData = [];
-        this.avalilabilityType = tab.props['data-route'];
-        this.createAndFetchNewQuery();
     },
     render() {
         let { data, addtnlQuery, dietSelectedMap,cuisineSelectedMap } = this.props.search.toJS();
@@ -226,33 +209,6 @@ const Search = createReactClass({
         	                   
                             </div>
     	                </div>
-    					<div className="pure-u-3-5 pure-u-md-1-5 display-table">
-                            <div className="move-center">
-                                <div className="center-inline-image">
-                                    <svg  width="24" height="24" viewBox="0 0 24 24">
-                                        <path d="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z" />
-                                    </svg>
-                                </div>
-                                <div className="select-date">
-            	                    <SelectField autoWidth={false} style={{width:'80%',left:'5px',height:'auto'}}
-                                                fullWidth={false}
-                                                labelStyle={{top:'4px',color:'#FF6F00'}}
-                                                floatingLabelStyle={{textAlign: 'middle'}} 
-                                                menuStyle={{width:'100%',textAlign:'left'}}
-                                                underlineStyle={{width:'80%'}} 
-                                                iconStyle={{top:'5px', right:'15px',}}
-                                                value={addtnlQuery.date} 
-                                                onChange={(event,index,value)=>this.selectOption(value,'date')}>
-            	                    	{
-            	                    		DATES(7,"ddd, MMM D","add").map(function(date,index){
-            	                    			return <MenuItem style={{width:'100%'}} key={index} value={date.value} primaryText={date.title}/>
-            	                    		})
-            	                    	}
-            					   </SelectField>
-                                </div>
-                            </div>
-                        </div>
-
                         <div className="diet-filter-wrapper">
                             <div className="center-inline-image">
                                 <div className="center-inline-image">
@@ -359,89 +315,47 @@ const Search = createReactClass({
 						})}
 					</Carousel>
 				</div>
-				<Tabs style={{marginTop:"1em"}} inkBarStyle={{border:"2px solid "+ amber900}} onChange={this.handleTabChange} value = {this.state.value}>
-                    <Tab buttonStyle={{backgroundColor:"white","color":amber900}} label="On Order" value = "onOrder" data-route="onOrder" onActive={this.handleActive}>
-                        <div className="providers-wrapper">
-                             <div className="is-center" style={{display:(this.state.showSpinner)?'block':'none'}}>
-                                <img src= "/general/loading.svg"/>
-                            </div>
-                            <div>
-                                {(resolvedData && resolvedData.length >0)? 
-                                resolvedData.map(function(foodItem,index){
-                                    return  <FoodItemInSearchPage
-                                                key={index}
-                                                foodItem={foodItem}
-                                                foodItemClicked={self.foodItemClicked}
-                                                mode = {"onOrder"}
-                                            />
-                                        })
-                                        :
-                                        <div style={{display:(!this.state.showSpinner)?'block':'none'}} className="is-center no-results-wrapper">
-                                            <div>Sorry! no results were found</div>
-                                            <div className="sub-text">Tried broadening filters ?</div>
-                                        </div>
-                                } 
-                            </div>
-                        {
-                            (data  && data.length >= 12*(pageNum+1))?
-                            <div className="load-more-center">
-                                <RaisedButton 
-                                    label="Show more results" 
-                                    primary={true} 
-                                    style={{width:'50%',margin:"1em"}}
-                                    onClick={this.loadMore}
-                                    disableTouchRipple={true}
-                            />
-                            </div>
-                            :
-                            undefined
-                        }
-                    <FoodItemModal foodId={this.props.foodIdSelected}
-                                  openModal={this.props.openModal}
-                                  stateProps={this.props.search}
+				
+                <div className="providers-wrapper">
+                     <div className="is-center" style={{display:(this.state.showSpinner)?'block':'none'}}>
+                        <img src= "/general/loading.svg"/>
+                    </div>
+                    <div>
+                        {(resolvedData && resolvedData.length >0)? 
+                        resolvedData.map(function(foodItem,index){
+                            return  <FoodItemInSearchPage
+                                        key={index}
+                                        foodItem={foodItem}
+                                        foodItemClicked={self.foodItemClicked}
+                                        mode = {"onOrder"}
+                                    />
+                                })
+                                :
+                                <div style={{display:(!this.state.showSpinner)?'block':'none'}} className="is-center no-results-wrapper">
+                                    <div>Sorry! no results were found</div>
+                                    <div className="sub-text">Tried broadening filters ?</div>
+                                </div>
+                        } 
+                    </div>
+                {
+                    (data  && data.length >= 12*(pageNum+1))?
+                    <div className="load-more-center">
+                        <RaisedButton 
+                            label="Show more results" 
+                            primary={true} 
+                            style={{width:'50%',margin:"1em"}}
+                            onClick={this.loadMore}
+                            disableTouchRipple={true}
                     />
                     </div>
-                </Tab>
-                 <Tab buttonStyle={{backgroundColor:"white","color":amber900}} label="Available now" value="specificDates" data-route="specificDates" onActive={this.handleActive} >
-                        <div className="providers-wrapper">
-                             <div className="is-center" style={{display:(this.state.showSpinner)?'block':'none'}}>
-                                <img src= "/general/loading.svg"/>
-                            </div>
-                            <div>
-                                {(resolvedData && resolvedData.length >0)? 
-                                resolvedData.map(function(foodItem,index){
-                                    return  <FoodItemInSearchPage
-                                                key={index}
-                                                foodItem={foodItem}
-                                                foodItemClicked={self.foodItemClicked}
-                                                mode = {"specificDates"}
-                                            />
-                                        })
-                                        :
-                                        <div style={{display:(!this.state.showSpinner)?'block':'none'}} className="is-center no-results-wrapper">
-                                            <div>Sorry! no results were found</div>
-                                            <div className="sub-text">also broaden filters ?</div>
-                                        </div>
-
-                                } 
-                            </div>
-                        {
-                            (data  && data.length >= 12*(pageNum+1))?
-                            <div className="load-more-center">
-                                <RaisedButton 
-                                    label="Show more results" 
-                                    primary={true} 
-                                    style={{width:'50%',margin:"1em"}}
-                                    onClick={this.loadMore}
-                                    disableTouchRipple={true}
-                            />
-                            </div>
-                            :
-                            undefined
-                        }
-                        </div>
-                    </Tab>
-            </Tabs>
+                    :
+                    undefined
+                }
+                <FoodItemModal foodId={this.props.foodIdSelected}
+                              openModal={this.props.openModal}
+                              stateProps={this.props.search}
+                />
+            </div>  
 		</div>
         );
     }

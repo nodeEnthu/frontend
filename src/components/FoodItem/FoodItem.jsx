@@ -74,19 +74,12 @@ const FoodItem = createReactClass({
                         <tr>
                             <td>Availability: </td>
                             <td className="add-padding-left">
-                            { (foodItem.avalilabilityType === 'specificDates')?
-                             
-                                foodItem.availability.map(function(date,index){
-                                  if(foodItem.availability.length != (index+1)){
-                                    return moment(date).format("MMM, D")+' | ';
-                                  }else return moment(date).format("MMM, D");
-                                })
-                                :
-                                PLACE_ORDER_BY.map(function(orderDate){
-                                  if(orderDate.value === foodItem.placeOrderBy){
-                                    return 'Order '+orderDate.label;
-                                  }
-                                })
+                            {
+                              PLACE_ORDER_BY.map(function(orderDate){
+                                if(orderDate.value === foodItem.placeOrderBy){
+                                  return 'Order '+orderDate.label;
+                                }
+                              })
                             }
                             </td>
                         </tr>

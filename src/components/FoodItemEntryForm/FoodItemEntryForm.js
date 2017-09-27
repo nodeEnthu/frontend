@@ -60,41 +60,7 @@ const FoodItemEntryForm= createReactClass({
         cuisineType: required,
         price:requiredInteger
     },
-    addTimeOffset(orignalDate){
-        return new Date(orignalDate.getTime()+orignalDate.getTimezoneOffset()*60000) ;
-    },
 
-    changeStoreTimeAndDateVals(date, storeKey,isInputChecked){
-        let {availability,oneTime} = this.props.foodItemEntryForm.toJS();
-        availability = availability || [];
-        if(availability.indexOf(date) > -1){
-            availability.splice(availability.indexOf(date),1);
-        }
-        else{
-            if(availability.indexOf(date) === -1) { availability.push(date);}
-        }
-        // now delete the earlier dates
-        availability.forEach(function(date,index){
-            if(moment().startOf('day').utc() > moment(date) ){
-                availability.splice(availability.indexOf(date),1);
-            }
-        })
-        // sort the dates
-        availability.sort(function(a,b){
-          return new Date(a) - new Date(b);
-        });
-        // completely overwrite whats in store
-        this.props.addFoodItemInfo({storeKey: storeKey,payload: availability});
-        let errorMsgkey = storeKey + 'ErrorMsg';
-        let errorMsg = (availability.length === 0)? 'Required':null
-        this.props.addFoodItemInfo({storeKey: errorMsgkey,payload:errorMsg});
-        // forcibly re-render
-        window.setTimeout(function() {this.setState({foo: "bar"});}.bind(this),0);
-    },
-
-    daysBeforeOrderDate(referenceDate,days){
-        return moment(referenceDate).subtract(days, "days").toDate();
-    },
     handleChange(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
@@ -121,25 +87,9 @@ const FoodItemEntryForm= createReactClass({
             this.props.addFoodItemInfo({storeKey: errorMsgkey, payload: null});
         }
     },
-    setCount(event) {
-        let input = event.target.value;
-        let stateKeyName = event.target.name;
-        this.setState({
-            description: input,
-            chars_left: maxCount - input.length
-        })
-        this.addFoodItemInfo.providerEntryForm.chars_left = maxCount - input.length; // hacky again
-        this.addFoodItemInfo.providerEntryForm.description = input; // hacky again
-    },
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
-        if(stateKeyName === "avalilabilityType"){
-           let requiredKey =  (input ==="specificDates")?"availability":"placeOrderBy";
-           let keyToBeDeleted = (input ==="specificDates")?"placeOrderBy":"availability";
-           delete this.mapFieldsToValidationType[keyToBeDeleted];
-           this.mapFieldsToValidationType[requiredKey] = (requiredKey === "placeOrderBy")? required:requiredArray;
-        }
         this.props.addFoodItemInfo({storeKey: stateKeyName,payload: input});
     },
     validateForm() {
@@ -223,7 +173,7 @@ const FoodItemEntryForm= createReactClass({
     render() {
         let {user} = this.props.globalState.core.toJS();
         let self = this;
-        let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg, avalilabilityType,price,priceErrorMsg,descriptionErrorMsg,availability,availabilityErrorMsg,placeOrderBy, placeOrderByErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting,snackBarOpen,snackBarMessage} = this.props.foodItemEntryForm.toJS();
+        let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg,price,priceErrorMsg,descriptionErrorMsg,placeOrderBy, placeOrderByErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting,snackBarOpen,snackBarMessage} = this.props.foodItemEntryForm.toJS();
         return (
             <div className="food-item-entry">
                 <div className="food-item-container">
@@ -301,73 +251,27 @@ const FoodItemEntryForm= createReactClass({
                                     })
                                 }
                                 </div>
-                                <div style={{marginTop:"0.5em"}}>
-                                    This food item is available:
-                                    <RadioButtonGroup name="avalilabilityType" valueSelected={avalilabilityType} onChange={this.changeStoreVal}>
-                                      <RadioButton
-                                        name="avalilabilityType"
-                                        value="specificDates"
-                                        label="On specific dates"
-                                        labelPosition="right"
-                                      />
-                                      <RadioButton
-                                        name="avalilabilityType"
-                                        value="onOrder"
-                                        label="Only on order"
-                                        labelPosition="right"
-                                        
-                                      />
-                                    </RadioButtonGroup>
+                           
+                               
+                                <div className = "pure-u-1" >
+                                    <label>Place order by</label>
+                                    <select id="order-by-date" 
+                                        name="placeOrderBy"
+                                        className="width-max"
+                                        onBlur={this.handleChange} 
+                                        onFocus={this.handleFocus}
+                                        onChange={this.changeStoreVal}
+                                        value={placeOrderBy}
+                                    >
+                                        {
+                                            PLACE_ORDER_BY.map(function(placeBy,index){
+                                                return  <option key={index} value={placeBy.value}>{placeBy.label}</option>
+                                            })
+                                        }
+                                    </select>
+                                    <span className = "error-message">{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
                                 </div>
-                                {(avalilabilityType==="specificDates")?
-                                    <div className="pure-u-1">
-                                        <label>Select date(s): </label>
-                                        <div className = "error-message">{(availabilityErrorMsg)?'*'+availabilityErrorMsg:undefined}</div>
-                                        <legend></legend>
-                                        {DATES(8,"dd, D",'add').map(function(date,index){
-                                                        return <div key={index} className="pure-u-1-3 pure-u-md-1-6" style={{paddingBottom : '0.25em'}}>
-                                                                <div className="parent-box">
-                                                                        <div className="child-box-1">
-                                                                            {date.title}
-                                                                        </div>
-                                                                        <div className="child-box-2">
-                                                                            <Checkbox
-                                                                                label=""
-                                                                                defaultChecked={(availability && availability.indexOf(date.value) > -1)} 
-                                                                                onCheck={(event,isInputChecked)=>self.changeStoreTimeAndDateVals(date.value, 'availability',isInputChecked)}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                    }
-                                                )}
-                                        
-                                    </div>
-                                    :
-                                    undefined
-                                }
-                                {(avalilabilityType==="onOrder")?
-                                    <div className = "pure-u-1" >
-                                        <label>Place order by</label>
-                                        <select id="order-by-date" 
-                                            name="placeOrderBy"
-                                            className="width-max"
-                                            onBlur={this.handleChange} 
-                                            onFocus={this.handleFocus}
-                                            onChange={this.changeStoreVal}
-                                            value={placeOrderBy}
-                                        >
-                                            {
-                                                PLACE_ORDER_BY.map(function(placeBy,index){
-                                                    return  <option key={index} value={placeBy.value}>{placeBy.label}</option>
-                                                })
-                                            }
-                                        </select>
-                                        <span className = "error-message">{(placeOrderByErrorMsg)?'*'+placeOrderByErrorMsg:undefined}</span>
-                                    </div>
-                                    :
-                                    undefined
-                                }
+                                  
                                 <div className = "pure-u-1 pure-u-md-1-2">
                                     <label>Pickup/delivery start time (hh:mm)</label>
                                     <select

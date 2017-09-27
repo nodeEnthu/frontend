@@ -61,23 +61,6 @@ const Checkout = createReactClass({
       else this.setState({verified: false});
     }
   },
-  componentDidUpdate(prevProps, prevState) {
-    const {itemsCheckedOut,providerProfileCall} = this.props.providerProfile.toJS();
-    for(var key in itemsCheckedOut){
-      if(itemsCheckedOut[key].avalilabilityType === 'specificDates'){
-        // take the first date
-        if(!itemsCheckedOut[key].orderDate){
-          // dates may be past so lets check first
-          for(var i=0; i< itemsCheckedOut[key].availability.length ; i++){
-            if(moment(itemsCheckedOut[key].availability[i]).startOf('day').utc().isSameOrAfter(moment().startOf('day').utc())){
-              this.changeStoreVal(key,'orderDate',itemsCheckedOut[key].availability[i]);
-              break;
-            }
-          }
-        }
-      }
-    }
-  },
   changeStoreVal(foodItemId,storeKey,val) {
     this.props.updateCheckedOutItem(foodItemId,storeKey,val);
   },
@@ -300,40 +283,26 @@ const Checkout = createReactClass({
                               <div className="pure-u-1 item-property">
                                 Date
                               </div>
-                              { (itemCheckedOut.avalilabilityType === 'specificDates')?
-                                <DropDownMenu value={itemCheckedOut.orderDate} onChange={(event, index, value)=>self.changeStoreVal(itemCheckedOut._id,'orderDate',value)}
-                                              iconStyle={{fill:"rgb(0, 0, 0)"}}
-                                              underlineStyle={{borderTop:"1px solid black"}}
-                                >
-                                  <MenuItem style={{width:'100%'}} value={undefined} primaryText={"select date"}/>
-                                  {itemCheckedOut.availability.map(function(availableDate,index){
-                                      if(moment(availableDate).isSameOrAfter(moment().startOf('day').utc())){
-                                        return <MenuItem key={index} value={availableDate} primaryText={moment(availableDate).format("dd, MMM Do")} />
-                                      }
-                                    }
-                                  )}
-                                </DropDownMenu>
-                                :
-                                <SelectField
-                                  value={itemCheckedOut.orderDate}
-                                  onChange={(event, index, value)=>self.changeStoreVal(itemCheckedOut._id,'orderDate',value)}
-                                  errorText={!itemCheckedOut.orderDate && 'Please select order date'}
-                                  errorStyle={{color: 'red'}}
-                                  style={{display:'inline-block', width:"150px", marginLeft:'1em', textAlign:'center'}}
-                                  iconStyle={{fill: 'rgb(0,0,0)'}}
-                                >
-              
-                                  <MenuItem style={{width:'100%'}} value={undefined} primaryText={"select date"}/>
-                                  {
-                                    DATES(7,"ddd, MMM D","add").map(function(date,index){
-                                      return (moment().add(itemCheckedOut.placeOrderBy,"days").startOf('day') <= moment(date.value))?
-                                              <MenuItem style={{width:'100%'}} key={index} value={date.value} primaryText={date.title}/>
-                                              :
-                                              undefined
-                                    })
-                                  }
-                                </SelectField>
-                              }
+                             
+                              <SelectField
+                                value={itemCheckedOut.orderDate}
+                                onChange={(event, index, value)=>self.changeStoreVal(itemCheckedOut._id,'orderDate',value)}
+                                errorText={!itemCheckedOut.orderDate && 'Please select order date'}
+                                errorStyle={{color: 'red'}}
+                                style={{display:'inline-block', width:"150px", marginLeft:'1em', textAlign:'center'}}
+                                iconStyle={{fill: 'rgb(0,0,0)'}}
+                              >
+                                <MenuItem style={{width:'100%'}} value={undefined} primaryText={"select date"}/>
+                                {
+                                  DATES(7,"ddd, MMM D","add").map(function(date,index){
+                                    return (moment().add(itemCheckedOut.placeOrderBy,"days").startOf('day') <= moment(date.value))?
+                                            <MenuItem style={{width:'100%'}} key={index} value={date.value} primaryText={date.title}/>
+                                            :
+                                            undefined
+                                  })
+                                }
+                              </SelectField>
+                            
                             </div>
                             <div className="pure-u-md-1-3 display-none-small">
                               <div className="pure-u-1 item-property">
