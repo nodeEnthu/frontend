@@ -283,23 +283,23 @@ const FoodItemEntryForm= createReactClass({
                                     <legend className="pull-left">
                                         Diet type(s):
                                     </legend>
-                                    {
-                                        DIET_TYPES.map(function(diet,index){
-                                            return <div key={index} className="pure-u-1-3 pure-u-md-1-6" style={{paddingBottom : '0.25em'}}>
-                                                    <div className="parent-box">
-                                                            <div className="child-box-1">
-                                                                {diet.value}
-                                                            </div>
-                                                            <div className="child-box-2">
-                                                                <Checkbox
-                                                                    defaultChecked={(self.props.foodItemEntryForm.toJS()[diet.value] === true)}
-                                                                    onCheck={(event,isInputChecked)=>self.toggle(diet.value ,isInputChecked)}
-                                                                />
-                                                            </div>
+                                {
+                                    DIET_TYPES.map(function(diet,index){
+                                        return <div key={index} className="pure-u-1-3 pure-u-md-1-6" style={{paddingBottom : '0.25em'}}>
+                                                <div className="parent-box">
+                                                        <div className="child-box-1">
+                                                            {diet.value}
+                                                        </div>
+                                                        <div className="child-box-2">
+                                                            <Checkbox
+                                                                defaultChecked={(self.props.foodItemEntryForm.toJS()[diet.value] === true)}
+                                                                onCheck={(event,isInputChecked)=>self.toggle(diet.value ,isInputChecked)}
+                                                            />
                                                         </div>
                                                     </div>
-                                        })
-                                    }
+                                                </div>
+                                    })
+                                }
                                 </div>
                                 <div style={{marginTop:"0.5em"}}>
                                     This food item is available:

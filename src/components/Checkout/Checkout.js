@@ -16,7 +16,7 @@ import ActionHighlightOff from 'material-ui/svg-icons/action/highlight-off'
 import {amber900} from 'material-ui/styles/colors';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import {DATES} from 'routes/Search/constants/searchFilters'
+import {DATES, normalizeDateWhileChanging} from 'routes/Search/constants/searchFilters'
 import createReactClass from 'create-react-class'
 import PhoneVerification from 'components/PhoneVerification'
 import SelectField from 'material-ui/SelectField';
@@ -326,7 +326,7 @@ const Checkout = createReactClass({
                                   <MenuItem style={{width:'100%'}} value={undefined} primaryText={"select date"}/>
                                   {
                                     DATES(7,"ddd, MMM D","add").map(function(date,index){
-                                      return (moment().add(itemCheckedOut.placeOrderBy,"days").startOf('day') <= moment(date.value).startOf('day').utc())?
+                                      return (moment().add(itemCheckedOut.placeOrderBy,"days").startOf('day') <= moment(date.value))?
                                               <MenuItem style={{width:'100%'}} key={index} value={date.value} primaryText={date.title}/>
                                               :
                                               undefined
