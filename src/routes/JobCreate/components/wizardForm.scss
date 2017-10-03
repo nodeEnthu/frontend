@@ -1,4 +1,7 @@
   .job-post-container {
+    h1{
+      font-size:115%;
+    }
     padding: 1em;
     input[type="text"],
     input[type="email"],
@@ -11,6 +14,7 @@
       input[type="text"] {
         width: 100%;
         border-radius: 0;
+        font-weight: 400;
       }
     }
     .next {

@@ -19,7 +19,7 @@ let WizardFormSecondPage = props => {
   return (
     <form onSubmit={handleSubmit} className="pure-form pure-form-stacked">
      <div style={{width:'100%'}}>
-         <legend style={{margin: "1em 0"}}>Party size:</legend>
+         <legend style={{margin: "1em 0"}}>Number of people:</legend>
         <Field
           name="partysize"
           type="text"
@@ -32,7 +32,7 @@ let WizardFormSecondPage = props => {
         <Field name="serviceType" component={RadioButtonGroup}>
           <RadioButton value="pickup" label="Pickup" />
           <RadioButton value="delivery" label="Delivery" />
-          <RadioButton value="any" label="Any" />
+          <RadioButton value="any" label="Pickup or delivery" />
         </Field>
       </div>
       <div style={{textAlign:'center', marginTop:'2em'}}>
@@ -49,11 +49,6 @@ let WizardFormSecondPage = props => {
 
 WizardFormSecondPage = reduxForm({
   form: 'wizard',
-  initialValues: {
-    partysize: '1',
-    serviceType: 'any',
-    frequency: 'weekly'
-  },
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true, // <------ unregister fields on unmount
   validate

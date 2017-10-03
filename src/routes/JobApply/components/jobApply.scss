@@ -1,0 +1,12 @@
+  .job-apply {
+    padding: 1em;
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      box-shadow: none;
+      border-radius: 0
+    }
+    .apply-wrapper{
+      margin-top:1em;
+    }
+  }

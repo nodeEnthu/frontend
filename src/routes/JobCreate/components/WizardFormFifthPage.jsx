@@ -19,7 +19,7 @@ const WizardFormFifthPage = props => {
       <div>
         <legend style={{margin: "1em 0"}}>Cuisine(s) interested in (optional):</legend>
           <Field name="ni" component={Checkbox} label="North-Indian" />
-          <Field name="su" component={Checkbox} label="South-Indian" />
+          <Field name="si" component={Checkbox} label="South-Indian" />
           <Field name="ch" component={Checkbox} label="Chinese" />
           <Field name="ve" component={Checkbox} label="Veg" />
           <Field name="nv" component={Checkbox} label="Non-veg" />

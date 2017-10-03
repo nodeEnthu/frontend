@@ -184,7 +184,7 @@ const ProviderProfile = createReactClass({
         <div id="layout" className="provider-profile">
           <div className="pure-u-1 profile-wrapper">
               <div className="pure-u-1 pure-u-md-1-4 is-center position-relative">
-                <img className = "pure-img-responsive" src={provider.imgUrl}/>
+                <img className = "pure-img-responsive" src={provider.imgUrl || 'https://s3-us-west-1.amazonaws.com/prod-usr-food-imgs/default_profile.jpg'}/>
                 <div className="response-ratio">
                   <Circle strokeLinecap ="butt" percent={(responseRatio)? responseRatio.toString() : '100'} strokeWidth="5" strokeColor="#FF6F00" />
                   <div className="response-percentage">{(responseRatio)? responseRatio.toString() + '%' : ' 100%'}</div>

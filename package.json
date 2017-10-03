@@ -43,7 +43,6 @@
     "prop-types": "^15.5.10",
     "purecss": "0.6.0",
     "rc-progress": "2.1.2",
-    "react": "^15.6.1",
     "react-addons-css-transition-group": "^15.0.1",
     "react-addons-shallow-compare": "^15.6.2",
     "react-autosuggest": "^3.7.3",

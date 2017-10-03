@@ -31,7 +31,7 @@ const FoodItemInProviderProfile = createReactClass({
     return <div id={foodItem.name.match(/[a-zA-Z]+/g).join('')} className="pure-u-1 pure-u-md-1-3 food-item-profile provider-profile-wrapper">
               <div className="pure-u-1 provider-img-section" onClick={(event)=>this.openFoodItemModal(event,foodItem)}>
                 <div className="img-avatar">
-                  <img className="gallery-img portrait"src={foodItem.imgUrl}/>
+                  <img className="gallery-img portrait"src={foodItem.imgUrl || 'https://s3-us-west-1.amazonaws.com/prod-usr-food-imgs/default_food.png'}/>
                 </div>
                 {
                   (foodItem.enableReview)?

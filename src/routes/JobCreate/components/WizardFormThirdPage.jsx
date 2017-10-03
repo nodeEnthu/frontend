@@ -14,14 +14,13 @@ let WizardFormThirdPage =  createReactClass({
   },
   render(){
     const { handleSubmit, pristine, previousPage, how_frequent,submitting,start_date, end_date,date,change } = this.props;
-    console.log(how_frequent);
     return (
       <form onSubmit={handleSubmit} className="pure-form pure-form-stacked">
         <div>
           <legend style={{margin: "1em 0"}}>How often do you want it:</legend>
           <Field name="frequency" component={RadioButtonGroup}>
             <RadioButton value="once" label="One time" />
-            <RadioButton value="weekly" label="Weekly tiffin type service" />
+            <RadioButton value="weekly" label="Recurring" />
           </Field>
         </div>
         <div>

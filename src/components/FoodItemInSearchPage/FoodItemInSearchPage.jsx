@@ -29,7 +29,7 @@ const FoodItemInSearchPage = createReactClass({
             <div>
                 <div className="pure-u-1 provider-img-section">
                   <div className="img-avatar">
-                    <img className="gallery-img portrait"src={foodItem.imgUrl}/>
+                    <img className="gallery-img portrait"src={foodItem.imgUrl || 'https://s3-us-west-1.amazonaws.com/prod-usr-food-imgs/default_food.png'}/>
                   </div>
                 </div>
                 <div className="pure-u-1 provider-info-section">

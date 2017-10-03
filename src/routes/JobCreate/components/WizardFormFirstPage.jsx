@@ -8,18 +8,18 @@ import createReactClass from 'create-react-class'
 import renderTextArea from './renderTextArea'
 let WizardFormFirstPage =  createReactClass({
   onSuggestionSelected(event,{suggestion}){
-    const {address,place_id, change } = this.props
+    const {addressVar,place_idVar, change } = this.props;
     change('address', suggestion.address);
     change('place_id', suggestion.place_id);
   },
   render(){
-    const { handleSubmit, address,place_id, change } = this.props
+    const { handleSubmit, addressVar,place_idVar, change } = this.props
     return (
       <form onSubmit={handleSubmit} className="pure-form pure-form-stacked">
-        <legend style={{margin: "1em 0"}}>Please provide your service address:</legend>
+        <legend style={{margin: "1em 0"}}>Please provide the address where food is required:</legend>
         <AsyncAutocomplete  name={'searchText'}
                             apiUrl = {'/api/locations/addressTypeAssist'}
-                            userSearchText = {address}
+                            userSearchText = {addressVar}
                             getSuggestionValue={(suggestion)=>suggestion.address}
                             onChange = {(event, value)=>{change('address', value.newValue); change('place_id', null)}}
                             onSuggestionSelected = {this.onSuggestionSelected}
@@ -29,11 +29,11 @@ let WizardFormFirstPage =  createReactClass({
             name="addtnlAddressComments"
             type="textarea"
             component={renderTextArea}
-            label="Landmarks/home no. that will help provider do delivery"
+            label="Landmarks / home no. that will help provider find you"
           />
         </div>
         <div style={{textAlign:'center', marginTop:'2em'}}>
-          <button type="submit" disabled = {!place_id}className="pure-button pure-button-primary is-center">
+          <button type="submit" className="pure-button pure-button-primary is-center">
             Next
           </button>
         </div>
@@ -46,6 +46,13 @@ WizardFormFirstPage = reduxForm({
   form: 'wizard', // a unique identifier for this form
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true, // <------ unregister fields on unmount
+  initialValues: {
+    partysize: '1',
+    serviceType: 'any',
+    frequency: 'weekly',
+    address:'',
+    place_id:'',
+  },
   validate
 })(WizardFormFirstPage)
 
@@ -53,12 +60,12 @@ WizardFormFirstPage = reduxForm({
 const selector = formValueSelector('wizard') // <-- same as form name
 WizardFormFirstPage = connect(state => {
   // can select values individually
-  const address = selector(state, 'address');
-  const place_id = selector(state, 'place_id');
+  const addressVar = selector(state, 'address');
+  const place_idVar = selector(state, 'place_id');
   // or together as a group
   return {
-    address,
-    place_id
+    addressVar,
+    place_idVar
   }
 })(WizardFormFirstPage)
 

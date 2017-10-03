@@ -5,7 +5,7 @@ import WizardFormSecondPage from './WizardFormSecondPage'
 import WizardFormThirdPage from './WizardFormThirdPage'
 import WizardFormFourthPage from './WizardFormFourthPage'
 import WizardFormFifthPage from './WizardFormFifthPage'
-
+import LinearProgress from 'material-ui/LinearProgress';
 import './wizardForm.scss'
 class WizardForm extends Component {
   constructor(props) {
@@ -29,6 +29,10 @@ class WizardForm extends Component {
     const { page } = this.state
     return (
       <div className="job-post-container">
+        <h1>Your food requirement</h1>
+        <div className="progress-wrapper">
+          <LinearProgress mode="determinate" value={(page) * 20} />
+        </div>
         {page === 1 && 
           <WizardFormFirstPage onSubmit={this.nextPage} />}
         {page === 2 &&

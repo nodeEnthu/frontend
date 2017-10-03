@@ -94,7 +94,7 @@ const Checkout = createReactClass({
           let distance =  (res.data.distance)? res.data.distance/1000 :undefined;
           if(distance){
              let providerRange = (provider.deliveryRadius)? parseInt(provider.deliveryRadius) :  5;
-            if(distance > 5) self.setState({providerOutsideDeliveryRadius:true, outOfRangeMessage: 'You are '+distance.toFixed(2) +'km away and outside provider\'s delivery range of '+ providerRange+'km .Please contact the provider directly to see whether they can still deliver'});
+            if(distance > (providerRange+1)) self.setState({providerOutsideDeliveryRadius:true, outOfRangeMessage: 'You are '+distance.toFixed(2) +'km away and outside provider\'s delivery range of '+ providerRange+'km .Please contact the provider directly to see whether they can still deliver'});
             else{
               self.setState({providerOutsideDeliveryRadius:false, outOfRangeMessage:''});
               self.props.openModal({storeKey:'orderSubmitModalOpen', openModal:true});
