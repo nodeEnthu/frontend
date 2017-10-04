@@ -8,19 +8,8 @@ const JobProposals = createReactClass({
 	getInitialState() {
 		return{};
 	},
-	handleExpandChange(expanded){
-    	this.setState({expanded: expanded});
-  	},
-  	handleToggle (event, toggle){
-    	this.setState({expanded: toggle});
-  	},
-  	handleExpand(){
-    	this.setState({expanded: true});
-  	},
-  	handleReduce(){
-    	this.setState({expanded: false});
-  	},
   	render(){
+  		
 	    return (
 	    <div className="job-home">
 	    	<div className="reco-wrapper">
@@ -28,7 +17,7 @@ const JobProposals = createReactClass({
 					Providers close to you:
 				</h3>
 			</div>
-			<Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
+			<Card expanded={this.state.expanded} >
 		        <CardHeader
 		          title="URL Avatar"
 		          subtitle="Subtitle"

@@ -16,7 +16,7 @@ import ActionHighlightOff from 'material-ui/svg-icons/action/highlight-off'
 import {amber900} from 'material-ui/styles/colors';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import {DATES, normalizeDateWhileChanging} from 'routes/Search/constants/searchFilters'
+import {DATES} from 'routes/Search/constants/searchFilters'
 import createReactClass from 'create-react-class'
 import PhoneVerification from 'components/PhoneVerification'
 import SelectField from 'material-ui/SelectField';

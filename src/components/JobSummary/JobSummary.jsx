@@ -3,6 +3,7 @@ import './jobSummary.scss';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import {WEEK_DAYS_JOB, MEALS, JOB_CUISINES} from 'routes/Search/constants/searchFilters'
 import {
   Table,
   TableBody,
@@ -11,7 +12,30 @@ import {
 } from 'material-ui/Table';
 
 const JobSummary = createReactClass({
+  componentDidMount() {
+
+  },
   render(){
+    const {jobDetails} = this.props;
+    let weekdays = [], meals = [],cuisines = [];
+    for(let key in jobDetails ){
+      if(jobDetails.hasOwnProperty(key)){
+        let isMeal , isCuisine;
+        MEALS.forEach(function(meal,index){
+          if(meal.value === key){meals.push(meal.label); isMeal = true}
+        })
+        if(!isMeal){
+          JOB_CUISINES.forEach(function(cuisine,index){
+            if(cuisine.value === key){cuisines.push(cuisine.label); isCuisine = true};
+          })
+        }
+        if(!isMeal && !isCuisine){
+          WEEK_DAYS_JOB.forEach(function(weekday){
+            if(weekday.value === key){weekdays.push(weekday.label)};
+          })
+        }
+      }
+    }
     return( 
             <Card>
               <CardHeader
@@ -26,36 +50,40 @@ const JobSummary = createReactClass({
                       <TableRowColumn>Location</TableRowColumn>
                       <TableRowColumn>
                         <div>
-                          Mariposa street
+                          {jobDetails.address}
                         </div>
                         <div>
-                          New wlanut tree and close to nehru garden
+                          {jobDetails.addtnlAddressComments}
                         </div>
                       </TableRowColumn>
                     </TableRow>
                     <TableRow>
                       <TableRowColumn>Number of people</TableRowColumn>
-                      <TableRowColumn>2</TableRowColumn>
+                      <TableRowColumn>{jobDetails.partysize}</TableRowColumn>
                     </TableRow>
                     <TableRow>
                       <TableRowColumn>Delivery Type</TableRowColumn>
-                      <TableRowColumn>Pick or delivery</TableRowColumn>
+                      <TableRowColumn>{jobDetails.serviceType}</TableRowColumn>
                     </TableRow>
                     <TableRow>
                       <TableRowColumn>How often</TableRowColumn>
-                      <TableRowColumn>Weekly</TableRowColumn>
+                      <TableRowColumn>{jobDetails.frequency}</TableRowColumn>
                     </TableRow>
                     <TableRow>
                       <TableRowColumn>Dates</TableRowColumn>
-                      <TableRowColumn>Jan-28 to Mar-17</TableRowColumn>
+                      <TableRowColumn>{jobDetails.start_date} to {jobDetails.end_date}</TableRowColumn>
                     </TableRow>
                     <TableRow>
                       <TableRowColumn>Day(s)</TableRowColumn>
-                      <TableRowColumn>Mon, Tue, Wed, Thu</TableRowColumn>
+                      <TableRowColumn>{weekdays.join(' , ')}</TableRowColumn>
                     </TableRow>
                     <TableRow>
                       <TableRowColumn>Meal(s)</TableRowColumn>
-                      <TableRowColumn>Lunch, Dinner</TableRowColumn>
+                      <TableRowColumn>{meals.join(' , ')}</TableRowColumn>
+                    </TableRow>
+                    <TableRow>
+                      <TableRowColumn>Cuisines(s)</TableRowColumn>
+                      <TableRowColumn>{cuisines.join(' , ')}</TableRowColumn>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -65,6 +93,8 @@ const JobSummary = createReactClass({
   }
 })
 
-JobSummary.propTypes = {}
+JobSummary.propTypes = {
+  jobDetails:PropTypes.object
+}
 
 export default JobSummary;

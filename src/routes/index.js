@@ -43,10 +43,9 @@ export const createRoutes = (store) => ({
         ContactUs(store),
         JobCreate(store),
         TermsAndConditions(store),
-        JobHome(store),
-        JobApply(store)
+        JobApply(store),
+        JobHome(store)
     ]
-
 })
 
 /*  Note: childRoutes can be chunked or otherwise loaded programmatically

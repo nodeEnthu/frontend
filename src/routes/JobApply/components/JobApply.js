@@ -10,6 +10,9 @@ const JobApply = createReactClass({
 	getInitialState() {
 		return{};
 	},
+	componentDidMount() {
+		console.log("coming here");	
+	},
   	render(){
 	    return (
 	    <div className="job-apply">
@@ -21,12 +24,11 @@ const JobApply = createReactClass({
 	                />
 	                <CardText>
 	                  <form className="pure-form">
-	                  	<textarea className="pure-u-1" placeholder="Write something to get this job">
+	                  	<textarea style={{minHeight:'3em'}}className="pure-u-1" placeholder="Write something to get this job">
 	                  	</textarea>
 	                  </form>
 	                </CardText>
 	                <CardActions style={{textAlign:'right'}}>
-	                  <FlatButton label="Decline" />
 	                   <FlatButton primary={true} label="Apply" />
 	                </CardActions>
 	            </Card>

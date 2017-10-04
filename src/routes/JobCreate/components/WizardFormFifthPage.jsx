@@ -4,6 +4,7 @@ import validate from './validate'
 import renderField from './renderField'
 import {RadioButton} from 'material-ui/RadioButton';
 import {Checkbox, RadioButtonGroup} from 'redux-form-material-ui';
+import {JOB_CUISINES} from 'routes/Search/constants/searchFilters'
 
 const renderError = ({ meta: { touched, error } }) =>
   touched && error
@@ -18,12 +19,11 @@ const WizardFormFifthPage = props => {
     <form onSubmit={handleSubmit} className="pure-form pure-form-stacked">
       <div>
         <legend style={{margin: "1em 0"}}>Cuisine(s) interested in (optional):</legend>
-          <Field name="ni" component={Checkbox} label="North-Indian" />
-          <Field name="si" component={Checkbox} label="South-Indian" />
-          <Field name="ch" component={Checkbox} label="Chinese" />
-          <Field name="ve" component={Checkbox} label="Veg" />
-          <Field name="nv" component={Checkbox} label="Non-veg" />
-          <Field name="de" component={Checkbox} label="Desserts" />
+          {
+            JOB_CUISINES.map(function(cuisine,index){
+              return <Field key={cuisine.value} name={cuisine.value} component={Checkbox} label={cuisine.label} />
+            })
+          }
       </div>
       <div style={{textAlign:'center', marginTop:'2em'}}>
         <button type="button" className="pure-button" style={{marginRight:'1em'}}onClick={previousPage}>

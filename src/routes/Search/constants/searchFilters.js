@@ -72,6 +72,14 @@ export function normalizeDateWhileChanging(action, n) {
   return day;
 }
 
+ /*Proceed with caution ... not tested atall*/
+export function normalizeDates(momentDate) {
+  let utcOffset = momentDate.utcOffset();
+  let utcOffsetAction = (utcOffset > 0) ? 'add' : 'subtract';
+  let day = momentDate[utcOffsetAction](utcOffset, 'minutes');
+  return day;
+}
+
 export const DIET_TYPES = [{
   value: 'organic',
   src: 'diets/organic.svg'
@@ -123,7 +131,7 @@ export const CANCEL_REASONS = [
   { value: 6, label: 'Other' }
 ];
 
-export const WEEK_DAYS = [
+export const WEEK_DAYS_JOB = [
   { value: 'mon', label: 'Mon' },
   { value: 'tue', label: 'Tue' },
   { value: 'wed', label: 'Wed' },
@@ -134,7 +142,16 @@ export const WEEK_DAYS = [
 ];
 
 export const MEALS = [
-  { value: 'breakfast', label: 'Breakfast' },
-  { value: 'lunch', label: 'Lunch' },
-  { value: 'dinner', label: 'Dinner' },
+  { value: 'br', label: 'Breakfast' },
+  { value: 'lu', label: 'Lunch' },
+  { value: 'di', label: 'Dinner' },
+]
+
+export const JOB_CUISINES = [
+  { value: 'ni', label: 'North-Indian' },
+  { value: 'si', label: 'South-Indian' },
+  { value: 'ch', label: 'Chinese' },
+  { value: 've', label: 'Veg' },
+  { value: 'nv', label: 'Non-veg' },
+  { value: 'de', label: 'Desserts' }
 ]

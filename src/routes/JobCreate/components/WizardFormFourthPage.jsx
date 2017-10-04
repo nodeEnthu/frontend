@@ -5,7 +5,7 @@ import validate from './validate'
 import renderField from './renderField'
 import {RadioButton} from 'material-ui/RadioButton';
 import {Checkbox, RadioButtonGroup} from 'redux-form-material-ui';
-import {WEEK_DAYS, MEALS} from 'routes/Search/constants/searchFilters';
+import {WEEK_DAYS_JOB, MEALS} from 'routes/Search/constants/searchFilters';
 import createReactClass from 'create-react-class'
 
 const renderError = ({ meta: { touched, error } }) =>
@@ -28,7 +28,7 @@ let WizardFormFourthPage = createReactClass({
           <div>
             <legend style={{margin: "1em 0"}}>Day(s) when you need service</legend>
          {
-            WEEK_DAYS.map(function(weekday,index){
+            WEEK_DAYS_JOB.map(function(weekday,index){
                 return <div key={index} className="pure-u-1-3 pure-u-md-1-6" style={{paddingBottom : '0.25em'}}>
                         <div className="parent-box">
                                 <div className="child-box-1">

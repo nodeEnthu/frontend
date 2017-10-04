@@ -4,7 +4,7 @@ import JobInvite from './routes/JobInvite'
 import JobProposals from './routes/JobProposals'
 
 export default (store) => ({
-  path : '/job/home',
+  path : '/job/:id',
    childRoutes: [
      JobSummary(store),
      JobInvite(store),
