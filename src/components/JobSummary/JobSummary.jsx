@@ -37,58 +37,50 @@ const JobSummary = createReactClass({
       }
     }
     return( 
-            <Card>
-              <CardHeader
-                title="URL Avatar"
-                subtitle="Subtitle"
-                avatar="http://lorempixel.com/400/200/sports/"
-              />
-              <CardText>
-                <Table>
-                  <TableBody displayRowCheckbox={false}>
-                    <TableRow>
-                      <TableRowColumn>Location</TableRowColumn>
-                      <TableRowColumn>
-                        <div>
-                          {jobDetails.address}
-                        </div>
-                        <div>
-                          {jobDetails.addtnlAddressComments}
-                        </div>
-                      </TableRowColumn>
-                    </TableRow>
-                    <TableRow>
-                      <TableRowColumn>Number of people</TableRowColumn>
-                      <TableRowColumn>{jobDetails.partysize}</TableRowColumn>
-                    </TableRow>
-                    <TableRow>
-                      <TableRowColumn>Delivery Type</TableRowColumn>
-                      <TableRowColumn>{jobDetails.serviceType}</TableRowColumn>
-                    </TableRow>
-                    <TableRow>
-                      <TableRowColumn>How often</TableRowColumn>
-                      <TableRowColumn>{jobDetails.frequency}</TableRowColumn>
-                    </TableRow>
-                    <TableRow>
-                      <TableRowColumn>Dates</TableRowColumn>
-                      <TableRowColumn>{jobDetails.start_date} to {jobDetails.end_date}</TableRowColumn>
-                    </TableRow>
-                    <TableRow>
-                      <TableRowColumn>Day(s)</TableRowColumn>
-                      <TableRowColumn>{weekdays.join(' , ')}</TableRowColumn>
-                    </TableRow>
-                    <TableRow>
-                      <TableRowColumn>Meal(s)</TableRowColumn>
-                      <TableRowColumn>{meals.join(' , ')}</TableRowColumn>
-                    </TableRow>
-                    <TableRow>
-                      <TableRowColumn>Cuisines(s)</TableRowColumn>
-                      <TableRowColumn>{cuisines.join(' , ')}</TableRowColumn>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </CardText>
-            </Card>
+            <Table>
+              <TableBody displayRowCheckbox={false}>
+                <TableRow>
+                  <TableRowColumn>Location</TableRowColumn>
+                  <TableRowColumn>
+                    <div>
+                      {jobDetails.address}
+                    </div>
+                    <div>
+                      {jobDetails.addtnlAddressComments}
+                    </div>
+                  </TableRowColumn>
+                </TableRow>
+                <TableRow>
+                  <TableRowColumn>Number of people</TableRowColumn>
+                  <TableRowColumn>{jobDetails.partysize}</TableRowColumn>
+                </TableRow>
+                <TableRow>
+                  <TableRowColumn>Delivery Type</TableRowColumn>
+                  <TableRowColumn>{jobDetails.serviceType}</TableRowColumn>
+                </TableRow>
+                <TableRow>
+                  <TableRowColumn>How often</TableRowColumn>
+                  <TableRowColumn>{jobDetails.frequency}</TableRowColumn>
+                </TableRow>
+                <TableRow>
+                  <TableRowColumn>Dates</TableRowColumn>
+                  <TableRowColumn>{jobDetails.start_date} to {jobDetails.end_date}</TableRowColumn>
+                </TableRow>
+                <TableRow>
+                  <TableRowColumn>Day(s)</TableRowColumn>
+                  <TableRowColumn>{weekdays.join(' , ')}</TableRowColumn>
+                </TableRow>
+                <TableRow>
+                  <TableRowColumn>Meal(s)</TableRowColumn>
+                  <TableRowColumn>{meals.join(' , ')}</TableRowColumn>
+                </TableRow>
+                <TableRow>
+                  <TableRowColumn>Cuisines(s)</TableRowColumn>
+                  <TableRowColumn>{cuisines.join(' , ')}</TableRowColumn>
+                </TableRow>
+              </TableBody>
+            </Table>
+              
           )
   }
 })

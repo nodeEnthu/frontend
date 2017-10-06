@@ -16,6 +16,15 @@ let WizardFormFirstPage =  createReactClass({
     const { handleSubmit, addressVar,place_idVar, change } = this.props
     return (
       <form onSubmit={handleSubmit} className="pure-form pure-form-stacked">
+        <div style={{width:'100%'}}>
+         <legend style={{margin: "1em 0"}}>Title:</legend>
+          <Field
+            name="title"
+            type="text"
+            component={renderField}
+            label="ex: Breakfast and lunch near Gachibowli"
+          />
+        </div>
         <legend style={{margin: "1em 0"}}>Please provide the address where food is required:</legend>
         <AsyncAutocomplete  name={'searchText'}
                             apiUrl = {'/api/locations/addressTypeAssist'}

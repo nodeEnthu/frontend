@@ -6,6 +6,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import './jobInvite.scss';
 import {securedGetCall,securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import { Link } from 'react-router';
+import FlatButton from 'material-ui/FlatButton';
+import ActionThumbUp from 'material-ui/svg-icons/action/thumb-up';
+import {fullWhite} from 'material-ui/styles/colors';
 
 const JobInvite = createReactClass({
 	getInitialState() {
@@ -40,7 +43,7 @@ const JobInvite = createReactClass({
 	},
   	render(){
   		let self = this;
-  		const {disabledInvites} = this.props;
+  		const {disabledInvites, jobDetails} = this.props;
   		const {providers} = this.state;
 	    return (
 	    <div className="job-invite">
@@ -63,13 +66,27 @@ const JobInvite = createReactClass({
 						        <CardText style={{paddingTop:'0.5em', paddingBottom:'0'}}>
 						          {provider.description}
 						        </CardText>
-						        <CardActions style={{textAlign:'right'}}>
-							      <RaisedButton style={{background:'#FFC107', color:'white'}} 
-							      				disabled={(disabledInvites.indexOf(provider._id) > -1)}
-							      				label={(disabledInvites.indexOf(provider._id) > -1)? 'Invited': 'send Invitation'} 
-							      				disabledBackgroundColor="green"
-							      				disabledLabelColor="white"
-							      				onClick={()=>self.sendInvite(provider._id)}/>
+						        <CardActions style={{textAlign:'right', margin:'0 1em 1em 0'}}>
+						        	{
+					                	(jobDetails.applicants.indexOf(provider._id)=== -1)?
+					                	<RaisedButton style={{background:'#FFC107', color:'white'}} 
+						      				disabled={(disabledInvites.indexOf(provider._id) > -1)}
+						      				label={(disabledInvites.indexOf(provider._id) > -1)? 'Invited': 'send Invitation'} 
+						      				disabledBackgroundColor="green"
+						      				disabledLabelColor="white"
+						      				onClick={()=>self.sendInvite(provider._id)}
+							      		/>
+					                	:
+				                		
+									    <FlatButton
+				                		 	label="Applied"
+				                		 	labelPosition="after"
+				                		 	icon={<ActionThumbUp color={fullWhite} />}
+									      	backgroundColor="#a4c639"
+									      	hoverColor="#8AA62F"
+									      	labelStyle={{color:"white"}}
+									    />   
+						            }
 							    </CardActions>
 					      	</Card>
 				})

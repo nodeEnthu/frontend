@@ -11,7 +11,8 @@ const JobCreate = createReactClass({
     // values.end_date  = normalizeDates(values.end_date);
     securedPostCall('/api/job/create', values)
       .then(function(res){
-        self.context.router.push('/job/'+res.data.result._id+'/summary');
+        console.log(res);
+        self.context.router.push('/job/'+res.data._id+'/summary');
       })
   },
   contextTypes: {

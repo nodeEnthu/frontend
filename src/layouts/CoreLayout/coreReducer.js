@@ -150,6 +150,7 @@ const initialState = Map({
         searchText: '',
         place_id: '',
         currency: undefined,
+        phone:'',
         firstTime:''
     }),
     loginModalOPen: undefined,
