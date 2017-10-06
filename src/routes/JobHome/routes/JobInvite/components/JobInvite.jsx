@@ -93,7 +93,7 @@ const JobInvite = createReactClass({
 			}
 			
 	    </div>)
-  }
+  	}
 })
 
 JobInvite.propTypes = {}

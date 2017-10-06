@@ -12,7 +12,7 @@ const JobCreate = createReactClass({
     securedPostCall('/api/job/create', values)
       .then(function(res){
         console.log(res);
-        self.context.router.push('/job/'+res.data._id+'/summary');
+        self.context.router.push('/job/'+res.data._id+'/invite');
       })
   },
   contextTypes: {

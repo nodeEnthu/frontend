@@ -56,6 +56,9 @@ const JobHome = createReactClass({
 			      <li>
 			        <Link to={`/job/${jobId}/proposals`} className={(activeLink === 'proposals')? 'active' : undefined} onClick = {()=>this.changeActiveLink('proposals')}>proposals</Link>
 			      </li>
+			      <li>
+			        <Link to={`/job/${jobId}/hire`} className={(activeLink === 'hire')? 'active' : undefined} onClick = {()=>this.changeActiveLink('hire')}>hire</Link>
+			      </li>
 			    </ul>
 			  </div>
 			</div>
