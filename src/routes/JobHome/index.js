@@ -2,13 +2,15 @@ import { injectReducer } from '../../store/reducers'
 import JobSummary from './routes/JobSummary'
 import JobInvite from './routes/JobInvite'
 import JobProposals from './routes/JobProposals'
+import JobHired from './routes/JobHired'
 
 export default (store) => ({
   path : '/job/:id',
    childRoutes: [
      JobSummary(store),
      JobInvite(store),
-     JobProposals(store)
+     JobProposals(store),
+     JobHired(store)
   ],
   /*  Async getComponent is only invoked when route matches   */
   getComponent (nextState, cb) {

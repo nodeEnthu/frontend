@@ -81,7 +81,6 @@ const JobInvite = createReactClass({
 									    <FlatButton
 				                		 	label="Applied"
 				                		 	labelPosition="after"
-				                		 	icon={<ActionThumbUp color={fullWhite} />}
 									      	backgroundColor="#a4c639"
 									      	hoverColor="#8AA62F"
 									      	labelStyle={{color:"white"}}
