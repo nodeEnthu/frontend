@@ -9,6 +9,7 @@ import { Link } from 'react-router';
 import FlatButton from 'material-ui/FlatButton';
 import ActionThumbUp from 'material-ui/svg-icons/action/thumb-up';
 import {fullWhite} from 'material-ui/styles/colors';
+import ProviderSummaryCard from './../../../components/ProviderSummaryCard'
 
 const JobProposals = createReactClass({
 	getInitialState() {
@@ -49,7 +50,7 @@ const JobProposals = createReactClass({
 	    <div className="job-invite">
 	    	<div className="reco-wrapper">
 				<h3>
-					Job proposals:
+					Providers who applied for this job:
 				</h3>
 			</div>
 			{
@@ -58,15 +59,19 @@ const JobProposals = createReactClass({
 						        <CardHeader
 						          title={<Link to={`/providerProfile/${application._creator._id}`}>{application._creator.title}</Link>}
 						          subtitle={self.resolveAddress(application._creator.fullAddress)}
+						          titleStyle={{textDecoration: 'underline', textDecorationColor: '#FF6F00'}}
 						          avatar={application._creator.imgUrl}
 						          style={{paddingBottom:0}}
 						          onClick={()=>self.context.router.push('/providerProfile/'+application._creator._id)}
 						        >
 						        </CardHeader>
 						        <CardText style={{paddingTop:'0.5em', paddingBottom:'0'}}>
+						        	<ProviderSummaryCard provider={application._creator}/>
+						        </CardText>
+						        <CardText style={{paddingTop:'0.5em', paddingBottom:'0'}}>
 						          {application.coverLetter}
 						        </CardText>
-						        <CardActions style={{textAlign:'right', padding:'0 1em 1em 0', marginBottom:'1em'}}>
+						        <CardActions style={{textAlign:'right', marginBottom:'1em'}}>
 						        	{
 					                	(jobDetails.hirees.indexOf(application._creator._id) >= 0)?
 					                	<FlatButton

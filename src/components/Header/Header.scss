@@ -58,20 +58,6 @@
     background-color: #c00 !important;
   }
 
-  #nav span:after,
-  #sub-nav span:after {
-    width: 0;
-    height: 0;
-    border: 0.313em solid transparent;
-    border-bottom: none;
-    border-top-color: #efa585;
-    content: '';
-    vertical-align: middle;
-    display: inline-block;
-    position: relative;
-    right: -0.313em;
-    /* 5 */
-  }
 
   .frame {
     position: absolute;
@@ -112,12 +98,6 @@
     display: table-cell;
   }
 
-  #nav>ul>li:hover a,
-  #nav>ul:not(:hover)>li.active a,
-  #sub-nav>ul>li:hover a,
-  #sub-nav>ul:not(:hover)>li.active a {
-    background-color: #cc470d;
-  }
   /* second level */
 
   #nav li ul {
@@ -143,11 +123,6 @@
     border-top: 1px solid #e15a1f;
     padding: 0.75em;
     /* 15 (20) */
-  }
-
-  #nav li ul li a:hover,
-  #nav li ul:not(:hover) li.active a {
-    background-color: #e15a1f;
   }
 
   .profile-pic {
@@ -185,6 +160,19 @@
 
   .show-desktop {
     display: block;
+  }
+
+  .show-desktop-inline {
+    display: inline-block;
+  }
+
+  .header-img {
+    width: 40px;
+    img {
+      width: 40px;
+      position: relative;
+      top: 0.5em;
+    }
   }
 
   @media only screen and ( max-width: 62.5em)
@@ -290,6 +278,9 @@
     }
     .logo {
       margin-left: 0em;
+    }
+    .show-desktop-inline {
+      display: none;
     }
     /* nav animation*/
   }

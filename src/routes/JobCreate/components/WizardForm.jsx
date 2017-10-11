@@ -29,12 +29,16 @@ class WizardForm extends Component {
     const { page } = this.state
     return (
       <div className="job-post-container">
-        <h1>Your food requirement</h1>
+        <h1>Your tiffin service requirement:</h1>
         <div className="progress-wrapper">
           <LinearProgress mode="determinate" value={(page) * 20} />
         </div>
         {page === 1 && 
-          <WizardFormFirstPage onSubmit={this.nextPage} />}
+          <WizardFormFirstPage onSubmit={this.nextPage} 
+                                updateUser = {this.props.updateUser} 
+                                globalState = {this.props.globalState} 
+          />
+        }
         {page === 2 &&
           <WizardFormSecondPage
             previousPage={this.previousPage}
@@ -61,7 +65,9 @@ class WizardForm extends Component {
 }
 
 WizardForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  updateUser:PropTypes.func,
+  globalState: PropTypes.object
 }
 
 export default WizardForm

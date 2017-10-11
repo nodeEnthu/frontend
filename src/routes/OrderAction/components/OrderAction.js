@@ -10,7 +10,7 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import {CANCEL_REASONS} from 'routes/Search/constants/searchFilters'
 import * as browserFingerprint from 'browser-fingerprint'
-
+import {normalizeDates, normalizeDateWhileChanging}  from 'routes/Search/constants/searchFilters'
 const OrderAction = createReactClass({
   getInitialState() {
     return{
@@ -96,9 +96,12 @@ const OrderAction = createReactClass({
       for(var key in itemsCheckedOut){
         if(itemsCheckedOut.hasOwnProperty(key)){
           resolvedItemsCheckedOut.push(itemsCheckedOut[key]);
+          console.log(itemsCheckedOut[key].orderDate);
+          console.log(normalizeDates(moment(itemsCheckedOut[key].orderDate)));
         }
       }
     }
+
     return (order && order.itemsCheckedOut)?
           <div className="order-action">
               <div className="checkout-title">{order.orderType +' order at ' + order.orderTime}</div>
@@ -148,7 +151,7 @@ const OrderAction = createReactClass({
                                 <div className="pure-u-1 item-property">
                                   Date
                                 </div>
-                                 <div className="item-wi-desc">{moment(itemCheckedOut.orderDate).format("dd, MMM Do")}</div>
+                                 <div className="item-wi-desc">{normalizeDates(moment(itemCheckedOut.orderDate)).format("dd, MMM Do")}</div>
                               </div>
                             </div>
                             <div className="pure-u-md-1-3 display-none-small">

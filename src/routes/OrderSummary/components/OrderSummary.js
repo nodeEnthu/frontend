@@ -64,7 +64,7 @@ const OrderAction = createReactClass({
                       <div className="pure-u-1-4 order-detail">{order.itemsCheckedOut[key].name}</div>
                       <div className="pure-u-1-4 order-detail">{order.itemsCheckedOut[key].quantity}</div>
                       <div className="pure-u-1-4 order-detail">{order.itemsCheckedOut[key].price}</div>
-                      <div className="pure-u-1-4 order-detail">{moment(order.itemsCheckedOut[key].orderDate).format("ddd, MMM Do")}</div>
+                      <div className="pure-u-1-4 order-detail">{moment.utc(order.itemsCheckedOut[key].orderDate).format("ddd, MMM Do")}</div>
                       <div className="pure-u-1 customer-comments order-detail">
                       {
                         (order.itemsCheckedOut[key].addtnlItemOrderInfo)?

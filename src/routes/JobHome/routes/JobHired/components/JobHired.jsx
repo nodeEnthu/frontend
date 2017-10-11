@@ -9,6 +9,7 @@ import { Link } from 'react-router';
 import FlatButton from 'material-ui/FlatButton';
 import ActionThumbUp from 'material-ui/svg-icons/action/thumb-up';
 import {fullWhite} from 'material-ui/styles/colors';
+import ProviderSummaryCard from './../../../components/ProviderSummaryCard'
 
 const JobHired = createReactClass({
 	getInitialState() {
@@ -24,7 +25,6 @@ const JobHired = createReactClass({
 		let self = this;
 		securedGetCall('/api/job/get/hirees',{jobId:jobDetails._id})
 	  		.then(function(res){
-	  			console.log(res);
 	        	self.setState({hirees: res.data});
 	      	});		
 	},
@@ -51,10 +51,14 @@ const JobHired = createReactClass({
 						          subtitle={self.resolveAddress(hire.fullAddress)}
 						          avatar={hire.imgUrl}
 						          style={{paddingBottom:0}}
+						          titleStyle={{textDecoration: 'underline', textDecorationColor: '#FF6F00'}}
 						          onClick={()=>self.context.router.push('/providerProfile/'+hire._id)}
 						        >
 						        </CardHeader>
-						        <CardActions style={{textAlign:'right', padding:'0 1em 1em 0', marginBottom:'1em'}}>
+						        <CardText style={{paddingTop:'0.5em', paddingBottom:'0'}}>
+						        	<ProviderSummaryCard provider={hire}/>
+						        </CardText>
+						        <CardActions style={{textAlign:'right',marginBottom:'1em'}}>
 				                	<FlatButton
 			                		 	label="Hired"
 			                		 	labelPosition="after"

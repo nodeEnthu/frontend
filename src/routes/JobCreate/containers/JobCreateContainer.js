@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { increment, doubleAsync } from '../modules/jobCreate'
+import { updateUser} from 'layouts/CoreLayout/coreReducer'
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -18,6 +19,8 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state) => ({
+  globalState: state,
+  updateUser,
   counter : state.jobCreate
 })
 

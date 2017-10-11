@@ -113,7 +113,7 @@ const HomeView = createReactClass({
 				<div className="splash-container pure-override-letter-spacing">
                     <div className="banner-wrapper">
                         <h1 className="promotion-heading">
-                            Find the best cooks in your neighborhood
+                            Find the best chefs in your neighborhood
                         </h1>
                         <div className="search-sec-wrapper">
                             <div className = "pure-u-1 pure-u-md-1-3 search-wrapper">
@@ -225,7 +225,7 @@ const HomeView = createReactClass({
                                     Step 1 - <span className="step-summary">Create Profile</span>
                                 </div>
                                 <div className="step-text">
-                                    Click "BECOME A COOK" on top nav bar
+                                    Click "BECOME A CHEF" on top nav bar
                                 </div>
                             </div>
                         </div>

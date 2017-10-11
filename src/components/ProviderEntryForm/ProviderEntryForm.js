@@ -44,6 +44,7 @@ const ProviderEntryForm = createReactClass({
     },
     mapFieldsToValidationType : {
         title: {validationType: required,validationMessage:'title is required'},
+        imgUrl: {validationType: required,validationMessage:'image is required'},
         email: {validationType:email,validationMessage:'email is required'},
         description: {validationType:maxLength,validationMessage:'description is required'},
         searchText:{validationType:required,validationMessage:'address is required'},
@@ -160,7 +161,7 @@ const ProviderEntryForm = createReactClass({
         }
     },
     render() {
-        let {chars_left, title, description, email,phone,imgUrl, code, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg,phoneErrorMsg, methodsOfPayment, keepAddressPrivateFlag,serviceOffered,addtnlComments, includeAddressInEmail,deliveryMinOrder,deliveryRadius,providerAddressJustificationModalOpen,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg,snackBarOpen,snackBarMessage } = this.props.providerEntryForm.toJS();
+        let {chars_left, title,imgUrlErrorMsg, description, email,phone,imgUrl, code, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg,phoneErrorMsg, methodsOfPayment, keepAddressPrivateFlag,serviceOffered,addtnlComments, includeAddressInEmail,deliveryMinOrder,deliveryRadius,providerAddressJustificationModalOpen,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg,snackBarOpen,snackBarMessage } = this.props.providerEntryForm.toJS();
         methodsOfPayment = methodsOfPayment || [];
         let self = this;
         switch(serviceOffered){
@@ -187,6 +188,8 @@ const ProviderEntryForm = createReactClass({
                         initialImgUrl={imgUrl}
                     />
                 </div>
+                <div className = "error-message">{(imgUrlErrorMsg)?'* please upload an image of your business':undefined}</div>
+
                 <form className="pure-form pure-form-stacked">
                     <fieldset>
                         <input value={title} type="text" className="pure-u-1" placeholder="*your business name " name="title" 

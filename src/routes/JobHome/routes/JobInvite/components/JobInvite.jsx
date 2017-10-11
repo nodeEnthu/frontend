@@ -9,11 +9,12 @@ import { Link } from 'react-router';
 import FlatButton from 'material-ui/FlatButton';
 import ActionThumbUp from 'material-ui/svg-icons/action/thumb-up';
 import {fullWhite} from 'material-ui/styles/colors';
-
+import {METHODS_OF_PAYMENT} from 'components/ProviderEntryForm/constants'
+import ProviderSummaryCard from './../../../components/ProviderSummaryCard'
 const JobInvite = createReactClass({
 	getInitialState() {
 		return{
-			providers:[],
+			providers:[]		
 		};
 	},
 	contextTypes: {
@@ -41,6 +42,7 @@ const JobInvite = createReactClass({
 				}
 			})
 	},
+	
   	render(){
   		let self = this;
   		const {disabledInvites, jobDetails} = this.props;
@@ -57,22 +59,23 @@ const JobInvite = createReactClass({
 					return <Card key={provider._id} >
 						        <CardHeader
 						          title={<Link to={`/providerProfile/${provider._id}`}>{provider.title}</Link>}
-						          subtitle={self.resolveAddress(provider.shortAddress) +' '+ provider.distance.toFixed(2) +' kms away'}
+						          subtitle={self.resolveAddress(provider.fullAddress)}
+						          titleStyle={{textDecoration: 'underline', textDecorationColor: '#FF6F00'}}
 						          avatar={provider.imgUrl}
 						          style={{paddingBottom:0}}
 						          onClick={()=>self.context.router.push('/providerProfile/'+provider._id)}
 						        >
 						        </CardHeader>
 						        <CardText style={{paddingTop:'0.5em', paddingBottom:'0'}}>
-						          {provider.description}
+						        	<ProviderSummaryCard provider={provider}/>
 						        </CardText>
-						        <CardActions style={{textAlign:'right', margin:'0 1em 1em 0'}}>
+						        <CardActions style={{textAlign:'right'}}>
 						        	{
 					                	(jobDetails.applicants.indexOf(provider._id)=== -1)?
 					                	<RaisedButton style={{background:'#FFC107', color:'white'}} 
 						      				disabled={(disabledInvites.indexOf(provider._id) > -1)}
-						      				label={(disabledInvites.indexOf(provider._id) > -1)? 'Invited': 'send Invitation'} 
-						      				disabledBackgroundColor="green"
+						      				label={(disabledInvites.indexOf(provider._id) > -1)? 'Invited': 'Invite'} 
+						      				disabledBackgroundColor="#29B6F6"
 						      				disabledLabelColor="white"
 						      				onClick={()=>self.sendInvite(provider._id)}
 							      		/>
@@ -81,8 +84,8 @@ const JobInvite = createReactClass({
 									    <FlatButton
 				                		 	label="Applied"
 				                		 	labelPosition="after"
-									      	backgroundColor="#a4c639"
-									      	hoverColor="#8AA62F"
+									      	backgroundColor="#FDD835"
+									      	hoverColor="#FBC02D"
 									      	labelStyle={{color:"white"}}
 									    />   
 						            }

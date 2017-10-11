@@ -11,6 +11,10 @@ import {
   TableRowColumn
 } from 'material-ui/Table';
 
+const styles = {
+  labelSettings:{width:'30%', padding:0,whiteSpace:'normal'},
+  descSettings:{ paddingLeft:'0.5em', whiteSpace:'normal'}
+}
 const JobSummary = createReactClass({
   componentDidMount() {
 
@@ -40,8 +44,8 @@ const JobSummary = createReactClass({
             <Table>
               <TableBody displayRowCheckbox={false}>
                 <TableRow>
-                  <TableRowColumn>Location</TableRowColumn>
-                  <TableRowColumn>
+                  <TableRowColumn style={styles.labelSettings}>Location:</TableRowColumn>
+                  <TableRowColumn style={styles.descSettings}>
                     <div>
                       {jobDetails.address}
                     </div>
@@ -51,32 +55,28 @@ const JobSummary = createReactClass({
                   </TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn>Number of people</TableRowColumn>
-                  <TableRowColumn>{jobDetails.partysize}</TableRowColumn>
+                  <TableRowColumn style={styles.labelSettings}>Number of people:</TableRowColumn>
+                  <TableRowColumn style = {styles.descSettings}>{jobDetails.partysize}</TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn>Delivery Type</TableRowColumn>
-                  <TableRowColumn>{jobDetails.serviceType}</TableRowColumn>
+                  <TableRowColumn style={styles.labelSettings}>Delivery Type:</TableRowColumn>
+                  <TableRowColumn style={styles.descSettings}>{jobDetails.serviceType}</TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn>How often</TableRowColumn>
-                  <TableRowColumn>{jobDetails.frequency}</TableRowColumn>
+                  <TableRowColumn style={styles.labelSettings}>Dates:</TableRowColumn>
+                  <TableRowColumn style={styles.descSettings}>{jobDetails.start_date} to {jobDetails.end_date}</TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn>Dates</TableRowColumn>
-                  <TableRowColumn>{jobDetails.start_date} to {jobDetails.end_date}</TableRowColumn>
+                  <TableRowColumn style={styles.labelSettings}>Day(s):</TableRowColumn>
+                  <TableRowColumn style={styles.descSettings}>{weekdays.join(' , ')}</TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn>Day(s)</TableRowColumn>
-                  <TableRowColumn>{weekdays.join(' , ')}</TableRowColumn>
+                  <TableRowColumn style={styles.labelSettings}>Meal(s):</TableRowColumn>
+                  <TableRowColumn style={styles.descSettings}>{meals.join(' , ')}</TableRowColumn>
                 </TableRow>
                 <TableRow>
-                  <TableRowColumn>Meal(s)</TableRowColumn>
-                  <TableRowColumn>{meals.join(' , ')}</TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn>Cuisines(s)</TableRowColumn>
-                  <TableRowColumn>{cuisines.join(' , ')}</TableRowColumn>
+                  <TableRowColumn style={styles.labelSettings}>Cuisine(s):</TableRowColumn>
+                  <TableRowColumn style={styles.descSettings}>{cuisines.join(' , ')}</TableRowColumn>
                 </TableRow>
               </TableBody>
             </Table>

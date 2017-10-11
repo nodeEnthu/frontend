@@ -18,7 +18,7 @@ import Dialog from 'material-ui/Dialog';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
-
+import MapsRestaurantMenu from 'material-ui/svg-icons/maps/restaurant-menu'
 
 const Header =createReactClass ({
     getInitialState() {
@@ -48,13 +48,20 @@ const Header =createReactClass ({
     contextTypes: {
       router: PropTypes.object.isRequired 
     },
-    checkLoginAndredirect(){
+    checkLoginAndredirect(action){
       const {user} = this.props.globalState.core.toJS();
       if (user && user._id){
-        this.context.router.push('/provider/'+user._id+'/providerProfileEntry' )
+        switch(action){
+          case 'providerProfileEntry':
+            this.context.router.push('/provider/'+user._id+'/providerProfileEntry') ;
+            break;
+          case 'postTiffinRequirement':
+            this.context.router.push('/job/create') ;
+            break;
+        }
       }
       else{
-        this.props.dispatch(actions.postLoginUrlRedirect('providerProfileEntry'));
+        this.props.dispatch(actions.postLoginUrlRedirect(action));
         this.props.dispatch(actions.openLoginModal());
       }
       this.setState({leftNavOpen:false});
@@ -144,7 +151,14 @@ const Header =createReactClass ({
                   }
                   {((user && (user.userType === 'consumer' || !user.published)) || !globalState.core.get('token').length)?
                     <MenuItem leftIcon={<ActionPermIdentity/>} onTouchTap={this.checkLoginAndredirect}>
-                        Become a cook
+                        Become a chef
+                    </MenuItem>
+                    :
+                    undefined
+                  }
+                  {((user && (user.userType === 'consumer' || !user.published)) || !globalState.core.get('token').length)?
+                    <MenuItem leftIcon={<MapsRestaurantMenu/>} onTouchTap={this.checkLoginAndredirect}>
+                        Post food need
                     </MenuItem>
                     :
                     undefined
@@ -167,8 +181,21 @@ const Header =createReactClass ({
                          } 
                       </li>
                       {(!globalState.core.get('token').length || (user && user.published === false))?
-                        <li onClick={this.checkLoginAndredirect}>
-                            <a style={{padding: (globalState.core.get('token').length)? '0 4em': '0 0.75em'}} href="javascript:void(0)">Become a cook</a>
+                        <li onClick={()=>this.checkLoginAndredirect('providerProfileEntry')}>
+                            <a className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0 4em 0 2em': '0 0.75em'}} href="javascript:void(0)" className="display-none-small">
+                              <span className="show-desktop-inline"style={{position: 'relative',bottom: '1em'}}>Become a chef</span>
+                              <img style={{lineHeight:'0'}} className="header-img" src="/general/chef.png"/>
+                            </a>
+                        </li>
+                        :
+                        undefined
+                      }
+                      {(user && user.published === false)?
+                        <li onClick={()=>this.checkLoginAndredirect('postTiffinRequirement')}>
+                            <a className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0': '0 0.75em'}} href="javascript:void(0)" className="display-none-small">
+                              <span className="show-desktop-inline"style={{position: 'relative',bottom: '1em'}}>Post your tiffin requirement</span>
+                              <img style={{lineHeight:'0'}} className="header-img" src="/general/tiffin.png"/>
+                            </a>
                         </li>
                         :
                         undefined
@@ -268,7 +295,6 @@ const Header =createReactClass ({
                       </div>
                     </Dialog>
                   </div>
-
               </AppBar>
                 
         );

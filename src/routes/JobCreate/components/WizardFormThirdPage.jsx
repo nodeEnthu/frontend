@@ -13,20 +13,11 @@ let WizardFormThirdPage =  createReactClass({
     return{};
   },
   render(){
-    const { handleSubmit, pristine, previousPage, how_frequent,submitting,start_date, end_date,date,change } = this.props;
+    const { handleSubmit, pristine, previousPage,submitting,start_date, end_date ,change } = this.props;
     return (
       <form onSubmit={handleSubmit} className="pure-form pure-form-stacked">
         <div>
-          <legend style={{margin: "1em 0"}}>How often do you want it:</legend>
-          <Field name="frequency" component={RadioButtonGroup}>
-            <RadioButton value="once" label="One time" />
-            <RadioButton value="weekly" label="Recurring" />
-          </Field>
-        </div>
-        <div>
           <legend style={{margin: "1em 0"}}>Select date(s):</legend>
-          {
-            (how_frequent === "weekly")?
             <DateRangePicker
               startDate={start_date} 
               endDate={end_date} 
@@ -39,16 +30,6 @@ let WizardFormThirdPage =  createReactClass({
               onFocusChange={focusedInput => this.setState({ focusedInput })} 
               numberOfMonths={1}
             />
-            :
-            <SingleDatePicker
-              date={date} 
-              onDateChange={date => change('date', date)} 
-              focused={this.state.focused} 
-              onFocusChange={({ focused }) => this.setState({ focused })}
-              numberOfMonths={1}
-            />
-          }
-         
         </div>
         <div style={{textAlign:'center', marginTop:'2em'}}>
           <button type="button" className="pure-button" style={{marginRight:'1em'}} onClick={previousPage}>
@@ -68,23 +49,20 @@ WizardFormThirdPage = reduxForm({
   form: 'wizard', // a unique identifier for this form
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true, // <------ unregister fields on unmount
-  validate,
+  validate
 })(WizardFormThirdPage)
 
 // Decorate with connect to read form values
 const selector = formValueSelector('wizard') // <-- same as form name
 WizardFormThirdPage = connect(state => {
   // can select values individually
-  const how_frequent = selector(state, 'frequency');
   const start_date = selector(state, 'start_date');
   const end_date = selector(state, 'end_date');
-  const date = selector(state, 'date');
   // or together as a group
   return {
-    how_frequent,
     start_date,
     end_date,
-    date
+    state
   }
 })(WizardFormThirdPage)
 

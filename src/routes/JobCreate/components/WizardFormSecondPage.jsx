@@ -19,7 +19,7 @@ let WizardFormSecondPage = props => {
   return (
     <form onSubmit={handleSubmit} className="pure-form pure-form-stacked">
      <div style={{width:'100%'}}>
-         <legend style={{margin: "1em 0"}}>Number of people:</legend>
+        <legend style={{margin: "1em 0"}}>Number of tiffins:</legend>
         <Field
           name="partysize"
           type="text"
@@ -30,9 +30,8 @@ let WizardFormSecondPage = props => {
       <div>
         <legend style={{margin: "1em 0"}}>Delivery type:</legend>
         <Field name="serviceType" component={RadioButtonGroup}>
-          <RadioButton value="pickup" label="Pickup" />
           <RadioButton value="delivery" label="Delivery" />
-          <RadioButton value="any" label="Pickup or delivery" />
+          <RadioButton value="pickup" label="Pickup" />
         </Field>
       </div>
       <div style={{textAlign:'center', marginTop:'2em'}}>

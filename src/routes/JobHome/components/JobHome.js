@@ -11,18 +11,24 @@ import {securedGetCall} from 'utils/httpUtils/apiCallWrapper';
 const JobHome = createReactClass({
 	getInitialState() {
 		return{
-			activeLink:'invite',
-			jobDetails:undefined,
+			activeLink:'',
+			jobDetails:'',
 			disabledInvites:[]
 		};
 	},
 	componentDidMount() {
 		let self = this;
+		let parts = this.context.router.getCurrentLocation().pathname.split("/");
+		let action = parts[parts.length - 1]; 
+		this.setState({activeLink:action});
 		securedGetCall('/api/job/'+this.props.params.id)
       		.then(function(res){
 	        	self.setState({jobDetails: res.data.job, disabledInvites : res.data.job.invitees});
 	      	});	
 	},
+	contextTypes: {
+        router: PropTypes.object.isRequired
+    },
 	changeActiveLink(link){
 		this.setState({activeLink:link});
 	},
@@ -41,7 +47,7 @@ const JobHome = createReactClass({
 	    <div className="job-home">
 	    	<div className="heading-title">
 	    		<h1>
-	    			Need organic home made food
+	    			{jobDetails.title}
 	    		</h1>
 	    	</div>
 			<div className='breadcrumbs'>

@@ -63,6 +63,7 @@ const OrderSubmitModal = createReactClass({
         // by default checkout quantity as one
         let quantity = itemsCheckedOut[key].quantity || 1;
         grandTotal = grandTotal + parseInt(itemsCheckedOut[key].price * parseInt(quantity));
+        console.log(itemsCheckedOut[key].orderDate);
       }
     };
     // make the checkout object here to be submitted once submit is clicked
@@ -165,7 +166,7 @@ const OrderSubmitModal = createReactClass({
                 <div className="pure-u-1-4 order-detail">{itemCheckedOut.name}</div>
                 <div className="pure-u-1-4 order-detail">{itemCheckedOut.quantity}</div>
                 <div className="pure-u-1-4 order-detail">{itemCheckedOut.price}</div>
-                <div className="pure-u-1-4 order-detail">{moment(itemCheckedOut.orderDate).format("ddd, MMM Do")}</div>
+                <div className="pure-u-1-4 order-detail">{moment.utc(itemCheckedOut.orderDate).format("ddd, MMM Do")}</div>
                 <div className="pure-u-1 customer-comments order-detail">
                 {
                   (itemCheckedOut.addtnlItemOrderInfo)?

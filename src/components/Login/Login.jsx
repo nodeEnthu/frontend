@@ -52,24 +52,25 @@ var Login = createReactClass({
                   dispatch(actions.updateUser('place_id',userSearchAndPlaceId.placeId));
                   // initialize one signal here .. 
                   //but first get the appId dependent upon the environment
-                  initializeOneSignal(envVars.oneSignalAppId);
-                  // check where is user right now .. if they currently on home page do some trickery
-                  if(self.context.router.location.pathname === '/'){
-                    // get the path to redirect to
-                    let redirectPath = globalState.core.get('postLoginUrlRedirect');
-                    if(redirectPath){
-                      // special treatment for first time provider entry here as we dont know the objectID
-                      redirectPath = (redirectPath ==='providerProfileEntry')? '/provider/'+res.user._id+'/providerProfileEntry':redirectPath;
-                      self.context.router.push(redirectPath);
-                      // reset it back to ''
-                      dispatch(actions.postLoginUrlRedirect(''));
-                    } else{
-                      // now based on the userType take an action
-                      if (res.user.userType === 'provider'){
-                         self.context.router.push('/providerProfile/'+res.user._id);
-                      }
+                  initializeOneSignal(envVars.oneSignalAppId);              
+                  // get the path to redirect to
+                  let redirectPath = globalState.core.get('postLoginUrlRedirect');
+                  if(redirectPath){
+                    // special treatment for first time provider entry here as we dont know the objectID
+                    switch(redirectPath){
+                      case 'providerProfileEntry':
+                        redirectPath = '/provider/'+res.user._id+'/providerProfileEntry';
+                        break;
+                      case 'postTiffinRequirement':
+                        redirectPath= '/job/create';
+                        break;
+
                     }
-                  } 
+                    self.context.router.push(redirectPath);
+                    // reset it back to empty
+                    dispatch(actions.postLoginUrlRedirect(''));
+                  }
+                  
               }
           })
     },

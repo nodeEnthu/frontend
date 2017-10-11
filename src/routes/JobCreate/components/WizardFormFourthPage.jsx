@@ -20,30 +20,26 @@ let WizardFormFourthPage = createReactClass({
     return{}
   },
   render(){
-     const { handleSubmit, previousPage, how_frequent } = this.props;
+     const { handleSubmit, previousPage } = this.props;
      return (
       <form onSubmit={handleSubmit} className="pure-form pure-form-stacked">
+        <div>
+          <legend style={{margin: "1em 0"}}>Day(s) when you need service</legend>
         {
-          (how_frequent === 'weekly')?
-          <div>
-            <legend style={{margin: "1em 0"}}>Day(s) when you need service</legend>
-         {
-            WEEK_DAYS_JOB.map(function(weekday,index){
-                return <div key={index} className="pure-u-1-3 pure-u-md-1-6" style={{paddingBottom : '0.25em'}}>
-                        <div className="parent-box">
-                                <div className="child-box-1">
-                                    {weekday.label}
-                                </div>
-                                <div className="child-box-2">
-                                    <Field name={weekday.value} component={Checkbox}/>
-                                </div>
-                            </div>
-                        </div>
-            })
-          }
-          </div>
-          : undefined
+          WEEK_DAYS_JOB.map(function(weekday,index){
+              return <div key={index} className="pure-u-1-3 pure-u-md-1-6" style={{paddingBottom : '0.25em'}}>
+                      <div className="parent-box">
+                              <div className="child-box-1">
+                                  {weekday.label}
+                              </div>
+                              <div className="child-box-2">
+                                  <Field name={weekday.value} component={Checkbox}/>
+                              </div>
+                          </div>
+                      </div>
+          })
         }
+        </div>
         <legend style={{margin: "1em 0"}}>Select meal(s) for each day</legend>
         <div>
           {
@@ -86,10 +82,5 @@ WizardFormFourthPage = reduxForm({
 const selector = formValueSelector('wizard') // <-- same as form name
 WizardFormFourthPage = connect(state => {
   // can select values individually
-  const how_frequent = selector(state, 'frequency');
-  // or together as a group
-  return {
-    how_frequent
-  }
 })(WizardFormFourthPage)
 export default WizardFormFourthPage

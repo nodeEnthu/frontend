@@ -41,43 +41,37 @@ export function DATES(n, format, action) {
   let day;
   // return today and six more days
   for (var i = 0; i < n; i++) {
-    let currentDate = moment(new Date());
-    let utcOffset = currentDate.utcOffset();
-    let utcOffsetAction = (utcOffset > 0) ? 'add' : 'subtract';
+    let date = new Date();
+    // this will take us to "2017-10-11T00:00:00.000Z" format 
+    day = moment.utc([date.getFullYear(), date.getMonth(), date.getDate()]);
     if (action === 'add') {
-      day = moment(new Date()).add(i, "days").startOf('day');
+      day = day.add(i, "days");
     } else {
-      day = moment(new Date()).subtract(i, "days").startOf('day');
+      day = day.subtract(i, "days");
     }
-    day = day[utcOffsetAction](utcOffset, 'minutes');
     result.push({
       value: day.toISOString(),
       title: day.format(format)
     })
   }
+  console.log(result);
   return result;
 }
 
 export function normalizeDateWhileChanging(action, n) {
-  let day;
-  let currentDate = moment(new Date());
-  let utcOffset = currentDate.utcOffset();
-  let utcOffsetAction = (utcOffset > 0) ? 'add' : 'subtract';
+  let day, date = new Date();
+  day = moment.utc([date.getFullYear(), date.getMonth(), date.getDate()]);
   if (action === 'add') {
-    day = moment(new Date()).add(n, "days").startOf('day');
+    day = day.add(n, "days");
   } else {
-    day = moment(new Date()).subtract(n, "days").startOf('day');
+    day = day.subtract(n, "days");
   }
-  day = day[utcOffsetAction](utcOffset, 'minutes');
   return day;
 }
 
- /*Proceed with caution ... not tested atall*/
-export function normalizeDates(momentDate) {
-  let utcOffset = momentDate.utcOffset();
-  let utcOffsetAction = (utcOffset > 0) ? 'add' : 'subtract';
-  let day = momentDate[utcOffsetAction](utcOffset, 'minutes');
-  return day;
+/*Proceed with caution ... not tested atall*/
+export function normalizeDates(date) {
+  return moment.utc([date.getFullYear(), date.getMonth(), date.getDate()]);
 }
 
 export const DIET_TYPES = [{
@@ -148,10 +142,6 @@ export const MEALS = [
 ]
 
 export const JOB_CUISINES = [
-  { value: 'ni', label: 'North-Indian' },
-  { value: 'si', label: 'South-Indian' },
-  { value: 'ch', label: 'Chinese' },
   { value: 've', label: 'Veg' },
   { value: 'nv', label: 'Non-veg' },
-  { value: 'de', label: 'Desserts' }
 ]

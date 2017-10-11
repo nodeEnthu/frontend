@@ -71,7 +71,7 @@ class AsyncAutocomplete extends React.Component {
         const {suggestions} = this.state;
         const inputProps = {
             name:this.props.name,
-            placeholder: "Your street address",
+            placeholder: "Your address",
             value:this.props.userSearchText || '',
             onChange: this.props.onChange,
             onFocus:this.props.onFocus || undefined,

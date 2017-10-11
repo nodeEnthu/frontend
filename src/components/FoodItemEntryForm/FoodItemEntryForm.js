@@ -38,6 +38,12 @@ const FoodItemEntryForm= createReactClass({
         this.scrollToElement('food-item-container');
         if(this.props.params.foodId){
             this.props.fetchData('/api/foodItem/'+this.props.params.foodId , 'foodItemCall','FOOD_ITEM')
+        }else{
+            const {user} = this.props.globalState.core.toJS();
+            if(user.foodItems.length >0){
+                this.props.addFoodItemInfo({storeKey:'snackBarOpen',payload:true});
+                this.props.addFoodItemInfo({storeKey:'snackBarMessage',payload:'Item added to menu'});
+            }
         }
     },
     scrollToElement(elementClassName){
@@ -57,6 +63,7 @@ const FoodItemEntryForm= createReactClass({
         name: required,
         description:required,
         placeOrderBy: required,
+        imgUrl:required,
         cuisineType: required,
         price:requiredInteger
     },
@@ -163,17 +170,14 @@ const FoodItemEntryForm= createReactClass({
                 if(addAnother){
                     // show the snackbar, turn the spinner off and dont go to the next page
                     self.setState({showSpinner:false});
-                    self.props.addFoodItemInfo({storeKey:'snackBarOpen',payload:true});
-                    self.props.addFoodItemInfo({storeKey:'snackBarMessage',payload:'Item added to menu'});
-                    //scroll to the top
-                    self.scrollToElement('food-item-container');
+                    location.reload();
                 } else self.onAllClear();
             })
     },
     render() {
         let {user} = this.props.globalState.core.toJS();
         let self = this;
-        let { name,imgUrl,nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg,price,priceErrorMsg,descriptionErrorMsg,placeOrderBy, placeOrderByErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting,snackBarOpen,snackBarMessage} = this.props.foodItemEntryForm.toJS();
+        let { name,imgUrl,imgUrlErrorMsg, nameErrorMsg, description, cuisineType,cuisineTypeErrorMsg,price,priceErrorMsg,descriptionErrorMsg,placeOrderBy, placeOrderByErrorMsg, pickUpStartTime, pickUpEndTime, organic, vegetarian, glutenfree, lowcarb, vegan, nutfree, oilfree, nondairy, indianFasting,snackBarOpen,snackBarMessage} = this.props.foodItemEntryForm.toJS();
         return (
             <div className="food-item-entry">
                 <div className="food-item-container">
@@ -185,6 +189,7 @@ const FoodItemEntryForm= createReactClass({
                             onImageUploadStart = {this.onImageUploadStart}
                         />
                     </div>
+                    <div className = "error-message">{(imgUrlErrorMsg)?'*'+'Please upload an image':undefined}</div>
                     <form className="pure-form pure-form-stacked ">
                         <fieldset>
                             <div>
