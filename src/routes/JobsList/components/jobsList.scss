@@ -1,5 +1,11 @@
 .jobs-list {
   padding: 1em;
+  .empty-page-container{
+    margin:0 auto;
+    padding:3em;
+    width:100%;
+    text-align:center;
+  }
   h2 {
     font-size: 125%;
     font-weight: 400;
@@ -19,15 +25,22 @@
   .job-container {
     margin-bottom: 0.5em;
     padding:1em;
-    text-align:center;
   }
   .job-heading {
     padding: 0.5em;
     font-size:105%;
     border-bottom: 1px solid silver;
+    /*span{
+        padding:2px;
+        border-bottom: 1px solid #FF6F00;
+        line-height:2em;
+    }*/
   }
   .job-sub-heading {
     padding-top:0.5em;
     padding-bottom: 0.25em;
+  }
+  .job-attr-desc{
+    color:#FF6F00;
   }
 }

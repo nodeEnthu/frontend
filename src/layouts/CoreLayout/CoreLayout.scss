@@ -1,12 +1,15 @@
 .mainContainer {}
 
+.footer-wrapper {
+    width:100%;
+    text-align:left;
+}
 .footer {
     background: #ff5f5f5;
 }
 
 .container {
     margin: 0 auto;
-    background: #ff5f5f5;
 }
 
 .content {
@@ -15,15 +18,16 @@
     }
 }
 
-.footer-wrapper {}
 
-.footer {
-    margin: 0 auto;
+@media (max-width: 53em) {
+    .content{
+        min-height:500px;
+    }
 }
+
 
 @media (min-width: 1330px) {
     /* We increase the header font size even more */
-    
     .footer {
         width: 70%;
     }

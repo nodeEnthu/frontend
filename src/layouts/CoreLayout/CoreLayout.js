@@ -15,7 +15,7 @@ export const CoreLayout = ({ children }) => (
     <div className="footer-wrapper">
       <div className="footer">
         <div className="pure-menu pure-menu-horizontal">
-          <ul>
+          <ul className="pure-menu-list">
               <li className="pure-menu-item"><a href="/termsandconditions" className="pure-menu-link">Terms and conditions</a></li>
               <li className="pure-menu-item"><a href="mailto:support@spoonandspanner.com" className="pure-menu-link">Contact-us</a></li>
           </ul>

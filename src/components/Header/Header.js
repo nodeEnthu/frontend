@@ -142,23 +142,25 @@ const Header =createReactClass ({
                     :
                     undefined
                   }
-                  {(globalState.core.get('token').length>0 )?
-                    <MenuItem leftIcon={<ActionPowerSettingsNew/>}>
-                        <a onClick = {this.removeToken}>Logout</a>
+                 
+                 
+                  {((user && (user.userType === 'consumer' || !user.published)) || !globalState.core.get('token').length)?
+                    <MenuItem leftIcon={<img src="/general/tiffin_outline.png"/>} onTouchTap={()=>this.goToPage('/jobs/list')}>
+                        Tiffin posts
                     </MenuItem>
                     :
                     undefined
                   }
-                  {((user && (user.userType === 'consumer' || !user.published)) || !globalState.core.get('token').length)?
+                   {((user && (user.userType === 'consumer' || !user.published)) || !globalState.core.get('token').length)?
                     <MenuItem leftIcon={<ActionPermIdentity/>} onTouchTap={this.checkLoginAndredirect}>
                         Become a chef
                     </MenuItem>
                     :
                     undefined
                   }
-                  {((user && (user.userType === 'consumer' || !user.published)) || !globalState.core.get('token').length)?
-                    <MenuItem leftIcon={<MapsRestaurantMenu/>} onTouchTap={this.checkLoginAndredirect}>
-                        Post food need
+                   {(globalState.core.get('token').length>0 )?
+                    <MenuItem leftIcon={<ActionPowerSettingsNew/>}>
+                        <a onClick = {this.removeToken}>Logout</a>
                     </MenuItem>
                     :
                     undefined
@@ -182,7 +184,7 @@ const Header =createReactClass ({
                       </li>
                       {(!globalState.core.get('token').length || (user && user.published === false))?
                         <li onClick={()=>this.checkLoginAndredirect('providerProfileEntry')}>
-                            <a className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0 4em 0 2em': '0 0.75em'}} href="javascript:void(0)" className="display-none-small">
+                            <a className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0 4em 0 1em': '0 0.75em'}} href="javascript:void(0)" className="display-none-small">
                               <span className="show-desktop-inline"style={{position: 'relative',bottom: '1em'}}>Become a chef</span>
                               <img style={{lineHeight:'0'}} className="header-img" src="/general/chef.png"/>
                             </a>

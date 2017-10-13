@@ -7,7 +7,7 @@ import {WEEK_DAYS_JOB, MEALS, JOB_CUISINES} from 'routes/Search/constants/search
 import PropTypes from 'prop-types';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-
+import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 
 const styles = {
@@ -50,34 +50,47 @@ const JobsList = createReactClass({
     let self = this;
     return(
         <div className="jobs-list">
-          <h2>
-            Your jobs list
-          </h2>
-          <div className="create-job-button">
-            <FloatingActionButton onClick={()=>this.context.router.push('/job/create')}
-            >
-              <ContentAdd />
-            </FloatingActionButton>
-          </div>
+          {
+            (jobsList.length>0)?
+            <div>
+              <h2>
+                Your tiffin requirements
+              </h2>
+              <div className="create-job-button">
+                <FloatingActionButton onClick={()=>this.context.router.push('/job/create')}
+                >
+                  <ContentAdd />
+                </FloatingActionButton>
+              </div>
+            </div>
+            :
+            <div className="empty-page-container" onClick={()=>self.context.router.push('/job/create')}>
+              <p>
+                Oops you have no tiffin requirements posted here. Get started by posting one !
+              </p>
+              <RaisedButton label="Get Started" style={{marginBottom:'1em'}} />
+              <img style={{width:'100%'}} src="/general/man_eating_pasta.jpg"/>
+            </div>
+          }
           <div className="list-wrapper">
             {
               jobsList.map(function(job,index){
-                return <Paper key = {index+' job'} className="job-container" onClick={()=>self.context.router.push(`/job/${job._id}/invite`)}>
-                          <div className="job-heading">
+                return <Paper key = {index+' job'} className="job-container">
+                          <div className="job-heading" onClick={()=>self.context.router.push(`/job/${job._id}/summary`)}>
                             <span>{self.createTitle(job)}</span>
                           </div>
                           <div className="container pure-g">
-                            <div className="column pure-u-1-3">
+                            <div className="column pure-u-1-3" onClick={()=>self.context.router.push(`/job/${job._id}/invite`)}>
                               <div className= "job-sub-heading">Invites</div>
-                              <div>{job.invitees.length}</div>
+                              <div className="job-attr-desc">{job.invitees.length}</div>
                             </div>
-                            <div className="column pure-u-1-3">
+                            <div className="column pure-u-1-3" onClick={()=>self.context.router.push(`/job/${job._id}/proposals`)}>
                               <div className= "job-sub-heading">Proposals</div>
-                              <div>{job.applicants.length}</div>
+                              <div className="job-attr-desc">{job.applicants.length}</div>
                             </div>
-                            <div className="column pure-u-1-3">
+                            <div className="column pure-u-1-3" onClick={()=>self.context.router.push(`/job/${job._id}/hired`)}>
                               <div className= "job-sub-heading">Hires</div>
-                              <div>{job.hirees.length}</div>
+                              <div className="job-attr-desc">{job.hirees.length}</div>
                             </div>
                           </div>
                         </Paper>
