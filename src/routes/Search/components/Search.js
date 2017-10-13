@@ -1,5 +1,5 @@
 import React from 'react'
-import { CUISINE_TYPES, DIET_TYPES, RADIUS_OPTIONS, ORDER_TYPE, DATES } from './../constants/searchFilters'
+import { CUISINE_TYPES, DIET_TYPES, RADIUS_OPTIONS, ORDER_TYPE} from './../constants/searchFilters'
 import Carousel from 'nuka-carousel'
 import './search.scss'
 import classNames from 'classnames'
@@ -167,8 +167,7 @@ const Search = createReactClass({
         	}
         }
         let self = this;
-        addtnlQuery.date = addtnlQuery.date || DATES(7)[0].value ;
-        const titleText = moment(addtnlQuery.date).format("Do MMM") + ' near ' + user.searchText;
+        const titleText =  user.searchText;
         return (
             <div className="search">
             	<Card>

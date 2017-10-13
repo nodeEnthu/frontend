@@ -4,6 +4,7 @@ import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import {WEEK_DAYS_JOB, MEALS, JOB_CUISINES} from 'routes/Search/constants/searchFilters'
+import moment from 'moment'
 import {
   Table,
   TableBody,
@@ -18,6 +19,9 @@ const styles = {
 const JobSummary = createReactClass({
   componentDidMount() {
 
+  },
+  resolveDates(date){
+    return moment.utc(date).format("Do,MMM ddd");
   },
   render(){
     const {jobDetails} = this.props;
@@ -64,7 +68,7 @@ const JobSummary = createReactClass({
                 </TableRow>
                 <TableRow>
                   <TableRowColumn style={styles.labelSettings}>Dates:</TableRowColumn>
-                  <TableRowColumn style={styles.descSettings}>{jobDetails.start_date} to {jobDetails.end_date}</TableRowColumn>
+                  <TableRowColumn style={styles.descSettings}>{this.resolveDates(jobDetails.start_date)} - {this.resolveDates(jobDetails.end_date)}</TableRowColumn>
                 </TableRow>
                 <TableRow>
                   <TableRowColumn style={styles.labelSettings}>Day(s):</TableRowColumn>

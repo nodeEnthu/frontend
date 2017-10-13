@@ -6,7 +6,7 @@ import IconButton from 'material-ui/IconButton'
 import classNames from 'classnames';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
 import { securedPostCall} from 'utils/httpUtils/apiCallWrapper';
-import { DATES, CUISINE_TYPES,DIET_TYPES,PLACE_ORDER_BY} from 'routes/Search/constants/searchFilters';
+import { CUISINE_TYPES,DIET_TYPES,PLACE_ORDER_BY} from 'routes/Search/constants/searchFilters';
 import {daysOfTheWeek,timeOfDay} from './constants';
 import ImageUploader from 'components/ImageUploader'
 import s3ImageUpload from 'utils/uploader/s3ImageUpload';

@@ -62,7 +62,7 @@ let WizardFormFirstPage =  createReactClass({
             name="addtnlAddressComments"
             type="textarea"
             component={renderTextArea}
-            label="Landmarks / home no. that will help provider find you"
+            label="Landmarks / house no. that will help provider find you"
           />
         </div>
         <div style={{width:'100%'}}>

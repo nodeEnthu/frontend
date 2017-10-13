@@ -10,7 +10,6 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import {CANCEL_REASONS} from 'routes/Search/constants/searchFilters'
 import * as browserFingerprint from 'browser-fingerprint'
-import {normalizeDates, normalizeDateWhileChanging}  from 'routes/Search/constants/searchFilters'
 const OrderAction = createReactClass({
   getInitialState() {
     return{
@@ -96,8 +95,6 @@ const OrderAction = createReactClass({
       for(var key in itemsCheckedOut){
         if(itemsCheckedOut.hasOwnProperty(key)){
           resolvedItemsCheckedOut.push(itemsCheckedOut[key]);
-          console.log(itemsCheckedOut[key].orderDate);
-          console.log(normalizeDates(moment(itemsCheckedOut[key].orderDate)));
         }
       }
     }
@@ -151,7 +148,7 @@ const OrderAction = createReactClass({
                                 <div className="pure-u-1 item-property">
                                   Date
                                 </div>
-                                 <div className="item-wi-desc">{normalizeDates(moment(itemCheckedOut.orderDate)).format("dd, MMM Do")}</div>
+                                 <div className="item-wi-desc">{moment.utc(itemCheckedOut.orderDate).format("dd, MMM Do")}</div>
                               </div>
                             </div>
                             <div className="pure-u-md-1-3 display-none-small">
@@ -217,61 +214,61 @@ const OrderAction = createReactClass({
               undefined
             }
             <Dialog
-                    open={deleteItemModalOpen}
-                    onRequestClose={()=>this.setState({deleteItemModalOpen:false})}
-                  >
-                  <div style={{textAlign:"center"}}>
-                    <p>
-                      Are you sure you want to cancel the order ?
-                    </p>
-                    <p>
-                      You will not be able to take any further action on this order
-                    </p>
-                    <DropDownMenu value={cancelReason} onChange={(event, index, value)=>self.setState({cancelReason:value})}
-                                  iconStyle={{fill:"rgb(0, 0, 0)"}}
-                                  underlineStyle={{borderTop:"1px solid black"}}
-                    >
-                      <MenuItem style={{width:'100%'}} value={undefined} primaryText={'Please select reason'}/>
-                      {
-                        CANCEL_REASONS.map(function(reason,index){
-                          return <MenuItem style={{width:'100%'}} key={index} value={reason.value} primaryText={reason.label}/>
-  
-                        })
-                      }
-                    </DropDownMenu>
-                    {
-                      (cancelReason === 6)?
-                      <form className="pure-form pure-form-stacked">
-                        <textarea className = "pure-u-1" value={cancelText} placeholder="Please type reason for cancellation here" onChange={(event)=>this.setState({cancelText:event.target.value})}/>
-                      </form>
-                      :
-                      undefined
-                    }
-                    <div>
-                      {
-                        (cancelReason === 6 && !cancelText)?
-                        <div style={{padding:"0.5em"}}>
-                          Please type the reason for cancel
-                        </div>
-                        :
-                        undefined
-                      }
-                          
-                        <RaisedButton label="No"
-                            onTouchTap={()=>this.setState({deleteItemModalOpen:false})}
-                        />
-                        <div className="pure-u-1-12">
-                        </div>
-                        <RaisedButton 
-                          backgroundColor="red" 
-                          label="Yes" 
-                          onTouchTap={(event)=>this.cancelOrder()}
-                          disabled={((cancelReason === 6 && !cancelText) || (!cancelReason &&  cancelReason!=0)) ? true:false}
-                        />
+              open={deleteItemModalOpen}
+              onRequestClose={()=>this.setState({deleteItemModalOpen:false})}
+            >
+              <div style={{textAlign:"center"}}>
+                <p>
+                  Are you sure you want to cancel the order ?
+                </p>
+                <p>
+                  You will not be able to take any further action on this order
+                </p>
+                <DropDownMenu value={cancelReason} onChange={(event, index, value)=>self.setState({cancelReason:value})}
+                              iconStyle={{fill:"rgb(0, 0, 0)"}}
+                              underlineStyle={{borderTop:"1px solid black"}}
+                >
+                  <MenuItem style={{width:'100%'}} value={undefined} primaryText={'Please select reason'}/>
+                  {
+                    CANCEL_REASONS.map(function(reason,index){
+                      return <MenuItem style={{width:'100%'}} key={index} value={reason.value} primaryText={reason.label}/>
+
+                    })
+                  }
+                </DropDownMenu>
+                {
+                  (cancelReason === 6)?
+                  <form className="pure-form pure-form-stacked">
+                    <textarea className = "pure-u-1" value={cancelText} placeholder="Please type reason for cancellation here" onChange={(event)=>this.setState({cancelText:event.target.value})}/>
+                  </form>
+                  :
+                  undefined
+                }
+                <div>
+                  {
+                    (cancelReason === 6 && !cancelText)?
+                    <div style={{padding:"0.5em"}}>
+                      Please type the reason for cancel
                     </div>
-                  </div>
-                 </Dialog>
-            </div>
+                    :
+                    undefined
+                  }
+                      
+                    <RaisedButton label="No"
+                        onTouchTap={()=>this.setState({deleteItemModalOpen:false})}
+                    />
+                    <div className="pure-u-1-12">
+                    </div>
+                    <RaisedButton 
+                      backgroundColor="red" 
+                      label="Yes" 
+                      onTouchTap={(event)=>this.cancelOrder()}
+                      disabled={((cancelReason === 6 && !cancelText) || (!cancelReason &&  cancelReason!=0)) ? true:false}
+                    />
+                </div>
+              </div>
+            </Dialog>
+          </div>
           :
           <div></div>
   }

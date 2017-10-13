@@ -1,0 +1,33 @@
+.jobs-list {
+  padding: 1em;
+  h2 {
+    font-size: 125%;
+    font-weight: 400;
+    display: inline-block;
+  }
+  .create-job-button{
+    display: inline-block;
+    float:right;
+  }
+  .list-wrapper{
+    margin: 1em 0;
+  }
+  .container .column {
+    display: inline;
+    text-align: center;
+  }
+  .job-container {
+    margin-bottom: 0.5em;
+    padding:1em;
+    text-align:center;
+  }
+  .job-heading {
+    padding: 0.5em;
+    font-size:105%;
+    border-bottom: 1px solid silver;
+  }
+  .job-sub-heading {
+    padding-top:0.5em;
+    padding-bottom: 0.25em;
+  }
+}

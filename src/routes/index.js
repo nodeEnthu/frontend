@@ -18,6 +18,7 @@ import { onMainPageEnter} from 'utils/auth/onEnterAuth'
 import JobCreate from './JobCreate'
 import JobHome from './JobHome'
 import JobApply from './JobApply'
+import JobsList from './JobsList'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -44,7 +45,8 @@ export const createRoutes = (store) => ({
         JobCreate(store),
         TermsAndConditions(store),
         JobApply(store),
-        JobHome(store)
+        JobHome(store),
+        JobsList(store)
     ]
 })
 
