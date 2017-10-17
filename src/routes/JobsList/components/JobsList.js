@@ -69,7 +69,7 @@ const JobsList = createReactClass({
                 Oops you have no tiffin requirements posted here. Get started by posting one !
               </p>
               <RaisedButton label="Get Started" style={{marginBottom:'1em'}} />
-              <img style={{width:'100%'}} src="/general/man_eating_pasta.jpg"/>
+              <div><img style={{width:'45%'}} src="/general/hungry.png"/></div>
             </div>
           }
           <div className="list-wrapper">

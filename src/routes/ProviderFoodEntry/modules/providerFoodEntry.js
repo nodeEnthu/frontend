@@ -26,7 +26,6 @@ export function addFoodItemInfo(obj) {
     }
 }
 export function removeFoodItemInfo() {
-    console.log("removing food item onfo");
     return {
         type: REMOVE_FOOD_ITEM_INFO
     }

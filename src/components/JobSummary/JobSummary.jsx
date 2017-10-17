@@ -3,8 +3,8 @@ import './jobSummary.scss';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
-import {WEEK_DAYS_JOB, MEALS, JOB_CUISINES} from 'routes/Search/constants/searchFilters'
 import moment from 'moment'
+import normalizeJobDetails from 'utils/normalizeJobDetails'
 import {
   Table,
   TableBody,
@@ -25,25 +25,7 @@ const JobSummary = createReactClass({
   },
   render(){
     const {jobDetails} = this.props;
-    let weekdays = [], meals = [],cuisines = [];
-    for(let key in jobDetails ){
-      if(jobDetails.hasOwnProperty(key)){
-        let isMeal , isCuisine;
-        MEALS.forEach(function(meal,index){
-          if(meal.value === key){meals.push(meal.label); isMeal = true}
-        })
-        if(!isMeal){
-          JOB_CUISINES.forEach(function(cuisine,index){
-            if(cuisine.value === key){cuisines.push(cuisine.label); isCuisine = true};
-          })
-        }
-        if(!isMeal && !isCuisine){
-          WEEK_DAYS_JOB.forEach(function(weekday){
-            if(weekday.value === key){weekdays.push(weekday.label)};
-          })
-        }
-      }
-    }
+    const {weekdays,meals,cuisines} = normalizeJobDetails(jobDetails);
     return( 
             <Table>
               <TableBody displayRowCheckbox={false}>

@@ -35,7 +35,7 @@ let WizardFormThirdPage =  createReactClass({
           <button type="button" className="pure-button" style={{marginRight:'1em'}} onClick={previousPage}>
             Previous
           </button>
-          <button type="submit" className="pure-button pure-button-primary" disabled={pristine || submitting}>
+          <button type="submit" className="pure-button pure-button-primary" disabled={pristine || submitting || !end_date}>
             Next
           </button>
         </div>

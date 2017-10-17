@@ -76,7 +76,7 @@ let WizardFormFirstPage =  createReactClass({
           />
         </div>
         <div style={{textAlign:'center', marginTop:'2em'}}>
-          <button type="submit" disabled={!place_idVar}className="pure-button pure-button-primary is-center">
+          <button type="submit" className="pure-button pure-button-primary is-center">
             Next
           </button>
         </div>
@@ -94,6 +94,7 @@ WizardFormFirstPage = reduxForm({
     serviceType: 'delivery',
     address:'',
     place_id:'',
+    lu:true,
   },
   validate
 })(WizardFormFirstPage)

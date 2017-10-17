@@ -63,7 +63,6 @@ const OrderSubmitModal = createReactClass({
         // by default checkout quantity as one
         let quantity = itemsCheckedOut[key].quantity || 1;
         grandTotal = grandTotal + parseInt(itemsCheckedOut[key].price * parseInt(quantity));
-        console.log(itemsCheckedOut[key].orderDate);
       }
     };
     // make the checkout object here to be submitted once submit is clicked

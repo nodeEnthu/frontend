@@ -54,7 +54,6 @@ export function DATES(n, format, action) {
       title: day.format(format)
     })
   }
-  console.log(result);
   return result;
 }
 
