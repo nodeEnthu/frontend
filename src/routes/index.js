@@ -19,7 +19,7 @@ import JobCreate from './JobCreate'
 import JobHome from './JobHome'
 import JobApply from './JobApply'
 import JobsList from './JobsList'
-
+import LoginPage from './LoginPage'
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
 
@@ -30,6 +30,7 @@ export const createRoutes = (store) => ({
             indexRoute: Home,
             onEnter: (nextState, replace) => onMainPageEnter(nextState, replace, store)
         },
+        LoginPage(store),
         ProviderProfileEntry(store),
         ProviderFoodEntry(store),
         ProviderProfilePage(store),
