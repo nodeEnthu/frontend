@@ -19,7 +19,7 @@ import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import MapsRestaurantMenu from 'material-ui/svg-icons/maps/restaurant-menu'
-
+import ActionCardTravel from 'material-ui/svg-icons/action/card-travel'
 const Header =createReactClass ({
     getInitialState() {
       return {
@@ -113,7 +113,6 @@ const Header =createReactClass ({
                   <img className = "logo show-desktop" src="/general/logo-desktop.png"></img>
                   <img className = "logo show-mobile" src="/general/logo-mobile.png"></img>
                 </div>
-
                 <Drawer
                   docked={false}
                   width={200}
@@ -142,17 +141,22 @@ const Header =createReactClass ({
                     :
                     undefined
                   }
-                 
-                 
-                  {((user && (user.userType === 'consumer' || !user.published)) || !globalState.core.get('token').length)?
-                    <MenuItem leftIcon={<img src="/general/tiffin_outline.png"/>} onTouchTap={()=>this.goToPage('/jobs/list')}>
-                        Tiffin posts
+                  {(user && user.userType === 'provider')?
+                    <MenuItem leftIcon={<ActionCardTravel/>} onTouchTap={()=>this.goToPage('/job/apply/board')}>
+                        Job board
                     </MenuItem>
                     :
                     undefined
                   }
-                   {((user && (user.userType === 'consumer' || !user.published)) || !globalState.core.get('token').length)?
-                    <MenuItem leftIcon={<ActionPermIdentity/>} onTouchTap={this.checkLoginAndredirect}>
+                  {(globalState.core.get('token').length>0)?
+                    <MenuItem leftIcon={<img src="/general/tiffin_outline.png"/>} onTouchTap={()=>this.goToPage('/jobs/list')}>
+                        Tiffin needs
+                    </MenuItem>
+                    :
+                    undefined
+                  }
+                  {((user && (user.userType === 'consumer' || !user.published)) || !globalState.core.get('token').length)?
+                    <MenuItem leftIcon={<ActionPermIdentity/>} onTouchTap={()=>this.checkLoginAndredirect('providerProfileEntry')}>
                         Become a chef
                     </MenuItem>
                     :
@@ -182,26 +186,6 @@ const Header =createReactClass ({
                           <Login{...this.props}/>
                          } 
                       </li>
-                      {(!globalState.core.get('token').length || (user && user.published === false))?
-                        <li onClick={()=>this.checkLoginAndredirect('providerProfileEntry')}>
-                            <a className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0 4em 0 1em': '0 0.75em'}} href="javascript:void(0)" className="display-none-small">
-                              <span className="show-desktop-inline"style={{position: 'relative',bottom: '1em'}}>Become a chef</span>
-                              <img style={{lineHeight:'0'}} className="header-img" src="/general/chef.png"/>
-                            </a>
-                        </li>
-                        :
-                        undefined
-                      }
-                      {(user && user.published === false)?
-                        <li onClick={()=>this.checkLoginAndredirect('postTiffinRequirement')}>
-                            <a className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0': '0 0.75em'}} href="javascript:void(0)" className="display-none-small">
-                              <span className="show-desktop-inline"style={{position: 'relative',bottom: '1em'}}>Post your tiffin requirement</span>
-                              <img style={{lineHeight:'0'}} className="header-img" src="/general/tiffin.png"/>
-                            </a>
-                        </li>
-                        :
-                        undefined
-                      }
                       <li className="profile-pic" onClick={()=>this.goToHomePage(user)}>
                       {(user.img)?
                         <img src={user.img} 
@@ -214,6 +198,24 @@ const Header =createReactClass ({
                         :
                         undefined
                       } 
+                      </li>
+                      {(!globalState.core.get('token').length || (user && user.published === false))?
+                        <li onClick={()=>this.checkLoginAndredirect('providerProfileEntry')}>
+                            <a className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0 1em': '0 0.75em'}} href="javascript:void(0)" className="display-none-small">
+                              <span className="show-desktop-inline"style={{position: 'relative',bottom: '1em'}}>Become a chef</span>
+                              <img style={{lineHeight:'0'}} className="header-img" src="/general/chef.png"/>
+                            </a>
+                        </li>
+                        :
+                        undefined
+                      }
+                     
+                      <li>
+                          <a className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0': '0 0.75em'}} 
+                              href={(user && (user.userType === 'provider'))? '/how/tiffin/works/provider': '/how/tiffin/works/customer'} className="display-none-small"
+                          >
+                            <img style={{lineHeight:'0'}} className="header-img" src="/general/tiffin.png"/>
+                          </a>
                       </li>
                     </ul>
                   </nav>

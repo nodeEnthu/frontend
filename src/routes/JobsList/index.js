@@ -1,8 +1,11 @@
 import { injectReducer } from '../../store/reducers'
+import { onJobsListEntry} from 'utils/auth/onEnterAuth'
 
 export default (store) => ({
   path : '/jobs/list',
   /*  Async getComponent is only invoked when route matches   */
+  onEnter: (nextState, replace) => onJobsListEntry(nextState, replace, store),
+
   getComponent (nextState, cb) {
     /*  Webpack - use 'require.ensure' to create a split point
         and embed an async module loader (jsonp) when bundling   */

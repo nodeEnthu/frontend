@@ -22,6 +22,7 @@ var Login = createReactClass({
         dispatch(actions.closeLoginModal());
     },
     componentDidMount() {
+    
     },
     contextTypes: {
       router: PropTypes.object.isRequired
@@ -64,7 +65,9 @@ var Login = createReactClass({
                       case 'postTiffinRequirement':
                         redirectPath= '/job/create';
                         break;
-
+                      case 'viewJobBoard':
+                        redirectPath='/job/apply/board';
+                        break;
                     }
                     self.context.router.push(redirectPath);
                     // reset it back to empty

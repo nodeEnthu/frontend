@@ -24,7 +24,6 @@ const JobsList = createReactClass({
     let self = this;
     securedGetCall('/api/job/list/all')
         .then(function(res){
-          console.log(res.data);
           self.setState({jobsList:res.data});
         });
   },
@@ -68,8 +67,8 @@ const JobsList = createReactClass({
               <p>
                 Oops you have no tiffin requirements posted here. Get started by posting one !
               </p>
-              <RaisedButton label="Get Started" style={{marginBottom:'1em'}} />
-              <div><img style={{width:'45%'}} src="/general/hungry.png"/></div>
+              <RaisedButton label="Get Started" style={{marginBottom:'1em'}} disableTouchRipple = {true}/>
+              <div style={{maxWidth:'200px', margin:'0 auto'}}><img style={{width:'45%'}} src="/general/hungry.png"/></div>
             </div>
           }
           <div className="list-wrapper">

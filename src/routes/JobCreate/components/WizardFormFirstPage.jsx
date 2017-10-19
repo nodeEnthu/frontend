@@ -76,7 +76,7 @@ let WizardFormFirstPage =  createReactClass({
           />
         </div>
         <div style={{textAlign:'center', marginTop:'2em'}}>
-          <button type="submit" className="pure-button pure-button-primary is-center">
+          <button type="submit" disabled = {!place_id} className="pure-button pure-button-primary is-center">
             Next
           </button>
         </div>

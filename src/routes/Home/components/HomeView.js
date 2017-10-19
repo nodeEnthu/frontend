@@ -164,96 +164,90 @@ const HomeView = createReactClass({
                     </div>
                 </div>
                 <div className="sub-content-wrapper">
-                    <div className="pure-u-1 steps-text">
-                        3 steps to get started
-                    </div>
-                    <div className="pure-u-md-1-2 pure-u-1 steps">
-                        <div className="steps-intro-text">
-                            I&#39;m a customer
-                        </div>
-                        <div className="business-step dotted">
-                            <div className="pure-u-1-3 step-img-wrapper">
-                                <img src="shared/home/icon-SearchBig.png"/>
-                            </div>
-                            <div className="pure-u-2-3">
-                                <div className="step-heading">
-                                    Step 1 - <span className="step-summary">Search</span>
-                                </div>
-                                <div className="step-text">
-                                    Search for the service and provider
+                    <div className="how-se">
+                        <h2>I&#39;m a <span>customer</span></h2>
+                        <div className="wraper-container">
+                            <div className="pure-u-1 pure-u-md-1-3">
+                                <div className="how-col">
+                                    <div className="how-bxx">
+                                        <div className="how-pic">
+                                            <img src="shared/home/magnifying-glass.png"/>
+                                        </div>
+                                        <div className="how-pic-cont">
+                                            <h4>Search <span></span></h4>
+                                            <p>Search for the service and provider</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="business-step dotted">
-                            <div className="pure-u-1-3 step-img-wrapper">
-                                <img src="shared/home/icon-QuoteBig.png"/>
-                            </div>
-                            <div className="pure-u-2-3">
-                                <div className="step-heading" >
-                                    Step 2 - <span className="step-summary">Browse</span>
+                            <div className="pure-u-1 pure-u-md-1-3">
+                                <div className="how-col">
+                                    <div className="how-bxx">
+                                        <div className="how-pic">
+                                            <img src="shared/home/earth-globe.png"/>
+                                        </div>
+                                        <div className="how-pic-cont">
+                                            <h4>Browse <span> </span></h4>
+                                            <p>Browse different provider profiles</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="step-text">
-                                    Browse different provider profiles
-                                </div>
                             </div>
-                        </div>
-                        <div className="business-step">
-                            <div className="pure-u-1-3 step-img-wrapper">
-                                <img src="shared/home/icon-HireBig.png">
-                                </img>
-                            </div>
-                            <div className="pure-u-2-3">
-                                <div className="step-heading">
-                                    Step-3 - <span className="step-summary">Order</span>
-                                </div>
-                                <div className="step-text">
-                                    Order and receive confirmation email from provider
+                            <div className="pure-u-1 pure-u-md-1-3">
+                                <div className="how-col">
+                                    <div className="how-bxx">
+                                        <div className="how-pic">
+                                            <img src="shared/home/hand-shake.png"/>
+                                        </div>
+                                        <div className="how-pic-cont">
+                                            <h4>Order <span></span></h4>
+                                            <p>Order and receive confirmation email from provider</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="pure-u-md-1-2 pure-u-1 steps">
-                        <div className="steps-intro-text">
-                            I&#39;m a provider
-                        </div>
-                        <div className="business-step dotted">
-                            <div className="pure-u-1-3 step-img-wrapper">
-                                <img src="shared/home/icon-ProfileBig.png"/>
-                            </div>
-                            <div className="pure-u-2-3">
-                                <div className="step-heading">
-                                    Step 1 - <span className="step-summary">Create Profile</span>
-                                </div>
-                                <div className="step-text">
-                                    Click "BECOME A CHEF" on top nav bar
-                                </div>
-                            </div>
-                        </div>
-                        <div className="business-step dotted">
-                            <div className="pure-u-1-3 step-img-wrapper">
-                                <img src="shared/home/icon-ItemsBig.png"/>
-                            </div>
-                            <div className="pure-u-2-3">
-                                <div className="step-heading" >
-                                    Step 2 - <span className="step-summary">Add Food Items</span>
-                                </div>
-                                <div className="step-text">
-                                    Add food item(s) you wish to provide
+                    <div className="how-se how-second">
+                        <h2>I&#39;m a <span>provider</span></h2>
+                        <div className="wraper-container">
+                            <div className="pure-u-1 pure-u-md-1-3">
+                                <div className="how-col">
+                                    <div className="how-bxx">
+                                        <div className="how-pic">
+                                            <img src="shared/home/chef.png"/>
+                                        </div>
+                                        <div className="how-pic-cont">
+                                            <h4>Create <span> Profile</span></h4>
+                                            <p>Click "BECOME A CHEF" on top nav bar</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            
-                        </div>
-                        <div className="business-step">
-                            <div className="pure-u-1-3 step-img-wrapper">
-                                <img src="shared/home/icon-PublishBig.png">
-                                </img>
-                            </div>
-                            <div className="pure-u-2-3">
-                                <div className="step-heading">
-                                    Step-3 - <span className="step-summary">Preview and Publish</span>
+                            <div className="pure-u-1 pure-u-md-1-3">
+                                <div className="how-col">
+                                    <div className="how-bxx">
+                                        <div className="how-pic">
+                                            <img src="shared/home/rice.png"/>
+                                        </div>
+                                        <div className="how-pic-cont">
+                                            <h4>Add <span>  Food Items</span></h4>
+                                            <p>Add food item(s) you wish to provide</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="step-text">
-                                    You&#39;re DONE! start getting orders
+                            </div>
+                            <div className="pure-u-1 pure-u-md-1-3">
+                                <div className="how-col">
+                                    <div className="how-bxx">
+                                        <div className="how-pic">
+                                            <img src="shared/home/thumb-up.png"/>
+                                        </div>
+                                        <div className="how-pic-cont">
+                                            <h4>Preview & <span> Publish</span></h4>
+                                            <p>You&#39;re DONE! start getting orders</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

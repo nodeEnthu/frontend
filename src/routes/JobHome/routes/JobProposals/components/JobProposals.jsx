@@ -86,6 +86,7 @@ const JobProposals = createReactClass({
 									    <RaisedButton 
 					                		label = "Hire me"
 						      				onClick={()=>self.sendHire(application._creator._id)}
+							                disableTouchRipple = {true}
 							      		/>   
 						            }
 				                	

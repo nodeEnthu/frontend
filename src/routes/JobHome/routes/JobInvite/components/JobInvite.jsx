@@ -78,6 +78,7 @@ const JobInvite = createReactClass({
 						      				disabledBackgroundColor="#29B6F6"
 						      				disabledLabelColor="white"
 						      				onClick={()=>self.sendInvite(provider._id)}
+							                disableTouchRipple = {true}
 							      		/>
 					                	:
 				                		

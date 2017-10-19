@@ -74,3 +74,55 @@ export function onJobCreateEnter(nextState, replace, store) {
     // user has access to some on else's profile
   } 
 }
+
+export function onJobsListEntry(nextState, replace, store){
+  let globalState = store.getState();
+  const { user, userLoggedIn } = globalState.core.toJS();
+  if (!userLoggedIn) {
+    // is user is not logged it .. send them to home page
+    replace('/login?rdr=/jobs/list');
+    // user has access to some on else's profile
+  } 
+}
+export function onJobCreateEntry(nextState, replace, store){
+  let globalState = store.getState();
+  const { user, userLoggedIn } = globalState.core.toJS();
+  if (!userLoggedIn) {
+    // is user is not logged it .. send them to home page
+    replace('/login?rdr=/job/create');
+    // user has access to some on else's profile
+  } 
+}
+
+export function onJobInviteEntry(nextState, replace, store){
+  let globalState = store.getState();
+  let currentRoute = nextState.location.pathname;
+  const { user, userLoggedIn } = globalState.core.toJS();
+  if (!userLoggedIn) {
+    // is user is not logged it .. send them to home page
+    replace('/login?rdr='+currentRoute);
+    // user has access to some on else's profile
+  } 
+}
+
+export function onJobProposalEntry(nextState, replace, store){
+  let globalState = store.getState();
+  let currentRoute = nextState.location.pathname;
+  const { user, userLoggedIn } = globalState.core.toJS();
+  if (!userLoggedIn) {
+    // is user is not logged it .. send them to home page
+    replace('/login?rdr='+currentRoute);
+    // user has access to some on else's profile
+  } 
+}
+
+export function onJobApplyEntry(nextState, replace, store){
+  let globalState = store.getState();
+  let currentRoute = nextState.location.pathname;
+  const { user, userLoggedIn } = globalState.core.toJS();
+  if (!userLoggedIn) {
+    // is user is not logged it .. send them to home page
+    replace('/login?rdr='+currentRoute);
+    // user has access to some on else's profile
+  }
+}

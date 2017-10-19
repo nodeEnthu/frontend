@@ -1,9 +1,9 @@
 import { injectReducer } from '../../store/reducers'
-import { onJobCreateEnter} from 'utils/auth/onEnterAuth'
+import { onJobCreateEntry} from 'utils/auth/onEnterAuth'
 
 export default (store) => ({
   path : 'job/create',
-  //onEnter: (nextState, replace) => onJobCreateEnter(nextState, replace, store),
+  onEnter: (nextState, replace) => onJobCreateEntry(nextState, replace, store),
   /*  Async getComponent is only invoked when route matches   */
   getComponent (nextState, cb) {
     /*  Webpack - use 'require.ensure' to create a split point

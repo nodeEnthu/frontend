@@ -12,32 +12,60 @@ import PhoneVerification from 'components/PhoneVerification';
 import FlatButton from 'material-ui/FlatButton';
 import ActionThumbUp from 'material-ui/svg-icons/action/thumb-up';
 import {fullWhite} from 'material-ui/styles/colors';
-
+import async from 'async'
+import {unionBy} from 'lodash'
+import ActionStars from 'material-ui/svg-icons/action/stars'
+import Alert from 'react-s-alert';
 const JobApply = createReactClass({
 	getInitialState() {
 		return{
 			providerId:undefined,
-			invitedJobs:[],
+			jobs:[],
 			invitedJobsExpanded0:true,
 			verified:false,
 			phone:undefined,
-			code:undefined
+			code:undefined,
+			loadingResults:false
 		};
 	},
+	contextTypes: {
+      router: PropTypes.object.isRequired 
+    },
 	componentDidMount() {
-		// make the calls 1. to get all the invite list
 		const {user}  = this.props.globalState.core.toJS();
-		if(user.phone){
-			this.setState({phone:user.phone, verified:true, providerId: user._id});
+		if(user.userType ==='consumer') this.context.router.push('/jobs/list');
+		else if(user.userType ==='provider' && !user.published) {
+			this.context.router.push(`/provider/${user._id}/providerProfileEntry`);
+			Alert.warning('Please enroll as a chef and then click on "Jobs Board" in left nav to see jobs close to you', {
+	            position: 'bottom',
+	        });
 		}
-		this.refreshPage();
+		else{
+			if(user.phone){
+				this.setState({phone:user.phone, verified:true, providerId: user._id, loadingResults:true});
+			}
+			this.refreshPage();
+		}
 	},
 	refreshPage(){
 		let self = this;
-		securedGetCall('/api/providers/get/job/invites')
+		async.parallel([function(cb){
+			securedGetCall('/api/providers/get/job/invites')
 			.then(function(res){
-				self.setState({invitedJobs:res.data});
+				cb(null,res.data);
 			})
+		},
+		function(cb){
+			securedGetCall('/api/job/get/closeby')
+			.then(function(res){
+				cb(null,res.data.results);
+			})
+		}],function(err,resultArr){
+			// create a unique list
+			let result = _.unionBy(resultArr[1], resultArr[0], "_id");
+			self.setState({jobs:result});
+			self.setState({loadingResults:false});
+		})
 	},
 	resolveAddress(address){
 		if (address) address = address.replace(/,[^,]+$/, "");
@@ -68,16 +96,18 @@ const JobApply = createReactClass({
 		this.setState({[stateKey]:value});
 	},
   	render(){
-  		const {invitedJobs,verified,phone,code,providerId} = this.state;
+  		const {jobs,verified,phone,code,providerId,loadingResults} = this.state;
+  		const {user}  = this.props.globalState.core.toJS();
   		let self = this;
 	    return (
 	    <div className="job-apply">
 	    	<div className="apply-wrapper">
 	    		<h2>
-	    			Your job invitations:
+	    			Your job board
 	    		</h2>
-	    		{
-	    			invitedJobs.map(function(job,index){
+	    		{	(!loadingResults)?
+	    			(jobs.length >0)?
+	    			jobs.map(function(job,index){
 	    				return (<Card key={index+'job'}
 	    							expanded={self.state['invitedJobsExpanded'+index]}
 	    							onExpandChange={()=>self.handleExpandChange('invitedJobsExpanded'+index)}
@@ -86,13 +116,13 @@ const JobApply = createReactClass({
 					               <CardHeader
 							          	title={job.title}
 							          	subtitle={'at '+self.resolveAddress(job.address)}
-							          	avatar="http://lorempixel.com/400/200/sports/"
+							          	avatar={(job.invitees.indexOf(providerId)>-1)? <ActionStars style={{color:'red'}}/>:undefined }
 							           	actAsExpander={true}
           								showExpandableButton={true}
 							        >
 							        </CardHeader>
 						       {
-			                		(job && job.applicants &&job.applicants.indexOf(providerId)=== -1)?
+			                		(job && job.applicants && (job.applicants.indexOf(providerId)=== -1 || job.hirees.indexOf(providerId) > -1))?
 			                		undefined
 			                		:
 			                		<div style={{textAlign:'right', margin:'0 1em 1em 0'}}>
@@ -100,11 +130,27 @@ const JobApply = createReactClass({
 									      <FlatButton
 				                		 	label="Applied"
 				                		 	labelPosition="after"
-				                		 	icon={<ActionThumbUp color={fullWhite} />}
-									      	backgroundColor="#a4c639"
-									      	hoverColor="#8AA62F"
+									      	backgroundColor="#FDD835"
+									      	hoverColor="#FBC02D"
 									      	labelStyle={{color:"white"}}
 
+									    />
+									    </CardActions>
+									</div>
+				            	}
+				            	{
+			                		(job && job.applicants &&job.hirees.indexOf(providerId)=== -1)?
+			                		undefined
+			                		:
+			                		<div style={{textAlign:'right', margin:'0 1em 1em 0'}}>
+			                			<CardActions>
+									      <FlatButton
+				                		 	label="Hired"
+				                		 	labelPosition="after"
+				                		 	icon={<ActionThumbUp color={fullWhite} />}
+									      	backgroundColor="#a4c639"
+								      		hoverColor="#8AA62F"
+									      	labelStyle={{color:"white"}}
 									    />
 									    </CardActions>
 									</div>
@@ -144,7 +190,12 @@ const JobApply = createReactClass({
 						                      <div className="error">Please provide one time verified contact number for provider</div>:undefined
 						                    }
 							                <CardActions style={{textAlign:'right'}}>
-							                   <RaisedButton primary={true} disabled={!verified || !self.state['coverLetter'+index]} label="Apply" onClick={()=>self.apply(job._id, index)}/>
+							                	<RaisedButton 
+							                   		primary={true} 
+							                   		disabled={!verified || !self.state['coverLetter'+index]} 
+							                   		label="Apply" onClick={()=>self.apply(job._id, index)}
+							                   		disableTouchRipple = {true}
+							                   	/>
 							                </CardActions>
 							            </CardText>
 							            :
@@ -152,7 +203,39 @@ const JobApply = createReactClass({
 					                }	
 								    </CardText>
 					            </Card>)
-	    			})
+	    					})
+							:
+							<div>
+								<div className="is-center">
+									<img src="/general/noresult.png"/>
+								</div>
+								<p>
+									Sorry you have no results!
+								</p>
+								<p>
+									Our research shows provider profiles:
+								</p>
+								<div className="no-order-list">
+								    <p>1. With verified phone number</p>
+								    <p>2. With pictures that showcase their business</p>
+								    <p>3. With detailed description of food items</p>
+								    <p>4. That get shared on social media</p>
+								    <p>5. Which take fast action on their received orders</p>
+								</div>
+							    <p> receive most orders</p>
+							    <div className="is-center">
+								   	<RaisedButton
+			                		 	label="View your profile"
+			                		 	primary={true}
+			                		 	onClick={()=>self.context.router.push('/providerProfile/'+user._id)}
+							            disableTouchRipple = {true}
+								    />
+								</div>
+							</div>
+							:
+							<div className="is-center">
+		                        <img src= "/general/loading.svg"/>
+		                    </div>
 	    		}
 		    	
 	        </div>

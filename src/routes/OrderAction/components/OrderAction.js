@@ -256,6 +256,7 @@ const OrderAction = createReactClass({
                       
                     <RaisedButton label="No"
                         onTouchTap={()=>this.setState({deleteItemModalOpen:false})}
+                        disableTouchRipple = {true}
                     />
                     <div className="pure-u-1-12">
                     </div>
@@ -264,6 +265,7 @@ const OrderAction = createReactClass({
                       label="Yes" 
                       onTouchTap={(event)=>this.cancelOrder()}
                       disabled={((cancelReason === 6 && !cancelText) || (!cancelReason &&  cancelReason!=0)) ? true:false}
+                      disableTouchRipple = {true}
                     />
                 </div>
               </div>

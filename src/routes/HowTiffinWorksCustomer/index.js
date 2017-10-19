@@ -1,10 +1,7 @@
-import { injectReducer } from 'store/reducers'
-import { onJobProposalEntry } from 'utils/auth/onEnterAuth'
+import { injectReducer } from '../../store/reducers'
 
 export default (store) => ({
-  path : '/job/:id/proposals',
-  onEnter: (nextState, replace) => onJobProposalEntry(nextState, replace, store),
-
+  path : '/how/tiffin/works/customer',
   /*  Async getComponent is only invoked when route matches   */
   getComponent (nextState, cb) {
     /*  Webpack - use 'require.ensure' to create a split point
@@ -12,16 +9,16 @@ export default (store) => ({
     require.ensure([], (require) => {
       /*  Webpack - use require callback to define
           dependencies for bundling   */
-      const JobProposals = require('./containers/JobProposalsContainer').default
-      const reducer = require('./modules/jobProposals').default
+      const HowTiffinWorksCustomer = require('./containers/HowTiffinWorksCustomerContainer').default
+      const reducer = require('./modules/howTiffinWorksCustomer').default
 
       /*  Add the reducer to the store on key 'counter'  */
-      injectReducer(store, { key: 'jobProposals', reducer })
+      injectReducer(store, { key: 'howTiffinWorksCustomer', reducer })
 
       /*  Return getComponent   */
-      cb(null, JobProposals)
+      cb(null, HowTiffinWorksCustomer)
 
     /* Webpack named bundle   */
-    }, 'jobProposals')
+    }, 'howTiffinWorksCustomer')
   }
 })

@@ -15,6 +15,8 @@ import Paper from 'material-ui/Paper';
 
 const LoginPage = createReactClass({
     componentDidMount() {
+      const {globalState,dispatch } = this.props;
+      const {user,envVars} = globalState.core.toJS();
     },
     contextTypes: {
       router: PropTypes.object.isRequired
@@ -28,42 +30,28 @@ const LoginPage = createReactClass({
           .then(function(result) {
               let res = result.data;
               if (res.token) {
-                  // user will be logged in for just this tab
-                  sessionStorage.setItem('token', res.token);
-                  dispatch(actions.addToken(res.token));
-                  dispatch(actions.addUser(res.user));
-                  dispatch(actions.userLoggedIn(true));
-                  let userSearchAndPlaceId;
-                  dispatch(actions.updateUser('firstTime',res.firstTime));
-                  // check whether the person was looking for a new address before logging in 
-                  if(searchText && place_id){
-                    // register the new location
-                    securedGetCall('/api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
-                    userSearchAndPlaceId = {address:searchText, placeId:place_id}
-                  } else userSearchAndPlaceId = getSearchAddressAndPlaceId(res.user);
-                  dispatch(actions.updateUser('searchText',userSearchAndPlaceId.address));
-                  dispatch(actions.updateUser('place_id',userSearchAndPlaceId.placeId));
-                  // initialize one signal here .. 
-                  //but first get the appId dependent upon the environment
-                  initializeOneSignal(envVars.oneSignalAppId);              
-                  // get the path to redirect to
-                  let redirectPath = globalState.core.get('postLoginUrlRedirect');
-                  if(redirectPath){
-                    // special treatment for first time provider entry here as we dont know the objectID
-                    switch(redirectPath){
-                      case 'providerProfileEntry':
-                        redirectPath = '/provider/'+res.user._id+'/providerProfileEntry';
-                        break;
-                      case 'postTiffinRequirement':
-                        redirectPath= '/job/create';
-                        break;
-
-                    }
-                    self.context.router.push(redirectPath);
-                    // reset it back to empty
-                    dispatch(actions.postLoginUrlRedirect(''));
-                  }
-                  
+                // user will be logged in for just this tab
+                sessionStorage.setItem('token', res.token);
+                dispatch(actions.addToken(res.token));
+                dispatch(actions.addUser(res.user));
+                dispatch(actions.userLoggedIn(true));
+                let userSearchAndPlaceId;
+                dispatch(actions.updateUser('firstTime',res.firstTime));
+                // check whether the person was looking for a new address before logging in 
+                if(searchText && place_id){
+                  // register the new location
+                  securedGetCall('/api/locations/registerMostRecentSearchLocation',{address:searchText,place_id:place_id})
+                  userSearchAndPlaceId = {address:searchText, placeId:place_id}
+                } else userSearchAndPlaceId = getSearchAddressAndPlaceId(res.user);
+                dispatch(actions.updateUser('searchText',userSearchAndPlaceId.address));
+                dispatch(actions.updateUser('place_id',userSearchAndPlaceId.placeId));
+                // initialize one signal here .. 
+                //but first get the appId dependent upon the environment
+                initializeOneSignal(envVars.oneSignalAppId);              
+                // get the path to redirect to
+                let redirectPath = self.context.router.location.query.rdr;
+                redirectPath = (redirectPath)? redirectPath :'/'
+                self.context.router.push(redirectPath);
               }
           })
     },
