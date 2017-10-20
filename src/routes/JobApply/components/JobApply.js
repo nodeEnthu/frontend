@@ -179,7 +179,7 @@ const JobApply = createReactClass({
 							              	</form>
 							                <form className="pure-form" style={{marginTop:'0.5em'}}>
 							                	<textarea 	style={{minHeight:'5em'}}className="pure-u-1" 
-							                				placeholder="Write something to get this job" 
+							                				placeholder="Explain pricing, various food options available on different days and pick-up/delivery timings" 
 							                				value={self.state['coverLetter'+index] || ''}
 							                				onChange={(event)=>self.coverLetterChange('coverLetter'+index, event.target.value)}
 							                	>

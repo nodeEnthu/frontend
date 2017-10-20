@@ -52,7 +52,7 @@ let WizardFormFirstPage =  createReactClass({
                             onSuggestionSelected = {this.onSuggestionSelected}
         />
         {
-          (addressVar && !place_idVar)?
+          (addressVar && addressVar.length>4 &&!place_idVar)?
           <div className="error">Please choose from one of the suggested addresses</div>
           :
           undefined
@@ -76,7 +76,7 @@ let WizardFormFirstPage =  createReactClass({
           />
         </div>
         <div style={{textAlign:'center', marginTop:'2em'}}>
-          <button type="submit" disabled = {!place_id} className="pure-button pure-button-primary is-center">
+          <button type="submit" disabled = {!place_idVar} className="pure-button pure-button-primary is-center">
             Next
           </button>
         </div>
