@@ -4,7 +4,7 @@ import { email, maxLength, required } from './../../utils/formUtils/formValidati
 import Toggle from 'material-ui/Toggle';
 import classNames from 'classnames';
 import Dialog from 'material-ui/Dialog';
-import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
+import {getCall, securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import AsyncAutocomplete from 'components/AsyncAutocomplete';
 import ImageUploader from 'components/ImageUploader';
 import s3ImageUpload from 'utils/uploader/s3ImageUpload';
@@ -17,11 +17,13 @@ import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import {METHODS_OF_PAYMENT} from './constants';
 import PhoneVerification from 'components/PhoneVerification';
-const maxCount = 100;
+import scrollToElement from 'scroll-to-element';
+
 const ProviderEntryForm = createReactClass({
     getInitialState() {
-      return{
+        return{
             showSpinner:false,
+            uniqueTitle:true        
         }  
     },
     componentWillMount() {
@@ -32,6 +34,7 @@ const ProviderEntryForm = createReactClass({
             .then((res)=>{
                 if(res && res.payload &&res.payload.data && res.payload.data.data && res.payload.data.data.name){
                     let provider = res.payload.data.data;
+                    self.setState({providerTitle: provider.title});
                     if(self.props.mode === "PROVIDER_ENTRY" && provider.publishStage >=2){
                         self.context.router.push('/provider/'+provider._id+'/providerFoodEntry');
                     }
@@ -69,6 +72,22 @@ const ProviderEntryForm = createReactClass({
             this.props.addProviderErrorMsg({storeKey: errorMsgkey,payload: errorMsg});
         }
     },
+    checkUniqueVals(event){
+        let self = this;
+        let input = event.target.value;
+        // detect a change from initial name
+        let {providerTitle} = this.state;
+        if(providerTitle != input){
+            getCall('/api/providers/check/unique/name',{title: input})
+                .then(function(res){
+                    if(res.data.unique === true) self.setState({uniqueTitle:true})
+                    else self.setState({uniqueTitle:false})
+                });
+        }
+    },
+    resetUniqueTitles(){
+        this.setState({uniqueTitle:true});
+    },
     toggle(storeKey) {
         this.props.addProviderInfo({storeKey: storeKey,payload: !this.props.providerEntryForm.get(storeKey)})
     },
@@ -85,7 +104,7 @@ const ProviderEntryForm = createReactClass({
     changeStoreVal(event) {
         let input = event.target.value;
         let stateKeyName = event.target.name;
-         this.props.addProviderInfo({storeKey:stateKeyName,payload:input});
+        this.props.addProviderInfo({storeKey:stateKeyName,payload:input});
         // forcibly re-render
         window.setTimeout(function() {this.setState({foo: "bar"});}.bind(this),0); 
     },
@@ -109,6 +128,7 @@ const ProviderEntryForm = createReactClass({
     validateForm(){
         let self = this;
         let noErrorsInform = true;
+        const {uniqueTitle} = this.state;
         for (let key in this.mapFieldsToValidationType) {
             if (this.mapFieldsToValidationType.hasOwnProperty(key)) {
                 let validationType = this.mapFieldsToValidationType[key].validationType;
@@ -124,7 +144,7 @@ const ProviderEntryForm = createReactClass({
                 }
             }
         }
-        return noErrorsInform;
+        return (noErrorsInform && uniqueTitle);
     },
     onImageChange(blob,imgUrl,fileConfig){
         this.props.addProviderInfo({
@@ -158,11 +178,20 @@ const ProviderEntryForm = createReactClass({
         }else{
             // show snackbar
             this.props.addProviderInfo({storeKey:'snackBarOpen',payload:true});
+            this.scrollToElement('container');
         }
+    },
+    scrollToElement(elementClassName){
+        scrollToElement('.'+elementClassName, {
+            offset: 0,
+            ease: 'linear',
+            duration: 500
+        });
     },
     render() {
         let {chars_left, title,imgUrlErrorMsg, description, email,phone,imgUrl, code, titleErrorMsg, descriptionErrorMsg, cityErrorMsg, emailErrorMsg,phoneErrorMsg, methodsOfPayment, keepAddressPrivateFlag,serviceOffered,addtnlComments, includeAddressInEmail,deliveryMinOrder,deliveryRadius,providerAddressJustificationModalOpen,searchText,searchTextErrorMsg,place_id,place_idErrorMsg, providerTypeErrorMsg,snackBarOpen,snackBarMessage } = this.props.providerEntryForm.toJS();
         methodsOfPayment = methodsOfPayment || [];
+        let {uniqueTitle} = this.state;
         let self = this;
         switch(serviceOffered){
             case 1:
@@ -193,11 +222,20 @@ const ProviderEntryForm = createReactClass({
                 <form className="pure-form pure-form-stacked">
                     <fieldset>
                         <input value={title} type="text" className="pure-u-1" placeholder="*your business name " name="title" 
-                            onChange={this.changeStoreVal}
-                            onBlur={this.handleChange} 
+                            onChange={(e)=>{
+                                            this.changeStoreVal(e);
+                                            this.resetUniqueTitles();
+                                        }
+                                    }
+                            onBlur={(e)=>{
+                                            this.handleChange(e); 
+                                            this.checkUniqueVals(e);
+                                        }
+                                    } 
                             onFocus={this.handleFocus}
                         />
                         <div className = "error-message">{(titleErrorMsg)?'*'+titleErrorMsg:undefined}</div>
+                        <div className = "error-message">{(!uniqueTitle)?'Oops! this name is already taken. Choose another one':undefined}</div>
                         <textarea className = "pure-u-1" name="description" placeholder="background" value={description}
                             onBlur={this.handleChange} 
                             onFocus={this.handleFocus} 
@@ -386,7 +424,7 @@ const ProviderEntryForm = createReactClass({
                 </div>
                 <Snackbar
                   open = {snackBarOpen || false}
-                  message={'Please fill the required fields'}
+                  message={'Please corect errors in form'}
                   autoHideDuration={4000}
                   onRequestClose={()=>this.toggle('snackBarOpen',false)}
                 />

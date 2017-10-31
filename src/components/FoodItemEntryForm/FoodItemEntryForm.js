@@ -35,7 +35,7 @@ const FoodItemEntryForm= createReactClass({
     componentDidMount() {
         this.props.removeFoodItemInfo();
         //scroll to the top
-        this.scrollToElement('food-item-container');
+        this.scrollToElement('container');
         if(this.props.params.foodId){
             this.props.fetchData('/api/foodItem/'+this.props.params.foodId , 'foodItemCall','FOOD_ITEM')
         }else{
@@ -145,9 +145,9 @@ const FoodItemEntryForm= createReactClass({
             }else this.submitFoodItem(addAnother) 
         } else{
             //scroll to the top
-            this.scrollToElement('food-item-container');
+            this.scrollToElement('container');
             // show snackbar
-            this.props.addFoodItemInfo({storeKey:'snackBarMessage',payload:'Please fill the required fields'});
+            this.props.addFoodItemInfo({storeKey:'snackBarMessage',payload:'Please correct errors in the form'});
             this.props.addFoodItemInfo({storeKey:'snackBarOpen',payload:true});
         }
     },
