@@ -113,7 +113,7 @@ const HomeView = createReactClass({
 				<div className="splash-container pure-override-letter-spacing">
                     <div className="banner-wrapper">
                         <h1 className="promotion-heading">
-                            Find the best chefs in your neighborhood
+                            Order food from home chefs near you
                         </h1>
                         <div className="search-sec-wrapper">
                             <div className = "pure-u-1 pure-u-md-1-3 search-wrapper">

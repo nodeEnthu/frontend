@@ -22,7 +22,7 @@ import JobsList from './JobsList'
 import LoginPage from './LoginPage'
 import HowTiffinWorksCustomer from './HowTiffinWorksCustomer'
 import HowTiffinWorksProvider from './HowTiffinWorksProvider'
-
+import HowItWorksProvider from './HowItWorksProvider'
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
 
@@ -52,7 +52,8 @@ export const createRoutes = (store) => ({
         JobHome(store),
         JobsList(store),
         HowTiffinWorksCustomer(store),
-        HowTiffinWorksProvider(store)
+        HowTiffinWorksProvider(store),
+        HowItWorksProvider(store)
     ]
 })
 

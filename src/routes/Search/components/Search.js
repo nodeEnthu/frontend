@@ -149,7 +149,7 @@ const Search = createReactClass({
         }
     	else {
             this.props.userProfileScrollPosition(foodItem.name);
-            this.context.router.push('/providerProfile/'+foodItem._creator);
+            this.context.router.push('/providerProfile/'+foodItem.providerName);
         }
     },
     render() {
@@ -162,6 +162,7 @@ const Search = createReactClass({
         	if(data[i].foodItems && data[i].foodItems.length>0){
         		for (let j = 0; j < data[i].foodItems.length; j++) {
                 	data[i].foodItems[j].distance = (data[i].distance).toFixed(2);
+                    data[i].foodItems[j].providerName = data[i].title.replace(/ /g,"_");
             	}
             	resolvedData = resolvedData.concat(data[i].foodItems);
         	}

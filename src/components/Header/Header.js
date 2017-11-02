@@ -48,24 +48,6 @@ const Header =createReactClass ({
     contextTypes: {
       router: PropTypes.object.isRequired 
     },
-    checkLoginAndredirect(action){
-      const {user} = this.props.globalState.core.toJS();
-      if (user && user._id){
-        switch(action){
-          case 'providerProfileEntry':
-            this.context.router.push('/provider/'+user._id+'/providerProfileEntry') ;
-            break;
-          case 'postTiffinRequirement':
-            this.context.router.push('/job/create') ;
-            break;
-        }
-      }
-      else{
-        this.props.dispatch(actions.postLoginUrlRedirect(action));
-        this.props.dispatch(actions.openLoginModal());
-      }
-      this.setState({leftNavOpen:false});
-    },
     goToPage(link){
       this.context.router.push(link);
       this.setState({leftNavOpen:false});
@@ -156,7 +138,7 @@ const Header =createReactClass ({
                     undefined
                   }
                   {((user && (user.userType === 'consumer' || !user.published)) || !globalState.core.get('token').length)?
-                    <MenuItem leftIcon={<ActionPermIdentity/>} onTouchTap={()=>this.checkLoginAndredirect('providerProfileEntry')}>
+                    <MenuItem leftIcon={<ActionPermIdentity/>} onTouchTap={()=>this.goToPage('/how/it/works/provider')}>
                         Become a chef
                     </MenuItem>
                     :
@@ -200,7 +182,7 @@ const Header =createReactClass ({
                       } 
                       </li>
                       {(!globalState.core.get('token').length || (user && user.published === false))?
-                        <li onClick={()=>this.checkLoginAndredirect('providerProfileEntry')}>
+                        <li onClick={()=>this.goToPage('/how/it/works/provider')}>
                             <a className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0 1em': '0 0.75em'}} href="javascript:void(0)" className="display-none-small">
                               <span className="show-desktop-inline"style={{position: 'relative',bottom: '1em'}}>Become a chef</span>
                               <img style={{lineHeight:'0'}} className="header-img" src="/general/chef.png"/>

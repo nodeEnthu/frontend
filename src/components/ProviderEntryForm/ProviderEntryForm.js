@@ -424,7 +424,7 @@ const ProviderEntryForm = createReactClass({
                 </div>
                 <Snackbar
                   open = {snackBarOpen || false}
-                  message={'Please corect errors in form'}
+                  message={'Please correct errors in form'}
                   autoHideDuration={4000}
                   onRequestClose={()=>this.toggle('snackBarOpen',false)}
                 />

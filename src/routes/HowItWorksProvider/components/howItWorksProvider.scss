@@ -1,0 +1,83 @@
+.home {
+  background-color: white;
+  .wraper-container {
+    h1 {
+      font-size: 120%;
+      font-weight: 400;
+    }
+  }
+  .reco-text {
+    margin: 1em auto;
+
+    background: white;
+    width: 80%;
+    padding: 3em;
+    border: 1px solid #ff6f00;
+    div {
+      font-size: 110%;
+      padding-top: 1em;
+      span {
+        color: #ff6f00;
+        font-weight: 600;
+      }
+    }
+  }
+  .how-se {
+    padding-bottom: 20px;
+    h2 {
+      margin-bottom: 1em;
+    }
+  }
+  .ban-smal {
+    width: 100%;
+    display: table;
+    background: url("../assets/banner-catering.jpg") no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+    padding: 70px 0px;
+    color: #fff;
+    font-size: 2em;
+    text-align: center;
+  }
+  .get-started-button {
+    margin-top: 1em;
+  }
+  .list-numbered {
+    list-style: none;
+    counter-reset: line;
+  }
+
+  .list-numbered>li {
+    position: relative;
+    margin-bottom: 1.5em;
+  }
+
+  .list-numbered>li:before {
+    position: absolute;
+    left: -2.25em;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    margin-right: 0.5em;
+    background-color: #ff6f00;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: 1.25em;
+    counter-increment: line;
+    content: counter(line);
+  }
+}
+
+@media (max-width: 53em) {
+  .home {
+    .reco-text {
+      margin: 1em auto;
+      background: white;
+      width: 90%;
+      padding: 1em;
+      border: 1px solid #ff6f00;
+    }
+  }
+}

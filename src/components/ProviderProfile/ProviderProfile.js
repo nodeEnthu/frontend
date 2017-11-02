@@ -163,7 +163,7 @@ const ProviderProfile = createReactClass({
     const {user} = this.props.globalState.core.toJS();
     let userViewingOwnProfile = false;
     if(this.props.params && this.props.params.id && user && user._id){
-      if(this.props.params.id === user._id){
+      if(this.props.params.id === user._id || (user.title && this.props.params.id === user.title.replace(/ /g,"_"))){
         userViewingOwnProfile=true;
       }
     }
