@@ -1,7 +1,7 @@
 import React from 'react'
 import './providerPublish.scss'
 import ProviderProfile from 'components/ProviderProfile'
-import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
+import {postCall, securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import Stepper from 'components/Stepper'
 import RaisedButton from 'material-ui/RaisedButton';
 import * as actions from 'layouts/CoreLayout/coreReducer';
@@ -16,6 +16,13 @@ const Provider = createReactClass ({
   },
   contextTypes: {
     router: PropTypes.object.isRequired
+  },
+  componentDidMount() {
+    // check for the promotion
+    let refId = this.context.router.location.query.refId;
+    if(refId){
+      postCall('/api/providers/analytics/publish/started',{refId:refId});
+    }
   },
   publishProvider(){
     let self = this;

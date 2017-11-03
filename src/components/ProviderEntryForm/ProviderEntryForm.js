@@ -4,7 +4,7 @@ import { email, maxLength, required } from './../../utils/formUtils/formValidati
 import Toggle from 'material-ui/Toggle';
 import classNames from 'classnames';
 import Dialog from 'material-ui/Dialog';
-import {getCall, securedPostCall} from 'utils/httpUtils/apiCallWrapper';
+import {getCall, postCall,securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import AsyncAutocomplete from 'components/AsyncAutocomplete';
 import ImageUploader from 'components/ImageUploader';
 import s3ImageUpload from 'utils/uploader/s3ImageUpload';
@@ -36,11 +36,18 @@ const ProviderEntryForm = createReactClass({
                     let provider = res.payload.data.data;
                     self.setState({providerTitle: provider.title});
                     if(self.props.mode === "PROVIDER_ENTRY" && provider.publishStage >=2){
-                        self.context.router.push('/provider/'+provider._id+'/providerFoodEntry');
+                        self.context.router.push('/provider/'+provider._id+'/providerFoodEntry'+ this.context.router.location.search);
                     }
                 }
             })
         }
+    },
+    componentDidMount() {
+      // check for the promotion
+      let refId = this.context.router.location.query.refId;
+      if(refId){
+        postCall('/api/providers/analytics/profile/started',{refId:refId});
+      }
     },
     contextTypes: {
         router: PropTypes.object.isRequired

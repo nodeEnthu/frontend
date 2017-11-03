@@ -49,7 +49,7 @@ const Header =createReactClass ({
       router: PropTypes.object.isRequired 
     },
     goToPage(link){
-      this.context.router.push(link);
+      this.context.router.push(link+this.context.router.location.search);
       this.setState({leftNavOpen:false});
     },
     goToHomePage(user){
@@ -194,7 +194,7 @@ const Header =createReactClass ({
                      
                       <li>
                           <a className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0': '0 0.75em'}} 
-                              href={(user && (user.userType === 'provider'))? '/how/tiffin/works/provider': '/how/tiffin/works/customer'} className="display-none-small"
+                              href={(user && (user.userType === 'provider'))? '/how/tiffin/works/provider'+ this.context.router.location.search: '/how/tiffin/works/customer'+ this.context.router.location.search} className="display-none-small"
                           >
                             <img style={{lineHeight:'0'}} className="header-img" src="/general/tiffin.png"/>
                           </a>

@@ -5,7 +5,7 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton'
 import classNames from 'classnames';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box'
-import { securedPostCall} from 'utils/httpUtils/apiCallWrapper';
+import { postCall, securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import { CUISINE_TYPES,DIET_TYPES,PLACE_ORDER_BY} from 'routes/Search/constants/searchFilters';
 import {daysOfTheWeek,timeOfDay} from './constants';
 import ImageUploader from 'components/ImageUploader'
@@ -44,6 +44,10 @@ const FoodItemEntryForm= createReactClass({
                 this.props.addFoodItemInfo({storeKey:'snackBarOpen',payload:true});
                 this.props.addFoodItemInfo({storeKey:'snackBarMessage',payload:'Item added to menu'});
             }
+        }
+        let refId = this.context.router.location.query.refId;
+        if(refId){
+            postCall('/api/providers/analytics/foodItem/started',{refId:refId});
         }
     },
     scrollToElement(elementClassName){

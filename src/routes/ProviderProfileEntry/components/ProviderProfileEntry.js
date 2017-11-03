@@ -10,6 +10,9 @@ const ProviderProfileEntry = createReactClass ({
   componentDidMount() {
     
   },
+  contextTypes: {
+    router: PropTypes.object.isRequired
+  },
   handleNext(){
     this.refs.providerform.formSubmit();
   },
@@ -36,7 +39,7 @@ const ProviderProfileEntry = createReactClass ({
                                 mode = {"PROVIDER_ENTRY"}
                                 fetchSecuredData={this.props.fetchSecuredData}
                                 nextLabel={"NEXT: FOOD LISTINGS"}
-                                linkToRedirectOnAllClear={"/provider/"+user._id+"/providerFoodEntry"}
+                                linkToRedirectOnAllClear={"/provider/"+user._id+"/providerFoodEntry"+ this.context.router.location.search}
             />
           </div>
           

@@ -7,7 +7,9 @@ import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 
 const ProviderFoodEntry = createReactClass ({
-  
+  contextTypes: {
+    router: PropTypes.object.isRequired
+  },
  
   render() { 
     const {user} = this.props.globalState.core.toJS();
@@ -29,8 +31,8 @@ const ProviderFoodEntry = createReactClass ({
                                 mode = {"PROVIDER_ENTRY"} 
                                 dispatch={this.props.dispatch}
                                 params={this.props.params}
-                                nextLabel={"NEXT: PUBLISH"}
-                                linkToRedirectOnAllClear={"/provider/"+user._id+"/publish"}
+                                nextLabel={"NEXT"}
+                                linkToRedirectOnAllClear={"/provider/"+user._id+"/publish"+ this.context.router.location.search}
             />
           </div>
     );

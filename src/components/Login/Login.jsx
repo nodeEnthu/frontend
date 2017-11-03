@@ -60,7 +60,7 @@ var Login = createReactClass({
                     // special treatment for first time provider entry here as we dont know the objectID
                     switch(redirectPath){
                       case 'providerProfileEntry':
-                        redirectPath = '/provider/'+res.user._id+'/providerProfileEntry';
+                        redirectPath = '/provider/'+res.user._id+'/providerProfileEntry'+ self.context.router.location.search;
                         break;
                       case 'postTiffinRequirement':
                         redirectPath= '/job/create';

@@ -51,6 +51,10 @@
   .list-numbered>li {
     position: relative;
     margin-bottom: 1.5em;
+    span {
+      color: #ff6f00;
+      font-weight: 600;
+    }
   }
 
   .list-numbered>li:before {

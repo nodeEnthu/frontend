@@ -6,18 +6,28 @@ import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import * as actions from 'layouts/CoreLayout/coreReducer'
+import {postCall} from 'utils/httpUtils/apiCallWrapper';
+
 const HowItWorksProvider = createReactClass({
     componentDidMount() {
     },
     contextTypes: {
       router: PropTypes.object.isRequired
     },
+    componentDidMount() {
+      // check for the promotion
+      let refId = this.context.router.location.query.refId;
+      if(refId){
+        postCall('/api/providers/analytics/provider/promo/click',{refId:refId});
+      }
+    },
     checkLoginAndredirect(action){
       const {user} = this.props.globalState.core.toJS();
+      console.log(this.context.router.location.search);
       if (user && user._id){
         switch(action){
           case 'providerProfileEntry':
-            this.context.router.push('/provider/'+user._id+'/providerProfileEntry') ;
+            this.context.router.push('/provider/'+user._id+'/providerProfileEntry'+ this.context.router.location.search) ;
             break;
           default:
             break;
@@ -33,7 +43,7 @@ const HowItWorksProvider = createReactClass({
           <div className="home">
             <div className="ban-smal">
               <div className="wraper-container">
-                <h1>Become a home chef and start providing food <span>starting today</span></h1>
+                <h1>Become a home chef and start providing food to your <span>neighbours</span></h1>
               </div>
               <div className="get-started-button">
                 <RaisedButton style={{fontSize:'14px'}} label="Become a home chef"
@@ -49,6 +59,7 @@ const HowItWorksProvider = createReactClass({
                 Here are some pointers to get the most out of our platform.
               </div>
               <ol className="list-numbered">
+                <li>Deliver food atleast within <span>1km radius</span>. Most customers want home delivery</li>
                 <li>Provide accurate pictures of you/your business and food items </li>
                 <li>Provider phone number while enrolling</li>
                 <li>Be quick in taking actions on orders you receive (you will get a sms)</li>

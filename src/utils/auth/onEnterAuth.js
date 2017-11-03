@@ -13,11 +13,11 @@ export function onProviderProfileEntry(nextState, replace, store) {
   let globalState = store.getState();
   const { user, userLoggedIn } = globalState.core.toJS();
   if (userLoggedIn && user.published && user.userType === 'provider') {
-    replace('/providerProfile/' + user._id);
+    replace('/providerProfile/' + user._id+ globalState.location.search);
   } else if (!userLoggedIn) {
     replace('/');
   } else if (userLoggedIn && !user.published && (user.foodItemAddedInEntryMode || (user.foodItems && user.foodItems.length > 0))) {
-    replace('/provider/' + user._id + '/publish');
+    replace('/provider/' + user._id + '/publish'+ globalState.location.search);
   }
 }
 
@@ -25,7 +25,7 @@ export function onProviderFoodEntry(nextState, replace, store) {
   let globalState = store.getState();
   const { user, userLoggedIn } = globalState.core.toJS();
   if (userLoggedIn && user.published && user.userType === 'provider') {
-    replace('/providerProfile/' + user._id);
+    replace('/providerProfile/' + user._id + globalState.location.search);
   } else if (!userLoggedIn) {
     replace('/');
   }
@@ -39,7 +39,7 @@ export function onProviderPublish(nextState, replace, store) {
   } else if (!userLoggedIn) {
     replace('/');
   } else if (userLoggedIn && !user.published && !(user.foodItemAddedInEntryMode || (user.foodItems && user.foodItems.length > 0))) {
-    replace('/provider/' + user._id + '/providerProfileEntry');
+    replace('/provider/' + user._id + '/providerProfileEntry'+ globalState.location.search);
   }
 }
 export function onProviderNotPublish(nextState, replace, store) {
@@ -47,7 +47,7 @@ export function onProviderNotPublish(nextState, replace, store) {
   const { user, userLoggedIn } = globalState.core.toJS();
   if (userLoggedIn && !user.published && user._id === nextState.params.id) {
     // this means user clicked on edit profile
-    replace('/provider/' + user._id + '/publish');
+    replace('/provider/' + user._id + '/publish'+ globalState.location.search);
   }
 }
 

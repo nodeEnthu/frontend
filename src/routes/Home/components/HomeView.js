@@ -122,7 +122,7 @@ const HomeView = createReactClass({
                                         <span>Im looking for</span>
                                         <select defaultValue ="food" name="select-category">
                                             <option value="food">
-                                                Food providers
+                                                Food
                                             </option>
                                         </select>
                                         <span className="display-none-small" style={{margin:"0 10px"}}>in</span>
@@ -165,7 +165,7 @@ const HomeView = createReactClass({
                 </div>
                 <div className="sub-content-wrapper">
                     <div className="how-se">
-                        <h2>I&#39;m a <span>customer</span></h2>
+                        <h2>How it <span>works</span></h2>
                         <div className="wraper-container">
                             <div className="pure-u-1 pure-u-md-1-3">
                                 <div className="how-col">
@@ -201,57 +201,88 @@ const HomeView = createReactClass({
                                         </div>
                                         <div className="how-pic-cont">
                                             <h4>Order <span></span></h4>
-                                            <p>Order and receive confirmation email from provider</p>
+                                            <p>Order and receive confirmation email</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="how-se how-second">
-                        <h2>I&#39;m a <span>provider</span></h2>
-                        <div className="wraper-container">
+
+                    <div className="how-se">
+        
+                        <div className="wraper-container bor-s">                
                             <div className="pure-u-1 pure-u-md-1-3">
-                                <div className="how-col">
-                                    <div className="how-bxx">
-                                        <div className="how-pic">
-                                            <img src="shared/home/chef.png"/>
-                                        </div>
-                                        <div className="how-pic-cont">
-                                            <h4>Create <span> Profile</span></h4>
-                                            <p>Click "BECOME A CHEF" on top nav bar</p>
-                                        </div>
+                                <div className="vision-main">
+                                <div className="vision">
+                                    <img src="/shared/home/network.jpg"/>
+                                </div>
+                                </div>
+                            </div>
+                            <div className="pure-u-1 pure-u-md-2-3">
+                                <div className="vision-main">
+                                    <div className="vision">
+                                        <p><span>Our vision at spoonandspanner</span> is to create a world where every home chef can sustain and thrive a business that provides healthy food to its customers within at least 1km radius.</p>
+                                        
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <div className="wraper-container bor-s">
                             <div className="pure-u-1 pure-u-md-1-3">
-                                <div className="how-col">
-                                    <div className="how-bxx">
-                                        <div className="how-pic">
-                                            <img src="shared/home/rice.png"/>
-                                        </div>
-                                        <div className="how-pic-cont">
-                                            <h4>Add <span>  Food Items</span></h4>
-                                            <p>Add food item(s) you wish to provide</p>
-                                        </div>
+                                <div className="vision-main">
+                                <div className="vision">
+                                    <img src="/shared/home/health.jpg"/>
+                                </div>
+                                </div>
+                            </div>          
+                            <div className="pure-u-1 pure-u-md-2-3">
+                                <div className="vision-main">
+                                    <div className="vision">
+                                        <p ><span>A world where you don’t have to rely on nearby restaurants</span> and other fancy eateries to sustain a healthy living. Where you have access to all the unknown geniuses around you that deliver much healthier options and are not solely driven by profit.</p>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <div className="wraper-container bor-s">
                             <div className="pure-u-1 pure-u-md-1-3">
-                                <div className="how-col">
-                                    <div className="how-bxx">
-                                        <div className="how-pic">
-                                            <img src="shared/home/thumb-up.png"/>
-                                        </div>
-                                        <div className="how-pic-cont">
-                                            <h4>Preview & <span> Publish</span></h4>
-                                            <p>You&#39;re DONE! start getting orders</p>
-                                        </div>
+                                <div className="vision-main">
+                                <div className="vision">
+                                    <img src="/shared/home/health.jpg"/>
+                                </div>
+                                </div>
+                            </div>
+                            <div className="pure-u-1 pure-u-md-2-3">
+                                <div className="vision-main">
+                                    <div className="vision">
+                                        <p><span>In our hearts</span>, we have always known that the overcooked foods at restaurants that might fulfill our cravings in the spur of moment are not healthy. We want to break the fast food cycle and spark the free market for home food where there is no middle man. This makes sure that you get the best price and our home chef gets 100% of the order money.</p>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="wraper-container bor-s">
+                            <div className="pure-u-1 pure-u-md-1-3">
+                                <div className="vision-main">
+                                    <div className="vision">
+                                        <img src="/shared/home/payment.jpg"/>
+                                    </div>
+                                </div>
+                            </div>         
+                            <div className="pure-u-1 pure-u-md-2-3">
+                                <div className="vision-main">
+                                    <div className="vision">
+                                        <p><span>It is time that we redefine</span> the food market and offer the option of buying the most hygenic and healthy food from your nearby neighbor rather than an overpriced place which has profit as its priority</p>
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div className="list-business">
                         <div className="pure-u-md-1-2 pure-u-1 cook-photo">
                              <img className="gallery-img portrait" src="shared/home/cookPhoto.jpg"/>

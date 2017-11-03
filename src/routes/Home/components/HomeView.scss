@@ -132,8 +132,133 @@
     position: relative;
   }
 
+  .vision {
+    width: 100%;
+    display: table;
+    margin-bottom: 15px;
+  }
+  .vision p span {
+    color: #ff6f00;
+    font-weight: 600;
+  }
 
-  
+  .vision-main {
+    width: 100%;
+    display: table;
+  }
+
+  .how-se:hover .vision-pic-inner img {
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+  }
+
+  .how-se:hover .vision-pic {
+    border-color: #000;
+  }
+
+  .how-se h3 {
+    color: #ff6f00;
+    margin: 0px auto;
+    font-size: 2em;
+    margin-bottom: 50px;
+    letter-spacing: .5px;
+    position: relative;
+    padding-bottom: 15px;
+    /*background: url(binoculars.png) no-repeat;*/
+    background-size: 36px;
+    padding-left: 45px;
+    display: table;
+    font-weight: 600;
+  }
+
+  .how-se h3:before {
+    content: '';
+    width: 40px;
+    height: 4px;
+    background-color: #ff6f00;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 30px;
+  }
+
+  .how-se h3 span {
+    color: #000;
+    font-weight: 400;
+  }
+  .vision p {
+    font-size: 16px;
+    letter-spacing: .5px;
+    line-height: 26px;
+    margin-bottom: 10px;
+    font-weight: 300;
+    height: 138px;
+    vertical-align: middle;
+    display: table-cell;
+  }
+  p.right-padding {
+    padding-right: 15px;
+  }
+  p.left-padding {
+    padding-left: 15px;
+  }
+
+  .hwo-sec {
+    width: 100%;
+    display: table;
+    /*background:url(Indian-Food-wikicont.jpg) no-repeat;*/
+    background-size: cover;
+    background-position: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .hwo-sec .wraper-container {
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+
+  .hwo-sec-inner {
+    padding: 30px;
+    width: 100%;
+    display: table;
+    border: 2px solid #000;
+  }
+
+  .hwo-sec-inner img {
+    width: 100%;
+  }
+
+  .veg-te h3 {
+    margin-left: 0px;
+    font-size: 26px;
+    color: #ff6f00;
+    margin-top: 0px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+
+  .veg-te {
+    padding-left: 50px;
+  }
+
+  .veg-te p {
+    margin-top: 0px;
+    font-size: 16px;
+    letter-spacing: 1px;
+    line-height: 28px;
+  }
+
+  .vision img {
+    width: 100%;
+    border-radius: 100%;
+  }
 
   .list-business {
     display: flex;
@@ -299,6 +424,8 @@
     }
   }
 }
+
+
 
 
 
