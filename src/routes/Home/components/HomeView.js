@@ -11,6 +11,7 @@ import Stepper from 'components/Stepper';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
+import Paper from 'material-ui/Paper';
 
 const HomeView = createReactClass({
     getInitialState() {
@@ -137,8 +138,8 @@ const HomeView = createReactClass({
                                                 name={"home_view"} 
                                                 userSearchText = {this.props.globalState.core.get('user').get('searchText')}
                                                 apiUrl = {'/api/locations/addressTypeAssist'}
-                                                getSuggestionValue={(suggestion)=>suggestion.address}
-                                                onChange = {(event, value)=>{
+                                                getSuggestionValue={(suggestion) => suggestion.address}
+                                                onChange = {(event, value) => {
                                                                                 this.setState({
                                                                                     showAddressError:false
                                                                                 });
@@ -153,7 +154,7 @@ const HomeView = createReactClass({
                                             </div>
                                             <div className="locate-me display-none-small">Locate me</div>
                                         </div>
-                                        <div className="search-button" onClick={()=>this.goToPage("search")}>
+                                        <div className="search-button" onClick={() => this.goToPage("search")}>
                                             <img src={(goTosearchPageDelaySpinner)?"general/loading.svg": "iconSearch.png"}></img>
                                         </div>
                                     </div>
@@ -208,81 +209,81 @@ const HomeView = createReactClass({
                             </div>
                         </div>
                     </div>
-
-                    <div className="how-se">
-        
-                        <div className="wraper-container bor-s">                
-                            <div className="pure-u-1 pure-u-md-1-3">
-                                <div className="vision-main">
-                                <div className="vision">
-                                    <img src="/shared/home/network.jpg"/>
-                                </div>
-                                </div>
-                            </div>
-                            <div className="pure-u-1 pure-u-md-2-3">
-                                <div className="vision-main">
+                    <div style={{padding : "0 0.5em"}}>
+                        <div className="how-se">
+                             <h2>Our <span>vision</span></h2>
+                            <div className="wraper-container bor-s">                
+                                <div className="pure-u-1 pure-u-md-1-3">
+                                    <div className="vision-main">
                                     <div className="vision">
-                                        <p><span>Our vision at spoonandspanner</span> is to create a world where every home chef can sustain and thrive a business that provides healthy food to its customers within at least 1km radius.</p>
-                                        
+                                        <img src="/shared/home/network.jpg"/>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div className="pure-u-1 pure-u-md-2-3">
+                                    <div className="vision-main">
+                                        <div className="vision">
+                                            <p><span>Our vision at spoonandspanner</span> is to create a world where every home chef can sustain and thrive a business that provides healthy food to its customers within at least 1km radius.</p>
+                                            
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div className="wraper-container bor-s">
-                            <div className="pure-u-1 pure-u-md-1-3">
-                                <div className="vision-main">
-                                <div className="vision">
-                                    <img src="/shared/home/health.jpg"/>
-                                </div>
-                                </div>
-                            </div>          
-                            <div className="pure-u-1 pure-u-md-2-3">
-                                <div className="vision-main">
+                            
+                            <div className="wraper-container bor-s">
+                                <div className="pure-u-1 pure-u-md-1-3">
+                                    <div className="vision-main">
                                     <div className="vision">
-                                        <p ><span>A world where you don’t have to rely on nearby restaurants</span> and other fancy eateries to sustain a healthy living. Where you have access to all the unknown geniuses around you that deliver much healthier options and are not solely driven by profit.</p>
+                                        <img src="/shared/home/health.jpg"/>
+                                    </div>
+                                    </div>
+                                </div>          
+                                <div className="pure-u-1 pure-u-md-2-3">
+                                    <div className="vision-main">
+                                        <div className="vision">
+                                            <p ><span>A world where you don’t have to rely on nearby restaurants</span> and other fancy eateries to sustain a healthy living. Where you have access to all the unknown geniuses around you that deliver much healthier options and are not solely driven by profit.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div className="wraper-container bor-s">
-                            <div className="pure-u-1 pure-u-md-1-3">
-                                <div className="vision-main">
-                                <div className="vision">
-                                    <img src="/shared/home/health.jpg"/>
-                                </div>
-                                </div>
-                            </div>
-                            <div className="pure-u-1 pure-u-md-2-3">
-                                <div className="vision-main">
-                                    <div className="vision">
-                                        <p><span>In our hearts</span>, we have always known that the overcooked foods at restaurants that might fulfill our cravings in the spur of moment are not healthy. We want to break the fast food cycle and spark the free market for home food where there is no middle man. This makes sure that you get the best price and our home chef gets 100% of the order money.</p>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="wraper-container bor-s">
-                            <div className="pure-u-1 pure-u-md-1-3">
-                                <div className="vision-main">
+                            
+                            <div className="wraper-container bor-s">
+                                <div className="pure-u-1 pure-u-md-1-3">
+                                    <div className="vision-main">
                                     <div className="vision">
                                         <img src="/shared/home/payment.jpg"/>
                                     </div>
+                                    </div>
                                 </div>
-                            </div>         
-                            <div className="pure-u-1 pure-u-md-2-3">
-                                <div className="vision-main">
-                                    <div className="vision">
-                                        <p><span>It is time that we redefine</span> the food market and offer the option of buying the most hygenic and healthy food from your nearby neighbor rather than an overpriced place which has profit as its priority</p>
-                                        
+                                <div className="pure-u-1 pure-u-md-2-3">
+                                    <div className="vision-main">
+                                        <div className="vision">
+                                            <p><span>In our hearts</span>, we have always known that the overcooked foods at restaurants that might fulfill our cravings in the spur of moment are not healthy. We want to break the fast food cycle and spark the free market for home food where there is no middle man. This makes sure that you get the best price and our home chef gets 100% of the order money.</p>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="wraper-container bor-s">
+                                <div className="pure-u-1 pure-u-md-1-3">
+                                    <div className="vision-main">
+                                        <div className="vision">
+                                            <img src="/shared/home/local-business-support.jpg"/>
+                                        </div>
+                                    </div>
+                                </div>         
+                                <div className="pure-u-1 pure-u-md-2-3">
+                                    <div className="vision-main">
+                                        <div className="vision">
+                                            <p><span>It is time that we redefine</span> the food market and offer the option of buying the most hygenic and healthy food from your nearby neighbor rather than an overpriced place which has profit as its priority</p>
+                                            
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div className="list-business">
                         <div className="pure-u-md-1-2 pure-u-1 cook-photo">
                              <img className="gallery-img portrait" src="shared/home/cookPhoto.jpg"/>
@@ -300,7 +301,7 @@ const HomeView = createReactClass({
                                     We are starting off with food with a vision of expanding this service to 
                                     other categories like electricians, plumbers etc as well
                                 </p>
-                                <p className="business-signup" onClick={()=>this.goToPage('providerEntry')}>
+                                <p className="business-signup" onClick={() => this.goToPage('providerEntry')}>
                                     Sign up now
                                 </p>
                             </div>

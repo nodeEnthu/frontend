@@ -88,10 +88,10 @@ const Header =createReactClass ({
         return (
               <AppBar
                 title=""
-                onLeftIconButtonTouchTap={()=>this.handleToggle()}
+                onLeftIconButtonTouchTap={() => this.handleToggle()}
                 titleStyle={{flex :'0 0 0'}}
               >
-                <div className="frame" onClick={()=>this.context.router.push('/')}>
+                <div className="frame" onClick={() => this.context.router.push('/')}>
                   <img className = "logo show-desktop" src="/general/logo-desktop.png"></img>
                   <img className = "logo show-mobile" src="/general/logo-mobile.png"></img>
                 </div>
@@ -105,40 +105,40 @@ const Header =createReactClass ({
                   {(globalState.core.get('token').length>0 && user&& user.name && user.userType==='provider')?
                     undefined
                     :
-                    <MenuItem leftIcon={<ActionHome/>} onTouchTap={()=>this.goToPage('/')}>
+                    <MenuItem leftIcon={<ActionHome/>} onTouchTap={() => this.goToPage('/')}>
                       Home
                     </MenuItem>
                   }
                   {(globalState.core.get('token').length>0 && user && user.name && user.place_id)?
-                    <MenuItem leftIcon={<ActionSearch/>} onTouchTap={()=>this.goToPage('/search')}>
+                    <MenuItem leftIcon={<ActionSearch/>} onTouchTap={() => this.goToPage('/search')}>
                       Search
                     </MenuItem>
                     :
                     undefined
                   }
                   {(globalState.core.get('token').length>0 )?
-                    <MenuItem leftIcon={<ActionChromeReaderMode/>} onTouchTap={()=>this.goToPage('/user/'+user._id+'/order-summary/#')}>
+                    <MenuItem leftIcon={<ActionChromeReaderMode/>} onTouchTap={() => this.goToPage('/user/'+user._id+'/order-summary/#')}>
                       Orders
                     </MenuItem>
                     :
                     undefined
                   }
                   {(user && user.userType === 'provider')?
-                    <MenuItem leftIcon={<ActionCardTravel/>} onTouchTap={()=>this.goToPage('/job/apply/board')}>
+                    <MenuItem leftIcon={<ActionCardTravel/>} onTouchTap={() => this.goToPage('/job/apply/board')}>
                         Job board
                     </MenuItem>
                     :
                     undefined
                   }
                   {(globalState.core.get('token').length>0)?
-                    <MenuItem leftIcon={<img src="/general/tiffin_outline.png"/>} onTouchTap={()=>this.goToPage('/jobs/list')}>
+                    <MenuItem leftIcon={<img src="/general/tiffin_outline.png"/>} onTouchTap={() => this.goToPage('/jobs/list')}>
                         Tiffin needs
                     </MenuItem>
                     :
                     undefined
                   }
                   {((user && (user.userType === 'consumer' || !user.published)) || !globalState.core.get('token').length)?
-                    <MenuItem leftIcon={<ActionPermIdentity/>} onTouchTap={()=>this.goToPage('/how/it/works/provider')}>
+                    <MenuItem leftIcon={<ActionPermIdentity/>} onTouchTap={() => this.goToPage('/how/it/works/provider')}>
                         Become a chef
                     </MenuItem>
                     :
@@ -168,7 +168,7 @@ const Header =createReactClass ({
                           <Login{...this.props}/>
                          } 
                       </li>
-                      <li className="profile-pic" onClick={()=>this.goToHomePage(user)}>
+                      <li className="profile-pic" onClick={() => this.goToHomePage(user)}>
                       {(user.img)?
                         <img src={user.img} 
                           style = {{
@@ -182,7 +182,7 @@ const Header =createReactClass ({
                       } 
                       </li>
                       {(!globalState.core.get('token').length || (user && user.published === false))?
-                        <li onClick={()=>this.goToPage('/how/it/works/provider')}>
+                        <li onClick={() => this.goToPage('/how/it/works/provider')}>
                             <a className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0 1em': '0 0.75em'}} href="javascript:void(0)" className="display-none-small">
                               <span className="show-desktop-inline"style={{position: 'relative',bottom: '1em'}}>Become a chef</span>
                               <img style={{lineHeight:'0'}} className="header-img" src="/general/chef.png"/>
@@ -212,7 +212,7 @@ const Header =createReactClass ({
                     {
                       (user && user.userType === 'provider')?
                       <form className="pure-form pure-form-stacked">
-                        <textarea className = "pure-u-1" value={deleteText} placeholder="Please type in your profile/business name to confirm." onChange={(event)=>this.setState({deleteText:event.target.value})}/>
+                        <textarea className = "pure-u-1" value={deleteText} placeholder="Please type in your profile/business name to confirm." onChange={(event) => this.setState({deleteText:event.target.value})}/>
                       </form>
                       :
                       undefined
@@ -224,7 +224,7 @@ const Header =createReactClass ({
                   { (accntDeleted === false && !showSpinner)?
                     <div>
                       <RaisedButton label="No"
-                        onTouchTap={()=>this.setState({deleteAccntModalOpen:false})}
+                        onTouchTap={() => this.setState({deleteAccntModalOpen:false})}
                       />
                       <div className="pure-u-1-12">
                       </div>
@@ -233,7 +233,7 @@ const Header =createReactClass ({
                         <RaisedButton 
                           backgroundColor="red" 
                           label="Yes" 
-                          onTouchTap={(event)=>this.deleteAccnt(user._id)}
+                          onTouchTap={(event) => this.deleteAccnt(user._id)}
                           disabled={(this.state.deleteText.toUpperCase() != user.title.toUpperCase() && user.userType != 'consumer')}
                         />
                         :undefined
