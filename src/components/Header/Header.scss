@@ -52,7 +52,7 @@
   #sub-nav li a {
     color: #fff;
   }
-  
+
   .frame {
     position: absolute;
     left: 3em;
@@ -60,7 +60,7 @@
     width: 14em;
     margin-left: 1em;
     top: 0.35em;
-    z-index:5;
+    z-index: 5;
   }
 
   .logo {
@@ -83,7 +83,7 @@
 
   #nav>ul>li a,
   #sub-nav ul li a {
-    position:relative;
+    position: relative;
     padding: 0 0.75em;
     height: 100%;
     font-size: 1em;
@@ -93,7 +93,6 @@
     vertical-align: middle;
     display: table-cell;
   }
-
   /* second level */
 
   #nav li ul {
@@ -161,6 +160,10 @@
     display: inline-block;
   }
 
+  .vision-main {
+    padding-left: 0.5em;
+  }
+
   .header-img {
     width: 40px;
     img {
@@ -195,6 +198,9 @@
     }
     .show-desktop {
       display: none;
+    }
+    .vision-main {
+      padding-left: 0;
     }
   }
 

@@ -172,7 +172,7 @@ const OrderAction = createReactClass({
                 })
               }
             </div>
-            { (!order.mailSentToCustomer && !showCheckMark && !showCrossMark )?
+            { (!order.mailSentToCustomer && !showCheckMark && !showCrossMark)?
               <div className="is-center" style={{marginTop:'2em'}}>
                   <div style={{display:(showSpinner)?'block':'none'}}>
                     <img src= "/general/loading.svg"/>
@@ -181,7 +181,7 @@ const OrderAction = createReactClass({
                   style={{marginRight:'10%',width:"35%",height:'3em',lineHeight:"3em"}}
                   labelStyle={{fontSize:"105%"}}
                   disableTouchRipple={true}
-                  onClick={()=>this.setState({deleteItemModalOpen:true})}
+                  onClick={() => this.setState({deleteItemModalOpen:true})}
                  />
                 <RaisedButton
                   primary={true}
@@ -215,7 +215,7 @@ const OrderAction = createReactClass({
             }
             <Dialog
               open={deleteItemModalOpen}
-              onRequestClose={()=>this.setState({deleteItemModalOpen:false})}
+              onRequestClose={() => this.setState({deleteItemModalOpen:false})}
             >
               <div style={{textAlign:"center"}}>
                 <p>
@@ -224,7 +224,7 @@ const OrderAction = createReactClass({
                 <p>
                   You will not be able to take any further action on this order
                 </p>
-                <DropDownMenu value={cancelReason} onChange={(event, index, value)=>self.setState({cancelReason:value})}
+                <DropDownMenu value={cancelReason} onChange={(event, index, value) => self.setState({cancelReason:value})}
                               iconStyle={{fill:"rgb(0, 0, 0)"}}
                               underlineStyle={{borderTop:"1px solid black"}}
                 >
@@ -239,7 +239,7 @@ const OrderAction = createReactClass({
                 {
                   (cancelReason === 6)?
                   <form className="pure-form pure-form-stacked">
-                    <textarea className = "pure-u-1" value={cancelText} placeholder="Please type reason for cancellation here" onChange={(event)=>this.setState({cancelText:event.target.value})}/>
+                    <textarea className = "pure-u-1" value={cancelText} placeholder="Please type reason for cancellation here" onChange={(event) => this.setState({cancelText:event.target.value})}/>
                   </form>
                   :
                   undefined
@@ -255,7 +255,7 @@ const OrderAction = createReactClass({
                   }
                       
                     <RaisedButton label="No"
-                        onTouchTap={()=>this.setState({deleteItemModalOpen:false})}
+                        onTouchTap={() => this.setState({deleteItemModalOpen:false})}
                         disableTouchRipple = {true}
                     />
                     <div className="pure-u-1-12">
@@ -263,7 +263,7 @@ const OrderAction = createReactClass({
                     <RaisedButton 
                       backgroundColor="red" 
                       label="Yes" 
-                      onTouchTap={(event)=>this.cancelOrder()}
+                      onTouchTap={(event) => this.cancelOrder()}
                       disabled={((cancelReason === 6 && !cancelText) || (!cancelReason &&  cancelReason!=0)) ? true:false}
                       disableTouchRipple = {true}
                     />

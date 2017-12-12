@@ -54,16 +54,16 @@ const JobHome = createReactClass({
 			  <div className='inner'>
 			    <ul className='cf'>
 			      <li>
-			        <Link to={`/job/${jobId}/summary`} className={(activeLink === 'summary')? 'active' : undefined} onClick = {()=>this.changeActiveLink('summary')}>job</Link>
+			        <Link to={`/job/${jobId}/summary`} className={(activeLink === 'summary')? 'active' : undefined} onClick = {() =>this.changeActiveLink('summary')}>job</Link>
 			      </li>
 			      <li>
-			          <Link to={`/job/${jobId}/invite`} className={(activeLink === 'invite')? 'active' : undefined} onClick = {()=>this.changeActiveLink('invite')}>invite</Link>
+			          <Link to={`/job/${jobId}/invite`} className={(activeLink === 'invite')? 'active' : undefined} onClick = {() =>this.changeActiveLink('invite')}>invite</Link>
 			      </li>
 			      <li>
-			        <Link to={`/job/${jobId}/proposals`} className={(activeLink === 'proposals')? 'active' : undefined} onClick = {()=>this.changeActiveLink('proposals')}>proposals</Link>
+			        <Link to={`/job/${jobId}/proposals`} className={(activeLink === 'proposals')? 'active' : undefined} onClick = {() =>this.changeActiveLink('proposals')}>proposals</Link>
 			      </li>
 			      <li>
-			        <Link to={`/job/${jobId}/hired`} className={(activeLink === 'hired')? 'active' : undefined} onClick = {()=>this.changeActiveLink('hired')}>hired</Link>
+			        <Link to={`/job/${jobId}/hired`} className={(activeLink === 'hired')? 'active' : undefined} onClick = {() =>this.changeActiveLink('hired')}>hired</Link>
 			      </li>
 			    </ul>
 			  </div>

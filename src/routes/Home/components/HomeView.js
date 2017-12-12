@@ -11,7 +11,6 @@ import Stepper from 'components/Stepper';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
-import Paper from 'material-ui/Paper';
 
 const HomeView = createReactClass({
     getInitialState() {
