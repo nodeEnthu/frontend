@@ -144,7 +144,7 @@ const FoodItemEntryForm= createReactClass({
                 // upload and assume its gonna pass
                 s3ImageUpload(this.state.fileConfig,this.state.imgBlob,function(){
                     self.submitFoodItem(addAnother)
-                        .then(()=>self.props.removeFoodItemInfo());
+                        .then(() =>self.props.removeFoodItemInfo());
                 });
             }else this.submitFoodItem(addAnother) 
         } else{
@@ -231,7 +231,7 @@ const FoodItemEntryForm= createReactClass({
                                         value={cuisineType}
                                     >
                                         <option value=''></option>
-                                        {CUISINE_TYPES.map((cuisine)=>{
+                                        {CUISINE_TYPES.map((cuisine) =>{
                                             return <option key={cuisine.value}>{cuisine.value}</option>
                                         })}
 
@@ -252,7 +252,7 @@ const FoodItemEntryForm= createReactClass({
                                                         <div className="child-box-2">
                                                             <Checkbox
                                                                 defaultChecked={(self.props.foodItemEntryForm.toJS()[diet.value] === true)}
-                                                                onCheck={(event,isInputChecked)=>self.toggle(diet.value ,isInputChecked)}
+                                                                onCheck={(event,isInputChecked) =>self.toggle(diet.value ,isInputChecked)}
                                                             />
                                                         </div>
                                                     </div>
@@ -325,7 +325,7 @@ const FoodItemEntryForm= createReactClass({
                                 <RaisedButton
                                   label="+ Add another item"
                                   style={{top:'6px'}}
-                                  onClick = {()=>this.formSubmit('addAnother')}
+                                  onClick = {() =>this.formSubmit('addAnother')}
                                   disableTouchRipple={true}
                                 />
                             </div>
@@ -354,14 +354,14 @@ const FoodItemEntryForm= createReactClass({
                         label={this.props.nextLabel}
                         backgroundColor="#FF6F00"
                         labelStyle={{color:'white'}}
-                        onTouchTap={()=>this.formSubmit()}
+                        onTouchTap={() =>this.formSubmit()}
                         disableTouchRipple={true}
                     />
                     <Snackbar
                       open={snackBarOpen || false}
                       message={snackBarMessage || ''}
                       autoHideDuration={4000}
-                      onRequestClose={()=>this.toggle('snackBarOpen',false)}
+                      onRequestClose={() =>this.toggle('snackBarOpen',false)}
                     />
                 </div>  
             </div>

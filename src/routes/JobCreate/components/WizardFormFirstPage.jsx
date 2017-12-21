@@ -47,8 +47,8 @@ let WizardFormFirstPage =  createReactClass({
         <AsyncAutocomplete  name={'searchText'}
                             apiUrl = {'/api/locations/addressTypeAssist'}
                             userSearchText = {addressVar}
-                            getSuggestionValue={(suggestion)=>suggestion.address}
-                            onChange = {(event, value)=>{change('address', value.newValue); change('place_id', null)}}
+                            getSuggestionValue={(suggestion) =>suggestion.address}
+                            onChange = {(event, value) =>{change('address', value.newValue); change('place_id', null)}}
                             onSuggestionSelected = {this.onSuggestionSelected}
         />
         {

@@ -25,7 +25,7 @@ const JobApply = createReactClass({
 			verified:false,
 			phone:undefined,
 			code:undefined,
-			loadingResults:false
+			loadingResults:true
 		};
 	},
 	contextTypes: {
@@ -33,7 +33,9 @@ const JobApply = createReactClass({
     },
 	componentDidMount() {
 		const {user}  = this.props.globalState.core.toJS();
+
 		if(user.userType ==='consumer') this.context.router.push('/jobs/list');
+
 		else if(user.userType ==='provider' && !user.published) {
 			this.context.router.push(`/provider/${user._id}/providerProfileEntry`);
 			Alert.warning('Please enroll as a chef and then click on "Jobs Board" in left nav to see jobs close to you', {
@@ -43,6 +45,8 @@ const JobApply = createReactClass({
 		else{
 			if(user.phone){
 				this.setState({phone:user.phone, verified:true, providerId: user._id, loadingResults:true});
+			}else{
+				this.setState({providerId: user._id});
 			}
 			this.refreshPage();
 		}
@@ -63,8 +67,8 @@ const JobApply = createReactClass({
 		}],function(err,resultArr){
 			// create a unique list
 			let result = _.unionBy(resultArr[1], resultArr[0], "_id");
-			self.setState({jobs:result});
 			self.setState({loadingResults:false});
+			self.setState({jobs:result});
 		})
 	},
 	resolveAddress(address){
@@ -96,21 +100,26 @@ const JobApply = createReactClass({
 		this.setState({[stateKey]:value});
 	},
   	render(){
-  		const {jobs,verified,phone,code,providerId,loadingResults} = this.state;
-  		const {user}  = this.props.globalState.core.toJS();
+  		let {jobs,verified,phone,code,providerId,loadingResults} = this.state;
+  		let {user}  = this.props.globalState.core.toJS();
   		let self = this;
+  		if (loadingResults)
+  			return (
+  				<div className="is-center">
+  					<img src= "/general/loading.svg"/>
+  				</div>)
 	    return (
 	    <div className="job-apply">
 	    	<div className="apply-wrapper">
 	    		<h2>
 	    			Your job board
 	    		</h2>
-	    		{	(!loadingResults)?
+	    		{	
 	    			(jobs.length >0)?
 	    			jobs.map(function(job,index){
 	    				return (<Card key={index+'job'}
 	    							expanded={self.state['invitedJobsExpanded'+index]}
-	    							onExpandChange={()=>self.handleExpandChange('invitedJobsExpanded'+index)}
+	    							onExpandChange={() =>self.handleExpandChange('invitedJobsExpanded'+index)}
 	    							style={{marginTop:'0.5em'}}
 	    						>
 					               <CardHeader
@@ -122,9 +131,8 @@ const JobApply = createReactClass({
 							        >
 							        </CardHeader>
 						       {
-			                		(job && job.applicants && (job.applicants.indexOf(providerId)=== -1 || job.hirees.indexOf(providerId) > -1))?
-			                		undefined
-			                		:
+			                		(job && job.applicants && job.applicants.indexOf(providerId) > -1 && job.hirees.indexOf(providerId) === -1)?
+			                		
 			                		<div style={{textAlign:'right', margin:'0 1em 1em 0'}}>
 			                			<CardActions>
 									      <FlatButton
@@ -137,11 +145,10 @@ const JobApply = createReactClass({
 									    />
 									    </CardActions>
 									</div>
+									: undefined
 				            	}
 				            	{
-			                		(job && job.applicants &&job.hirees.indexOf(providerId)=== -1)?
-			                		undefined
-			                		:
+			                		(job && job.applicants && job.hirees.indexOf(providerId)> -1)?
 			                		<div style={{textAlign:'right', margin:'0 1em 1em 0'}}>
 			                			<CardActions>
 									      <FlatButton
@@ -154,13 +161,15 @@ const JobApply = createReactClass({
 									    />
 									    </CardActions>
 									</div>
+									: 
+									undefined
 				            	}
 							        <CardText
 							        	expandable={true}
 							        >
 					                	<JobSummary jobDetails={job}/>
 					                {
-			                			(job && job.applicants &&job.applicants.indexOf(providerId)=== -1)?
+			                			(job && job.applicants && job.applicants.indexOf(providerId)=== -1 && job.hirees.indexOf(providerId) === -1)?
 				                		<CardText>
 					                		<div style={{fontSize:'115%', fontWeight:400, marginBottom:'0.25em'}}>
 					                			Apply for this job:
@@ -181,7 +190,7 @@ const JobApply = createReactClass({
 							                	<textarea 	style={{minHeight:'5em'}}className="pure-u-1" 
 							                				placeholder="Explain pricing, various food options available on different days and pick-up/delivery timings" 
 							                				value={self.state['coverLetter'+index] || ''}
-							                				onChange={(event)=>self.coverLetterChange('coverLetter'+index, event.target.value)}
+							                				onChange={(event) =>self.coverLetterChange('coverLetter'+index, event.target.value)}
 							                	>
 							                 	</textarea>
 							                </form>
@@ -193,7 +202,7 @@ const JobApply = createReactClass({
 							                	<RaisedButton 
 							                   		primary={true} 
 							                   		disabled={!verified || !self.state['coverLetter'+index]} 
-							                   		label="Apply" onClick={()=>self.apply(job._id, index)}
+							                   		label="Apply" onClick={() =>self.apply(job._id, index)}
 							                   		disableTouchRipple = {true}
 							                   	/>
 							                </CardActions>
@@ -227,15 +236,11 @@ const JobApply = createReactClass({
 								   	<RaisedButton
 			                		 	label="View your profile"
 			                		 	primary={true}
-			                		 	onClick={()=>self.context.router.push('/providerProfile/'+user._id)}
+			                		 	onClick={() =>self.context.router.push('/providerProfile/'+user._id)}
 							            disableTouchRipple = {true}
 								    />
 								</div>
 							</div>
-							:
-							<div className="is-center">
-		                        <img src= "/general/loading.svg"/>
-		                    </div>
 	    		}
 		    	
 	        </div>

@@ -4,6 +4,7 @@ import '../../styles/core.scss'
 import Header from '../../components/Header/index'
 import PropTypes from 'prop-types';
 import Alert from 'react-s-alert';
+import { Link, IndexLink } from 'react-router';
 
 export const CoreLayout = ({ children }) => (
   <div className='container'>
@@ -16,8 +17,8 @@ export const CoreLayout = ({ children }) => (
       <div className="footer">
         <div className="pure-menu pure-menu-horizontal">
           <ul className="pure-menu-list">
-              <li className="pure-menu-item"><a href="/termsandconditions" className="pure-menu-link">Terms and conditions</a></li>
-              <li className="pure-menu-item"><a href="mailto:support@spoonandspanner.com" className="pure-menu-link">Contact-us</a></li>
+              <li className="pure-menu-item"><Link to="/termsandconditions" className="pure-menu-link">Terms and conditions</Link></li>
+              <li className="pure-menu-item"><Link to="mailto:support@spoonandspanner.com" className="pure-menu-link">Contact-us</Link></li>
           </ul>
         </div>
       </div>

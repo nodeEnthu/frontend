@@ -1,7 +1,12 @@
 .job-home {
   .job-hired {
+    .no-hired-text {
+    	padding-top:2em;
+      	margin: 0 auto;
+    }
     a {
-      color: black;
+    	color: black;
+     	border-bottom: 1px solid #C0DEED;
     }
   }
 }

@@ -70,7 +70,13 @@ const JobHome = createReactClass({
 			</div>
 			{
 				(jobDetails)?
-					React.cloneElement(this.props.children, { jobDetails: jobDetails, refreshPage:self.refreshPage, disabledInvites: disabledInvites })
+					React.cloneElement(this.props.children, 
+										{ 	jobDetails: jobDetails, 
+											refreshPage:self.refreshPage, 
+											disabledInvites: disabledInvites, 
+											changeActiveLink:self.changeActiveLink 
+										}
+									)
 					:
 					undefined
 			}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './providerentryform.scss';
-import { email, maxLength, required } from './../../utils/formUtils/formValidation';
+import { email, maxLength, required, noSpecialCharacters } from './../../utils/formUtils/formValidation';
 import Toggle from 'material-ui/Toggle';
 import classNames from 'classnames';
 import Dialog from 'material-ui/Dialog';
@@ -31,7 +31,7 @@ const ProviderEntryForm = createReactClass({
         // check whether its an edit to an already present provider
         if(this.props.params.id){
             this.props.fetchSecuredData('/api/users/'+this.props.params.id+'/profileEdit' , 'providerProfileCall',this.props.mode)
-            .then((res)=>{
+            .then((res) =>{
                 if(res && res.payload &&res.payload.data && res.payload.data.data && res.payload.data.data.name){
                     let provider = res.payload.data.data;
                     self.setState({providerTitle: provider.title});
@@ -53,7 +53,7 @@ const ProviderEntryForm = createReactClass({
         router: PropTypes.object.isRequired
     },
     mapFieldsToValidationType : {
-        title: {validationType: required,validationMessage:'title is required'},
+        title: {validationType: noSpecialCharacters,validationMessage:'title is required'},
         imgUrl: {validationType: required,validationMessage:'image is required'},
         email: {validationType:email,validationMessage:'email is required'},
         description: {validationType:maxLength,validationMessage:'description is required'},
@@ -62,6 +62,9 @@ const ProviderEntryForm = createReactClass({
     },
     handleChange(event) {
         let input = event.target.value;
+        if(input){
+            input = input.trim();
+        }
         let stateKeyName = event.target.name;
         let actionObj = {
             storeKey :stateKeyName,
@@ -174,13 +177,13 @@ const ProviderEntryForm = createReactClass({
             if (reqBody.imgChanged) {
                 s3ImageUpload(this.state.fileConfig,this.state.imgBlob,function(){
                     securedPostCall('/api/providers/registration' , reqBody)
-                        .then(()=>self.onAllClear())
+                        .then(() =>self.onAllClear())
                 });
                 // reset it back to not changed
                 this.props.addProviderInfo({storeKey:'imgChanged',payload:false});
             }else{
                 securedPostCall('/api/providers/registration' , reqBody)
-                    .then(()=>self.onAllClear())
+                    .then(() =>self.onAllClear())
             }
         }else{
             // show snackbar
@@ -229,12 +232,12 @@ const ProviderEntryForm = createReactClass({
                 <form className="pure-form pure-form-stacked">
                     <fieldset>
                         <input value={title} type="text" className="pure-u-1" placeholder="*your business name " name="title" 
-                            onChange={(e)=>{
+                            onChange={(e) =>{
                                             this.changeStoreVal(e);
                                             this.resetUniqueTitles();
                                         }
                                     }
-                            onBlur={(e)=>{
+                            onBlur={(e) =>{
                                             this.handleChange(e); 
                                             this.checkUniqueVals(e);
                                         }
@@ -280,12 +283,12 @@ const ProviderEntryForm = createReactClass({
                                         thumbSwitchedStyle={{backgroundColor:'#FF6F00'}}
                                         trackSwitchedStyle={{backgroundColor:'#fdd4b5'}}
                                         defaultToggled={!keepAddressPrivateFlag}
-                                        onToggle={()=>{this.toggle('keepAddressPrivateFlag')}}
+                                        onToggle={() =>{this.toggle('keepAddressPrivateFlag')}}
                                     />
                                 </div>
                                 
                                 <a className="pure-menu-link address-justification" 
-                                    onClick={()=>{this.toggle('providerAddressJustificationModalOpen')}}>
+                                    onClick={() =>{this.toggle('providerAddressJustificationModalOpen')}}>
                                     why we need it?
                                 </a> 
                             </div>  
@@ -295,8 +298,8 @@ const ProviderEntryForm = createReactClass({
                                             onFocus={this.handleFocus}
                                             userSearchText = {this.props.providerEntryForm.get('searchText')}
                                             apiUrl = {'/api/locations/addressTypeAssist'}
-                                            getSuggestionValue={(suggestion)=>suggestion.address}
-                                            onChange = {(event, value)=>{
+                                            getSuggestionValue={(suggestion) =>suggestion.address}
+                                            onChange = {(event, value) =>{
                                                                             this.props.addProviderInfo({
                                                                                                     storeKey:'searchText',
                                                                                                     payload:value.newValue
@@ -410,7 +413,7 @@ const ProviderEntryForm = createReactClass({
                                                 key={index}
                                                 label= {methodOfPayment.label}
                                                 checked={(methodsOfPayment.indexOf(methodOfPayment.value) > -1)? true: false }
-                                                onCheck={()=>self.changeMethodsofPayment("methodsOfPayment",methodOfPayment.value)}
+                                                onCheck={() =>self.changeMethodsofPayment("methodsOfPayment",methodOfPayment.value)}
                                             />
                                 })
                             }
@@ -433,11 +436,11 @@ const ProviderEntryForm = createReactClass({
                   open = {snackBarOpen || false}
                   message={'Please correct errors in form'}
                   autoHideDuration={4000}
-                  onRequestClose={()=>this.toggle('snackBarOpen',false)}
+                  onRequestClose={() =>this.toggle('snackBarOpen',false)}
                 />
                 <Dialog
                   open={providerAddressJustificationModalOpen || false}
-                  onRequestClose={()=>{this.toggle('providerAddressJustificationModalOpen')}}
+                  onRequestClose={() =>{this.toggle('providerAddressJustificationModalOpen')}}
                 >
                   <div ref="subtitle"
                     style={{

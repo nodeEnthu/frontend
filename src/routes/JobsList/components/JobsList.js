@@ -56,14 +56,14 @@ const JobsList = createReactClass({
                 Your tiffin requirements
               </h2>
               <div className="create-job-button">
-                <FloatingActionButton onClick={()=>this.context.router.push('/job/create')}
+                <FloatingActionButton onClick={() =>this.context.router.push('/job/create')}
                 >
                   <ContentAdd />
                 </FloatingActionButton>
               </div>
             </div>
             :
-            <div className="empty-page-container" onClick={()=>self.context.router.push('/job/create')}>
+            <div className="empty-page-container" onClick={() =>self.context.router.push('/job/create')}>
               <p>
                 Oops you have no tiffin requirements posted here. Get started by posting one !
               </p>
@@ -75,19 +75,19 @@ const JobsList = createReactClass({
             {
               jobsList.map(function(job,index){
                 return <Paper key = {index+' job'} className="job-container">
-                          <div className="job-heading" onClick={()=>self.context.router.push(`/job/${job._id}/summary`)}>
+                          <div className="job-heading" onClick={() =>self.context.router.push(`/job/${job._id}/summary`)}>
                             <span>{self.createTitle(job)}</span>
                           </div>
                           <div className="container pure-g">
-                            <div className="column pure-u-1-3" onClick={()=>self.context.router.push(`/job/${job._id}/invite`)}>
+                            <div className="column pure-u-1-3" onClick={() =>self.context.router.push(`/job/${job._id}/invite`)}>
                               <div className= "job-sub-heading">Invites</div>
                               <div className="job-attr-desc">{job.invitees.length}</div>
                             </div>
-                            <div className="column pure-u-1-3" onClick={()=>self.context.router.push(`/job/${job._id}/proposals`)}>
+                            <div className="column pure-u-1-3" onClick={() =>self.context.router.push(`/job/${job._id}/proposals`)}>
                               <div className= "job-sub-heading">Proposals</div>
                               <div className="job-attr-desc">{job.applicants.length}</div>
                             </div>
-                            <div className="column pure-u-1-3" onClick={()=>self.context.router.push(`/job/${job._id}/hired`)}>
+                            <div className="column pure-u-1-3" onClick={() =>self.context.router.push(`/job/${job._id}/hired`)}>
                               <div className= "job-sub-heading">Hires</div>
                               <div className="job-attr-desc">{job.hirees.length}</div>
                             </div>

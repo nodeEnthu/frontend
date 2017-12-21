@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import {securedPostCall} from 'utils/httpUtils/apiCallWrapper';
 import {normalizeDates} from 'routes/Search/constants/searchFilters'
 import normalizeJobDetails from 'utils/normalizeJobDetails'
+import {reset} from 'redux-form';
+
 const JobCreate = createReactClass({
   formSubmit(values){
     let self = this;
@@ -13,6 +15,7 @@ const JobCreate = createReactClass({
     securedPostCall('/api/job/create', normalizeJobDetails(values))
       .then(function(res){
         self.context.router.push('/job/'+res.data._id+'/invite');
+        self.props.dispatch(reset('wizard'));
       })
   },
   contextTypes: {
@@ -27,7 +30,8 @@ const JobCreate = createReactClass({
 
 JobCreate.propTypes = {
   updateUser:PropTypes.func,
-  globalState: PropTypes.object
+  globalState: PropTypes.object,
+  dispatch: PropTypes.func
 }
 
 export default JobCreate

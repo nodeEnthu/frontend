@@ -63,7 +63,7 @@ const JobInvite = createReactClass({
 						          titleStyle={{textDecoration: 'underline', textDecorationColor: '#FF6F00'}}
 						          avatar={provider.imgUrl}
 						          style={{paddingBottom:0}}
-						          onClick={()=>self.context.router.push('/providerProfile/'+provider._id)}
+						          onClick={() =>self.context.router.push('/providerProfile/'+provider._id)}
 						        >
 						        </CardHeader>
 						        <CardText style={{paddingTop:'0.5em', paddingBottom:'0'}}>
@@ -77,7 +77,7 @@ const JobInvite = createReactClass({
 						      				label={(disabledInvites.indexOf(provider._id) > -1)? 'Invited': 'Invite'} 
 						      				disabledBackgroundColor="#29B6F6"
 						      				disabledLabelColor="white"
-						      				onClick={()=>self.sendInvite(provider._id)}
+						      				onClick={() =>self.sendInvite(provider._id)}
 							                disableTouchRipple = {true}
 							      		/>
 					                	:

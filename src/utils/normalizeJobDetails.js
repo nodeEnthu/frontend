@@ -42,8 +42,8 @@ export default function normalizeJobDetails(jobDetails) {
   //check whether the first word is a house address
   let numPattern = /^[0-9\-]+$/;
   address = (!numPattern.test(addressArr[0])) ? addressArr[0] : addressArr[1];
-  normalizedJob.start_date = normalizeDates(moment.utc(normalizedJob.start_date).toDate());
-  normalizedJob.end_date = normalizeDates(moment.utc(normalizedJob.end_date).toDate());
+  normalizedJob.start_date = normalizeDates(moment(normalizedJob.start_date).toDate());
+  normalizedJob.end_date = normalizeDates(moment(normalizedJob.end_date).toDate());
 
   startDate = moment.utc(normalizedJob.start_date).format("MMM D");
   endDate = moment.utc(normalizedJob.end_date).format("MMM D");

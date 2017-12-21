@@ -35,7 +35,17 @@ const JobHired = createReactClass({
   	render(){
   		let self = this;
   		const {hirees} = this.state;
-  		const {jobDetails} = this.props;
+  		const {jobDetails, changeActiveLink} = this.props;
+  		{
+	    	if(hirees.length ===0)
+	    		return (
+	    			<div className="job-proposal">
+		    			<div className="no-proposals-text" onClick={() => changeActiveLink('proposals')}> 
+		    				No one hired yet <Link to={`/job/${jobDetails._id}/proposals`}>.Please consider proposals here</Link>
+		    			</div>
+		    		</div>
+	    	)
+	    }
 	    return (
 	    <div className="job-hired">
 	    	<div className="reco-wrapper">
@@ -52,7 +62,7 @@ const JobHired = createReactClass({
 						          avatar={hire.imgUrl}
 						          style={{paddingBottom:0}}
 						          titleStyle={{textDecoration: 'underline', textDecorationColor: '#FF6F00'}}
-						          onClick={()=>self.context.router.push('/providerProfile/'+hire._id)}
+						          onClick={() =>self.context.router.push('/providerProfile/'+hire._id)}
 						        >
 						        </CardHeader>
 						        <CardText style={{paddingTop:'0.5em', paddingBottom:'0'}}>
@@ -71,6 +81,7 @@ const JobHired = createReactClass({
 					      	</Card>
 				})
 			}
+			
 			
 	    </div>)
   	}

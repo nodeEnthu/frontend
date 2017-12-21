@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, IndexLink } from 'react-router';
 import { connect } from 'react-redux'
-import * as actions from '../../layouts/CoreLayout/coreReducer'
+import * as actions from 'layouts/CoreLayout/coreReducer'
 import Login from '../Login/Login'
 import './Header.scss'
 import {securedPostCall} from 'utils/httpUtils/apiCallWrapper'
@@ -182,22 +182,24 @@ const Header =createReactClass ({
                       } 
                       </li>
                       {(!globalState.core.get('token').length || (user && user.published === false))?
-                        <li onClick={() => this.goToPage('/how/it/works/provider')}>
-                            <a className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0 1em': '0 0.75em'}} href="javascript:void(0)" className="display-none-small">
+                        <li>
+                            <Link className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0 1em': '0 0.75em'}}  className="display-none-small"
+                                to ={'/how/it/works/provider'}
+                            >
                               <span className="show-desktop-inline"style={{position: 'relative',bottom: '1em'}}>Become a chef</span>
                               <img style={{lineHeight:'0'}} className="header-img" src="/general/chef.png"/>
-                            </a>
+                            </Link>
                         </li>
                         :
                         undefined
                       }
                      
                       <li>
-                          <a className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0': '0 0.75em'}} 
-                              href={(user && (user.userType === 'provider'))? '/how/tiffin/works/provider'+ this.context.router.location.search: '/how/tiffin/works/customer'+ this.context.router.location.search} className="display-none-small"
+                          <Link className= "show-desktop" style={{padding: (globalState.core.get('token').length)? '0': '0 0.75em'}} 
+                              to={(user && (user.userType === 'provider'))? '/how/tiffin/works/provider'+ this.context.router.location.search: '/how/tiffin/works/customer'+ this.context.router.location.search} className="display-none-small"
                           >
                             <img style={{lineHeight:'0'}} className="header-img" src="/general/tiffin.png"/>
-                          </a>
+                          </Link>
                       </li>
                     </ul>
                   </nav>

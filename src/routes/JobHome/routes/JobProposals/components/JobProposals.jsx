@@ -45,9 +45,19 @@ const JobProposals = createReactClass({
   	render(){
   		let self = this;
   		const {applications} = this.state;
-  		const {jobDetails} = this.props;
+  		const {jobDetails, changeActiveLink} = this.props;
+  		{
+	    	if(applications.length ===0)
+	    		return (
+	    			<div className="job-proposal">
+		    			<div className="no-proposals-text" onClick={() => changeActiveLink('invite')}> 
+		    				Oops!! no one has applied yet, send <Link to={`/job/${jobDetails._id}/invite`}>invitations to providers near you</Link>
+		    			</div>
+		    		</div>
+	    	)
+	    }
 	    return (
-	    <div className="job-invite">
+	    <div className="job-proposal">
 	    	<div className="reco-wrapper">
 				<h3>
 					Providers who applied for this job:
@@ -55,14 +65,15 @@ const JobProposals = createReactClass({
 			</div>
 			{
 				applications.map(function(application,index){
-					return <Card key={index} >
+					if(application._creator && application._creator._id){
+						return <Card key={index} >
 						        <CardHeader
 						          title={<Link to={`/providerProfile/${application._creator._id}`}>{application._creator.title}</Link>}
 						          subtitle={self.resolveAddress(application._creator.fullAddress)}
 						          titleStyle={{textDecoration: 'underline', textDecorationColor: '#FF6F00'}}
 						          avatar={application._creator.imgUrl}
 						          style={{paddingBottom:0}}
-						          onClick={()=>self.context.router.push('/providerProfile/'+application._creator._id)}
+						          onClick={() =>self.context.router.push('/providerProfile/'+application._creator._id)}
 						        >
 						        </CardHeader>
 						        <CardText style={{paddingTop:'0.5em', paddingBottom:'0'}}>
@@ -85,13 +96,14 @@ const JobProposals = createReactClass({
 					                	:
 									    <RaisedButton 
 					                		label = "Hire me"
-						      				onClick={()=>self.sendHire(application._creator._id)}
+						      				onClick={() =>self.sendHire(application._creator._id)}
 							                disableTouchRipple = {true}
 							      		/>   
 						            }
 				                	
 							    </CardActions>
 					      	</Card>
+					}
 				})
 			}
 			

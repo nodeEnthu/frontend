@@ -15,6 +15,15 @@ export function required(value,message) {
     }
 }
 
+export function noSpecialCharacters(value,message){
+    let regex = /[^a-zA-Z ]+/ ;
+    if(value && regex.test(value))
+        return 'no special characters allowed'
+    
+    else if(isEmpty(value))
+        return message || 'Required';
+}
+
 export function minLength(min) {
     return value => {
         if (!isEmpty(value) && value.length < min) {
