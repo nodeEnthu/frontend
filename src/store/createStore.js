@@ -80,8 +80,8 @@ export default (initialState = {}, cb) => {
             }
         ], function(err, resultArr) {
             cb(store);
-        })
-        // initializtion code ends here
+    })
+    // initializtion code ends here
 
     // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
     store.unsubscribeHistory = browserHistory.listen(updateLocation(store))
