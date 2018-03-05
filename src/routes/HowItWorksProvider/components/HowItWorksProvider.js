@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import * as actions from 'layouts/CoreLayout/coreReducer'
 import {postCall} from 'utils/httpUtils/apiCallWrapper';
+import {Helmet} from "react-helmet";
 
 const HowItWorksProvider = createReactClass({
     componentDidMount() {
@@ -41,13 +42,18 @@ const HowItWorksProvider = createReactClass({
     render: function() {
         return (
           <div className="home">
+            <Helmet>
+                <title>Become a home chef</title>
+                <meta name="description" content="Become a home chef and provide healthy food to your neighbours" />
+                <meta name="keywords" content="provide home cooked food, become home chef, provide tiffin service"/>
+            </Helmet>
             <div className="ban-smal">
               <div className="wraper-container">
                 <h1>Become a home chef and start providing food to your <span>neighbours</span></h1>
               </div>
               <div className="get-started-button">
                 <RaisedButton style={{fontSize:'14px'}} label="Become a home chef"
-                            onClick={()=>this.checkLoginAndredirect('providerProfileEntry')}
+                            onClick={() =>this.checkLoginAndredirect('providerProfileEntry')}
                             disableTouchRipple = {true}
               />
               </div>

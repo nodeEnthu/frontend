@@ -6,8 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import './jobHome.scss';
 import { Link } from 'react-router';
 import {securedGetCall} from 'utils/httpUtils/apiCallWrapper';
-
-
+import {Helmet} from "react-helmet";
 const JobHome = createReactClass({
 	getInitialState() {
 		return{
@@ -44,44 +43,49 @@ const JobHome = createReactClass({
   		const jobId = this.props.params.id;
   		let self = this;
 	    return (
-	    <div className="job-home">
-	    	<div className="heading-title">
-	    		<h1>
-	    			{jobDetails.title}
-	    		</h1>
-	    	</div>
-			<div className='breadcrumbs'>
-			  <div className='inner'>
-			    <ul className='cf'>
-			      <li>
-			        <Link to={`/job/${jobId}/summary`} className={(activeLink === 'summary')? 'active' : undefined} onClick = {() =>this.changeActiveLink('summary')}>job</Link>
-			      </li>
-			      <li>
-			          <Link to={`/job/${jobId}/invite`} className={(activeLink === 'invite')? 'active' : undefined} onClick = {() =>this.changeActiveLink('invite')}>invite</Link>
-			      </li>
-			      <li>
-			        <Link to={`/job/${jobId}/proposals`} className={(activeLink === 'proposals')? 'active' : undefined} onClick = {() =>this.changeActiveLink('proposals')}>proposals</Link>
-			      </li>
-			      <li>
-			        <Link to={`/job/${jobId}/hired`} className={(activeLink === 'hired')? 'active' : undefined} onClick = {() =>this.changeActiveLink('hired')}>hired</Link>
-			      </li>
-			    </ul>
-			  </div>
-			</div>
-			{
-				(jobDetails)?
-					React.cloneElement(this.props.children, 
-										{ 	jobDetails: jobDetails, 
-											refreshPage:self.refreshPage, 
-											disabledInvites: disabledInvites, 
-											changeActiveLink:self.changeActiveLink 
-										}
-									)
-					:
-					undefined
-			}
-			
-	    </div>)
+		    <div className="job-home">
+		    	<Helmet>
+	                <meta charSet="utf-8" />
+	                <title>{jobDetails.title}</title>
+	            </Helmet>
+		    	<div className="heading-title">
+		    		<h1>
+		    			{jobDetails.title}
+		    		</h1>
+		    	</div>
+				<div className='breadcrumbs'>
+				  <div className='inner'>
+				    <ul className='cf'>
+				      <li>
+				        <Link to={`/job/${jobId}/summary`} className={(activeLink === 'summary')? 'active' : undefined} onClick = {() =>this.changeActiveLink('summary')}>job</Link>
+				      </li>
+				      <li>
+				          <Link to={`/job/${jobId}/invite`} className={(activeLink === 'invite')? 'active' : undefined} onClick = {() =>this.changeActiveLink('invite')}>invite</Link>
+				      </li>
+				      <li>
+				        <Link to={`/job/${jobId}/proposals`} className={(activeLink === 'proposals')? 'active' : undefined} onClick = {() =>this.changeActiveLink('proposals')}>proposals</Link>
+				      </li>
+				      <li>
+				        <Link to={`/job/${jobId}/hired`} className={(activeLink === 'hired')? 'active' : undefined} onClick = {() =>this.changeActiveLink('hired')}>hired</Link>
+				      </li>
+				    </ul>
+				  </div>
+				</div>
+				{
+					(jobDetails)?
+						React.cloneElement(this.props.children, 
+											{ 	jobDetails: jobDetails, 
+												refreshPage:self.refreshPage, 
+												disabledInvites: disabledInvites, 
+												changeActiveLink:self.changeActiveLink 
+											}
+										)
+						:
+						undefined
+				}
+				
+		    </div>
+	)
   }
 })
 

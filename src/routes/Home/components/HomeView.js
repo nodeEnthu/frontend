@@ -11,6 +11,7 @@ import Stepper from 'components/Stepper';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
+import {Helmet} from "react-helmet";
 
 const HomeView = createReactClass({
     getInitialState() {
@@ -110,6 +111,11 @@ const HomeView = createReactClass({
         let {user} = this.props.globalState.core.toJS();
         return (
             <div className="home">
+                <Helmet>
+                    <title>Order home cooked food delivery</title>
+                    <meta name="description" content="Find and provide fresh and healthy home cooked food from your neighbours. Order pick up or delivery of tiffin or À la carte home cooked meals from  home chefs close to you." />
+                    <meta name="keywords" content="home cooked food delivery, provide home cooked food, tiffin orders, home cooked food from your neighbours , sell home cooked food online, order fresh and healthy home cooked food"/>
+                </Helmet>
 				<div className="splash-container pure-override-letter-spacing">
                     <div className="banner-wrapper">
                         <h1 className="promotion-heading">

@@ -33,7 +33,8 @@ import CommunicationChat from 'material-ui/svg-icons/communication/chat';
 import CommunicationContactPhone from 'material-ui/svg-icons/communication/contact-phone'
 import PhoneVerification from 'components/PhoneVerification'
 import SocialShareSS from 'components/SocialShare'
-
+import {Helmet} from "react-helmet";
+import googleRichCard from './utils/googleRichCard'
 const ProviderProfile = createReactClass({
   getInitialState() {
       return {
@@ -182,6 +183,20 @@ const ProviderProfile = createReactClass({
     }
     return (provider && !isEmptyObj(provider) && provider.userType && user && user.name || (provider && !isEmptyObj(provider) && !this.props.globalState.core.get('userLoggedIn')))?
         <div id="layout" className="provider-profile">
+          {
+            (this.props.actionName === 'PROVIDER')?
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>{provider.title}</title>
+                <meta name="description" content={provider.description} />
+                <script type="application/ld+json">{`${JSON.stringify(googleRichCard(provider,window))}`}
+                </script>
+
+            </Helmet>
+            :
+            undefined
+          }
+
           <div className="pure-u-1 profile-wrapper">
               <div className="pure-u-1 pure-u-md-1-4 is-center position-relative">
                 <img className = "pure-img-responsive" src={provider.imgUrl || 'https://s3-us-west-1.amazonaws.com/prod-usr-food-imgs/default_profile.jpg'}/>
@@ -282,7 +297,7 @@ const ProviderProfile = createReactClass({
                   icon={<EditorModeEdit/>}
                   style={{width:'100%',height:'auto',lineHeight:'auto'}}
                   hoverColor="#8AA62F"
-                  onClick={(event)=>self.context.router.push('/providers/'+provider._id+'/edit')}
+                  onClick={(event) => self.context.router.push('/providers/'+provider._id+'/edit')}
                   disableTouchRipple={true}
                 />
             </div>
@@ -311,7 +326,7 @@ const ProviderProfile = createReactClass({
                     undefined
                   }
                   { 
-                    provider.foodItems.map((foodItem)=>{
+                    provider.foodItems.map((foodItem) =>{
                       return <FoodItemInProviderProfile
                                 provider={provider}
                                 key={foodItem._id}
@@ -357,7 +372,7 @@ const ProviderProfile = createReactClass({
                 (this.props.mode != 'PROVIDER_ENTRY'  && itemToBeDeleted)?
                   <Dialog
                     open={deleteItemModalOpen}
-                    onRequestClose={()=>this.props.openModal({storeKey:'deleteItemModalOpen', openModal:false})}
+                    onRequestClose={() =>this.props.openModal({storeKey:'deleteItemModalOpen', openModal:false})}
                   >
                   <div style={{textAlign:"center", color:"black"}}>
                     <p>
@@ -368,12 +383,12 @@ const ProviderProfile = createReactClass({
                     </p>
                     <div>
                         <FlatButton label="Cancel"
-                            onTouchTap={()=>this.props.openModal({storeKey:'deleteItemModalOpen', openModal:false})}
+                            onTouchTap={() =>this.props.openModal({storeKey:'deleteItemModalOpen', openModal:false})}
                         />
                         <FlatButton 
                           backgroundColor="red" 
                           label="Delete" 
-                          onTouchTap={(event)=>this.deleteFoodItemSubmit(itemToBeDeleted)}
+                          onTouchTap={(event) =>this.deleteFoodItemSubmit(itemToBeDeleted)}
                         />
                     </div>
                   </div>

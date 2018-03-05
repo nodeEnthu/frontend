@@ -5,7 +5,9 @@ import './howTiffinWorksProvider.scss';
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
-import * as actions from 'layouts/CoreLayout/coreReducer'
+import * as actions from 'layouts/CoreLayout/coreReducer';
+import {Helmet} from "react-helmet";
+
 const HowTiffinWorksProvider = createReactClass({
     componentDidMount() {
     },
@@ -31,13 +33,18 @@ const HowTiffinWorksProvider = createReactClass({
     render: function() {
         return (
           <div className="home">
+            <Helmet>
+                <title>Home chefs provide tiffin service</title>
+                <meta name="description" content="Home chefs fulfil tiffin needs of your neighbours" />
+                <meta name="keywords" content="fulfil tiffin needs, provide dabba service"/>
+            </Helmet>
             <div className="ban-smal">
               <div className="wraper-container">
                 Home chefs start providing <span>tiffin</span> service
               </div>
               <div className="get-started-button">
                 <RaisedButton style={{fontSize:'14px'}} label="Your job board"
-                            onClick={()=>this.checkLoginAndredirect('viewJobBoard')}
+                            onClick={() =>this.checkLoginAndredirect('viewJobBoard')}
                             disableTouchRipple = {true}
               />
               </div>
