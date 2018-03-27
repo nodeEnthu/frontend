@@ -24,7 +24,6 @@ const HowItWorksProvider = createReactClass({
     },
     checkLoginAndredirect(action){
       const {user} = this.props.globalState.core.toJS();
-      console.log(this.context.router.location.search);
       if (user && user._id){
         switch(action){
           case 'providerProfileEntry':

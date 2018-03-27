@@ -140,7 +140,7 @@ const MessageWindow = createReactClass({
                   {
                     (!showCrossMark && !showCheckMark)?
                     <fieldset>
-                      <button type="submit" name="Send your message" id="contact-submit" onClick={(e)=>this.sendMessageToProvider(e)}>Submit</button>
+                      <button type="submit" name="Send your message" id="contact-submit" onClick={(e) => this.sendMessageToProvider(e)}>Submit</button>
                     </fieldset>
                     :
                     undefined
