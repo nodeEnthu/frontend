@@ -25,7 +25,7 @@ const FoodItemInSearchPage = createReactClass({
   render(){
     const {foodItem,foodItemClicked,mode} = this.props;
     return <div className="pure-u-1 pure-u-md-1-3 provider-profile-wrapper"
-            onClick={(event)=>foodItemClicked(event,foodItem)}>
+            onClick={(event) =>foodItemClicked(event,foodItem)}>
             <div>
                 <div className="pure-u-1 provider-img-section">
                   <div className="img-avatar">

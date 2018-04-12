@@ -163,7 +163,7 @@ const ACTION_HANDLERS = {
     [RECEIVE_DATA_SUBMIT_REVIEW]: (state, action) => state.setIn([action.payload.storeKey, 'isLoading'], false).setIn([action.payload.storeKey, 'error'], undefined).setIn([action.payload.storeKey, 'data'], Map(action.payload.data.data)),
     [FLUSH_OUT_STALE__REVIEW_DATA]: (state, action) => state.setIn(['reviews', 'reviewMap', action.foodItemId], Map()),
 
-    [FOOD_ID_SELECTED]:(state,action)=>state.set('foodIdSelected', action.foodItemId)
+    [FOOD_ID_SELECTED]:(state,action) =>state.set('foodIdSelected', action.foodItemId)
 }
 
 // ------------------------------------

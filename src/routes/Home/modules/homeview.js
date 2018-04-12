@@ -18,7 +18,7 @@ export function placeholder(){
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-   [PLACE_HOLDER]:(state,action)=>{return state;}
+   [PLACE_HOLDER]:(state,action) =>{return state;}
 }
 
 // ------------------------------------
