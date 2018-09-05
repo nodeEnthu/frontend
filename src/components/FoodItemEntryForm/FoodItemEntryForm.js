@@ -338,7 +338,7 @@ const FoodItemEntryForm= createReactClass({
                     <div style={{display:(this.state.showSpinner)?'block':'none'}}>
                         <img src= "/general/loading.svg"/>
                     </div>
-                    {(user.foodItems.length >0 || user.foodItemAddedInEntryMode)?
+                    {(user.foodItems && user.foodItems.length >0 || user.foodItemAddedInEntryMode)?
                         <RaisedButton
                             label="Cancel"
                             backgroundColor="white"
